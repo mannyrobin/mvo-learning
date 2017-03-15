@@ -1,0 +1,3 @@
+[submodule "web/app/themes/hip-bb-theme"]
+	path = web/app/themes/hip-bb-theme
+	url = https://gitlab.com/hipdevteam/hip-bb-theme
