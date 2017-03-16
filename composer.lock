@@ -4,8 +4,82 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ad6f493b8307cd0b55e1b5a5d14fc108",
+    "content-hash": "e516c3f022877e0e2a83869d57b149c7",
     "packages": [
+        {
+            "name": "calderawp/dismissible-notice",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CalderaWP/dismissible_notice.git",
+                "reference": "26a0a00cced207464eb005d2eeb3ab93727363d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CalderaWP/dismissible_notice/zipball/26a0a00cced207464eb005d2eeb3ab93727363d3",
+                "reference": "26a0a00cced207464eb005d2eeb3ab93727363d3",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL v2+"
+            ],
+            "authors": [
+                {
+                    "name": "Josh Pollock",
+                    "email": "Josh@JoshPress.net"
+                }
+            ],
+            "description": "Creates a dismissible--via AJAX--admin nag.",
+            "time": "2015-08-24T20:27:16+00:00"
+        },
+        {
+            "name": "calderawp/licensing-helper",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CalderaWP/licensing-helper.git",
+                "reference": "f378f3ffd1f527360d0b462ecebced4c77e78a27"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CalderaWP/licensing-helper/zipball/f378f3ffd1f527360d0b462ecebced4c77e78a27",
+                "reference": "f378f3ffd1f527360d0b462ecebced4c77e78a27",
+                "shasum": ""
+            },
+            "require": {
+                "calderawp/dismissible-notice": "dev-master",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "calderawp\\licensing_helper\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "David Cramer",
+                    "homepage": "http://cramer.co.za",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Josh Pollock",
+                    "email": "Josh@JoshPress.net",
+                    "homepage": "http://joshpress.net"
+                }
+            ],
+            "description": "Helper class for CalderaWP Licensing Manager",
+            "keywords": [
+                "wordpress"
+            ],
+            "time": "2016-11-06T19:40:16+00:00"
+        },
         {
             "name": "composer/installers",
             "version": "v1.0.25",
@@ -104,7 +178,99 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2016-04-13 19:46:30"
+            "time": "2016-04-13T19:46:30+00:00"
+        },
+        {
+            "name": "deliciousbrains/wp-migrate-db-pro",
+            "version": "1.7.1",
+            "dist": {
+                "type": "zip",
+                "url": "https://deliciousbrains.com/dl/wp-migrate-db-pro-latest.zip?licence_key=36b68ad8-fe9c-4fff-ae80-e3082798399e&site_url=composer-test.dev",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0.12"
+            },
+            "type": "wordpress-plugin"
+        },
+        {
+            "name": "deliciousbrains/wp-migrate-db-pro-media-files",
+            "version": "1.4.7",
+            "dist": {
+                "type": "zip",
+                "url": "https://deliciousbrains.com/dl/wp-migrate-db-pro-media-files-latest.zip?licence_key=36b68ad8-fe9c-4fff-ae80-e3082798399e&site_url=composer-test.dev",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0.12"
+            },
+            "type": "wordpress-plugin"
+        },
+        {
+            "name": "hipdevteam/formworks",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/hipdevteam/formworks",
+                "reference": "40d4efbdc8686593404ae925ae178b5c964d11f6"
+            },
+            "require": {
+                "calderawp/dismissible-notice": "*",
+                "calderawp/licensing-helper": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "wordpress-plugin",
+            "autoload": {
+                "psr-4": {
+                    "calderawp\\frmwks\\": "classes"
+                }
+            },
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "David Cramer",
+                    "homepage": "http://digilab.co.za",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Form Analytics Management Suite",
+            "keywords": [
+                "wordpress"
+            ],
+            "time": "2017-02-14T17:42:35+00:00"
+        },
+        {
+            "name": "hipdevteam/reviews-bb-module",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/hipdevteam/reviews-bb-module.git",
+                "reference": "e40145fdf3e527f9ac5d19d2ab55298a3662da84"
+            },
+            "require": {
+                "composer/installers": "~1.0.12"
+            },
+            "type": "wordpress-plugin",
+            "time": "2017-02-22T19:21:21+00:00"
+        },
+        {
+            "name": "hipdevteam/social-warfare-pro",
+            "version": "2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/hipdevteam/social-warfare-pro.git",
+                "reference": "575aa58f506ceb6686f87c9ca92b6fd9728adb02"
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "description": "A fork of social-warfare, allowing management with composer",
+            "time": "2017-02-04T22:24:17+00:00"
         },
         {
             "name": "johnpbloch/wordpress",
@@ -141,7 +307,7 @@
                 "blog",
                 "cms"
             ],
-            "time": "2017-03-06 16:01:58"
+            "time": "2017-03-06T16:01:58+00:00"
         },
         {
             "name": "johnpbloch/wordpress-core-installer",
@@ -189,7 +355,7 @@
             "keywords": [
                 "wordpress"
             ],
-            "time": "2015-06-11 15:15:30"
+            "time": "2015-06-11T15:15:30+00:00"
         },
         {
             "name": "oscarotero/env",
@@ -231,7 +397,7 @@
             "keywords": [
                 "env"
             ],
-            "time": "2016-05-08 17:14:32"
+            "time": "2016-05-08T17:14:32+00:00"
         },
         {
             "name": "roots/wp-password-bcrypt",
@@ -288,7 +454,7 @@
             "keywords": [
                 "wordpress wp bcrypt password"
             ],
-            "time": "2016-03-01 16:27:06"
+            "time": "2016-03-01T16:27:06+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -338,93 +504,154 @@
                 "env",
                 "environment"
             ],
-            "time": "2016-09-01 10:05:43"
-        }
-    ],
-    "packages-dev": [
+            "time": "2016-09-01T10:05:43+00:00"
+        },
         {
-            "name": "squizlabs/php_codesniffer",
-            "version": "2.8.1",
+            "name": "wpackagist-plugin/autodescription",
+            "version": "2.8.2",
             "source": {
-                "type": "git",
-                "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d"
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/autodescription/",
+                "reference": "tags/2.8.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d",
-                "reference": "d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d",
-                "shasum": ""
+                "url": "https://downloads.wordpress.org/plugin/autodescription.2.8.2.zip",
+                "reference": null,
+                "shasum": null
             },
             "require": {
-                "ext-simplexml": "*",
-                "ext-tokenizer": "*",
-                "ext-xmlwriter": "*",
-                "php": ">=5.1.2"
+                "composer/installers": "~1.0"
             },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0"
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/autodescription/"
+        },
+        {
+            "name": "wpackagist-plugin/duplicate-post",
+            "version": "3.1.2",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/duplicate-post/",
+                "reference": "tags/3.1.2"
             },
-            "bin": [
-                "scripts/phpcs",
-                "scripts/phpcbf"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.x-dev"
-                }
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/duplicate-post.3.1.2.zip",
+                "reference": null,
+                "shasum": null
             },
-            "autoload": {
-                "classmap": [
-                    "CodeSniffer.php",
-                    "CodeSniffer/CLI.php",
-                    "CodeSniffer/Exception.php",
-                    "CodeSniffer/File.php",
-                    "CodeSniffer/Fixer.php",
-                    "CodeSniffer/Report.php",
-                    "CodeSniffer/Reporting.php",
-                    "CodeSniffer/Sniff.php",
-                    "CodeSniffer/Tokens.php",
-                    "CodeSniffer/Reports/",
-                    "CodeSniffer/Tokenizers/",
-                    "CodeSniffer/DocGenerators/",
-                    "CodeSniffer/Standards/AbstractPatternSniff.php",
-                    "CodeSniffer/Standards/AbstractScopeSniff.php",
-                    "CodeSniffer/Standards/AbstractVariableSniff.php",
-                    "CodeSniffer/Standards/IncorrectPatternException.php",
-                    "CodeSniffer/Standards/Generic/Sniffs/",
-                    "CodeSniffer/Standards/MySource/Sniffs/",
-                    "CodeSniffer/Standards/PEAR/Sniffs/",
-                    "CodeSniffer/Standards/PSR1/Sniffs/",
-                    "CodeSniffer/Standards/PSR2/Sniffs/",
-                    "CodeSniffer/Standards/Squiz/Sniffs/",
-                    "CodeSniffer/Standards/Zend/Sniffs/"
-                ]
+            "require": {
+                "composer/installers": "~1.0"
             },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Greg Sherwood",
-                    "role": "lead"
-                }
-            ],
-            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
-            "homepage": "http://www.squizlabs.com/php-codesniffer",
-            "keywords": [
-                "phpcs",
-                "standards"
-            ],
-            "time": "2017-03-01 22:17:45"
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/duplicate-post/"
+        },
+        {
+            "name": "wpackagist-plugin/duracelltomi-google-tag-manager",
+            "version": "1.5.1",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/duracelltomi-google-tag-manager/",
+                "reference": "tags/1.5.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/duracelltomi-google-tag-manager.1.5.1.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/duracelltomi-google-tag-manager/"
+        },
+        {
+            "name": "wpackagist-plugin/nginx-cache",
+            "version": "1.0.2",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/nginx-cache/",
+                "reference": "tags/1.0.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/nginx-cache.1.0.2.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/nginx-cache/"
+        },
+        {
+            "name": "wpackagist-plugin/query-monitor",
+            "version": "2.13.4",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/query-monitor/",
+                "reference": "tags/2.13.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/query-monitor.2.13.4.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/query-monitor/"
+        },
+        {
+            "name": "wpackagist-plugin/redirection",
+            "version": "2.5",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/redirection/",
+                "reference": "tags/2.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/redirection.2.5.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/redirection/"
+        },
+        {
+            "name": "wpackagist-plugin/social-warfare",
+            "version": "2.2.3",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/social-warfare/",
+                "reference": "tags/2.2.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/social-warfare.2.2.3.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/social-warfare/"
         }
     ],
+    "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": [],
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.6"

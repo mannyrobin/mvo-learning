@@ -6,6 +6,7 @@
   "config": {
     "preferred-install": "dist"
   },
+  "minimum-stability": "dev",
   "repositories": [
     {
       "type": "composer",
@@ -59,21 +60,6 @@
 					"composer/installers": "~1.0.12"
 				}
 			}
-		},
-		{
-			"type": "package",
-			"package": {
-				"name": "beaver-builder/bb-plugin",
-				"type": "wordpress-plugin",
-				"version": "1.8.8",
-				"dist": {
-					"type": "zip",
-					"url": "http://updates.wpbeaverbuilder.com/?fl-api-method=composer_download&download=bb-plugin-pro.zip&license=7a62702e706176726976676e72657063767540617667666877"
-				},
-				"require": {
-					"composer/installers": "~1.0.7"
-				}
-			}
 		}
   ],
   "require": {
@@ -83,7 +69,6 @@
     "johnpbloch/wordpress": "4.7.3",
     "oscarotero/env": "^1.0",
     "roots/wp-password-bcrypt": "1.0.0",
-		"beaver-builder/bb-plugin": "1.8.8",
 		"deliciousbrains/wp-migrate-db-pro": "1.7.1",
 		"deliciousbrains/wp-migrate-db-pro-media-files": "1.4.7",
 		"wpackagist-plugin/social-warfare": "^2.2.1",
@@ -95,7 +80,7 @@
 		"wpackagist-plugin/autodescription": "*",
 		"hipdevteam/formworks": "^1.0.1",
 		"hipdevteam/reviews-bb-module": "^2.0.0",
-		"hipdevteam/social-warfare-pro": "^2.2.1",
+		"hipdevteam/social-warfare-pro": "^2.2.1"
   },
   "require-dev": {
   },
