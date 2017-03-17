@@ -20,3 +20,6 @@ web/.htaccess
 # Composer
 vendor/*
 !vendor/.gitkeep
+
+# Node
+node_modules
