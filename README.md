@@ -5,8 +5,9 @@ Bedrock-based WordPress install for Hip medical clients.
 1. Clone the repository into the web root of your development environment.
 2. Create `.env` with and populate with needed variables.
 3. Run `composer update` to pull plugins and dependencies.
-4. Activate Beaver Builder, Beaver Themer, and the Hip Med Child Theme
-5. Find file `start-content.xml` in the hip-bb-theme directory. Import that file into your project with the WordPress Importer.
+4. Run `git submodule init` to checkout parent theme.
+5. Activate Beaver Builder, Beaver Themer, and the Hip Med Child Theme
+6. Find file `start-content.xml` in the hip-bb-theme directory. Import that file into your project with the WordPress Importer.
 
 ### Other Info
 - Try to work mostly with hip-med-child, Beaver Builder, and Beaver Themer.
