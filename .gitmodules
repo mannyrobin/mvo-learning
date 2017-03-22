@@ -1,3 +1,6 @@
 [submodule "web/app/themes/hip-bb-theme"]
 	path = web/app/themes/hip-bb-theme
 	url = https://gitlab.com/hipdevteam/hip-bb-theme
+[submodule "web/app/plugins/butterbean"]
+	path = web/app/plugins/butterbean
+	url = https://github.com/justintadlock/butterbean
