@@ -78,6 +78,7 @@
 		"wpackagist-plugin/redirection": "*",
 		"wpackagist-plugin/duracelltomi-google-tag-manager": "*",
 		"wpackagist-plugin/autodescription": "*",
+		"wpackagist-plugin/schema-app-structured-data-for-schemaorg": "*",
 		"hipdevteam/formworks": "^1.0.1",
 		"hipdevteam/reviews-bb-module": "^2.0.0",
 		"hipdevteam/social-warfare-pro": "^2.2.1"
