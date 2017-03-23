@@ -4,3 +4,6 @@
 [submodule "web/app/plugins/butterbean"]
 	path = web/app/plugins/butterbean
 	url = https://github.com/justintadlock/butterbean
+[submodule "web/app/plugins/butterbean-tinymce"]
+	path = web/app/plugins/butterbean-tinymce
+	url = https://github.com/slaFFik/butterbean-tinymce
