@@ -63,7 +63,7 @@
 				children = item.find( '.fl-theme-builder-preview-select-item-children' ),
 				loc      = item.attr( 'data-location' ),
 				loaded   = item.attr( 'data-children-loaded' );
-				loader   = $( '<img src="' + FLBuilderLayoutConfig.paths.pluginUrl + 'img/ajax-loader.gif" />' ),
+				loader   = $( '<img src="' + FLBuilderLayoutConfig.paths.pluginUrl + 'img/ajax-loader.svg" />' ),
 				title    = $( '.fl-theme-builder-preview-select-title div span' );
 
 			if ( undefined != loc ) {

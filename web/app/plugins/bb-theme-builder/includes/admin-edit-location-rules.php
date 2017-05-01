@@ -2,27 +2,27 @@
 	<tr class="fl-mb-row fl-theme-builder-location-rules">
 		<td  class="fl-mb-row-heading">
 			<label><?php _e( 'Location', 'fl-theme-builder' ); ?></label>
-			<i class="fl-mb-row-heading-help dashicons dashicons-editor-help" title="<?php esc_html_e( sprintf( 'Add locations for where this %s should appear.', $post_type->labels->singular_name ), 'fl-theme-builder' ); ?>"></i>
+			<i class="fl-mb-row-heading-help dashicons dashicons-editor-help" title="<?php esc_html_e( sprintf( __( 'Add locations for where this %s should appear.', 'fl-theme-builder'), $post_type->labels->singular_name ) ); ?>"></i>
 		</td>
 		<td class="fl-mb-row-content">
 			<div class="fl-theme-builder-saved-locations fl-theme-builder-saved-rules"></div>
 			<div class="fl-theme-builder-add-location fl-theme-builder-add-rule">
-				<a href="javascript:void(0);" class="fl-theme-builder-add-location fl-theme-builder-add-rule button"><?php _e( 'Add Location Rule', 'fl-builder' ); ?></a>
+				<a href="javascript:void(0);" class="fl-theme-builder-add-location fl-theme-builder-add-rule button"><?php _e( 'Add Location Rule', 'fl-theme-builder' ); ?></a>
 			</div>
 			<div class="fl-theme-builder-add-exclusion fl-theme-builder-add-rule">
-				<a href="javascript:void(0);" class="fl-theme-builder-add-exclusion fl-theme-builder-add-rule button"><?php _e( 'Add Exclusion Rule', 'fl-builder' ); ?></a>
+				<a href="javascript:void(0);" class="fl-theme-builder-add-exclusion fl-theme-builder-add-rule button"><?php _e( 'Add Exclusion Rule', 'fl-theme-builder' ); ?></a>
 			</div>
 		</td>
 	</tr>
 	<tr class="fl-mb-row fl-theme-builder-location-rules fl-theme-builder-exclusion-rules">
 		<td  class="fl-mb-row-heading">
 			<label><?php _e( 'Exclude', 'fl-theme-builder' ); ?></label>
-			<i class="fl-mb-row-heading-help dashicons dashicons-editor-help" title="<?php esc_html_e( sprintf( 'This %s will not appear at these locations.', $post_type->labels->singular_name ), 'fl-theme-builder' ); ?>"></i>
+			<i class="fl-mb-row-heading-help dashicons dashicons-editor-help" title="<?php esc_html_e( sprintf( __( 'This %s will not appear at these locations.', 'fl-theme-builder' ), $post_type->labels->singular_name ) ); ?>"></i>
 		</td>
 		<td class="fl-mb-row-content">
 			<div class="fl-theme-builder-saved-locations fl-theme-builder-saved-rules"></div>
 			<div class="fl-theme-builder-add-location fl-theme-builder-add-rule">
-				<a href="javascript:void(0);" class="fl-theme-builder-add-location fl-theme-builder-add-rule button"><?php _e( 'Add Exclusion Rule', 'fl-builder' ); ?></a>
+				<a href="javascript:void(0);" class="fl-theme-builder-add-location fl-theme-builder-add-rule button"><?php _e( 'Add Exclusion Rule', 'fl-theme-builder' ); ?></a>
 			</div>
 		</td>
 	</tr>

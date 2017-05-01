@@ -95,7 +95,7 @@ final class FLThemeBuilderLayoutAdminAdd {
 	 */
 	static public function filter_config( $config ) {
 		$action = __( 'Add', 'fl-theme-builder' );
-		$string = _x( sprintf( '%s Theme Layout', $action ), '%s is an action like Add, Edit or View.', 'fl-theme-builder' );
+		$string = sprintf( _x( '%s Theme Layout', '%s is an action like Add, Edit or View.', 'fl-theme-builder' ), $action );
 
 		$config['strings']['addButton']['theme-layout'] = $string;
 

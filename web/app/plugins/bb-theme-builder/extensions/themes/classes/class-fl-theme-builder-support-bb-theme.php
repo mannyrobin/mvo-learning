@@ -82,6 +82,11 @@ final class FLThemeBuilderSupportBBTheme {
 	 * @return void
 	 */
 	static public function setup_headers_and_footers() {
+
+		if ( 'tpl-no-header-footer.php' == get_page_template_slug() ) {
+			return;
+		}
+
 		$header_ids = FLThemeBuilderLayoutData::get_current_page_header_ids();
 		$footer_ids = FLThemeBuilderLayoutData::get_current_page_footer_ids();
 
@@ -93,8 +98,23 @@ final class FLThemeBuilderSupportBBTheme {
 		}
 		if ( ! empty( $footer_ids ) ) {
 			add_filter( 'fl_footer_enabled', '__return_false' );
-			add_action( 'fl_after_content', 'FLThemeBuilderLayoutRenderer::render_footer' );
+			add_action( 'fl_after_content', __CLASS__ . '::render_footer' );
 		}
+	}
+
+	/**
+	 * Renders a custom footer for the BB theme. We do this
+	 * here so the footer actions can still fire.
+	 *
+	 * @since 1.0
+	 * @return void
+	 */
+	static public function render_footer() {
+		do_action('fl_before_footer_widgets');
+		do_action('fl_before_footer');
+		FLThemeBuilderLayoutRenderer::render_footer();
+		do_action('fl_after_footer_widgets');
+		do_action('fl_after_footer');
 	}
 }
 

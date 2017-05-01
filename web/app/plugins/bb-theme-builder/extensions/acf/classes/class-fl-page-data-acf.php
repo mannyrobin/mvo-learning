@@ -25,7 +25,7 @@ final class FLPageDataACF {
 		$content = '';
 		$object  = get_field_object( trim( $settings->name ), self::get_object_id( $property ) );
 
-		if ( empty( $object ) || ! isset( $object['type'] ) || $object['type'] != $settings->type ) {
+		if ( empty( $object ) || ! isset( $object['type'] ) ) {
 			return $content;
 		}
 
@@ -42,10 +42,23 @@ final class FLPageDataACF {
 			case 'radio':
 			case 'page_link':
 			case 'google_map':
+				$value = isset( $object['value'] ) ? $object['value'] : '';
+				$height = ! empty( $object['height'] ) ? $object['height'] : '400';
+				if ( ! empty( $value ) && is_array( $value ) && isset( $value['address'] ) ) {
+					$address = urlencode( $value['address'] );
+					$content = "<iframe src='https://www.google.com/maps/embed/v1/place?key=AIzaSyD09zQ9PNDNNy9TadMuzRV_UsPUoWKntt8&q={$address}' style='border:0;width:100%;height:{$height}px'></iframe>";
+				} else {
+					$content = '';
+				}
+				break;
 			case 'date_picker':
 			case 'date_time_picker':
 			case 'time_picker':
-				$content = isset( $object['value'] ) ? $object['value'] : '';
+				if ( isset( $object['value'] ) ) {
+					$content = date( $object['display_format'], strtotime( $object['value'] ) );
+				} else {
+					$content = '';
+				}
 				break;
 			case 'image':
 				$content = self::get_file_url_from_object( $object, $settings->image_size );
@@ -53,6 +66,8 @@ final class FLPageDataACF {
 			case 'file':
 				$content = self::get_file_url_from_object( $object );
 				break;
+			default:
+				$content = '';
 		}
 
 		return is_string( $content ) ? $content : '';
@@ -161,6 +176,8 @@ final class FLPageDataACF {
 			if ( $user->ID > 0 ) {
 				$id = 'user_' . $user->ID;
 			}
+		} elseif ( strstr( $property['key'], 'acf_option' ) ) {
+			$id = 'option';
 		}
 
 		return $id;

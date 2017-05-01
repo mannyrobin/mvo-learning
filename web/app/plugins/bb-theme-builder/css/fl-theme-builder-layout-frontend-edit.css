@@ -61,15 +61,17 @@
 }
 .fl-theme-builder-preview-select-item-child {
 	color: #b3b3b3;
-	padding-top: 10px;	
+	padding-top: 10px;
 }
 .fl-theme-builder-preview-select-item-child:hover {
 	color: #000;
 }
 
 /* Content */
-.single:not(.woocommerce).single-fl-theme-layout .fl-content {
-	width: 100%;
+.fl-theme-builder-header.single-fl-theme-layout .fl-content,
+.fl-theme-builder-footer.single-fl-theme-layout .fl-content,
+.fl-theme-builder-part.single-fl-theme-layout .fl-content {
+	width: 100% !important;
 }
 .fl-builder-content-primary:not([data-type="part"]) {
 	visibility: hidden;

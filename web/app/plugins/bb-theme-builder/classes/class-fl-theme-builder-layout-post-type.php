@@ -52,6 +52,10 @@ final class FLThemeBuilderLayoutPostType {
 			'supports'              => array(
 				'title',
 				'revisions',
+				'thumbnail'
+			),
+			'taxonomies'		=> array(
+				'fl-builder-template-category'
 			),
 			'menu_icon'			    => 'dashicons-welcome-widgets-menus',
 			'public'                => $can_edit,

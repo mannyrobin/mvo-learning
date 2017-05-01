@@ -1,5 +1,5 @@
 <table class="fl-mb-table widefat">
-	
+
 	<tr class="fl-mb-row">
 		<td  class="fl-mb-row-heading">
 			<label><?php _e( 'Type', 'fl-theme-builder' ); ?></label>
@@ -17,7 +17,7 @@
 			<input name="fl-theme-layout-type" type="hidden" value="<?php echo $type; ?>" />
 		</td>
 	</tr>
-	
+
 	<tr class="fl-mb-row fl-theme-layout-hook-row">
 		<td  class="fl-mb-row-heading">
 			<label><?php _e( 'Position', 'fl-theme-builder' ); ?></label>
@@ -36,7 +36,7 @@
 			</select>
 		</td>
 	</tr>
-	
+
 	<tr class="fl-mb-row fl-theme-layout-order-row">
 		<td  class="fl-mb-row-heading">
 			<label><?php _e( 'Order', 'fl-theme-builder' ); ?></label>
@@ -46,7 +46,7 @@
 			<input name="fl-theme-layout-order" type="number" value="<?php echo ( '' == $order ? 0 : $order ); ?>" />
 		</td>
 	</tr>
-	
+
 	<tr class="fl-mb-row fl-theme-layout-header-sticky">
 		<td  class="fl-mb-row-heading">
 			<label><?php _e( 'Sticky', 'fl-theme-builder' ); ?></label>
@@ -59,7 +59,7 @@
 			</select>
 		</td>
 	</tr>
-	
+
 	<tr class="fl-mb-row fl-theme-layout-header-shrink">
 		<td  class="fl-mb-row-heading">
 			<label><?php _e( 'Shrink', 'fl-theme-builder' ); ?></label>
@@ -72,5 +72,18 @@
 			</select>
 		</td>
 	</tr>
-	
+
+	<tr class="fl-mb-row fl-theme-layout-header-overlay">
+		<td  class="fl-mb-row-heading">
+			<label><?php _e( 'Overlay', 'fl-theme-builder' ); ?></label>
+			<i class="fl-mb-row-heading-help dashicons dashicons-editor-help" title="<?php esc_html_e( 'Overlay this header on top of the page content with a transparent background.', 'fl-theme-builder' ); ?>"></i>
+		</td>
+		<td class="fl-mb-row-content">
+			<select name="fl-theme-layout-settings[overlay]">
+				<option value="1" <?php selected( $settings['overlay'], '1' ); ?>><?php _e( 'Yes', 'fl-theme-builder' ); ?></option>
+				<option value="0" <?php selected( $settings['overlay'], '0' ); ?>><?php _e( 'No', 'fl-theme-builder' ); ?></option>
+			</select>
+		</td>
+	</tr>
+
 </table>

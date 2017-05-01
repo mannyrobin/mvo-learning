@@ -50,7 +50,7 @@ FLBuilder::register_module( 'FLWooProductTitleModule', array(
 							'family'		=> 'Default',
 							'weight'		=> 300,
 						),
-						'label'         => __( 'Font', 'fl-builder' ),
+						'label'         => __( 'Font', 'fl-theme-builder' ),
 						'preview'         => array(
 							'type'            => 'font',
 							'selector'        => '.fl-module-content .product_title',

@@ -17,11 +17,7 @@ final class FLThemeBuilderWooCommerceSingular {
 		add_filter( 'body_class',                             __CLASS__ . '::body_class' );
 		add_filter( 'fl_theme_builder_before_render_content', __CLASS__ . '::before_render_content' );
 		add_filter( 'fl_builder_content_classes',             __CLASS__ . '::content_class' );
-		add_filter( 'fl_theme_builder_content_attrs',         __CLASS__ . '::content_attrs' );
 		add_filter( 'fl_theme_builder_after_render_content',  __CLASS__ . '::after_render_content' );
-
-		// Singular templates
-		FLBuilder::register_templates( FL_THEME_BUILDER_WOOCOMMERCE_DIR . 'data/templates-singular.dat' );
 	}
 
 	/**
@@ -129,22 +125,6 @@ final class FLThemeBuilderWooCommerceSingular {
 		}
 
 		return $classes;
-	}
-
-	/**
-	 * Adds the WooCommerce content attributes to theme layouts that are
-	 * set to product locations.
-	 *
-	 * @since 1.0
-	 * @param array $attrs
-	 * @return array
-	 */
-	static public function content_attrs( $attrs ) {
-		if ( is_singular() && 'product' == get_post_type() && function_exists( 'woocommerce_get_product_schema' ) ) {
-			$attrs['itemtype'] = woocommerce_get_product_schema();
-		}
-
-		return $attrs;
 	}
 
 	/**

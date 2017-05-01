@@ -33,6 +33,22 @@
 		header : null,
 
 		/**
+		 * Whether this header overlays the content or not.
+		 *
+		 * @since 1.0
+		 * @property {Boolean} overlay
+		 */
+		overlay : false,
+
+		/**
+		 * Whether the page has the WP admin bar or not.
+		 *
+		 * @since 1.0
+		 * @property {Boolean} hasAdminBar
+		 */
+		hasAdminBar : false,
+
+		/**
 		 * Initializes header layout logic.
 		 *
 		 * @since 1.0
@@ -45,16 +61,20 @@
 
 			if ( ! editing && header.length ) {
 
-				this.win    = $( window );
-				this.body   = $( 'body' );
-				this.header = header.eq( 0 );
+				this.win    	 = $( window );
+				this.body   	 = $( 'body' );
+				this.header 	 = header.eq( 0 );
+				this.overlay     = !! Number( header.attr( 'data-overlay' ) );
+				this.hasAdminBar = !! $( 'body.admin-bar' ).length;
 
 				if ( Number( header.attr( 'data-sticky' ) ) ) {
 
+					this.header.data( 'original-top', this.header.offset().top );
 					this.win.on( 'resize', $.throttle( 500, $.proxy( this._initSticky, this ) ) );
 					this._initSticky();
 
 					if ( Number( header.attr( 'data-shrink' ) ) ) {
+						this.header.data( 'original-height', this.header.outerHeight() );
 						this.win.on( 'resize', $.throttle( 500, $.proxy( this._initShrink, this ) ) );
 						this._initShrink();
 					}
@@ -72,11 +92,52 @@
 		_initSticky: function()
 		{
 			if ( this.win.width() >= FLBuilderLayoutConfig.breakpoints.medium ) {
-				this.header.addClass( 'fl-theme-builder-header-sticky' );
-				this.body.css( 'padding-top', this.header.outerHeight() + 'px' );
+				this.win.on( 'scroll.fl-theme-builder-header-sticky', $.proxy( this._doSticky, this ) );
+				this._doSticky();
 			} else {
+				this.win.off( 'scroll.fl-theme-builder-header-sticky' );
 				this.header.removeClass( 'fl-theme-builder-header-sticky' );
 				this.body.css( 'padding-top', '0' );
+			}
+		},
+
+		/**
+		 * Sticks the header when the page is scrolled.
+		 *
+		 * @since 1.0
+		 * @access private
+		 * @method _doSticky
+		 */
+		_doSticky: function()
+		{
+			var winTop    		  = this.win.scrollTop(),
+				headerTop 		  = this.header.data( 'original-top' ),
+				hasStickyClass    = this.header.hasClass( 'fl-theme-builder-header-sticky' ),
+				hasScrolledClass  = this.header.hasClass( 'fl-theme-builder-header-scrolled' );
+
+			if ( this.hasAdminBar ) {
+				winTop += 32;
+			}
+
+			if ( winTop >= headerTop ) {
+				if ( ! hasStickyClass ) {
+					this.header.addClass( 'fl-theme-builder-header-sticky' );
+					if ( ! this.overlay ) {
+						this.body.css( 'padding-top', this.header.outerHeight() + 'px' );
+					}
+				}
+			}
+			else if ( hasStickyClass ) {
+				this.header.removeClass( 'fl-theme-builder-header-sticky' );
+				this.body.css( 'padding-top', '0' );
+			}
+
+			if ( winTop > headerTop ) {
+				if ( ! hasScrolledClass ) {
+					this.header.addClass( 'fl-theme-builder-header-scrolled' );
+				}
+			} else if ( hasScrolledClass ) {
+				this.header.removeClass( 'fl-theme-builder-header-scrolled' );
 			}
 		},
 
@@ -93,7 +154,6 @@
 				this.win.on( 'scroll.fl-theme-builder-header-shrink', $.proxy( this._doShrink, this ) );
 			} else {
 				this.body.css( 'padding-top', '0' );
-				this.body.removeClass( 'fl-theme-builder-body-shrink' );
 				this.win.off( 'scroll.fl-theme-builder-header-shrink' );
 				this._removeShrink();
 			}
@@ -108,17 +168,20 @@
 		 */
 		_doShrink: function()
 		{
-			var top    = this.win.scrollTop(),
-				height = parseInt( this.body.css( 'padding-top' ) );
+			var winTop 	  	 = this.win.scrollTop(),
+				headerTop 	 = this.header.data( 'original-top' ),
+				headerHeight = this.header.data( 'original-height' ),
+				hasClass     = this.header.hasClass( 'fl-theme-builder-header-shrink' );
 
-			if ( top > height ) {
+			if ( this.hasAdminBar ) {
+				winTop += 32;
+			}
 
-				if ( ! this.header.hasClass( 'fl-theme-builder-header-shrink' ) ) {
+			if ( winTop > headerTop + headerHeight ) {
 
-					this.header.attr( 'data-original-height', this.header.outerHeight() );
+				if ( ! hasClass ) {
+
 					this.header.addClass( 'fl-theme-builder-header-shrink' );
-					this.body.addClass( 'fl-theme-builder-body-shrink' );
-					this.body.css( 'padding-top', '0' );
 
 					this.header.find( '.fl-row-content-wrap' ).each( function() {
 
@@ -146,8 +209,7 @@
 						}
 					} );
 				}
-			} else if ( this.header.hasClass( 'fl-theme-builder-header-shrink' ) ) {
-				this.body.css( 'padding-top', this.header.attr( 'data-original-height' ) + 'px' );
+			} else if ( hasClass ) {
 				this._removeShrink();
 			}
 		},

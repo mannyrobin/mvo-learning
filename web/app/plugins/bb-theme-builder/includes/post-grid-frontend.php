@@ -2,7 +2,7 @@
 <div class="fl-post-column">
 <?php endif; ?>
 
-<div class="<?php $module->render_post_class(); ?>" itemscope itemtype="<?php FLPostGridModule::schema_itemtype(); ?>">
+<div <?php $module->render_post_class(); ?> itemscope itemtype="<?php FLPostGridModule::schema_itemtype(); ?>">
 	<?php
 
 	FLPostGridModule::schema_meta();

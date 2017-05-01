@@ -1,3 +1,52 @@
+<h4>1.0-alpha.7 - 04/19/2017</h4>
+<p><strong>Enhancements</strong></p>
+<ul>
+	<li>Added new overlay setting for header layouts that allows you to create transparent headers.</li>
+	<li>Added body classes for when theme layouts are present on the page.</li>
+	<li>Added the ability to hide the exclusion rules after opening them.</li>
+	<li>Added thumbnails for the built-in templates.</li>
+	<li>Added featured image and category support for theme layouts.</li>
+</ul>
+<p><strong>Bug Fixes</strong></p>
+<ul>
+	<li>Fixed issues with WooCommerce 3.0.</li>
+	<li>Fixed ACF Google Maps field.</li>
+	<li>Fixed double slash in the path to jQuery throttle.</li>
+	<li>Fixed PHP warnings caused by layout preview queries.</li>
+	<li>Fixed parts showing on all post categories when only set to one.</li>
+</ul>
+
+<h4>1.0-alpha.6 - 04/11/2017</h4>
+<p><strong>Enhancements</strong></p>
+<ul>
+	<li>We now show a warning confirmation dialog when overriding a theme layout with a standard builder layout.</li>
+</ul>
+<p><strong>Bug Fixes</strong></p>
+<ul>
+	<li>Fixed "Comments will not display for this Post" message showing below Disqus comments.</li>
+	<li>Fixed theme layouts overriding custom page templates.</li>
+	<li>Fixed header/footer layouts rendering on the no header/footer template.</li>
+	<li>Fixed aspect ratio for logos in shrinking headers.</li>
+</ul>
+
+<h4>1.0-alpha.5 - 03/28/2017</h4>
+<p><strong>Enhancements</strong></p>
+<ul>
+	<li>Added support for archive term meta.</li>
+	<li>Added support for ACF option fields.</li>
+	<li>Added translations.</li>
+	<li>Added FLThemeBuilder::has_layout method for checking if the current page has a layout.</li>
+</ul>
+<p><strong>Bug Fixes</strong></p>
+<ul>
+	<li>Fixed layouts breaking when Yoast SEO is active.</li>
+	<li>Fixed 404 layouts not working.</li>
+	<li>Fixed parallax backgrounds jumping in shrinking headers.</li>
+	<li>Fixed ACF date/time fields not rendering the display format.</li>
+	<li>Fixed parts not rendering when using a custom footer.</li>
+	<li>Fixed parts that are set to show before the header showing after it when the header is sticky.</li>
+</ul>
+
 <h4>1.0-alpha.4 - 03/09/2017</h4>
 <p><strong>PLEASE NOTE:</strong> The updater for Beaver Themer was broken in the last alpha. You will need to manually update to this version.</p>
 <p><strong>Enhancements</strong></p>

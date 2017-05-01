@@ -26,9 +26,6 @@ final class FLThemeBuilderWooCommerceArchive {
 		// Filters
 		add_filter( 'fl_builder_register_settings_form',    __CLASS__ . '::post_grid_settings', 10, 2 );
 		add_filter( 'fl_builder_render_css',                __CLASS__ . '::post_grid_css', 10, 2 );
-
-		// Archive templates
-		FLBuilder::register_templates( FL_THEME_BUILDER_WOOCOMMERCE_DIR . 'data/templates-archive.dat' );
 	}
 
 	/**
@@ -299,27 +296,27 @@ final class FLThemeBuilderWooCommerceArchive {
 			'fields' => array(
 				'woo_sale_flash_bg' => array(
 					'type'          => 'color',
-					'label'         => __( 'Product Sale Background', 'fl-builder' ),
+					'label'         => __( 'Product Sale Background', 'fl-theme-builder' ),
 					'show_reset'    => true,
 				),
 				'woo_sale_flash_color' => array(
 					'type'          => 'color',
-					'label'         => __( 'Product Sale Text Color', 'fl-builder' ),
+					'label'         => __( 'Product Sale Text Color', 'fl-theme-builder' ),
 					'show_reset'    => true,
 				),
 				'woo_rating_fg' => array(
 					'type'          => 'color',
-					'label'         => __( 'Product Rating Foreground', 'fl-builder' ),
+					'label'         => __( 'Product Rating Foreground', 'fl-theme-builder' ),
 					'show_reset'    => true,
 				),
 				'woo_rating_bg' => array(
 					'type'          => 'color',
-					'label'         => __( 'Product Rating Background', 'fl-builder' ),
+					'label'         => __( 'Product Rating Background', 'fl-theme-builder' ),
 					'show_reset'    => true,
 				),
 				'woo_rating_font_size' => array(
 					'type'          => 'text',
-					'label'         => __( 'Product Rating Font Size', 'fl-builder' ),
+					'label'         => __( 'Product Rating Font Size', 'fl-theme-builder' ),
 					'default'       => '',
 					'maxlength'     => '3',
 					'size'          => '4',
@@ -327,12 +324,12 @@ final class FLThemeBuilderWooCommerceArchive {
 				),
 				'woo_price_color' => array(
 					'type'          => 'color',
-					'label'         => __( 'Product Price Text Color', 'fl-builder' ),
+					'label'         => __( 'Product Price Text Color', 'fl-theme-builder' ),
 					'show_reset'    => true,
 				),
 				'woo_price_font_size' => array(
 					'type'          => 'text',
-					'label'         => __( 'Product Price Font Size', 'fl-builder' ),
+					'label'         => __( 'Product Price Font Size', 'fl-theme-builder' ),
 					'default'       => '',
 					'maxlength'     => '3',
 					'size'          => '4',
@@ -346,13 +343,13 @@ final class FLThemeBuilderWooCommerceArchive {
 			'fields' => array(
 				'woo_button_bg_color' => array(
 					'type'          => 'color',
-					'label'         => __( 'Background Color', 'fl-builder' ),
+					'label'         => __( 'Background Color', 'fl-theme-builder' ),
 					'default'       => '',
 					'show_reset'    => true,
 				),
 				'woo_button_text_color' => array(
 					'type'          => 'color',
-					'label'         => __( 'Text Color', 'fl-builder' ),
+					'label'         => __( 'Text Color', 'fl-theme-builder' ),
 					'default'       => '',
 					'show_reset'    => true,
 				),

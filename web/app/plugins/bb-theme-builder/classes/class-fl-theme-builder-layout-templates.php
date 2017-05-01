@@ -21,6 +21,7 @@ final class FLThemeBuilderLayoutTemplates {
 		add_action( 'fl_builder_after_save_user_template',    __CLASS__ . '::after_save_user_template' );
 
 		// Filters
+		add_filter( 'fl_builder_template_selector_data',      __CLASS__ . '::template_selector_data', 10, 2 );
 		add_filter( 'fl_builder_override_apply_template',     __CLASS__ . '::override_apply_template', 1, 2 );
 	}
 
@@ -50,7 +51,8 @@ final class FLThemeBuilderLayoutTemplates {
 	 * Sets the template selector data type for theme templates.
 	 *
 	 * @since 1.0
-	 * @return void
+	 * @param string $type
+	 * @return string
 	 */
 	static public function template_selector_data_type( $type ) {
 		global $post;
@@ -66,6 +68,49 @@ final class FLThemeBuilderLayoutTemplates {
 		}
 
 		return $type;
+	}
+
+	/**
+	 * Filters out templates for plugins that aren't currently
+	 * active like WooCommerce.
+	 *
+	 * @since 1.0
+	 * @param array $data
+	 * @param string $type
+	 * @return void
+	 */
+	static public function template_selector_data( $data, $type ) {
+
+		if ( ! in_array( $type, array( 'singular', 'archive' ) ) ) {
+			return $data;
+		}
+
+		$filter = array();
+
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			$filter[] = 'Product';
+			$filter[] = 'Products';
+		}
+
+		if ( empty( $filter ) ) {
+			return $data;
+		}
+
+		foreach ( $data['templates'] as $key => $template ) {
+			if ( in_array( $template['name'], $filter ) ) {
+				unset( $data['templates'][ $key ] );
+			}
+		}
+
+		foreach ( $data['categorized'] as $cat_key => $cat_data ) {
+			foreach ( $cat_data['templates'] as $key => $template ) {
+				if ( in_array( $template['name'], $filter ) ) {
+					unset( $data['categorized'][ $cat_key ]['templates'][ $key ] );
+				}
+			}
+		}
+
+		return $data;
 	}
 
 	/**

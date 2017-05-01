@@ -24,7 +24,7 @@ final class FLThemeBuilderWhiteLabel {
 	 */
 	static public function plugins_page( $plugins )
 	{
-		$default  = __( 'Page Builder', 'fl-builder' );
+		$default  = __( 'Page Builder', 'fl-theme-builder' );
 		$branding = FLBuilderModel::get_branding();
 		$key	  = plugin_basename( FL_THEME_BUILDER_DIR . 'bb-theme-builder.php' );
 

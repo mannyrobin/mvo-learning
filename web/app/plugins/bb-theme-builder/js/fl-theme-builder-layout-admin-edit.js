@@ -85,6 +85,7 @@
 			var type      = $( 'input[name=fl-theme-layout-type]' ).val(),
 				sticky    = $( '.fl-theme-layout-header-sticky' ),
 				shrink    = $( '.fl-theme-layout-header-shrink' ),
+				overlay   = $( '.fl-theme-layout-header-overlay' ),
 				hookRow   = $( '.fl-theme-layout-hook-row' ),
 				hook      = $( 'select[name=fl-theme-layout-hook]' ),
 				orderRow  = $( '.fl-theme-layout-order-row' ),
@@ -92,9 +93,11 @@
 
 			if ( 'header' == type ) {
 				sticky.show().find( 'select' ).trigger( 'change' );
+				overlay.show();
 			} else {
 				sticky.hide();
 				shrink.hide();
+				overlay.hide();
 			}
 
 			if ( 'part' == type ) {
@@ -161,7 +164,13 @@
 			}
 
 			if ( 0 === config.saved.length ) {
+
 				savedWrap.append( template( { type : type } ) );
+
+				if ( 'exclusion' == type ) {
+					savedWrap.find( '.fl-theme-builder-remove-rule-button' ).show();
+				}
+
 			} else {
 
 				for ( ; i < config.saved.length; i++ ) {
@@ -410,22 +419,31 @@
 		 */
 		_removeLocationClicked: function( e )
 		{
-			var button    = $( e.target ),
-				wrap      = button.closest( '.fl-theme-builder-location-rules' ),
-				parent    = button.parents( '.fl-theme-builder-saved-location' ),
-				select    = parent.find( '.fl-theme-builder-location' ),
-				locations = wrap.find( '.fl-theme-builder-saved-location' ),
-				remove    = wrap.find( '.fl-theme-builder-saved-locations .fl-theme-builder-remove-rule-button' );
+			var button      = $( e.target ),
+				wrap        = button.closest( '.fl-theme-builder-location-rules' ),
+				parent      = button.parents( '.fl-theme-builder-saved-location' ),
+				select      = parent.find( '.fl-theme-builder-location' ),
+				locations   = wrap.find( '.fl-theme-builder-saved-location' ),
+				remove      = wrap.find( '.fl-theme-builder-saved-locations .fl-theme-builder-remove-rule-button' ),
+				isExclusion = button.closest( '.fl-theme-builder-exclusion-rules' ).length ? true : false;
 
 			if ( locations.length > 1 ) {
 				button.closest( '.fl-theme-builder-saved-location' ).remove();
 			}
 
 			if ( 1 === locations.length ) {
-				select.val( '' );
-				remove.hide();
-				select.parent().removeClass( 'fl-theme-builder-rule-objects-visible' );
-			} else if ( 2 === locations.length && '' == $( '.fl-theme-builder-location' ).val() ) {
+
+				select.val( '' ).parent().removeClass( 'fl-theme-builder-rule-objects-visible' );
+
+				if ( ! isExclusion ) {
+					remove.hide();
+				}
+				if ( isExclusion ) {
+					$( '.fl-theme-builder-exclusion-rules' ).hide();
+					$( '.fl-theme-builder-add-exclusion' ).show();
+				}
+
+			} else if ( ! isExclusion && 2 === locations.length && '' == wrap.find( '.fl-theme-builder-location' ).eq( 0 ).val() ) {
 				remove.hide();
 			}
 		},

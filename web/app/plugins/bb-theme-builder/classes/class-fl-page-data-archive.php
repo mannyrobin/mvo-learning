@@ -40,4 +40,24 @@ final class FLPageDataArchive {
 
 		return $title;
 	}
+
+	/**
+	 * @since 1.0
+	 * @return string
+	 */
+	static public function get_term_meta( $settings ) {
+
+		if ( empty( $settings->key ) ) {
+			return '';
+		}
+
+		$term_id        = 0;
+		$queried_object = get_queried_object();
+
+		if ( is_object( $queried_object ) && isset( $queried_object->term_id ) ) {
+			$term_id = $queried_object->term_id;
+		}
+
+		return get_term_meta( $term_id, $settings->key, true );
+	}
 }

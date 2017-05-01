@@ -3,7 +3,7 @@
 	<div class="fl-theme-builder-preview-select-title">
 		<i class="fa fa-caret-down"></i>
 		<div>
-			<?php echo __( 'Preview As', 'fl-builder' ) . ': '; ?>
+			<?php echo __( 'Preview As', 'fl-theme-builder' ) . ': '; ?>
 			<span><?php echo $label; ?></span>
 		</div>
 	</div>

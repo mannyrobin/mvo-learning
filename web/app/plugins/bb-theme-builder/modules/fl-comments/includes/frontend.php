@@ -1,10 +1,13 @@
 <?php
 
+ob_start();
 comments_template();
+$comments = ob_get_clean();
 
-if ( ! comments_open() && ! get_comments_number() ) {
-	$object = get_post_type_object( get_post_type() );
+if ( empty( $comments ) ) {
 	echo '<div class="fl-builder-module-placeholder-message">';
-	_ex( sprintf( 'Comments will not display for this %s.', $object->labels->singular_name ), 'post type label', 'fl-theme-builder' );
+	_e( 'Comments', 'fl-theme-builder' );
 	echo '</div>';
+} else {
+	echo $comments;
 }

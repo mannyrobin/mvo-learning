@@ -73,8 +73,9 @@ final class FLThemeBuilderLayoutData {
 	 */
 	static public function get_settings( $post_id ) {
 		$defaults = array(
-			'sticky' => 0,
-			'shrink' => 0,
+			'sticky'  => 0,
+			'shrink'  => 0,
+			'overlay' => 0,
 		);
 
 		$settings = get_post_meta( $post_id, '_fl_theme_layout_settings', true );
@@ -244,13 +245,7 @@ final class FLThemeBuilderLayoutData {
 			}
 
 			foreach ( $layouts as $layout_type => $layout_array ) {
-
-				if ( 'part' == $layout_type ) {
-					$layouts[ $layout_type ] = $layout_array;
-				} else {
-					$layouts[ $layout_type ] = FLThemeBuilderRulesLocation::get_posts_from_array( $layout_array );
-				}
-
+				$layouts[ $layout_type ] = FLThemeBuilderRulesLocation::get_posts_from_array( $layout_array, $layout_type );
 				$layouts[ $layout_type ] = FLThemeBuilderRulesUser::get_posts_from_array( $layouts[ $layout_type ] );
 				uasort( $layouts[ $layout_type ], array( 'FLThemeBuilderLayoutData', 'order_layouts' ) );
 			}

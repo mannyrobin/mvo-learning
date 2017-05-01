@@ -220,6 +220,9 @@ final class FLThemeBuilderRulesLocation {
 			if ( empty( $exclusions ) ) {
 				continue;
 			}
+			else if ( 'general:404' == $location['location'] && in_array( 'general:404', $exclusions ) ) {
+				$exclude = '404' != get_post_meta( $post['id'], '_fl_theme_layout_type', true );
+			}
 			else if ( $location['object'] && in_array( $location['object'], $exclusions ) ) {
 				$exclude = true;
 			}
@@ -265,12 +268,14 @@ final class FLThemeBuilderRulesLocation {
 	 *
 	 * @since 1.0
 	 * @param array $array
+	 * @param string $type
 	 * @return array
 	 */
-	static public function get_posts_from_array( $array ) {
+	static public function get_posts_from_array( $array, $type ) {
 		$location = self::get_current_page_location();
 		$post_id  = get_the_ID();
 		$posts    = array();
+		$is_part  = 'part' == $type;
 
 		if ( count( $array ) > 0 ) {
 
@@ -284,7 +289,7 @@ final class FLThemeBuilderRulesLocation {
 			}
 
 			// Check for a location layout.
-			if ( empty( $posts ) ) {
+			if ( empty( $posts ) || $is_part ) {
 				foreach ( $array as $post ) {
 					if ( in_array( $location['location'], $post['locations'] ) ) {
 						$posts[] = $post;
@@ -293,7 +298,7 @@ final class FLThemeBuilderRulesLocation {
 			}
 
 			// Check for an all archives layout.
-			if ( empty( $posts ) && ( is_archive() || is_home() ) ) {
+			if ( ( empty( $posts ) || $is_part ) && ( is_archive() || is_home() ) ) {
 				foreach ( $array as $post ) {
 					if ( in_array( 'general:archive', $post['locations'] ) ) {
 						$posts[] = $post;
@@ -304,7 +309,7 @@ final class FLThemeBuilderRulesLocation {
 			if ( is_singular() ) {
 
 				// Check for a single layout by parent.
-				if ( empty( $posts ) ) {
+				if ( empty( $posts ) || $is_part ) {
 					foreach ( $array as $post ) {
 						foreach ( $post['locations'] as $post_location ) {
 							if ( stristr( $post_location, ':post:' ) ) {
@@ -318,7 +323,7 @@ final class FLThemeBuilderRulesLocation {
 				}
 
 				// Check for a single layout by taxonomy.
-				if ( empty( $posts ) ) {
+				if ( empty( $posts ) || $is_part ) {
 					foreach ( $array as $post ) {
 						foreach ( $post['locations'] as $post_location ) {
 							if ( stristr( $post_location, ':taxonomy:' ) ) {
@@ -332,7 +337,7 @@ final class FLThemeBuilderRulesLocation {
 				}
 
 				// Check for an all single layout.
-				if ( empty( $posts ) ) {
+				if ( empty( $posts ) || $is_part ) {
 					foreach ( $array as $post ) {
 						if ( in_array( 'general:single', $post['locations'] ) ) {
 							$posts[] = $post;
@@ -342,7 +347,7 @@ final class FLThemeBuilderRulesLocation {
 			}
 
 			// Finally, check for a site wide layout.
-			if ( empty( $posts ) ) {
+			if ( empty( $posts ) || $is_part ) {
 				foreach ( $array as $post ) {
 					if ( in_array( 'general:site', $post['locations'] ) ) {
 						$posts[] = $post;
@@ -1253,7 +1258,7 @@ final class FLThemeBuilderRulesLocation {
 	    // Get the preview query args.
 	    $preview = explode( ':', $preview );
 
-	    if ( 'post' == $preview[0] ) {
+	    if ( 'post' == $preview[0] && post_type_exists( $preview[1] ) ) {
 		    self::$preview_args = array(
 		    	'post_type' => $preview[1],
 		    	'p' => $preview[2],

@@ -22,6 +22,7 @@ final class FLThemeBuilderLayoutRenderer {
 		add_action( 'template_include',                __CLASS__ . '::override_template_include', 11 );
 
 		// Filters
+		add_filter( 'body_class',            		   __CLASS__ . '::body_class' );
 		add_filter( 'fl_builder_render_js',            __CLASS__ . '::render_js' );
 		add_filter( 'fl_builder_render_css',           __CLASS__ . '::render_css' );
 		add_filter( 'fl_theme_builder_render_header',  __CLASS__ . '::render_header' );
@@ -50,6 +51,25 @@ final class FLThemeBuilderLayoutRenderer {
 				}, ( $part['order'] ? $part['order'] : 10 ) );
 			}
 		}
+	}
+
+	/**
+	 * Adds theme layout body classes if theme layouts
+	 * are present.
+	 *
+	 * @since 1.0
+	 * @param array $classes
+	 * @return array
+	 */
+	static public function body_class( $classes ) {
+
+		$layouts = FLThemeBuilderLayoutData::get_current_page_layouts();
+
+		foreach ( $layouts as $key => $data ) {
+			$classes[] = 'fl-theme-builder-' . $key;
+		}
+
+		return $classes;
 	}
 
 	/**
@@ -122,7 +142,7 @@ final class FLThemeBuilderLayoutRenderer {
 			foreach ( $layout_group as $layout ) {
 
 				if ( 'header' == $layout_type ) {
-					wp_enqueue_script( 'jquery-throttle', FL_THEME_BUILDER_URL . '/js/jquery.throttle.min.js', array( 'jquery' ), FL_THEME_BUILDER_VERSION, true );
+					wp_enqueue_script( 'jquery-throttle', FL_THEME_BUILDER_URL . 'js/jquery.throttle.min.js', array( 'jquery' ), FL_THEME_BUILDER_VERSION, true );
 				}
 			}
 		}
@@ -331,10 +351,11 @@ final class FLThemeBuilderLayoutRenderer {
 		$settings = FLThemeBuilderLayoutData::get_settings( $ids[0] );
 
 		FLBuilder::render_content_by_id( $ids[0], 'header', array(
-			'itemscope'   => 'itemscope',
-			'itemtype'    => 'http://schema.org/WPHeader',
-			'data-sticky' => $settings['sticky'],
-			'data-shrink' => $settings['shrink'],
+			'itemscope'    => 'itemscope',
+			'itemtype'     => 'http://schema.org/WPHeader',
+			'data-sticky'  => $settings['sticky'],
+			'data-shrink'  => $settings['shrink'],
+			'data-overlay' => $settings['overlay'],
 		) );
 
 		do_action( 'fl_theme_builder_after_render_header', $ids[0] );
@@ -355,6 +376,13 @@ final class FLThemeBuilderLayoutRenderer {
 
 		if ( empty( $ids ) ) {
 			return $template;
+		} elseif ( is_singular() ) {
+
+			$page_template = get_page_template_slug();
+
+			if ( 'fl-theme-layout' != get_post_type() && $page_template && 'default' != $page_template ) {
+				return $template;
+			}
 		}
 
 		return FL_THEME_BUILDER_DIR . 'includes/content.php';

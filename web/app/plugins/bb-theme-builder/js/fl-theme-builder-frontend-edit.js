@@ -18,6 +18,7 @@
 		_init: function()
 		{
 			this._bind();
+			this._maybeShowOverrideWarning();
 		},
 
 		/**
@@ -34,6 +35,36 @@
 		},
 
 		/**
+		 * Shows a confirmation dialog warning the user if they are about
+		 * to override a theme layout with a standard builder layout.
+		 *
+		 * @since 1.0
+		 * @access private
+		 * @method _maybeShowOverrideWarning
+		 */
+		_maybeShowOverrideWarning: function()
+		{
+			var enabled  = FLBuilderConfig.builderEnabled,
+				postType = FLBuilderConfig.postType,
+				layouts  = FLThemeBuilderConfig.layouts,
+				strings  = FLThemeBuilderConfig.strings;
+
+			if ( ! enabled && 'fl-theme-layout' != postType && 'undefined' != typeof layouts.singular ) {
+				FLBuilder.confirm( {
+					message : strings.overrideWarning,
+					strings : {
+						ok     : strings.overrideWarningOk,
+						cancel : strings.overrideWarningCancel
+					},
+					cancel : function() {
+						FLBuilder.showAjaxLoader();
+						window.location.href = FLThemeBuilderConfig.adminEditURL;
+					}
+				} );
+			}
+		},
+
+		/**
 		 * Shows the edit overlay when the mouse enters a
 		 * header, footer or part.
 		 *
@@ -43,7 +74,7 @@
 		 */
 		_partMouseenter: function()
 		{
-
+			// TODO
 		},
 
 		/**
@@ -56,7 +87,7 @@
 		 */
 		_partMouseleave: function()
 		{
-
+			// TODO
 		}
 	};
 

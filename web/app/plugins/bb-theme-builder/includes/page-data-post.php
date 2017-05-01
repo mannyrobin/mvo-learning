@@ -5,7 +5,7 @@
  */
 FLPageData::add_post_property( 'title', array(
 	'label'       => __( 'Post Title', 'fl-theme-builder' ),
-	'group'       => 'general',
+	'group'       => 'posts',
 	'type'        => 'string',
 	'getter'      => 'get_the_title',
 	'placeholder' => 'Lorem Ipsum Dolor',
@@ -16,7 +16,7 @@ FLPageData::add_post_property( 'title', array(
  */
 FLPageData::add_post_property( 'excerpt', array(
 	'label'       => __( 'Post Excerpt', 'fl-theme-builder' ),
-	'group'       => 'general',
+	'group'       => 'posts',
 	'type'        => 'string',
 	'getter'      => 'FLPageDataPost::get_excerpt',
 	'placeholder' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
@@ -43,7 +43,7 @@ FLPageData::add_post_property_settings_fields( 'excerpt', array(
  */
 FLPageData::add_post_property( 'content', array(
 	'label'       => __( 'Post Content', 'fl-theme-builder' ),
-	'group'       => 'general',
+	'group'       => 'posts',
 	'type'        => 'string',
 	'post_type'   => 'fl-theme-layout',
 	'getter'      => 'FLPageDataPost::get_content',
@@ -55,7 +55,7 @@ FLPageData::add_post_property( 'content', array(
  */
 FLPageData::add_post_property( 'link', array(
 	'label'       => __( 'Post Link', 'fl-theme-builder' ),
-	'group'       => 'general',
+	'group'       => 'posts',
 	'type'        => array( 'string' ),
 	'getter'      => 'FLPageDataPost::get_link',
 ) );
@@ -87,7 +87,7 @@ FLPageData::add_post_property_settings_fields( 'link', array(
  */
 FLPageData::add_post_property( 'url', array(
 	'label'       => __( 'Post URL', 'fl-theme-builder' ),
-	'group'       => 'general',
+	'group'       => 'posts',
 	'type'        => array( 'url' ),
 	'getter'      => 'get_permalink',
 ) );
@@ -97,7 +97,7 @@ FLPageData::add_post_property( 'url', array(
  */
 FLPageData::add_post_property( 'date', array(
 	'label'       => __( 'Post Date', 'fl-theme-builder' ),
-	'group'       => 'general',
+	'group'       => 'posts',
 	'type'        => 'string',
 	'getter'      => 'FLPageDataPost::get_date',
 ) );
@@ -126,7 +126,7 @@ FLPageData::add_post_property_settings_fields( 'date', array(
  */
 FLPageData::add_post_property( 'featured_image', array(
 	'label'       => __( 'Post Featured Image', 'fl-theme-builder' ),
-	'group'       => 'general',
+	'group'       => 'posts',
 	'type'        => 'string',
 	'getter'      => 'FLPageDataPost::get_featured_image',
 ) );
@@ -183,7 +183,7 @@ FLPageData::add_post_property_settings_fields( 'featured_image', array(
  */
 FLPageData::add_post_property( 'featured_image_url', array(
 	'label'       => __( 'Post Featured Image', 'fl-theme-builder' ),
-	'group'       => 'general',
+	'group'       => 'posts',
 	'type'        => 'photo',
 	'getter'      => 'FLPageDataPost::get_featured_image_url',
 ) );
@@ -205,7 +205,7 @@ FLPageData::add_post_property_settings_fields( 'featured_image_url', array(
  */
 FLPageData::add_post_property( 'attached_images', array(
 	'label'       => __( 'Post Attached Images', 'fl-theme-builder' ),
-	'group'       => 'general',
+	'group'       => 'posts',
 	'type'        => 'multiple-photos',
 	'getter'      => 'FLPageDataPost::get_attached_images',
 ) );
@@ -215,7 +215,7 @@ FLPageData::add_post_property( 'attached_images', array(
  */
 FLPageData::add_post_property( 'terms_list', array(
 	'label'       => __( 'Post Terms List', 'fl-theme-builder' ),
-	'group'       => 'general',
+	'group'       => 'posts',
 	'type'        => array( 'string' ),
 	'getter'      => 'FLPageDataPost::get_terms_list',
 ) );
@@ -386,7 +386,7 @@ FLPageData::add_post_property_settings_fields( 'author_profile_picture_url', arr
  */
 FLPageData::add_post_property( 'custom_field', array(
 	'label'       => __( 'Post Custom Field', 'fl-theme-builder' ),
-	'group'       => 'general',
+	'group'       => 'posts',
 	'type'        => 'all',
 	'getter'      => 'FLPageDataPost::get_custom_field',
 ) );

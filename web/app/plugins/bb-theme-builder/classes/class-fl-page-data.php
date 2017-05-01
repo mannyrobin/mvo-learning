@@ -79,6 +79,12 @@ final class FLPageData {
 			'general' => array(
 				'label' => __( 'General', 'fl-theme-builder' ),
 			),
+			'archives' => array(
+				'label' => __( 'Archives', 'fl-theme-builder' ),
+			),
+			'posts' => array(
+				'label' => __( 'Posts', 'fl-theme-builder' ),
+			),
 			'comments' => array(
 				'label' => __( 'Comments', 'fl-theme-builder' ),
 			),

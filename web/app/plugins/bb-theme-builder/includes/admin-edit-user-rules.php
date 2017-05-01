@@ -2,12 +2,12 @@
 	<tr class="fl-mb-row">
 		<td  class="fl-mb-row-heading">
 			<label><?php _e( 'Users', 'fl-theme-builder' ); ?></label>
-			<i class="fl-mb-row-heading-help dashicons dashicons-editor-help" title="<?php esc_html_e( sprintf( 'Choose which users should be able to view this %s. If none are selected, all users will see this %s.', $post_type->labels->singular_name, $post_type->labels->singular_name ), 'fl-theme-builder' ); ?>"></i>
+			<i class="fl-mb-row-heading-help dashicons dashicons-editor-help" title="<?php esc_html_e( sprintf( __( 'Choose which users should be able to view this %s. If none are selected, all users will see this %s.', 'fl-theme-builder' ), $post_type->labels->singular_name, $post_type->labels->singular_name ) ); ?>"></i>
 		</td>
 		<td class="fl-mb-row-content">
 			<div class="fl-theme-builder-saved-user-rules fl-theme-builder-saved-rules"></div>
 			<div class="fl-theme-builder-add-user-rule fl-theme-builder-add-rule">
-				<a href="javascript:void(0);" class="fl-theme-builder-add-user-rule fl-theme-builder-add-rule button"><?php _e( 'Add User Rule', 'fl-builder' ); ?></a>
+				<a href="javascript:void(0);" class="fl-theme-builder-add-user-rule fl-theme-builder-add-rule button"><?php _e( 'Add User Rule', 'fl-theme-builder' ); ?></a>
 			</div>
 		</td>
 	</tr>
@@ -17,7 +17,7 @@
 	<div class="fl-theme-builder-saved-user-rule fl-theme-builder-saved-rule">
 		<div class="fl-theme-builder-saved-rule-select">
 			<select name="fl-theme-builder-user-rule[]"  class="fl-theme-builder-user-rule">
-				<option value=""><?php _e( 'Choose...', 'fl-theme-builder' ); ?></option>
+				<option value=""><?php _e( 'All Users', 'fl-theme-builder' ); ?></option>
 				<?php foreach ( $rules as $group_key => $group_data ) : ?>
 				<optgroup label="<?php echo $group_data['label']; ?>">
 					<?php foreach ( $group_data['rules'] as $rule_key => $rule_data ) : ?>

@@ -29,8 +29,8 @@ final class FLThemeBuilder {
 	static public function register_user_access_settings() {
 		FLBuilderUserAccess::register_setting( 'theme_builder_editing', array(
 			'default'     => array( 'administrator' ),
-			'group'       => __( 'Admin', 'fl-builder' ),
-			'label'       => __( 'Theme Builder Editing', 'fl-builder' ),
+			'group'       => __( 'Admin', 'fl-theme-builder' ),
+			'label'       => __( 'Theme Builder Editing', 'fl-theme-builder' ),
 			'description' => __( 'The selected roles will be able to edit themes using the builder.', 'fl-theme-builder' ),
 		) );
 	}
@@ -60,6 +60,19 @@ final class FLThemeBuilder {
 
 		// Nothing found
 		return false;
+	}
+
+	/**
+	 * Checks to see if the current page has a layout
+	 * of the specified type.
+	 *
+	 * @since 1.0
+	 * @param string $type
+	 * @return bool
+	 */
+	static public function has_layout( $type = null ) {
+		$layouts = FLThemeBuilderLayoutData::get_current_page_layouts( $type );
+		return count( $layouts ) ? true : false;
 	}
 }
 

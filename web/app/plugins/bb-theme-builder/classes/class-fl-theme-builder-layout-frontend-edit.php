@@ -34,10 +34,6 @@ final class FLThemeBuilderLayoutFrontendEdit {
 		wp_enqueue_style( 'fl-theme-builder-layout-frontend-edit', FL_THEME_BUILDER_URL . 'css/fl-theme-builder-layout-frontend-edit.css', array(), FL_THEME_BUILDER_VERSION );
 
 		wp_enqueue_script( 'fl-theme-builder-layout-frontend-edit', FL_THEME_BUILDER_URL . 'js/fl-theme-builder-layout-frontend-edit.js', array(), FL_THEME_BUILDER_VERSION );
-
-		wp_localize_script( 'fl-theme-builder-layout-frontend-edit', 'FLThemeBuilderConfig', array(
-			'previewLocations' => FLThemeBuilderRulesLocation::get_preview_locations( $post->ID ),
-		) );
 	}
 }
 

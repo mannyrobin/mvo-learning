@@ -311,10 +311,12 @@ final class FLThemeBuilderFieldConnections {
 	}
 
 	/**
-	 * Connects and caches all layout node settings before the
-	 * page renders for the first post in the query. This ensures
-	 * that settings are connected while in the loop as not all
-	 * WordPress functions for posts work outside the loop.
+	 * Connects and caches all layout node settings before the page
+	 * renders for the first post in the query. This ensures that
+	 * settings are connected while in the loop as not all WordPress
+	 * functions for posts work outside the loop. We also have to go
+	 * through the entire loop as not doing so appears to cause issues,
+	 * most notably with Yoast SEO (see issue #13).
 	 *
 	 * @since 1.0
 	 * @return void
@@ -326,6 +328,7 @@ final class FLThemeBuilderFieldConnections {
 
 	    $layout_ids  = FLThemeBuilderLayoutData::get_current_page_layout_ids();
 	    $node_status = FLBuilderModel::get_node_status();
+	    $connected   = false;
 
 	    if ( empty( $layout_ids ) ) {
 		    return;
@@ -337,16 +340,19 @@ final class FLThemeBuilderFieldConnections {
 
 			the_post();
 
-			foreach ( $layout_ids as $layout_id ) {
+			if ( ! $connected ) {
 
-				$data = FLBuilderModel::get_layout_data( $node_status, $layout_id );
+				foreach ( $layout_ids as $layout_id ) {
 
-				foreach ( $data as $node ) {
-					FLBuilderModel::get_node_settings( $node );
+					$data = FLBuilderModel::get_layout_data( $node_status, $layout_id );
+
+					foreach ( $data as $node ) {
+						FLBuilderModel::get_node_settings( $node );
+					}
 				}
 			}
 
-			break;
+			$connected = true;
 		}
 
 		rewind_posts();
