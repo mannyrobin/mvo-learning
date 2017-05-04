@@ -4,6 +4,7 @@ web/app/plugins/*
 !web/app/plugins/bb-plugin
 !web/app/plugins/bb-theme-builder
 !web/app/plugins/wpforms*
+web/app/plugins/wpforms-ga
 !web/app/plugins/butterbean
 !web/app/plugins/butterbean-tinymce
 web/app/mu-plugins/*/
