@@ -13,10 +13,6 @@
       "url": "https://wpackagist.org"
     },
 		{
-			"type": "composer",
-			"url": "https://composer.imnotsoup.com"
-		},
-		{
 			"type": "package",
 			"package": {
 				"name": "deliciousbrains/wp-migrate-db-pro",
@@ -60,13 +56,39 @@
 					"composer/installers": "~1.0.12"
 				}
 			}
+		},
+		{
+			"type": "package",
+			"package": {
+				"name": "hipdevteam/social-warfare-pro",
+				"version": "2.2.6",
+				"type": "wordpress-plugin",
+				"source": {
+					"url": "https://gitlab.com/hipdevteam/social-warfare-pro.git",
+					"type": "git",
+					"reference": "2.2.6"
+				}
+			}
+		},
+		{
+			"type": "package",
+			"package": {
+				"name": "hipdevteam/reviews-bb-module",
+				"version": "2.0.1",
+				"type": "wordpress-plugin",
+				"source": {
+					"url": "https://gitlab.com/hipdevteam/reviews-bb-module.git",
+					"type": "git",
+					"reference": "2.0.1"
+				}
+			}
 		}
   ],
   "require": {
     "php": ">=5.6",
     "composer/installers": "~1.0.12",
     "vlucas/phpdotenv": "^2.0.1",
-    "johnpbloch/wordpress": "^4.7",
+    "johnpbloch/wordpress": "^4.8",
     "oscarotero/env": "^1.0",
     "roots/wp-password-bcrypt": "1.0.0",
 		"deliciousbrains/wp-migrate-db-pro": "1.7.1",
@@ -79,6 +101,7 @@
 		"wpackagist-plugin/duracelltomi-google-tag-manager": "*",
 		"wpackagist-plugin/autodescription": "*",
 		"wpackagist-plugin/schema-app-structured-data-for-schemaorg": "*",
+		"wpackagist-plugin/prizm-image": "*",
 		"ydlr/wpforms-ga": "^0.1",
 		"hipdevteam/reviews-bb-module": "^2.0.0",
 		"hipdevteam/social-warfare-pro": "^2.2.1"
