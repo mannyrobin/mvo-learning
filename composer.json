@@ -104,7 +104,8 @@
 		"wpackagist-plugin/prizm-image": "*",
 		"ydlr/wpforms-ga": "^0.1",
 		"hipdevteam/reviews-bb-module": "^2.0.0",
-		"hipdevteam/social-warfare-pro": "^2.2.1"
+		"hipdevteam/social-warfare-pro": "^2.2.1",
+		"hipdevteam/bb-related-posts": "*"
   },
   "require-dev": {
   },
