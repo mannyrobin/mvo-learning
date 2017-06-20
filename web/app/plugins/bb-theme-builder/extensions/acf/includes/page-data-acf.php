@@ -3,35 +3,35 @@
 /**
  * Advanced Custom Field String
  */
-FLPageData::add_archive_property( 'acf', $data = array(
+FLPageData::add_archive_property( 'acf', array(
 	'label'   => __( 'ACF Archive Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => array( 'string', 'custom_field' ),
 	'getter'  => 'FLPageDataACF::string_field',
 ) );
 
-FLPageData::add_post_property( 'acf', $data = array(
+FLPageData::add_post_property( 'acf', array(
 	'label'   => __( 'ACF Post Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => array( 'string', 'custom_field' ),
 	'getter'  => 'FLPageDataACF::string_field',
 ) );
 
-FLPageData::add_post_property( 'acf_author', $data = array(
+FLPageData::add_post_property( 'acf_author', array(
 	'label'   => __( 'ACF Post Author Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => array( 'string', 'custom_field' ),
 	'getter'  => 'FLPageDataACF::string_field',
 ) );
 
-FLPageData::add_site_property( 'acf_user', $data = array(
+FLPageData::add_site_property( 'acf_user', array(
 	'label'   => __( 'ACF User Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => array( 'string', 'custom_field' ),
 	'getter'  => 'FLPageDataACF::string_field',
 ) );
 
-FLPageData::add_site_property( 'acf_option', $data = array(
+FLPageData::add_site_property( 'acf_option', array(
 	'label'   => __( 'ACF Option Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => array( 'string', 'custom_field' ),
@@ -88,35 +88,35 @@ FLPageData::add_site_property_settings_fields( 'acf_option', $form );
 /**
  * Advanced Custom Field URL
  */
-FLPageData::add_archive_property( 'acf_url', $data = array(
+FLPageData::add_archive_property( 'acf_url', array(
 	'label'   => __( 'ACF Archive Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => 'url',
 	'getter'  => 'FLPageDataACF::url_field',
 ) );
 
-FLPageData::add_post_property( 'acf_url', $data = array(
+FLPageData::add_post_property( 'acf_url', array(
 	'label'   => __( 'ACF Post Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => 'url',
 	'getter'  => 'FLPageDataACF::url_field',
 ) );
 
-FLPageData::add_post_property( 'acf_author_url', $data = array(
+FLPageData::add_post_property( 'acf_author_url', array(
 	'label'   => __( 'ACF Post Author Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => 'url',
 	'getter'  => 'FLPageDataACF::url_field',
 ) );
 
-FLPageData::add_site_property( 'acf_user_url', $data = array(
+FLPageData::add_site_property( 'acf_user_url', array(
 	'label'   => __( 'ACF User Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => 'url',
 	'getter'  => 'FLPageDataACF::url_field',
 ) );
 
-FLPageData::add_site_property( 'acf_option_url', $data = array(
+FLPageData::add_site_property( 'acf_option_url', array(
 	'label'   => __( 'ACF Option Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => 'url',
@@ -163,35 +163,35 @@ FLPageData::add_site_property_settings_fields( 'acf_option_url', $form );
 /**
  * Advanced Custom Field Photo
  */
-FLPageData::add_archive_property( 'acf_photo', $data = array(
+FLPageData::add_archive_property( 'acf_photo', array(
 	'label'   => __( 'ACF Archive Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => 'photo',
 	'getter'  => 'FLPageDataACF::photo_field',
 ) );
 
-FLPageData::add_post_property( 'acf_photo', $data = array(
+FLPageData::add_post_property( 'acf_photo', array(
 	'label'   => __( 'ACF Post Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => 'photo',
 	'getter'  => 'FLPageDataACF::photo_field',
 ) );
 
-FLPageData::add_post_property( 'acf_author_photo', $data = array(
+FLPageData::add_post_property( 'acf_author_photo', array(
 	'label'   => __( 'ACF Post Author Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => 'photo',
 	'getter'  => 'FLPageDataACF::photo_field',
 ) );
 
-FLPageData::add_site_property( 'acf_user_photo', $data = array(
+FLPageData::add_site_property( 'acf_user_photo', array(
 	'label'   => __( 'ACF User Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => 'photo',
 	'getter'  => 'FLPageDataACF::photo_field',
 ) );
 
-FLPageData::add_site_property( 'acf_option_photo', $data = array(
+FLPageData::add_site_property( 'acf_option_photo', array(
 	'label'   => __( 'ACF Option Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => 'photo',
@@ -236,35 +236,35 @@ FLPageData::add_site_property_settings_fields( 'acf_option_photo', $form );
 /**
  * Advanced Custom Field Multiple Photos
  */
-FLPageData::add_archive_property( 'acf_gallery', $data = array(
+FLPageData::add_archive_property( 'acf_gallery', array(
 	'label'   => __( 'ACF Archive Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => 'multiple-photos',
 	'getter'  => 'FLPageDataACF::multiple_photos_field',
 ) );
 
-FLPageData::add_post_property( 'acf_gallery', $data = array(
+FLPageData::add_post_property( 'acf_gallery', array(
 	'label'   => __( 'ACF Post Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => 'multiple-photos',
 	'getter'  => 'FLPageDataACF::multiple_photos_field',
 ) );
 
-FLPageData::add_post_property( 'acf_author_gallery', $data = array(
+FLPageData::add_post_property( 'acf_author_gallery', array(
 	'label'   => __( 'ACF Post Author Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => 'multiple-photos',
 	'getter'  => 'FLPageDataACF::multiple_photos_field',
 ) );
 
-FLPageData::add_site_property( 'acf_user_gallery', $data = array(
+FLPageData::add_site_property( 'acf_user_gallery', array(
 	'label'   => __( 'ACF User Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => 'multiple-photos',
 	'getter'  => 'FLPageDataACF::multiple_photos_field',
 ) );
 
-FLPageData::add_site_property( 'acf_option_gallery', $data = array(
+FLPageData::add_site_property( 'acf_option_gallery', array(
 	'label'   => __( 'ACF Option Field', 'fl-theme-builder' ),
 	'group'   => 'acf',
 	'type'    => 'multiple-photos',
@@ -283,3 +283,54 @@ FLPageData::add_post_property_settings_fields( 'acf_gallery', $form );
 FLPageData::add_post_property_settings_fields( 'acf_author_gallery', $form );
 FLPageData::add_site_property_settings_fields( 'acf_user_gallery', $form );
 FLPageData::add_site_property_settings_fields( 'acf_option_gallery', $form );
+
+/**
+ * Advanced Custom Field Color
+ */
+FLPageData::add_archive_property( 'acf_color', array(
+	'label'   => __( 'ACF Archive Field', 'fl-theme-builder' ),
+	'group'   => 'acf',
+	'type'    => 'color',
+	'getter'  => 'FLPageDataACF::color_field',
+) );
+
+FLPageData::add_post_property( 'acf_color', array(
+	'label'   => __( 'ACF Post Field', 'fl-theme-builder' ),
+	'group'   => 'acf',
+	'type'    => 'color',
+	'getter'  => 'FLPageDataACF::color_field',
+) );
+
+FLPageData::add_post_property( 'acf_author_color', array(
+	'label'   => __( 'ACF Post Author Field', 'fl-theme-builder' ),
+	'group'   => 'acf',
+	'type'    => 'color',
+	'getter'  => 'FLPageDataACF::color_field',
+) );
+
+FLPageData::add_site_property( 'acf_user_color', array(
+	'label'   => __( 'ACF User Field', 'fl-theme-builder' ),
+	'group'   => 'acf',
+	'type'    => 'color',
+	'getter'  => 'FLPageDataACF::color_field',
+) );
+
+FLPageData::add_site_property( 'acf_option_color', array(
+	'label'   => __( 'ACF Option Field', 'fl-theme-builder' ),
+	'group'   => 'acf',
+	'type'    => 'color',
+	'getter'  => 'FLPageDataACF::color_field',
+) );
+
+$form = array(
+	'name' => array(
+		'type'  => 'text',
+		'label' => __( 'Field Name', 'fl-theme-builder' ),
+	),
+);
+
+FLPageData::add_archive_property_settings_fields( 'acf_color', $form );
+FLPageData::add_post_property_settings_fields( 'acf_color', $form );
+FLPageData::add_post_property_settings_fields( 'acf_author_color', $form );
+FLPageData::add_site_property_settings_fields( 'acf_user_color', $form );
+FLPageData::add_site_property_settings_fields( 'acf_option_color', $form );

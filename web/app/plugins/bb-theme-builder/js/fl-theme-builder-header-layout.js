@@ -61,24 +61,28 @@
 
 			if ( ! editing && header.length ) {
 
-				this.win    	 = $( window );
-				this.body   	 = $( 'body' );
-				this.header 	 = header.eq( 0 );
-				this.overlay     = !! Number( header.attr( 'data-overlay' ) );
-				this.hasAdminBar = !! $( 'body.admin-bar' ).length;
+				header.imagesLoaded( $.proxy( function() {
 
-				if ( Number( header.attr( 'data-sticky' ) ) ) {
+					this.win    	 = $( window );
+					this.body   	 = $( 'body' );
+					this.header 	 = header.eq( 0 );
+					this.overlay     = !! Number( header.attr( 'data-overlay' ) );
+					this.hasAdminBar = !! $( 'body.admin-bar' ).length;
 
-					this.header.data( 'original-top', this.header.offset().top );
-					this.win.on( 'resize', $.throttle( 500, $.proxy( this._initSticky, this ) ) );
-					this._initSticky();
+					if ( Number( header.attr( 'data-sticky' ) ) ) {
 
-					if ( Number( header.attr( 'data-shrink' ) ) ) {
-						this.header.data( 'original-height', this.header.outerHeight() );
-						this.win.on( 'resize', $.throttle( 500, $.proxy( this._initShrink, this ) ) );
-						this._initShrink();
+						this.header.data( 'original-top', this.header.offset().top );
+						this.win.on( 'resize', $.throttle( 500, $.proxy( this._initSticky, this ) ) );
+						this._initSticky();
+
+						if ( Number( header.attr( 'data-shrink' ) ) ) {
+							this.header.data( 'original-height', this.header.outerHeight() );
+							this.win.on( 'resize', $.throttle( 500, $.proxy( this._initShrink, this ) ) );
+							this._initShrink();
+						}
 					}
-				}
+
+				}, this ) );
 			}
 		},
 

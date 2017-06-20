@@ -147,7 +147,7 @@ final class FLBuilderModel {
 	 * @access private
 	 * @var array $template_data
 	 */
-	static private $template_data = array();
+	static private $template_data = null;
 
 	/**
 	 * An array of cached post IDs for node templates.
@@ -191,7 +191,7 @@ final class FLBuilderModel {
 		add_filter('heartbeat_received',                               __CLASS__ . '::lock_post', 10, 2);
 
 		/* Core Templates */
-		self::register_templates( FL_BUILDER_DIR . 'data/templates.dat' );
+		self::register_core_templates();
 	}
 
 	/**
@@ -451,7 +451,7 @@ final class FLBuilderModel {
 			}
 		}
 
-		return $editable;
+		return (bool) apply_filters( 'fl_builder_is_post_editable', $editable );
 	}
 
 	/**
@@ -480,7 +480,9 @@ final class FLBuilderModel {
 	 */
 	static public function is_builder_enabled()
 	{
-		if(!is_admin() && post_password_required()) {
+		$post_id = self::get_post_id();
+
+		if(!is_admin() && post_password_required($post_id)) {
 			return false;
 		}
 		else if(self::is_builder_active()) {
@@ -489,7 +491,7 @@ final class FLBuilderModel {
 		else {
 
 			$post_types = self::get_post_types();
-			$post		= get_post(self::get_post_id());
+			$post		= get_post($post_id);
 
 			if($post && in_array($post->post_type, $post_types)) {
 				return get_post_meta($post->ID, '_fl_builder_enabled', true);
@@ -622,6 +624,9 @@ final class FLBuilderModel {
 			// Lock the post.
 			require_once ABSPATH . 'wp-admin/includes/post.php';
 			wp_set_post_lock( $post->ID );
+
+			// Allow devs to hook into when editing is enabled.
+			do_action( 'fl_builder_editing_enabled' );
 		}
 	}
 
@@ -3093,7 +3098,7 @@ final class FLBuilderModel {
 		$widgets = array();
 
 		foreach($wp_widget_factory->widgets as $class => $widget) {
-			$widget->class = $class;
+			$widget->class = get_class($widget);
 			$widgets[$widget->name] = $widget;
 		}
 
@@ -3434,7 +3439,7 @@ final class FLBuilderModel {
 		$new_post_id = wp_insert_post($data);
 
 		// Duplicate post meta.
-		$post_meta = $wpdb->get_results("SELECT meta_key, meta_value FROM {$wpdb->postmeta} WHERE post_id= {$post_id}");
+		$post_meta = $wpdb->get_results( $wpdb->prepare( "SELECT meta_key, meta_value FROM {$wpdb->postmeta} WHERE post_id = %d", $post_id ) );
 
 		if(count($post_meta) !== 0) {
 
@@ -3454,7 +3459,9 @@ final class FLBuilderModel {
 			}
 
 			$sql .= implode(" UNION ALL ", $sql_select);
+			// @codingStandardsIgnoreStart
 			$wpdb->query($sql);
+			// @codingStandardsIgnoreEnd
 		}
 
 		// Duplicate post terms.
@@ -4257,10 +4264,14 @@ final class FLBuilderModel {
 				// Update the layout data and settings.
 				self::update_layout_data($data);
 				self::update_layout_settings( $settings );
-			}
 
-			// Delete old asset cache.
-			self::delete_asset_cache();
+				// Delete old asset cache.
+				self::delete_asset_cache();
+
+				return array(
+					'layout_css' => $settings->css
+				);
+			}
 		}
 	}
 
@@ -4358,11 +4369,13 @@ final class FLBuilderModel {
 	 * @param object $node The type of object to check
 	 * @return bool
 	 */
-	static public function is_node_visible($node)
+	static public function is_node_visible( $node )
 	{
+		global $wp_the_query;
+
 		$is_visible = true;
 
-		if ( self::is_builder_active() ) {
+		if ( self::is_builder_active() && $wp_the_query->post->ID == self::get_post_id() ) {
 			return $is_visible;
 		}
 
@@ -4673,6 +4686,12 @@ final class FLBuilderModel {
 	 */
 	static public function set_node_template_default_type( $post_id, $post, $update )
 	{
+		global $pagenow;
+
+		if ( 'admin.php' == $pagenow && isset( $_GET['import'] ) ) {
+			return;
+		}
+
 		$post_data = self::get_post_data();
 
 		if ( $update || 'fl-builder-template' != $post->post_type ) {
@@ -5002,6 +5021,26 @@ final class FLBuilderModel {
 	}
 
 	/**
+	 * Registers the core templates with the builder.
+	 *
+	 * @since 1.10.3
+	 * @return void
+	 */
+	static private function register_core_templates()
+	{
+		$templates = glob( FL_BUILDER_DIR . 'data/*' );
+
+		foreach ( $templates as $template ) {
+
+			if ( 'templates.dat' == basename( $template ) ) {
+				continue;
+			}
+
+			self::register_templates( $template );
+		}
+	}
+
+	/**
 	 * Applies a core template and can be overridden by extensions to
 	 * apply something else that is being shown in the selector.
 	 *
@@ -5097,8 +5136,13 @@ final class FLBuilderModel {
 	static public function get_template( $index, $type = 'layout' )
 	{
 		$templates = self::get_templates( $type );
+		$template  = isset( $templates[ $index ] ) ? $templates[ $index ] : false;
 
-		return isset( $templates[ $index ] ) ? $templates[ $index ] : false;
+		if ( $template && isset( $template->nodes ) ) {
+			$template->nodes = maybe_unserialize( $template->nodes );
+		}
+
+		return $template;
 	}
 
 	/**
@@ -5111,34 +5155,53 @@ final class FLBuilderModel {
 	 */
 	static public function get_templates( $type = 'layout', $cached = true )
 	{
-		$templates = array();
+		// Pull from dat files if cached is false or we don't have saved data.
+		if ( ! $cached || ! self::$template_data ) {
 
-		foreach ( self::$templates as $path ) {
+			self::$template_data = array();
 
-			if ( file_exists( $path ) ) {
+			foreach ( self::$templates as $path ) {
 
-				if ( $cached && isset( self::$template_data[ $path ] ) ) {
-					$unserialized = self::$template_data[ $path ];
+				// Make sure the template file exists.
+				if ( ! file_exists( $path ) ) {
+					continue;
+				}
+
+				// Get the unserialized template data.
+				if ( stristr( $path, '.php' ) ) {
+					ob_start();
+					include $path;
+					$unserialized = unserialize( ob_get_clean() );
 				}
 				else {
-
-					if ( stristr( $path, '.php' ) ) {
-						ob_start();
-						include $path;
-						$unserialized = unserialize( ob_get_clean() );
-					}
-					else {
-						$unserialized = unserialize( file_get_contents( $path ) );
-					}
-
-					self::$template_data[ $path ] = $unserialized;
+					$unserialized = unserialize( file_get_contents( $path ) );
 				}
 
-				if ( is_array( $unserialized ) && isset( $unserialized[ $type ] ) ) {
-					$templates = array_merge( $templates, $unserialized[ $type ] );
+				// Make sure we have an unserialized array.
+				if ( ! is_array( $unserialized ) ) {
+					continue;
+				}
+
+				// Group and cache the template data.
+				foreach ( $unserialized as $template_type => $template_data ) {
+
+					if ( ! isset( self::$template_data[ $template_type ] ) ) {
+						self::$template_data[ $template_type ] = array();
+					}
+
+					// Reserialize the node data as it's expensive to store in memory.
+					foreach ( $template_data as $key => $template ) {
+						if ( isset( $template->nodes ) ) {
+							$template_data[ $key ]->nodes = serialize( $template_data[ $key ]->nodes );
+						}
+					}
+
+					self::$template_data[ $template_type ] = array_merge( self::$template_data[ $template_type ], $template_data );
 				}
 			}
 		}
+
+		$templates = isset( self::$template_data[ $type ] ) ? self::$template_data[ $type ] : array();
 
 		return apply_filters( 'fl_builder_get_templates', $templates, $type );
 	}
@@ -5179,7 +5242,8 @@ final class FLBuilderModel {
 
 			if ( 'module' == $type ) {
 
-				$node = array_shift( $template->nodes );
+				$nodes = maybe_unserialize( $template->nodes );
+				$node  = array_shift( $nodes );
 
 				if ( ! isset( self::$modules[ $node->settings->type ] ) ) {
 					continue;

@@ -14,7 +14,7 @@ FLBuilder::register_module_alias( 'fl-post-title', array(
 	'settings'    => array(
 		'tag'         => 'h1',
 		'connections' => array(
-			'heading' => ( object ) array(
+			'heading' => (object) array(
 				'object' => 'post',
 				'property' => 'title',
 				'field' => 'text',

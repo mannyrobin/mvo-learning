@@ -1,5 +1,35 @@
 (function($) {
 
+	window.onLoadFLReCaptcha = function() {
+		var reCaptchaFields = $( '.fl-grecaptcha' ),
+			widgetID;
+
+		if ( reCaptchaFields.length > 0 ) {
+			reCaptchaFields.each(function(){
+				var self 		= $( this ),
+				 	attrWidget 	= self.attr('data-widgetid');
+
+				// Avoid re-rendering as it's throwing API error
+				if ( (typeof attrWidget !== typeof undefined && attrWidget !== false) ) {
+					return;
+				}
+				else {
+					widgetID = grecaptcha.render( $(this).attr('id'), { 
+						sitekey : self.data( 'sitekey' ),
+						theme	: 'light',
+						callback: function( response ){
+							if ( response != '' ) {
+								self.attr( 'data-fl-grecaptcha-response', response );
+							}							
+						}
+					});
+					
+					self.attr( 'data-widgetid', widgetID );					
+				}							
+			});
+		}
+	};
+
 	FLBuilderContactForm = function( settings )
 	{
 		this.settings	= settings;
@@ -26,7 +56,8 @@
 				phone			= $(this.nodeClass + ' .fl-phone input'),
 				subject	  		= $(this.nodeClass + ' .fl-subject input'),
 				message	  		= $(this.nodeClass + ' .fl-message textarea'),
-				reCaptchaField	= $(this.nodeClass + ' .g-recaptcha'),
+				reCaptchaField  = $('#'+ this.settings.id + '-fl-grecaptcha'),
+				reCaptchaValue	= reCaptchaField.data( 'fl-grecaptcha-response' ),
 				ajaxData 		= null,
 				ajaxurl	  		= FLBuilderLayoutConfig.paths.wpAjaxUrl,
 				email_regex 	= /\S+@\S+\.\S+/,
@@ -97,12 +128,13 @@
 			}
 
 			// validate if reCAPTCHA is enabled and checked
-			if ( reCaptchaField.length && typeof grecaptcha !== 'undefined' && grecaptcha.getResponse() == '' ) {
-				isValid = false;
-				reCaptchaField.parent().addClass('fl-error');
-			}
-			else {
-				reCaptchaField.parent().removeClass('fl-error');
+			if ( reCaptchaField.length > 0 ) {
+				if ( 'undefined' === typeof reCaptchaValue || reCaptchaValue === false ) {
+					isValid = false;
+					reCaptchaField.parent().addClass( 'fl-error' );
+				} else {
+					reCaptchaField.parent().removeClass('fl-error');
+				}
 			}
 			
 			// end if we're invalid, otherwise go on..
@@ -127,8 +159,8 @@
 					node_id 			: nodeId
 				}
 
-				if ( typeof grecaptcha !== 'undefined' ) {
-					ajaxData.recaptcha_response	= grecaptcha.getResponse();
+				if ( reCaptchaValue ) {
+					ajaxData.recaptcha_response	= reCaptchaValue;
 				}
 				
 				// post the form data

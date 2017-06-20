@@ -95,7 +95,7 @@ final class FLBuilderUserTemplatesPostType {
 			'show_admin_column' => true
 		) );
 		
-		register_taxonomy( 'fl-builder-template-category', array( 'fl-builder-template' ), $args );
+		register_taxonomy( 'fl-builder-template-category', array( 'fl-builder-template', 'fl-theme-layout' ), $args );
 		
 		// Register the template type tax.
 		$args = apply_filters( 'fl_builder_register_template_type_args', array(

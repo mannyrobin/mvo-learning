@@ -511,7 +511,7 @@
 			var heading         = typeof e == 'undefined' ? [] : $(e.target).closest('tr').find('th'),
 				widgetHeading   = $('.fl-builder-widget-settings .fl-builder-settings-title'),
 				lightboxHeading = $('.fl-builder-settings .fl-lightbox-header'),
-				loaderSrc       = FLBuilderLayoutConfig.paths.pluginUrl + 'img/ajax-loader-small.gif',
+				loaderSrc       = FLBuilderLayoutConfig.paths.pluginUrl + 'img/ajax-loader-small.svg',
 				loader          = $('<img class="fl-builder-preview-loader" src="' + loaderSrc + '" />');
 				
 			this.delay(1000, $.proxy(this.preview, this));
@@ -1465,6 +1465,7 @@
 			
 			row.removeClass('fl-row-align-top');
 			row.removeClass('fl-row-align-center');
+			row.removeClass('fl-row-align-bottom');
 			
 			if(this.elements.height.val() == 'full') {
 				row.addClass('fl-row-full-height');
@@ -2131,7 +2132,11 @@
 				input    = $(e.target),
 				val      = input.val(),
 				color    = val === '' ? 'inherit' : '#' + val;
-				
+			
+			if ( /^rgb/.test( val.replace(/\s+/g, '') ) ) {
+				color = val;
+			}
+
 			if ( input.closest( '.fl-field-responsive-setting' ).length ) {
 				this.updateResponsiveCSSRule( selector, preview.property, color );
 			}

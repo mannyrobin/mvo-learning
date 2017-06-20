@@ -1,0 +1,77 @@
+# Copyright (C) 2016 popup-maker-exit-intent-popups
+# This file is distributed under the same license as the popup-maker-exit-intent-popups package.
+msgid ""
+msgstr ""
+"Project-Id-Version: popup-maker-exit-intent-popups\n"
+"Report-Msgid-Bugs-To: https://wppopupmaker.com/support\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
+"Language-Team: WP Popup Maker <support@wppopupmaker.com>\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n\n"
+
+#: popup-maker-exit-intent-popups.php:172
+msgid "Top Sensitivity"
+msgstr ""
+
+#: popup-maker-exit-intent-popups.php:173
+msgid "This defines the distance from the top of the browser window where the users mouse movement is detected."
+msgstr ""
+
+#: popup-maker-exit-intent-popups.php:182
+msgid "False Positive Delay"
+msgstr ""
+
+#: popup-maker-exit-intent-popups.php:183
+msgid "This defines the delay used for false positive detection. A higher value reduces false positives, but increases chances of not opening in time."
+msgstr ""
+
+#: popup-maker-exit-intent-popups.php:199
+msgid "Prompt Message"
+msgstr ""
+
+#: popup-maker-exit-intent-popups.php:200
+msgid "Enter the message displayed in the interrupt prompt."
+msgstr ""
+
+#: popup-maker-exit-intent-popups.php:201
+msgid "Are you sure you want to leave?"
+msgstr ""
+
+#: popup-maker-exit-intent-popups.php:202
+msgid "Please take a moment to check out a special offer just for you!"
+msgstr ""
+
+#: popup-maker-exit-intent-popups.php:222
+msgid "Exit Intent"
+msgstr ""
+
+#: popup-maker-exit-intent-popups.php:223
+msgid "Exit Intent Settings"
+msgstr ""
+
+#: popup-maker-exit-intent-popups.php:226
+msgid "Top"
+msgstr ""
+
+#: popup-maker-exit-intent-popups.php:228
+msgid "Delay"
+msgstr ""
+
+#: popup-maker-exit-intent-popups.php:233
+msgid "Exit Prevention"
+msgstr ""
+
+#: popup-maker-exit-intent-popups.php:234
+msgid "Exit Prevention Settings"
+msgstr ""
+
+#: popup-maker-exit-intent-popups.php:237
+msgid "Message"
+msgstr ""

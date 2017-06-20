@@ -8,14 +8,16 @@ if($query->have_posts()) :
 
 do_action( 'fl_builder_posts_module_before_posts', $settings, $query );
 
+$paged = ( FLBuilderLoop::get_paged() > 0 ) ? ' fl-paged-scroll-to' : '';
+
 ?>
-<div class="fl-post-<?php echo $module->get_layout_slug(); ?>" itemscope="itemscope" itemtype="http://schema.org/Blog">
+<div class="fl-post-<?php echo $module->get_layout_slug() . $paged; ?>" itemscope="itemscope" itemtype="http://schema.org/Blog">
 	<?php
 
 	while($query->have_posts()) {
 
 		$query->the_post();
-		
+
 		include apply_filters( 'fl_builder_posts_module_layout_path', $module->dir . 'includes/post-' . $module->get_layout_slug() . '.php', $settings->layout, $settings );
 	}
 
@@ -27,8 +29,8 @@ do_action( 'fl_builder_posts_module_before_posts', $settings, $query );
 <div class="fl-clear"></div>
 <?php endif; ?>
 <?php
-	
-do_action( 'fl_builder_posts_module_after_posts', $settings );
+
+do_action( 'fl_builder_posts_module_after_posts', $settings, $query );
 
 // Render the pagination.
 if($settings->pagination != 'none' && $query->have_posts()) :
@@ -40,6 +42,8 @@ if($settings->pagination != 'none' && $query->have_posts()) :
 <?php endif; ?>
 <?php
 
+do_action( 'fl_builder_posts_module_after_pagination', $settings, $query );
+
 // Render the empty message.
 if(!$query->have_posts()) :
 
@@ -50,7 +54,7 @@ if(!$query->have_posts()) :
 	<?php get_search_form(); ?>
 	<?php endif; ?>
 </div>
-	
+
 <?php
 
 endif;

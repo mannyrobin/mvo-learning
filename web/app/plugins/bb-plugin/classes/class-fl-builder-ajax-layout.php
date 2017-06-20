@@ -451,6 +451,9 @@ final class FLBuilderAJAXLayout {
 		$asset_ver  			= FLBuilderModel::get_asset_version();
 		$assets					= array( 'js' => '', 'css' => '' );
 		
+		// Ensure global assets are rendered.
+		FLBuilder::clear_enqueued_global_assets();
+		
 		// Render the JS.
 		if ( $partial_refresh_data['is_partial_refresh'] ) {
 			
@@ -475,7 +478,14 @@ final class FLBuilderAJAXLayout {
 			}
 			
 			$assets['js'] .= 'FLBuilder._renderLayoutComplete();';
-			$assets['js'] = FLJSMin::minify( $assets['js'] );
+
+			try {
+			    $min = FLJSMin::minify( $assets['js'] );
+			} catch (Exception $e) {}
+
+			if ( $min ) {
+			    $assets['js'] = $min;
+			}
 		}
 		else {
 			FLBuilder::render_js();

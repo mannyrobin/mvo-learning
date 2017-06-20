@@ -52,6 +52,8 @@
 			}
 			
 			$(this.postClass).css('visibility', 'visible');
+			
+			FLBuilderLayout._scrollToElement( $( this.nodeClass + ' .fl-paged-scroll-to' ) );
 		},
 		
 		_columnsLayout: function()

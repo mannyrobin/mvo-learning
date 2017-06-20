@@ -15,11 +15,12 @@ final class FLThemeBuilderLayoutRenderer {
 	 */
 	static public function init() {
 		// Actions
+		add_action( 'after_switch_theme',              __CLASS__ . '::delete_all_bundled_scripts' );
 		add_action( 'fl_builder_after_save_layout',    __CLASS__ . '::delete_all_bundled_scripts' );
 		add_action( 'template_redirect',               __CLASS__ . '::disable_content_rendering' );
 		add_action( 'template_redirect',               __CLASS__ . '::setup_part_hooks' );
 		add_action( 'wp_enqueue_scripts',              __CLASS__ . '::enqueue_scripts' );
-		add_action( 'template_include',                __CLASS__ . '::override_template_include', 11 );
+		add_action( 'template_include',                __CLASS__ . '::override_template_include', 999 );
 
 		// Filters
 		add_filter( 'body_class',            		   __CLASS__ . '::body_class' );
@@ -142,13 +143,16 @@ final class FLThemeBuilderLayoutRenderer {
 			foreach ( $layout_group as $layout ) {
 
 				if ( 'header' == $layout_type ) {
+					wp_enqueue_script( 'jquery-imagesloaded' );
 					wp_enqueue_script( 'jquery-throttle', FL_THEME_BUILDER_URL . 'js/jquery.throttle.min.js', array( 'jquery' ), FL_THEME_BUILDER_VERSION, true );
 				}
 			}
 		}
 
 		// Enqueue layout styles and scripts.
-		if ( 'fl-theme-layout' == get_post_type() && FLBuilderModel::is_builder_active() ) {
+		$post = FLThemeBuilderRulesLocation::get_preview_original_post();
+
+		if ( $post && 'fl-theme-layout' == $post->post_type ) {
 			self::enqueue_individual_scripts();
 		} else {
 			self::enqueue_bundled_scripts();
@@ -337,10 +341,12 @@ final class FLThemeBuilderLayoutRenderer {
 	 * if one is set.
 	 *
 	 * @since 1.0
+	 * @param string $tag
 	 * @return bool
 	 */
-	static public function render_header() {
+	static public function render_header( $tag = null ) {
 		$ids = FLThemeBuilderLayoutData::get_current_page_header_ids();
+		$tag = ! $tag ? 'header' : $tag;
 
 		if ( empty( $ids ) ) {
 			return false;
@@ -350,7 +356,7 @@ final class FLThemeBuilderLayoutRenderer {
 
 		$settings = FLThemeBuilderLayoutData::get_settings( $ids[0] );
 
-		FLBuilder::render_content_by_id( $ids[0], 'header', array(
+		FLBuilder::render_content_by_id( $ids[0], $tag, array(
 			'itemscope'    => 'itemscope',
 			'itemtype'     => 'http://schema.org/WPHeader',
 			'data-sticky'  => $settings['sticky'],
@@ -385,7 +391,7 @@ final class FLThemeBuilderLayoutRenderer {
 			}
 		}
 
-		return FL_THEME_BUILDER_DIR . 'includes/content.php';
+		return apply_filters( 'fl_theme_builder_template_include', FL_THEME_BUILDER_DIR . 'includes/content.php', $ids[0] );
 	}
 
 	/**
@@ -417,10 +423,12 @@ final class FLThemeBuilderLayoutRenderer {
 	 * if one is set.
 	 *
 	 * @since 1.0
+	 * @param string $tag
 	 * @return bool
 	 */
-	static public function render_footer() {
+	static public function render_footer( $tag = null ) {
 		$ids = FLThemeBuilderLayoutData::get_current_page_footer_ids();
+		$tag = ! $tag ? 'footer' : $tag;
 
 		if ( empty( $ids ) ) {
 			return false;
@@ -428,7 +436,7 @@ final class FLThemeBuilderLayoutRenderer {
 
 		do_action( 'fl_theme_builder_before_render_footer', $ids[0] );
 
-		FLBuilder::render_content_by_id( $ids[0], 'footer', array(
+		FLBuilder::render_content_by_id( $ids[0], $tag, array(
 			'itemscope' => 'itemscope',
 			'itemtype'  => 'http://schema.org/WPFooter',
 		) );

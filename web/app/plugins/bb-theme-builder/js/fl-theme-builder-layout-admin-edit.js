@@ -267,10 +267,15 @@
 		{
 			$( '.fl-theme-builder-location-objects' ).each( function() {
 				var select   = $( this ),
+					option   = null,
 					location = select.attr( 'data-location' );
 
-				if ( /post:[a-zA-Z]+:post:[a-zA-Z]+/.test( location ) ) {
-					select.find( 'option' ).eq( 0 ).remove();
+				if ( /post:[a-zA-Z0-9_-]+:post:[a-zA-Z0-9_-]+$/.test( location ) ) {
+					option = select.find( 'option' ).eq( 0 );
+
+					if ( '' === option.attr( 'value' ) ) {
+						option.remove();
+					}
 				}
 			} );
 		},
@@ -484,6 +489,7 @@
 
 			if ( 0 === saved.length ) {
 				savedWrap.append( template() );
+				savedWrap.find( '[data-rule="general:all"]' ).attr( 'selected', 'selected' );
 				return;
 			}
 
@@ -491,7 +497,7 @@
 
 				savedWrap.append( template() );
 
-				parts          = saved[ i ].split( ':' );
+				parts      = saved[ i ].split( ':' );
 				ruleWrap   = $( '.fl-theme-builder-saved-user-rule' ).last();
 				ruleSelect = ruleWrap.find( '.fl-theme-builder-user-rule' );
 				selected   = ruleWrap.find( '[data-rule="' + parts[0] + ':' + parts[1] + '"]' );

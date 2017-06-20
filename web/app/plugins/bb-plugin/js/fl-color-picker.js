@@ -748,7 +748,7 @@ var FLBuilderColorPicker;
 				} );
 
 			// logic to hide picker when the user clicks outside it
-			$( document ).on( 'click', function( event ) {
+			$( document ).on( 'mousedown', function( event ) {
 				if ( 0 === $( event.target ).closest( '.fl-color-picker-ui' ).length ) {
                     $( '.fl-color-picker-ui.fl-color-picker-active' ).removeClass( 'fl-color-picker-active' );
                 }
@@ -1467,6 +1467,7 @@ var FLBuilderColorPicker;
 						$(self._alphaHtml).insertAfter( self._iris );	
 					}
 
+					self.picker.addClass('fl-color-alpha-enabled');
 					self._pickerAlphaControls();
 				}
 				else {

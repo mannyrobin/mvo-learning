@@ -13,11 +13,11 @@ FLBuilder::register_module_alias( 'fl-featured-image', array(
 	'enabled'     => FLThemeBuilderLayoutData::current_post_is( 'singular' ),
 	'settings'    => array(
 		'connections' => array(
-			'photo'       => ( object ) array(
+			'photo'       => (object) array(
 				'object'      => 'post',
 				'property'    => 'featured_image_url',
 				'field'       => 'photo',
-				'settings'    => ( object ) array(
+				'settings'    => (object) array(
 					'size'       => 'large',
 				),
 			),

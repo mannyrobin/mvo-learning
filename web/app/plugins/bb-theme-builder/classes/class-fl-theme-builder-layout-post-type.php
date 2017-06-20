@@ -30,7 +30,8 @@ final class FLThemeBuilderLayoutPostType {
 	 * @return void
 	 */
 	static public function register() {
-		$can_edit = FLBuilderUserAccess::current_user_can( 'theme_builder_editing' );
+		$can_edit      = FLBuilderUserAccess::current_user_can( 'theme_builder_editing' );
+		$builder_admin = FLBuilderUserAccess::current_user_can( 'builder_admin' );
 
 		register_post_type( 'fl-theme-layout', apply_filters( 'fl_theme_builder_layout_register_post_type_args', array(
 			'labels'                => array(
@@ -52,17 +53,18 @@ final class FLThemeBuilderLayoutPostType {
 			'supports'              => array(
 				'title',
 				'revisions',
-				'thumbnail'
+				'thumbnail',
 			),
 			'taxonomies'		=> array(
 				'fl-builder-template-category'
 			),
 			'menu_icon'			    => 'dashicons-welcome-widgets-menus',
-			'public'                => $can_edit,
+			'public'                => false,
 			'publicly_queryable'    => $can_edit,
+			'show_ui'    			=> $can_edit,
 			'show_in_menu'          => false,
 			'show_in_nav_menus'     => false,
-			'show_in_admin_bar'     => true,
+			'show_in_admin_bar'     => $can_edit && $builder_admin,
 			'exclude_from_search'   => true,
 		) ) );
 	}
@@ -77,7 +79,7 @@ final class FLThemeBuilderLayoutPostType {
 	static public function load_page_template( $template ) {
 		global $post;
 
-		if ( 'string' == gettype( $template ) && is_object( $post ) && $post->post_type == 'fl-theme-layout' ) {
+		if ( 'string' == gettype( $template ) && is_object( $post ) && 'fl-theme-layout' == $post->post_type ) {
 
 			$type = get_post_meta( $post->ID, '_fl_theme_layout_type', true );
 

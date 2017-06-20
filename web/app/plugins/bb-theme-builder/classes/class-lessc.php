@@ -1,5 +1,5 @@
 <?php
-
+// @codingStandardsIgnoreStart
 /**
  * lessphp v0.4.0
  * http://leafo.net/lessphp
@@ -3775,5 +3775,4 @@ class lessc_formatter_lessjs extends lessc_formatter_classic {
 	public $assignSeparator = ': ';
 	public $selectorSeparator = ',';
 }
-
-
+// @codingStandardsIgnoreEnd

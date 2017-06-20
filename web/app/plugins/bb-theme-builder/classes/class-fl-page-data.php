@@ -91,11 +91,11 @@ final class FLPageData {
 			'author' => array(
 				'label' => __( 'Author', 'fl-theme-builder' ),
 			),
-			'user' => array(
-				'label' => __( 'User', 'fl-theme-builder' ),
-			),
 			'site' => array(
 				'label' => __( 'Site', 'fl-theme-builder' ),
+			),
+			'user' => array(
+				'label' => __( 'User', 'fl-theme-builder' ),
 			),
 			'advanced' => array(
 				'label' => __( 'Advanced', 'fl-theme-builder' ),
@@ -225,7 +225,8 @@ final class FLPageData {
 			'label'   => $key,
 			'type'    => 'string',
 			'form'    => false,
-			'getter'  => function(){ return ''; },
+			'getter'  => function() {
+				return ''; },
 		), $data );
 	}
 

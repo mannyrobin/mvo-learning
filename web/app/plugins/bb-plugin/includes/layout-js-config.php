@@ -11,5 +11,8 @@ var FLBuilderLayoutConfig = {
 	breakpoints : {
 		small  : <?php echo $global_settings->responsive_breakpoint; ?>,
 		medium : <?php echo $global_settings->medium_breakpoint; ?>
+	},
+	waypoint: {
+		offset: 80
 	}
 };

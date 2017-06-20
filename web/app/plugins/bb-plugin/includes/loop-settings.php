@@ -12,6 +12,9 @@ $defaults = array(
 
 $tab_defaults = isset( $tab['defaults'] ) ? $tab['defaults'] : array();
 $settings     = (object)array_merge( $defaults, $tab_defaults, (array)$settings );
+$settings 	  = apply_filters( 'fl_builder_loop_settings', $settings );  //Allow extension of default Values
+
+do_action( 'fl_builder_loop_settings_before_form', $settings ); // e.g Add custom FLBuilder::render_settings_field()
 
 ?>
 <div id="fl-builder-settings-section-source" class="fl-loop-data-source-select fl-builder-settings-section">
@@ -49,22 +52,6 @@ $settings     = (object)array_merge( $defaults, $tab_defaults, (array)$settings 
 			'label'         => __('Post Type', 'fl-builder'),
 		), $settings);
 	
-		// Order by
-		FLBuilder::render_settings_field('order_by', array(
-			'type'          => 'select',
-			'label'         => __('Order By', 'fl-builder'),
-			'options'       => array(
-				'ID'            => __('ID', 'fl-builder'),
-				'date'          => __('Date', 'fl-builder'),
-				'modified'      => __('Date Last Modified', 'fl-builder'),
-				'title'         => __('Title', 'fl-builder'),
-				'author'        => __('Author', 'fl-builder'),
-				'comment_count' => __('Comment Count', 'fl-builder'),
-				'menu_order'    => __('Menu Order', 'fl-builder'),
-				'rand'        	=> __('Random', 'fl-builder'),
-			)
-		), $settings);
-	
 		// Order
 		FLBuilder::render_settings_field('order', array(
 			'type'          => 'select',
@@ -73,6 +60,38 @@ $settings     = (object)array_merge( $defaults, $tab_defaults, (array)$settings 
 				'DESC'          => __('Descending', 'fl-builder'),
 				'ASC'           => __('Ascending', 'fl-builder'),
 			)
+		), $settings);
+	
+		// Order by
+		FLBuilder::render_settings_field('order_by', array(
+			'type'          => 'select',
+			'label'         => __('Order By', 'fl-builder'),
+			'options'       => array(
+				'author'         => __('Author', 'fl-builder'),
+				'comment_count'  => __('Comment Count', 'fl-builder'),
+				'date'           => __('Date', 'fl-builder'),
+				'modified'       => __('Date Last Modified', 'fl-builder'),
+				'ID'             => __('ID', 'fl-builder'),
+				'menu_order'     => __('Menu Order', 'fl-builder'),
+				'meta_value'     => __('Meta Value (Alphabetical)', 'fl-builder'),
+				'meta_value_num' => __('Meta Value (Numeric)', 'fl-builder'),
+				'rand'        	 => __('Random', 'fl-builder'),
+				'title'          => __('Title', 'fl-builder'),
+			),
+			'toggle'		=> array(
+				'meta_value' 	=> array(
+					'fields'		=> array( 'order_by_meta_key' )
+				),
+				'meta_value_num' => array(
+					'fields'		=> array( 'order_by_meta_key' )
+				)
+			)
+		), $settings);
+	
+		// Meta Key
+		FLBuilder::render_settings_field('order_by_meta_key', array(
+			'type'          => 'text',
+			'label'         => __('Meta Key', 'fl-builder'),
 		), $settings);
 	
 		// Offset
@@ -94,28 +113,28 @@ $settings     = (object)array_merge( $defaults, $tab_defaults, (array)$settings 
 			<?php
 	
 			// Posts
-			FLBuilder::render_settings_field('posts_' . $slug, array(
+			FLBuilder::render_settings_field( 'posts_' . $slug, array(
 				'type'          => 'suggest',
 				'action'        => 'fl_as_posts',
 				'data'          => $slug,
 				'label'         => $type->label,
-				'help'          => sprintf(__('Enter a list of %s.', 'fl-builder'), $type->label, $type->label),
+				'help'          => sprintf( __( 'Enter a list of %1$s.', 'fl-builder' ), $type->label ),
 				'matching'      => true
-			), $settings);
+			), $settings );
 	
 			// Taxonomies
 			$taxonomies = FLBuilderLoop::taxonomies($slug);
 	
 			foreach($taxonomies as $tax_slug => $tax) {
 	
-				FLBuilder::render_settings_field('tax_' . $slug . '_' . $tax_slug, array(
+				FLBuilder::render_settings_field( 'tax_' . $slug . '_' . $tax_slug, array(
 					'type'          => 'suggest',
 					'action'        => 'fl_as_terms',
 					'data'          => $tax_slug,
 					'label'         => $tax->label,
-					'help'          => sprintf(__('Enter a list of %s.', 'fl-builder'), $tax->label, $tax->label),
+					'help'          => sprintf( __( 'Enter a list of %1$s.', 'fl-builder' ), $tax->label ),
 					'matching'      => true
-				), $settings);
+				), $settings );
 			}
 	
 			?>
@@ -132,8 +151,10 @@ $settings     = (object)array_merge( $defaults, $tab_defaults, (array)$settings 
 			'help'          => __('Enter a list of authors usernames.', 'fl-builder'),
 			'matching'      => true
 		), $settings);
-	
+
 		?>
 		</table>
 	</div>
 </div>
+<?php
+do_action( 'fl_builder_loop_settings_after_form', $settings ); // e.g Add custom FLBuilder::render_settings_field()

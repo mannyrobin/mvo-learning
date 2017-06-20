@@ -16,11 +16,6 @@
 	<?php if( $settings->post_align != 'default' ) : ?>
 	text-align: <?php echo $settings->post_align; ?>;
 	<?php endif; ?>
-	
-	margin-bottom: <?php echo $settings->feed_post_spacing; ?>px;
-}
-.fl-node-<?php echo $id; ?> .fl-post-feed-post:last-child {
-	margin-bottom: 0;
 }
 
 <?php if ( ! empty( $settings->feed_post_padding ) ) : ?>

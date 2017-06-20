@@ -1,5 +1,5 @@
-<div class="<?php $module->render_post_class(); ?>" itemscope itemtype="<?php FLPostGridModule::schema_itemtype(); ?>">
-	
+<div <?php $module->render_post_class(); ?> itemscope itemtype="<?php FLPostGridModule::schema_itemtype(); ?>">
+
 	<?php FLPostGridModule::schema_meta(); ?>
 	<?php $module->render_featured_image( array( 'above-title', 'beside', 'beside-right' ) ); ?>
 	

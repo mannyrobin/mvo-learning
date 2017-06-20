@@ -1,5 +1,5 @@
-<div class="<?php $module->render_post_class(); ?>" itemscope itemtype="<?php FLPostGridModule::schema_itemtype(); ?>">
-	
+<div <?php $module->render_post_class(); ?> itemscope itemtype="<?php FLPostGridModule::schema_itemtype(); ?>">
+
 	<?php FLPostGridModule::schema_meta(); ?>
 	
 	<a class="fl-post-gallery-link" href="<?php the_permalink(); ?>" alt="<?php the_title_attribute(); ?>">
@@ -24,8 +24,8 @@
 		
 		<div class="fl-post-gallery-text-wrap">
 			<div class="fl-post-gallery-text">
-	
-				<?php if( $settings->has_icon && $settings->icon_position == 'above' ) : ?>
+
+				<?php if( $settings->has_icon == 'yes' && $settings->icon_position == 'above' ) : ?>
 					<span class="fl-gallery-icon">
 						<i class="<?php echo $settings->icon; ?>"></i> 
 					</span>
@@ -42,8 +42,8 @@
 				<?php endif; ?>
 				
 				<?php do_action( 'fl_builder_post_gallery_after_meta', $settings, $module ); ?>
-	
-				<?php if( $settings->has_icon && $settings->icon_position == 'below' ) : ?>
+
+				<?php if( $settings->has_icon == 'yes' && $settings->icon_position == 'below' ) : ?>
 					<span class="fl-gallery-icon">
 						<i class="<?php echo $settings->icon; ?>"></i> 
 					</span>

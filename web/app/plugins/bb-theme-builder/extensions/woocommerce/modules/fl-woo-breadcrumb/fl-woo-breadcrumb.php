@@ -57,13 +57,23 @@ FLBuilder::register_module( 'FLWooBreadcrumbModule', array(
 							'unit'          => 'px',
 						),
 					),
+					'link_color'    => array(
+						'type'          => 'color',
+						'label'         => __( 'Link Color', 'fl-theme-builder' ),
+						'show_reset'    => true,
+						'preview'       => array(
+							'type'          => 'css',
+							'selector'      => '.woocommerce-breadcrumb a',
+							'property'      => 'color',
+						),
+					),
 					'text_color'    => array(
 						'type'          => 'color',
 						'label'         => __( 'Text Color', 'fl-theme-builder' ),
 						'show_reset'    => true,
 						'preview'       => array(
 							'type'          => 'css',
-							'selector'      => '.woocommerce-breadcrumb, .woocommerce-breadcrumb a',
+							'selector'      => '.woocommerce-breadcrumb',
 							'property'      => 'color',
 						),
 					),

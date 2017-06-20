@@ -133,13 +133,20 @@ class FLPhotoModule extends FLBuilderModule {
 			}
 
 			// Make sure we have enough memory to crop.
-			@ini_set('memory_limit', '300M');
+			try{
+				ini_set('memory_limit', '300M');
+			} catch( Exception $e ) {
+				//
+			}
 
 			// Crop the photo.
 			$editor->resize($new_width, $new_height, true);
 
 			// Save the photo.
 			$editor->save($cropped_path['path']);
+
+			// Let third party media plugins hook in.
+			do_action( 'fl_builder_photo_cropped', $cropped_path );
 
 			// Return the new url.
 			return $cropped_path['url'];
@@ -188,19 +195,21 @@ class FLPhotoModule extends FLBuilderModule {
 	public function get_classes()
 	{
 		$classes = array( 'fl-photo-img' );
-		
+
 		if ( $this->settings->photo_source == 'library' && ! empty( $this->settings->photo ) ) {
-			
+
 			$data = self::get_data();
-			
+
 			if ( is_object( $data ) ) {
-				
-				$classes[] = 'wp-image-' . $data->id;
+
+				if( isset( $data->id ) ) {
+					$classes[] = 'wp-image-' . $data->id;
+				}
 
 				if ( isset( $data->sizes ) ) {
 
 					foreach ( $data->sizes as $key => $size ) {
-						
+
 						if ( $size->url == $this->settings->photo_src ) {
 							$classes[] = 'size-' . $key;
 							break;
@@ -303,11 +312,20 @@ class FLPhotoModule extends FLBuilderModule {
 	 */
 	public function get_attributes()
 	{
+		$photo = $this->get_data();
 		$attrs = '';
 		
 		if ( isset( $this->settings->attributes ) ) {
 			foreach ( $this->settings->attributes as $key => $val ) {
 				$attrs .= $key . '="' . $val . '" ';
+			}
+		}
+		
+		if ( is_object( $photo ) && isset( $photo->sizes ) ) {
+			foreach ( $photo->sizes as $size ) {
+				if ( $size->url == $this->settings->photo_src ) {
+					$attrs .= 'height="' . $size->height . '" width="' . $size->width . '" ';
+				}
 			}
 		}
 		

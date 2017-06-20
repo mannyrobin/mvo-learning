@@ -1,7 +1,7 @@
 <?php
 
 ob_start();
-comments_template();
+comments_template( '', true );
 $comments = ob_get_clean();
 
 if ( empty( $comments ) ) {

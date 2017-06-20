@@ -34,7 +34,7 @@
 				}
 				else {
 					this._oldScriptsStyles 	= $( '.fl-builder-node-scripts-styles[data-node="' + this._data.nodeId + '"]' );
-					this._content 			= $( '.fl-node-' + this._data.nodeId );
+					this._content 			= $( '.fl-node-' + this._data.nodeId ).eq(0);
 				}
 			}
 		}
@@ -388,12 +388,20 @@
 						siblings = this._data.nodeParent.find( ' > .fl-col-group, > .fl-module' );
 					}
 					
+					// Filter out any clones created by duplicating.
+					siblings = siblings.filter( ':not(.fl-builder-node-clone)' );
+					
 					// Add the new node.
 					if ( 0 === siblings.length || siblings.length == this._data.nodePosition ) {
 						this._data.nodeParent.append( this._data.html );
 					}
 					else {
 						siblings.eq( this._data.nodePosition ).before( this._data.html );
+					}
+					
+					// Remove node loading placeholder in case we have one.
+					if ( this._data.nodeId ) {
+						FLBuilder._removeNodeLoadingPlaceholder( $( '.fl-node-' + this._data.nodeId ) );
 					}
 				}
 				// We must be refreshing an existing node.

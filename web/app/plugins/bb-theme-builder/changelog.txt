@@ -1,3 +1,98 @@
+<h4>1.0.1.2 - 06/06/2017</h4>
+<p><strong>Bug Fixes</strong></p>
+<ul>
+	<li>Fixed overlay headers not being visible when editing them in the builder.</li>
+</ul>
+
+<h4>1.0.1.1 - 06/05/2017</h4>
+<p><strong>Bug Fixes</strong></p>
+<ul>
+	<li>Fixed a bug introduced in 1.0.1 with the Theme Layouts menu item not showing for users that have never saved the User Access settings before.</li>
+</ul>
+
+<h4>1.0.1 - 06/05/2017</h4>
+<p><strong>Enhancements</strong></p>
+<ul>
+	<li>Added full width theme layout support for Genesis.</li>
+	<li>Added full width theme layout support for GeneratePress.</li>
+	<li>Added support for the WooCommerce Storefront theme.</li>
+	<li>Added support for the WooCommerce Products Per Page plugin and other third party plugins that hook into the before and after shop loop actions.</li>
+	<li>Added connections for the current user or a specific user.</li>
+	<li>Added user meta and author meta connections.</li>
+	<li>Added row background color connection for custom fields.</li>
+	<li>Added a dropdown menu to the admin bar page builder button that gives access to launching the builder for theme layouts.</li>
+	<li>Added link color setting to the WooCommerce breadcrumb module.</li>
+	<li>Added fl_theme_builder_show_taxonomy filter.</li>
+	<li>Made the field connections insert button darker so it is more noticeable. Added a button for connecting next to it.</li>
+</ul>
+<p><strong>Bug Fixes</strong></p>
+<ul>
+	<li>Fixed choosing a page parent location not always working.</li>
+	<li>Fixed Themer modules not showing when some standard modules have been disabled in the admin settings.</li>
+	<li>Fixed incorrect post link shortcode in the post module custom layout.</li>
+	<li>Fixed the wpbb terms list shortcode throwing a fatal error when the taxonomy doesn't exist.</li>
+	<li>Fixed custom avatar plugins not working with author profile picture connections.</li>
+	<li>Fixed user rules select showing 'All Users' each time you add a new rule.</li>
+	<li>Fixed post names with special characters breaking location rule selects.</li>
+	<li>Fixed memory error with location rules that have a lot of posts.</li>
+	<li>Fixed 'Post Navigation' heading showing in the Post Navigation module.</li>
+	<li>Fixed the Beaver Builder Theme's before header hook not working for parts.</li>
+	<li>Fixed overlay headers showing while editing in the builder so they are not in the way of the content.</li>
+	<li>Fixed sticky/overlay headers showing on top of lightboxes and popups.</li>
+	<li>Fixed custom page templates preventing header theme layouts from showing.</li>
+	<li>Fixed theme layouts in the trash still showing the duplicate location warning.</li>
+	<li>Fixed third party meta boxes showing up on the post edit screen for theme layouts.</li>
+	<li>Fixed ACF date fields not displaying correctly in the free version.</li>
+	<li>Fixed WooCommerce sales flash placeholder showing when a product is not for sale.</li>
+	<li>Fixed WooCommerce add to cart button colors not applying for all button states.</li>
+	<li>Fixed WooCommerce Product Description module tab label. It should say General instead of Style.</li>
+	<li>Fixed incorrect line break in WooCommerce rating module in Safari.</li>
+	<li>Fixed only the comment form showing and not actual comments in Genesis and possibly other themes. </li>
+	<li>Fixed Genesis Connect For WooCommerce overriding theme layouts.</li>
+	<li>Fixed template data issues.</li>
+	<li>Fixed translation issues.</li>
+</ul>
+
+<h4>1.0 - 05/08/2017</h4>
+<p>Beaver Themer 1.0 is here at last! Please <a href="https://www.wpbeaverbuilder.com/beaver-themer/">visit our website</a> for more information on Beaver Themer.</p>
+
+<h4>1.0-beta.2 - 05/02/2017</h4>
+<p><strong>Bug Fixes</strong></p>
+<ul>
+	<li>Removed "hello and world" text that was showing for theme layouts on the admin edit screen.</li>
+	<li>Fixed preview selector posts not showing if the selected post no longer exists.</li>
+</ul>
+
+<h4>1.0-beta.1 - 05/01/2017</h4>
+<p><strong>Enhancements</strong></p>
+<ul>
+	<li>Updated translations.</li>
+</ul>
+<p><strong>Bug Fixes</strong></p>
+<ul>
+	<li>Fixed ACF date field returning the wrong format.</li>
+	<li>Fixed PHP warning when a preview post no longer exists.</li>
+	<li>Fixed translation issues.</li>
+</ul>
+
+<h4>1.0-alpha.10 - 04/26/2017</h4>
+<p><strong>Bug Fixes</strong></p>
+<ul>
+	<li>Fixed fatal error caused by parsing field connections in nested settings.</li>
+</ul>
+
+<h4>1.0-alpha.9 - 04/21/2017</h4>
+<p><strong>Bug Fixes</strong></p>
+<ul>
+	<li>Fixed incorrect header position when images load after the header JS has run.</li>
+</ul>
+
+<h4>1.0-alpha.8 - 04/20/2017</h4>
+<p><strong>Bug Fixes</strong></p>
+<ul>
+	<li>Fixed ACF bug breaking most fields.</li>
+</ul>
+
 <h4>1.0-alpha.7 - 04/19/2017</h4>
 <p><strong>Enhancements</strong></p>
 <ul>

@@ -1,5 +1,35 @@
 ( function( $ ) {
 
+	window.onLoadFLReCaptcha = function() {
+		var reCaptchaFields = $( '.fl-grecaptcha' ),
+			widgetID;
+
+		if ( reCaptchaFields.length > 0 ) {
+			reCaptchaFields.each(function(){
+				var self 		= $( this ),
+				 	attrWidget 	= self.attr('data-widgetid');
+
+				// Avoid re-rendering as it's throwing API error
+				if ( (typeof attrWidget !== typeof undefined && attrWidget !== false) ) {
+					return;
+				}
+				else {
+					widgetID = grecaptcha.render( $(this).attr('id'), { 
+						sitekey : self.data( 'sitekey' ),
+						theme	: 'light',
+						callback: function( response ){
+							if ( response != '' ) {
+								self.attr( 'data-fl-grecaptcha-response', response );
+							}							
+						}
+					});
+					
+					self.attr( 'data-widgetid', widgetID );					
+				}							
+			});
+		}
+	};
+
 	FLBuilderSubscribeForm = function( settings )
 	{
 		this.settings	= settings;
@@ -19,6 +49,7 @@
 		_init: function()
 		{
 			this.button.on( 'click', $.proxy( this._submitForm, this ) );
+			this.form.find( 'input[type="email"]' ).on( 'keypress', $.proxy( this._onEnterKey, this) );
 		},
 		
 		_submitForm: function( e )
@@ -31,7 +62,8 @@
 				waitText    	= this.button.closest( '.fl-form-button' ).data( 'wait-text' ),
 				name        	= this.form.find( 'input[name=fl-subscribe-form-name]' ),
 				email       	= this.form.find( 'input[name=fl-subscribe-form-email]' ),
-				recaptcha 		= this.form.find( '.g-recaptcha' ),
+				recaptcha 		= this.form.find( '.fl-grecaptcha' ),
+				reCaptchaValue	= recaptcha.data( 'fl-grecaptcha-response' ),
 				re          	= /\S+@\S+\.\S+/,
 				valid       	= true,
 				ajaxData 		= null;
@@ -51,19 +83,18 @@
 				email.siblings( '.fl-form-error-message' ).show();
 				valid = false;
 			}
-			if ( recaptcha.length > 0 && typeof grecaptcha !== 'undefined' ) {
-				if ( grecaptcha.getResponse() == '' ) {
+
+			if ( recaptcha.length > 0 ) {
+				if ( 'undefined' === typeof reCaptchaValue || reCaptchaValue === false ) {
+					valid = false;
 					recaptcha.addClass( 'fl-form-error' );
 					recaptcha.siblings( '.fl-form-error-message' ).show();
-					valid = false;
-				}
-				else {
+				} else {
 					recaptcha.removeClass( 'fl-form-error' );
 					recaptcha.siblings( '.fl-form-error-message' ).hide();
 				}
-				
 			}
-			
+
 			if ( valid ) {
 				
 				this.form.find( '> .fl-form-error-message' ).hide();
@@ -81,8 +112,8 @@
 					node_id 			: nodeId
 				};
 
-				if ( typeof grecaptcha !== 'undefined' ) {
-					ajaxData.recaptcha = grecaptcha.getResponse();
+				if ( reCaptchaValue ) {
+					ajaxData.recaptcha = reCaptchaValue;
 				}
 
 				$.post( FLBuilderLayoutConfig.paths.wpAjaxUrl, ajaxData, $.proxy( this._submitFormComplete, this ) );
@@ -111,6 +142,13 @@
 			else if ( 'redirect' == data.action ) {
 				window.location.href = data.url;
 			}
+		},
+
+		_onEnterKey: function( e )
+		{
+			if (e.which == 13) {
+		    	this.button.trigger( 'click' );
+		  	}
 		}
 	}
 	

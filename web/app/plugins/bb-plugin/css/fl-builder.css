@@ -16,8 +16,20 @@ html.fl-builder-edit {
 .fl-builder-hidden-editor {
 	display: none;
 }
+.screen-reader-text {
+	position: absolute;
+	left: -1000em;
+	top: -1000em;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+}
+
+/* Loading
+------------------------------------------------------ */
+
 .fl-builder-loading {
-	background: rgba(240, 240, 240, 0.8) url(../img/ajax-loader.gif) center center no-repeat;
+	background: rgba(240, 240, 240, 0.8) url(../img/ajax-loader.svg) center center no-repeat;
 	bottom: 0;
 	display: none;
 	left: 0;
@@ -28,27 +40,35 @@ html.fl-builder-edit {
 	z-index: 200000;
 }
 .fl-builder-settings .fl-builder-loading {
-	background: rgba(255, 255, 255, 0.8) url(../img/ajax-loader.gif) center center no-repeat;
+	background: rgba(255, 255, 255, 0.8) url(../img/ajax-loader.svg) center center no-repeat;
 	display: block;
 	position: absolute;
 }
-.screen-reader-text {
-	position: absolute;
-	left: -1000em;
-	top: -1000em;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
+.fl-builder-node-loading {
+	opacity: 0.35;
+}
+.fl-builder-node-loading-placeholder {
+	background: url(../img/ajax-loader.svg) center center no-repeat;
+	height: 50px;
+}
+.fl-col-group-has-child-loading {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+}
+.fl-col-group-has-child-loading > .fl-builder-node-loading-placeholder {
+	width: 50px;
 }
 
 /* Responsive Utilities
 ------------------------------------------------------ */
 
-.fl-visible-desktop,
-.fl-visible-desktop-medium,
-.fl-visible-medium,
-.fl-visible-medium-mobile,
-.fl-visible-mobile {
+.fl-builder-content-editing .fl-visible-desktop,
+.fl-builder-content-editing .fl-visible-desktop-medium,
+.fl-builder-content-editing .fl-visible-medium,
+.fl-builder-content-editing .fl-visible-medium-mobile,
+.fl-builder-content-editing .fl-visible-mobile {
 	display: block !important;
 }
 
@@ -459,6 +479,17 @@ span.fl-builder-block-no-node-templates:hover {
 .fl-builder-blocks-node-template .fl-builder-block {
 	position: relative;
 }
+.fl-builder-blocks-node-template .fl-builder-badge-global {
+	position: absolute;
+    right: 20px;
+    top: 13px;
+}
+.fl-builder-blocks-node-template .fl-builder-block:hover .fl-builder-badge-global {
+	display: none;
+}
+.fl-builder-blocks-node-template .fl-builder-block-global.fl-builder-block {
+	padding-right: 85px;
+}
 .fl-builder-blocks-section-content .fl-builder-node-template-actions {
 	bottom: 0;
 	cursor: default;
@@ -800,7 +831,7 @@ span.fl-builder-block-no-node-templates:hover {
 	text-shadow: none;
 }
 .fl-builder-col-resizing .fl-block-overlay-actions {
-	overflow: hidden;	
+	overflow: hidden;
 }
 .fl-block-overlay-actions > span {
 	display: block;
@@ -1297,6 +1328,14 @@ span.fl-builder-block-no-node-templates:hover {
 	height: 150px;
 }
 
+
+/* User Template Editing
+------------------------------------------------------ */
+
+.single-fl-builder-template .fl-content {
+	width: 100% !important;
+}
+
 /* Node Template Settings
 ------------------------------------------------------ */
 
@@ -1410,7 +1449,7 @@ form.fl-builder-settings {
 }
 .fl-form-table tr,
 .fl-form-table tr:nth-child(even) {
-	background: transparent;	
+	background: transparent;
 }
 .fl-form-table th {
 	border: none !important;
@@ -1455,15 +1494,15 @@ form.fl-builder-settings {
 .fl-builder-settings-fields .fl-field-control-wrapper {
 	position: relative;
 }
-.fl-builder-settings-fields textarea, 
-.fl-builder-settings-fields input[type=text], 
-.fl-builder-settings-fields input[type=password], 
-.fl-builder-settings-fields input[type=file], 
-.fl-builder-settings-fields input[type=email], 
-.fl-builder-settings-fields input[type=number], 
-.fl-builder-settings-fields input[type=search], 
-.fl-builder-settings-fields input[type=tel], 
-.fl-builder-settings-fields input[type=url], 
+.fl-builder-settings-fields textarea,
+.fl-builder-settings-fields input[type=text],
+.fl-builder-settings-fields input[type=password],
+.fl-builder-settings-fields input[type=file],
+.fl-builder-settings-fields input[type=email],
+.fl-builder-settings-fields input[type=number],
+.fl-builder-settings-fields input[type=search],
+.fl-builder-settings-fields input[type=tel],
+.fl-builder-settings-fields input[type=url],
 .fl-builder-settings-fields select {
 	background: #fff !important;
 	border-color: #dfdfdf !important;
@@ -2018,7 +2057,7 @@ i.fl-field-responsive-toggle:hover {
 
 /* Misc */
 .fl-builder-lightbox-loading {
-	background: url(../img/ajax-loader.gif) center center no-repeat;
+	background: url(../img/ajax-loader.svg) center center no-repeat;
 	height: 100px;
 }
 .fl-builder-settings .error,
@@ -2058,7 +2097,7 @@ ul.as-selections {
 	width: auto;
 }
 ul.as-selections.loading {
-	background: url('../img/ajax-loader-small.gif') 98% center no-repeat;
+	background: url('../img/ajax-loader-small.svg') 98% center no-repeat;
 }
 ul.as-selections li.as-selection-item {
 	background: #d4eaf6;

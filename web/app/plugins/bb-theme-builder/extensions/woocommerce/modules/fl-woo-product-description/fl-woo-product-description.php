@@ -24,7 +24,7 @@ class FLWooProductDescriptionModule extends FLBuilderModule {
 
 FLBuilder::register_module( 'FLWooProductDescriptionModule', array(
 	'general'       => array(
-		'title'         => __( 'Style', 'fl-theme-builder' ),
+		'title'         => __( 'General', 'fl-theme-builder' ),
 		'sections'      => array(
 			'general'         => array(
 				'title'         => '',

@@ -10,8 +10,7 @@ final class FLThemeBuilderWhiteLabel {
 	/**
 	 * @return void
 	 */
-	static public function init()
-	{
+	static public function init() {
 		add_filter( 'all_plugins', __CLASS__ . '::plugins_page' );
 	}
 
@@ -22,8 +21,7 @@ final class FLThemeBuilderWhiteLabel {
 	 * @param array $plugins An array data for each plugin.
 	 * @return array
 	 */
-	static public function plugins_page( $plugins )
-	{
+	static public function plugins_page( $plugins ) {
 		$default  = __( 'Page Builder', 'fl-theme-builder' );
 		$branding = FLBuilderModel::get_branding();
 		$key	  = plugin_basename( FL_THEME_BUILDER_DIR . 'bb-theme-builder.php' );

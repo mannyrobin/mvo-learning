@@ -4,6 +4,7 @@
 echo 'FLBuilderConfig = ' . json_encode( apply_filters('fl_builder_ui_js_config', array(
 	'adminUrl'                      => admin_url(),
 	'ajaxNonce'                     => wp_create_nonce( 'fl_ajax_update' ),
+	'builderEnabled'				=> get_post_meta( $post_id, '_fl_builder_enabled', true ) ? true : false,
 	'colorPresets'                  => FLBuilderModel::get_color_presets(),
 	'customImageSizeTitles'         => apply_filters( 'image_size_names_choose', array() ),
 	'debug'                         => ( defined( 'WP_DEBUG' ) && WP_DEBUG ),

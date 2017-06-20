@@ -88,13 +88,13 @@ final class FLBuilderUserTemplatesAdminEdit {
 		$action = __( 'Edit', 'fl-builder' );
 		
 		if ( 'row' == $type ) {
-			$label = _x( sprintf( '%s Saved Row', $action ), '%s is an action like Add, Edit or View.', 'fl-builder' );
+			$label = sprintf( _x( '%s Saved Row', '%s is an action like Add, Edit or View.', 'fl-builder' ), $action );
 		}
 		else if ( 'module' == $type ) {
-			$label = _x( sprintf( '%s Saved Module', $action ), '%s is an action like Add, Edit or View.', 'fl-builder' );
+			$label = sprintf( _x( '%s Saved Module', '%s is an action like Add, Edit or View.', 'fl-builder' ), $action );
 		}
 		else {
-			$label = _x( sprintf( '%s Template', $action ), '%s is an action like Add, Edit or View.', 'fl-builder' );
+			$label = sprintf( _x( '%s Template', '%s is an action like Add, Edit or View.', 'fl-builder' ), $action );
 		}
 		
 		return $label;
@@ -161,18 +161,18 @@ final class FLBuilderUserTemplatesAdminEdit {
 		if ( 'fl-builder-template' == $post->post_type ) {
 		
 			if ( 'row' == $type ) {
-				$view = _x( sprintf( '%s Saved Row', $view ), '%s is an action like Add, Edit or View.', 'fl-builder' );
+				$view = sprintf( _x( '%s Saved Row', '%s is an action like Add, Edit or View.', 'fl-builder' ), $view );
 			}
 			else if ( 'module' == $type ) {
-				$view = _x( sprintf( '%s Saved Module', $view ), '%s is an action like Add, Edit or View.', 'fl-builder' );
+				$view = sprintf( _x( '%s Saved Module', '%s is an action like Add, Edit or View.', 'fl-builder' ), $view );
 			}
 			else {
-				$view = _x( sprintf( '%s Template', $view ), '%s is an action like Add, Edit or View.', 'fl-builder' );
+				$view = sprintf( _x( '%s Template', '%s is an action like Add, Edit or View.', 'fl-builder' ), $view );
 			}
 		}
 		else {
 			$object = get_post_type_object( $post->post_type );
-			$view   = _x( sprintf( '%s %s', $view, $object->labels->singular_name ), '1%s is an action like Add, Edit or View. 2%s is post type label.', 'fl-builder' );
+			$view   = sprintf( _x( '%1$s %2$s', '%1$s is an action like Add, Edit or View. %2$s is post type label.', 'fl-builder' ), $view, $object->labels->singular_name );
 			
 		}
 		

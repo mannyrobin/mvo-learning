@@ -106,7 +106,7 @@ final class FLBuilderAdminPosts {
 	{
 		global $post;
 		
-		$post_type_obj 	= get_post_type_object ( $post->post_type );
+		$post_type_obj 	= get_post_type_object( $post->post_type );
 		$post_type_name = strtolower( $post_type_obj->labels->singular_name );
 		$enabled 		= FLBuilderModel::is_builder_enabled();
 		
@@ -126,10 +126,14 @@ final class FLBuilderAdminPosts {
 			
 		if ( 'trash' != $post->post_status && current_user_can( 'edit_post', $post->ID ) && wp_check_post_lock( $post->ID ) === false ) {
 			
-			$post_types = FLBuilderModel::get_post_types();
+			$is_post_editable = (bool) apply_filters( 'fl_builder_is_post_editable', true, $post );
 
-			if ( in_array( $post->post_type, $post_types ) ) {
-				$actions['fl-builder'] = '<a href="' . FLBuilderModel::get_edit_url() . '">' . FLBuilderModel::get_branding() . '</a>';
+			$post_types = FLBuilderModel::get_post_types();
+			
+			if ( in_array( $post->post_type, $post_types ) && $is_post_editable ) {
+				$enabled = get_post_meta( $post->ID, '_fl_builder_enabled', true );
+				$dot = ' <span style="color:' . ( $enabled ? '#6bc373' : '#d9d9d9' ) . '; font-size:18px;">&bull;</span>';
+				$actions['fl-builder'] = '<a href="' . FLBuilderModel::get_edit_url() . '">' . FLBuilderModel::get_branding() . $dot . '</a>';
 			}
 		}
 		

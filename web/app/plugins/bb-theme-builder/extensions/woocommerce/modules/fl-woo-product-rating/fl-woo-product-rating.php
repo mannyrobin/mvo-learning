@@ -59,7 +59,7 @@ FLBuilder::register_module( 'FLWooProductRatingModule', array(
 					),
 					'fg_color'      => array(
 						'type'          => 'color',
-						'label'         => __( 'Foreground Color', 'fl-theme-builder' ),
+						'label'         => __( 'Rating Foreground Color', 'fl-theme-builder' ),
 						'show_reset'    => true,
 						'preview'       => array(
 							'type'          => 'css',
@@ -69,13 +69,14 @@ FLBuilder::register_module( 'FLWooProductRatingModule', array(
 					),
 					'bg_color'      => array(
 						'type'          => 'color',
-						'label'         => __( 'Background Color', 'fl-theme-builder' ),
+						'label'         => __( 'Rating Background Color', 'fl-theme-builder' ),
 						'show_reset'    => true,
 						'preview'       => array(
 							'type'          => 'css',
 							'selector'      => '.fl-module-content .star-rating:before',
 							'property'      => 'color',
 						),
+						'help'			=> __( 'Controls the background color of the rating symbols.', 'fl-builder' ),
 					),
 				),
 			),

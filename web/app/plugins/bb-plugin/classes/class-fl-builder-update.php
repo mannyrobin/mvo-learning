@@ -91,6 +91,9 @@ final class FLBuilderUpdate {
 		
 		// Clear all asset cache.
 		FLBuilderModel::delete_asset_cache_for_all_posts();
+		
+		// Flush the rewrite rules.
+		flush_rewrite_rules();
 	}
 
 	/** 
@@ -136,14 +139,14 @@ final class FLBuilderUpdate {
 	static private function pre_1_2_8_table_exists()
 	{
 		global $wpdb;
-		
+
 		$table   = $wpdb->prefix . 'fl_builder_nodes';
-		$results = $wpdb->get_results("SHOW TABLES LIKE '{$table}'");
-		
+		$results = $wpdb->get_results( $wpdb->prepare( "SHOW TABLES LIKE %s", $table ) );
+
 		return count($results) > 0;
 	}
 
-	/** 
+	/**
 	 * Check to see if the fl_builder_nodes table that existed before 1.2.8
 	 * is empty or not.
 	 *
@@ -154,19 +157,19 @@ final class FLBuilderUpdate {
 	static private function pre_1_2_8_table_is_empty()
 	{
 		global $wpdb;
-		
+
 		if(self::pre_1_2_8_table_exists()) {
-				
+
 			$table = $wpdb->prefix . 'fl_builder_nodes';
-			$nodes = $wpdb->get_results("SELECT * FROM {$table}");
-			
+			$nodes = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %s", $table ) );
+
 			return count($nodes) === 0;
 		}
-		
+
 		return true;
 	}
 
-	/** 
+	/**
 	 * Saves a backup of the pre 1.2.8 database table.
 	 *
 	 * @since 1.2.8
@@ -176,16 +179,16 @@ final class FLBuilderUpdate {
 	static private function pre_1_2_8_backup()
 	{
 		global $wpdb;
-		
+
 		if(self::pre_1_2_8_table_exists()) {
-		
+
 			$cache_dir = FLBuilderModel::get_cache_dir();
 			$table     = $wpdb->prefix . 'fl_builder_nodes';
 
-			// Get the data to backup.            
-			$nodes = $wpdb->get_results("SELECT * FROM {$table}");
+			// Get the data to backup.
+			$nodes = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %s", $table ) );
 			$meta  = $wpdb->get_results("SELECT * FROM {$wpdb->postmeta} WHERE meta_key = '_fl_builder_layout'");
-		
+
 			// Build the export object.
 			$data           = new StdClass();
 			$data->version  = FL_BUILDER_VERSION;
@@ -262,37 +265,37 @@ final class FLBuilderUpdate {
 	static private function v_1_2_8()
 	{
 		global $wpdb;
-		
+
 		if(self::pre_1_2_8_table_exists()) {
-		
+
 			$table     = $wpdb->prefix . 'fl_builder_nodes';
 			$metas     = $wpdb->get_results("SELECT * FROM {$wpdb->postmeta} WHERE meta_key = '_fl_builder_layout'");
 			$cache_dir = FLBuilderModel::get_cache_dir();
-			
+
 			// Loop through the layout ids for each post.
 			foreach($metas as $meta) {
-			
+
 				// Get the old layout nodes from the database.
-				$published  = $wpdb->get_results("SELECT * FROM {$table} WHERE layout = '{$meta->meta_value}' AND status = 'published'");
-				$draft      = $wpdb->get_results("SELECT * FROM {$table} WHERE layout = '{$meta->meta_value}' AND status = 'draft'");
-				
-				// Convert the old nodes to new ones. 
+				$published  = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %s WHERE layout = %s AND status = 'published'", $table, $meta->meta_value ) );
+				$draft      = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %s WHERE layout = %s AND status = 'draft'", $table, $meta->meta_value ) );
+
+				// Convert the old nodes to new ones.
 				$published  = self::v_1_2_8_convert_nodes($published);
 				$draft      = self::v_1_2_8_convert_nodes($draft);
-				
-				// Add the new layout post meta. 
+
+				// Add the new layout post meta.
 				update_post_meta($meta->post_id, '_fl_builder_data', $published);
 				update_post_meta($meta->post_id, '_fl_builder_draft', $draft);
 			}
-			
+
 			// Backup the old builder table.
 			self::pre_1_2_8_backup();
-			
+
 			// Drop the old builder table.
 			if(file_exists($cache_dir['path'] . 'backup.dat')) {
 				$wpdb->query("DROP TABLE {$wpdb->prefix}fl_builder_nodes");
 			}
-			
+
 			// Delete old post meta.
 			delete_post_meta_by_key('_fl_builder_layout');
 			delete_post_meta_by_key('_fl_builder_layout_export');

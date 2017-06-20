@@ -32,17 +32,35 @@ final class FLThemeBuilderLayoutTemplates {
 	 * @return void
 	 */
 	static public function register_templates() {
-		$templates = array(
-			FL_THEME_BUILDER_DIR . 'data/templates-header.dat',
-			FL_THEME_BUILDER_DIR . 'data/templates-footer.dat',
-			FL_THEME_BUILDER_DIR . 'data/templates-singular.dat',
-			FL_THEME_BUILDER_DIR . 'data/templates-archive.dat',
-			FL_THEME_BUILDER_DIR . 'data/templates-404.dat',
-		);
 
-		foreach ( $templates as $path ) {
-			if ( file_exists( $path ) ) {
-				FLBuilder::register_templates( $path );
+		if ( class_exists( 'FLBuilderAddon' ) ) {
+			// 2.0 style register
+			FLBuilder::register_templates( array(
+					FL_THEME_BUILDER_DIR . 'data/templates-header.dat',
+					FL_THEME_BUILDER_DIR . 'data/templates-footer.dat',
+					FL_THEME_BUILDER_DIR . 'data/templates-singular.dat',
+					FL_THEME_BUILDER_DIR . 'data/templates-archive.dat',
+					FL_THEME_BUILDER_DIR . 'data/templates-404.dat',
+				), array(
+					'name'     => __( 'Themer Templates', 'fl-builder' ),
+					'handle'   => 'standard',
+					'_builtin' => true,
+				)
+			);
+		} else {
+			// 1.0 style register
+			$templates = array(
+				FL_THEME_BUILDER_DIR . 'data/templates-header.dat',
+				FL_THEME_BUILDER_DIR . 'data/templates-footer.dat',
+				FL_THEME_BUILDER_DIR . 'data/templates-singular.dat',
+				FL_THEME_BUILDER_DIR . 'data/templates-archive.dat',
+				FL_THEME_BUILDER_DIR . 'data/templates-404.dat',
+			);
+
+			foreach ( $templates as $path ) {
+				if ( file_exists( $path ) ) {
+					FLBuilder::register_templates( $path );
+				}
 			}
 		}
 	}

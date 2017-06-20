@@ -8,6 +8,14 @@
 final class FLBuilderLoop {
 
 	/**
+	 * Loop query counter
+	 *
+	 * @since 1.9.5
+	 * @var int $loop_counter
+	 */
+	static public $loop_counter = 0;
+
+	/**
 	 * Initializes hooks.
 	 *
 	 * @since 1.8
@@ -16,10 +24,12 @@ final class FLBuilderLoop {
 	static public function init()
 	{
 		// Actions
-		add_action( 'fl_builder_before_control_suggest', __CLASS__ . '::render_match_select', 10, 4 );
+		add_action( 'fl_builder_before_control_suggest', __CLASS__ . '::render_match_select', 10, 4 );	
+		add_action( 'init', 							 __CLASS__ . '::init_rewrite_rules' );
 		
 		// Filters
 		add_filter( 'found_posts',                       __CLASS__ . '::found_posts', 1, 2 );
+		add_filter( 'redirect_canonical', 				 __CLASS__ . '::override_canonical', 1, 2 );
 	}
 
 	/**
@@ -32,6 +42,7 @@ final class FLBuilderLoop {
 	 */
 	static public function query( $settings ) 
 	{
+		$settings = apply_filters( 'fl_builder_loop_before_query_settings', $settings );
 		do_action( 'fl_builder_loop_before_query', $settings );
 		
 		if ( isset( $settings->data_source ) && 'main_query' == $settings->data_source ) {
@@ -43,7 +54,7 @@ final class FLBuilderLoop {
 		
 		do_action( 'fl_builder_loop_after_query', $settings );
 		
-		return $query;
+		return apply_filters( 'fl_builder_loop_query', $query, $settings );
 	}
 
 	/**
@@ -78,9 +89,12 @@ final class FLBuilderLoop {
 		$order_by		 = empty($settings->order_by) ? 'date' : $settings->order_by;
 		$order			 = empty($settings->order) ? 'DESC' : $settings->order;
 		$users			 = empty($settings->users) ? '' : $settings->users;
-		$fields			 = empty($settings->fields) ? '' : $settings->fields; 
-		$paged			 = self::get_paged();
-		
+		$fields			 = empty($settings->fields) ? '' : $settings->fields;		
+
+		// Count how many times this method has been called
+		self::$loop_counter++;
+		$paged = self::get_paged();
+
 		// Get the offset.
 		if ( ! isset( $settings->offset ) || ! is_int( ( int )$settings->offset ) ) {
 			$offset = 0;
@@ -88,7 +102,7 @@ final class FLBuilderLoop {
 		else {
 			$offset = $settings->offset;
 		}
-		
+
 		// Get the paged offset. 
 		if ( $paged < 2 ) {
 			$paged_offset = $offset;
@@ -112,8 +126,17 @@ final class FLBuilderLoop {
 			'fields'				=> $fields
 		) );
 		
+		// Order by meta value arg.
+		if ( strstr( $order_by, 'meta_value' ) ) {
+			$args['meta_key'] = $settings->order_by_meta_key;
+		}
+		
 		// Build the author query.
 		if ( ! empty( $users ) ) {
+
+			if ( is_string( $users ) ) {
+				$users = explode( ',', $users );
+			}
 			
 			$arg = 'author__in';
 			
@@ -203,7 +226,49 @@ final class FLBuilderLoop {
 		
 		return $found_posts;
 	}
-	
+
+		
+	/**
+	 * Add rewrite rules for custom pagination that allows post modules
+	 * on the same page to be paged independently.
+	 *
+	 * @since 1.9.5
+	 * @return void
+	 */
+	static public function init_rewrite_rules()
+	{
+		for ( $x = 2; $x <= 10; $x++ ) {
+			add_rewrite_rule( 'paged-'. $x .'/([0-9]*)/?', 'index.php?page_id=' . get_option( 'page_on_front' ) . '&flpaged'. $x .'=$matches[1]', 'top' );
+			add_rewrite_rule( 'paged-'. $x .'/?([0-9]{1,})/?$', 'index.php?&flpaged'. $x .'=$matches[1]', 'top');
+			add_rewrite_rule( '(.?.+?)/paged-'. $x .'/?([0-9]{1,})/?$', 'index.php?pagename=$matches[1]&flpaged'. $x .'=$matches[2]', 'top');
+			add_rewrite_rule( '([^/]+)/paged-'. $x .'/?([0-9]{1,})/?$', 'index.php?name=$matches[1]&flpaged'. $x .'=$matches[2]', 'top');
+			add_rewrite_tag( "%flpaged{$x}%", '([^&]+)');
+		}
+	}
+
+	/**
+	 * Disable canonical redirection on the frontpage when query var 'flpaged' is found.
+	 * 
+	 * @param  string $redirect_url  The redirect URL.
+	 * @param  string $requested_url The requested URL.
+	 * @since  1.9.5
+	 * @return bool|string
+	 */
+	static public function override_canonical( $redirect_url, $requested_url ) {
+		global $wp_the_query;
+
+		if ( is_array($wp_the_query->query) ) {
+			foreach ($wp_the_query->query as $key => $value) {
+				if (strpos($key, 'flpaged') === 0 && is_page() && get_option( 'page_on_front' )) {
+					$redirect_url = false;
+					break;
+				}
+			}
+		}
+
+    	return $redirect_url;
+	}
+
 	/**
 	 * Builds and renders the pagination for a query.
 	 *
@@ -216,25 +281,44 @@ final class FLBuilderLoop {
 		$total_pages = $query->max_num_pages;
 		$permalink_structure = get_option('permalink_structure');
 		$paged = self::get_paged();
-		
+		$base = get_pagenum_link();
+
 		if($total_pages > 1) {
 		
-			if(!$current_page = $paged) {
+			if(!$current_page = $paged) { 
 				$current_page = 1;
 			}
 
-			if(empty($permalink_structure) || is_search()) {
-				$format = '&paged=%#%';
-			}
-			else if ("/" == substr($permalink_structure, -1)) {
-				$format = 'page/%#%/';
+			if ( self::$loop_counter > 1 ) {
+				$page_prefix = 'paged-'. self::$loop_counter;
 			}
 			else {
-				$format = '/page/%#%/';
+				$page_prefix = empty($permalink_structure) ? 'paged' : 'page';
 			}
 			
+			if(empty($permalink_structure) || is_search()) {
+				$format = '&'. $page_prefix .'=%#%';
+			}
+			else if ("/" == substr($base, -1)) {
+				$format = $page_prefix . '/%#%/';
+			}
+			else {
+				$format = '/'. $page_prefix .'/%#%';
+			}
+
+			// Fix for wpml pagination
+			// @since 1.10.2
+			if( ! empty( $permalink_structure ) && isset( $_GET['lang'] ) ) {
+				$base = untrailingslashit( add_query_arg( array( 'lang' => false ), $base ) );
+			}
+
+			$pos = strrpos($base, "paged-");
+			if ( $pos ) {
+				$base = substr_replace( $base, '', $pos, strlen( $base ) );
+			}
+
 			echo paginate_links(array(
-				'base'	   => get_pagenum_link(1) . '%_%',
+				'base'	   => $base . '%_%',
 				'format'   => $format,
 				'current'  => $current_page,
 				'total'	   => $total_pages,
@@ -247,13 +331,23 @@ final class FLBuilderLoop {
 	 * Returns the paged number for the query.
 	 *
 	 * @since 1.9.5
-	 * @return init
+	 * @return int
 	 */
-	static public function get_paged() 
+	static public function get_paged()
 	{
-		global $wp_the_query;
-		global $paged;
-			
+		global $wp_the_query, $paged;
+		
+		// Check first for custom pagination from post module
+		$flpaged = $wp_the_query->get( 'flpaged'. self::$loop_counter );
+		
+		if ( is_numeric( $flpaged ) ) {
+			return $flpaged;
+		}
+		else if ( self::$loop_counter > 1 ) {
+			// If we have multiple paginations, make sure it won't affect the other loops.
+			return 0;
+		}
+
 		// Check the 'page' query var.
 		$page_qv = $wp_the_query->get( 'page' );
 		
@@ -272,7 +366,7 @@ final class FLBuilderLoop {
 		if ( is_numeric( $paged ) ) {
 			return $paged;
 		}
-		
+
 		return 0;
 	}
 

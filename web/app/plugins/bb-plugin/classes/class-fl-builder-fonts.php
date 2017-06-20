@@ -14,6 +14,15 @@ final class FLBuilderFonts {
 	 */
 	static private $fonts = array();
 
+	/** 
+	 * @since 1.9.5
+	 * @return void
+	 */  
+	static public function init()
+	{
+		add_action('wp_enqueue_scripts', __CLASS__ . '::combine_google_fonts', 99);
+	}
+
 	/**
 	 * Renders the JavasCript variable for font settings dropdowns.
 	 *
@@ -97,7 +106,7 @@ final class FLBuilderFonts {
 	 */
 	static public function get_weight_string( $weight ){
 
-		$weight_string = array(
+		$weight_string = apply_filters( 'fl_builder_font_weight_strings', array(
 			'default' => __( 'Default', 'fl-builder' ),
 			'regular' => __( 'Regular', 'fl-builder' ),
 			'100' => 'Thin 100',
@@ -109,7 +118,7 @@ final class FLBuilderFonts {
 			'700' => 'Bold 700',
 			'800' => 'Extra-Bold 800',
 			'900' => 'Ultra-Bold 900'
-		);
+		) );
 
 		return $weight_string[ $weight ];
 	}
@@ -138,7 +147,12 @@ final class FLBuilderFonts {
 		if ( 'regular' == $font['weight'] ) {
 			$css .= 'font-weight: normal;';
 		} else {
-			$css .= 'font-weight: '. $font['weight'] .';';
+            if ( 'i' == substr( $font['weight'], -1 ) ) {
+                $css .= 'font-weight: '. substr( $font['weight'], 0, -1 ) .';';
+                $css .= 'font-style: italic;';
+            } else {
+                $css .= 'font-weight: '. $font['weight'] .';';
+            }
 		}
 
 		echo $css;
@@ -242,7 +256,7 @@ final class FLBuilderFonts {
 						self::$fonts[ $font['family'] ][] = $font['weight'];
 					}
 				} else {
-					// adds a new font and height
+					// adds a new font and weight
 					self::$fonts[ $font['family'] ] = array( $font['weight'] );
 
 				}
@@ -252,7 +266,117 @@ final class FLBuilderFonts {
 		}
 	}
 
+	/**
+	 * Combines all enqueued google font HTTP calls into one URL.
+	 *
+	 * @since  1.9.5
+	 * @return void
+	 */
+	static public function combine_google_fonts(){
+		global $wp_styles;
+
+		// Check for any enqueued `fonts.googleapis.com` from themes or plugins
+		if( isset( $wp_styles->queue ) ){
+
+			$google_fonts_domain = '//fonts.googleapis.com/css';
+			$enqueued_google_fonts = array();
+			$families = array();			
+			$subsets = array();
+			$font_args = array();		
+
+			// Collect all enqueued google fonts
+			foreach( $wp_styles->queue as $key => $handle ){
+
+				if ( ! isset( $wp_styles->registered[ $handle ] ) ) {
+					continue;
+				}
+
+				$style_src = $wp_styles->registered[ $handle ]->src;
+
+				if (strpos($style_src, 'fonts.googleapis.com/css') !== false) {
+			        $url = wp_parse_url( $style_src );
+			        
+			        if( is_string( $url['query'] ) ) {
+			        	parse_str( $url['query'], $parsed_url );
+
+			        	if( isset( $parsed_url['family'] ) ){
+
+			        		// Collect all subsets
+					        if( isset( $parsed_url['subset'] ) ){
+					        	$subsets[] = urlencode( trim( $parsed_url['subset'] ) );					 			
+					        }
+
+					        $font_families = explode( '|', $parsed_url['family'] );
+			        		foreach( $font_families as $parsed_font ){
+			        			
+			        			$get_font = explode( ':', $parsed_font );
+
+				        		// Extract the font data
+				        		if( isset( $get_font[0] ) && !empty( $get_font[0] ) ){
+				        			$family = $get_font[0];
+				        			$weights = isset( $get_font[1] ) && !empty( $get_font[1] ) ? explode( ',', $get_font[1] ) : array();
+
+				        			// Combine weights if family has been enqueued
+				        			if( isset( $enqueued_google_fonts[ $family ] ) && $weights != $enqueued_google_fonts[ $family ]['weights'] ){
+				        				$combined_weights = array_merge($weights, $enqueued_google_fonts[ $family ]['weights']);
+				        				$enqueued_google_fonts[ $family ]['weights'] = array_unique( $combined_weights );
+				        			}
+				        			else {
+				        				$enqueued_google_fonts[ $family ] = array(
+					        				'handle'	=> $handle,
+					        				'family'	=> $family,
+					        				'weights'	=> $weights
+					        			);
+
+					        			// Remove enqueued google font style, so we would only have one HTTP request.
+					        			wp_dequeue_style( $handle );
+				        			}
+				        		}
+			        		}			        		
+			        	}				        	
+			        }
+			    }
+			}
+
+			// Start combining all enqueued google fonts
+			if( count($enqueued_google_fonts) > 0 ){
+
+				foreach( $enqueued_google_fonts as $family => $data ){
+					// Collect all family and weights
+	    			if( !empty( $data['weights'] ) ) {
+	    				$families[] = $family .':'. implode(',', $data['weights']);
+	    			}
+	    			else {
+	    				$families[] = $family;
+	    			}
+				}
+
+				if( !empty( $families ) ){
+					$font_args['family'] = implode('|', $families);
+
+					if( !empty( $subsets ) ){
+						$font_args['subset'] = implode(',', $subsets);
+					}
+
+					$src = add_query_arg( $font_args, $google_fonts_domain );
+
+					// Enqueue google fonts into one URL request
+					wp_enqueue_style(
+						'fl-builder-google-fonts-'. md5( $src ), 
+						$src,
+						array()
+					);
+
+					// Clears data
+					$enqueued_google_fonts = array();
+				}
+			}
+		}
+	}
+
 }
+
+FLBuilderFonts::init();
 
 /**
  * Font info class for system and Google fonts.
@@ -328,9 +452,9 @@ final class FLBuilderFontFamilies {
 	 * @var array
 	 */
 	static public $google = array(
-	    "ABeeZee" => array(
-	        "regular",
-	    ),
+		"ABeeZee" => array(
+			"regular",
+		),
 		"Abel" => array(
 		    "regular",
 		),
@@ -552,6 +676,10 @@ final class FLBuilderFontFamilies {
 		"Armata" => array(
 		    "regular",
 		),
+		"Arsenal" => array(
+		    "regular",
+		    "700",
+		),
 		"Artifika" => array(
 		    "regular",
 		),
@@ -565,6 +693,7 @@ final class FLBuilderFontFamilies {
 		),
 		"Asap" => array(
 		    "regular",
+		    "500",
 		    "700",
 		),
 		"Asar" => array(
@@ -643,6 +772,9 @@ final class FLBuilderFontFamilies {
 		"Bad Script" => array(
 		    "regular",
 		),
+		"Bahiana" => array(
+		    "regular",
+		),
 		"Baloo" => array(
 		    "regular",
 		),
@@ -671,6 +803,9 @@ final class FLBuilderFontFamilies {
 		    "regular",
 		),
 		"Bangers" => array(
+		    "regular",
+		),
+		"Barrio" => array(
 		    "regular",
 		),
 		"Basic" => array(
@@ -951,7 +1086,9 @@ final class FLBuilderFontFamilies {
 		    "regular",
 		),
 		"Chivo" => array(
+		    "300",
 		    "regular",
+		    "700",
 		    "900",
 		),
 		"Chonburi" => array(
@@ -1344,13 +1481,41 @@ final class FLBuilderFontFamilies {
 		),
 		"Fira Mono" => array(
 		    "regular",
+		    "500",
 		    "700",
 		),
 		"Fira Sans" => array(
+		    "100",
+		    "200",
 		    "300",
 		    "regular",
 		    "500",
+		    "600",
 		    "700",
+		    "800",
+		    "900",
+		),
+		"Fira Sans Condensed" => array(
+		    "100",
+		    "200",
+		    "300",
+		    "regular",
+		    "500",
+		    "600",
+		    "700",
+		    "800",
+		    "900",
+		),
+		"Fira Sans Extra Condensed" => array(
+		    "100",
+		    "200",
+		    "300",
+		    "regular",
+		    "500",
+		    "600",
+		    "700",
+		    "800",
+		    "900",
 		),
 		"Fjalla One" => array(
 		    "regular",
@@ -2171,8 +2336,7 @@ final class FLBuilderFontFamilies {
 		"Molengo" => array(
 		    "regular",
 		),
-		"Molle" => array(
-		),
+		"Molle" => array(),
 		"Monda" => array(
 		    "regular",
 		    "700",
@@ -2193,12 +2357,26 @@ final class FLBuilderFontFamilies {
 		    "regular",
 		),
 		"Montserrat" => array(
+		    "100",
+		    "200",
+		    "300",
 		    "regular",
+		    "500",
+		    "600",
 		    "700",
+		    "800",
+		    "900",
 		),
 		"Montserrat Alternates" => array(
+		    "100",
+		    "200",
+		    "300",
 		    "regular",
+		    "500",
+		    "600",
 		    "700",
+		    "800",
+		    "900",
 		),
 		"Montserrat Subrayada" => array(
 		    "regular",
@@ -2242,8 +2420,13 @@ final class FLBuilderFontFamilies {
 		    "800",
 		),
 		"Muli" => array(
+		    "200",
 		    "300",
 		    "regular",
+		    "600",
+		    "700",
+		    "800",
+		    "900",
 		),
 		"Mystery Quest" => array(
 		    "regular",
@@ -2331,9 +2514,22 @@ final class FLBuilderFontFamilies {
 		    "regular",
 		),
 		"Nunito" => array(
+		    "200",
 		    "300",
 		    "regular",
+		    "600",
 		    "700",
+		    "800",
+		    "900",
+		),
+		"Nunito Sans" => array(
+		    "200",
+		    "300",
+		    "regular",
+		    "600",
+		    "700",
+		    "800",
+		    "900",
 		),
 		"Odor Mean Chey" => array(
 		    "regular",
@@ -2386,8 +2582,11 @@ final class FLBuilderFontFamilies {
 		    "regular",
 		),
 		"Oswald" => array(
+		    "200",
 		    "300",
 		    "regular",
+		    "500",
+		    "600",
 		    "700",
 		),
 		"Over the Rainbow" => array(
@@ -2400,6 +2599,22 @@ final class FLBuilderFontFamilies {
 		),
 		"Overlock SC" => array(
 		    "regular",
+		),
+		"Overpass" => array(
+		    "100",
+		    "200",
+		    "300",
+		    "regular",
+		    "600",
+		    "700",
+		    "800",
+		    "900",
+		),
+		"Overpass Mono" => array(
+		    "300",
+		    "regular",
+		    "600",
+		    "700",
 		),
 		"Ovo" => array(
 		    "regular",
@@ -2437,6 +2652,10 @@ final class FLBuilderFontFamilies {
 		"Pacifico" => array(
 		    "regular",
 		),
+		"Padauk" => array(
+		    "regular",
+		    "700",
+		),
 		"Palanquin" => array(
 		    "100",
 		    "200",
@@ -2451,6 +2670,9 @@ final class FLBuilderFontFamilies {
 		    "500",
 		    "600",
 		    "700",
+		),
+		"Pangolin" => array(
+		    "regular",
 		),
 		"Paprika" => array(
 		    "regular",
@@ -2537,7 +2759,10 @@ final class FLBuilderFontFamilies {
 		),
 		"Podkova" => array(
 		    "regular",
+		    "500",
+		    "600",
 		    "700",
+		    "800",
 		),
 		"Poiret One" => array(
 		    "regular",
@@ -2643,6 +2868,7 @@ final class FLBuilderFontFamilies {
 		"Quicksand" => array(
 		    "300",
 		    "regular",
+		    "500",
 		    "700",
 		),
 		"Quintessential" => array(
@@ -2777,8 +3003,15 @@ final class FLBuilderFontFamilies {
 		    "regular",
 		),
 		"Rokkitt" => array(
+		    "100",
+		    "200",
+		    "300",
 		    "regular",
+		    "500",
+		    "600",
 		    "700",
+		    "800",
+		    "900",
 		),
 		"Romanesco" => array(
 		    "regular",
@@ -2807,9 +3040,6 @@ final class FLBuilderFontFamilies {
 		    "900",
 		),
 		"Rubik Mono One" => array(
-		    "regular",
-		),
-		"Rubik One" => array(
 		    "regular",
 		),
 		"Ruda" => array(
@@ -2861,8 +3091,11 @@ final class FLBuilderFontFamilies {
 		"Sancreek" => array(
 		    "regular",
 		),
-		"Sansita One" => array(
+		"Sansita" => array(
 		    "regular",
+		    "700",
+		    "800",
+		    "900",
 		),
 		"Sarala" => array(
 		    "regular",
@@ -3255,6 +3488,7 @@ final class FLBuilderFontFamilies {
 		),
 		"Unna" => array(
 		    "regular",
+		    "700",
 		),
 		"VT323" => array(
 		    "regular",

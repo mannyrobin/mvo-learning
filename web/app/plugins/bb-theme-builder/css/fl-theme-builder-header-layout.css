@@ -5,7 +5,7 @@ header.fl-theme-builder-header-sticky {
 	right: 0;
 	top: 0;
 	width: 100%;
-	z-index: 9999;
+	z-index: 100;
 }
 .admin-bar header.fl-theme-builder-header-sticky {
 	top: 32px;
@@ -53,7 +53,10 @@ header.fl-theme-builder-header-shrink img {
 header.fl-builder-content[data-overlay="1"]:not(.fl-theme-builder-header-sticky) {
 	position: absolute;
 	width: 100%;
-	z-index: 9999;
+	z-index: 100;
+}
+.fl-builder-edit body:not(.single-fl-theme-layout) header.fl-builder-content[data-overlay="1"] {
+	display: none;
 }
 body:not(.single-fl-theme-layout) header.fl-builder-content[data-overlay="1"]:not(.fl-theme-builder-header-scrolled) .fl-row-content-wrap,
 body:not(.single-fl-theme-layout) header.fl-builder-content[data-overlay="1"]:not(.fl-theme-builder-header-scrolled) .fl-col-content {

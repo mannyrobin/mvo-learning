@@ -84,7 +84,7 @@ final class FLThemeBuilderLayoutAdminEdit {
 				'userRules' => FLThemeBuilderRulesUser::get_saved( $post->ID ),
 				'strings' => array(
 					'allObjects' => _x( 'All %s', '%s is the post or taxonomy name.', 'fl-theme-builder' ),
-					'alreadySaved' => _x( 'This location has already been added to the "1%1$s" 2%1$s. Would you like to remove it and add it to this 2%1$s?', '1%s is the post title. 2%s is the post type label.', 'fl-theme-builder' ),
+					'alreadySaved' => _x( 'This location has already been added to the "%1$s" %2$s. Would you like to remove it and add it to this %1$s?', '%1$s is the post title. %2$s is the post type label.', 'fl-theme-builder' ),
 					'assignedTo' => _x( 'Assigned to %s', '%s stands for post title.', 'fl-theme-builder' ),
 					'postTypePlural' => $object->label,
 					'postTypeSingular' => $object->labels->singular_name,
@@ -130,6 +130,8 @@ final class FLThemeBuilderLayoutAdminEdit {
 
 				if ( $location_post['id'] == $post->ID ) {
 					continue;
+				} elseif ( 'publish' != get_post_status( $location_post['id'] ) ) {
+					continue;
 				}
 
 				$post_users = FLThemeBuilderRulesUser::get_saved( $location_post['id'] );
@@ -161,9 +163,9 @@ final class FLThemeBuilderLayoutAdminEdit {
 				$posts = '<strong>' . $posts . '</strong>';
 
 				if ( 0 === count( $common ) ) {
-					$message = _x( sprintf( 'The layout %s is assigned to the same location and may not show.', $posts ), '% is a post title.', 'fl-theme-builder' );
+					$message = sprintf( _x( 'The layout %s is assigned to the same location and may not show.', '% is a post title.', 'fl-theme-builder' ), $posts );
 				} else {
-					$message = _x( sprintf( 'The layouts %s are assigned to the same location and may not show.', $posts ), '% is post titles.', 'fl-theme-builder' );
+					$message = sprintf( _x( 'The layouts %s are assigned to the same location and may not show.', '% is post titles.', 'fl-theme-builder' ), $posts );
 				}
 
 				echo '<div class="error">';

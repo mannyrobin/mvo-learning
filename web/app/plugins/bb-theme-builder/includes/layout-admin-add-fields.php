@@ -10,7 +10,7 @@
 			</optgroup>
 			<optgroup label="<?php _e( 'Content' , 'fl-theme-builder' ); ?>">
 				<option value="archive"><?php _e( 'Archive', 'fl-theme-builder' ); ?></option>
-				<option value="singular"><?php _e( 'Single', 'fl-theme-builder' ); ?></option>
+				<option value="singular"><?php _e( 'Singular', 'fl-theme-builder' ); ?></option>
 				<option value="404"><?php _e( '404', 'fl-theme-builder' ); ?></option>
 				<option value="part"><?php _e( 'Part', 'fl-theme-builder' ); ?> <?php if ( ! $parts || empty( $hooks ) ) { _e( '(Unsupported)', 'fl-theme-builder' );} ?></option>
 			</optgroup>
