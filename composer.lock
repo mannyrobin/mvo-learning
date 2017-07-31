@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fea29e776d12ee9e58b7f62b4e5622db",
+    "content-hash": "96c6bca23c003f5e89ff6763431beb4e",
     "packages": [
         {
             "name": "composer/installers",
@@ -136,16 +136,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "6.2.3",
+            "version": "6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "8d6c6cc55186db87b7dc5009827429ba4e9dc006"
+                "reference": "f4db5a78a5ea468d4831de7f0bf9d9415e348699"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/8d6c6cc55186db87b7dc5009827429ba4e9dc006",
-                "reference": "8d6c6cc55186db87b7dc5009827429ba4e9dc006",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/f4db5a78a5ea468d4831de7f0bf9d9415e348699",
+                "reference": "f4db5a78a5ea468d4831de7f0bf9d9415e348699",
                 "shasum": ""
             },
             "require": {
@@ -155,8 +155,11 @@
             },
             "require-dev": {
                 "ext-curl": "*",
-                "phpunit/phpunit": "^4.0",
+                "phpunit/phpunit": "^4.0 || ^5.0",
                 "psr/log": "^1.0"
+            },
+            "suggest": {
+                "psr/log": "Required for using the Log middleware"
             },
             "type": "library",
             "extra": {
@@ -194,7 +197,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2017-02-28T22:50:30+00:00"
+            "time": "2017-06-22T18:50:49+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -313,51 +316,60 @@
             "time": "2017-03-20T17:10:46+00:00"
         },
         {
+            "name": "hipdevteam/bb-related-posts",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/hipdevteam/bb-related-posts.git",
+                "reference": "9e8cdfde624aaefd7a7987e5c94830d8d67fcb22"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v3/projects/hipdevteam%2Fbb-related-posts/repository/archive.zip?sha=9e8cdfde624aaefd7a7987e5c94830d8d67fcb22",
+                "reference": "9e8cdfde624aaefd7a7987e5c94830d8d67fcb22",
+                "shasum": ""
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GLPv3+"
+            ],
+            "authors": [
+                {
+                    "name": "Hip Creative",
+                    "email": "zach@hipcreativeinc.com"
+                }
+            ],
+            "description": "Beaver Builder Module to display related posts with default styles for body or sidebar placement.",
+            "time": "2017-06-14T13:35:56+00:00"
+        },
+        {
             "name": "hipdevteam/reviews-bb-module",
             "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/reviews-bb-module.git",
-                "reference": "f60e92b9fd5359044bc97e5fa72fe4aa36e57f06"
+                "reference": "2.0.1"
             },
-            "require": {
-                "composer/installers": "~1.0"
-            },
-            "type": "wordpress-plugin",
-            "time": "2017-04-06T18:56:29+00:00"
-        },
-        {
-            "name": "hipdevteam/social-warfare-pro",
-            "version": "2.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.com/hipdevteam/social-warfare-pro.git",
-                "reference": "575aa58f506ceb6686f87c9ca92b6fd9728adb02"
-            },
-            "require": {
-                "composer/installers": "~1.0"
-            },
-            "type": "wordpress-plugin",
-            "description": "A fork of social-warfare, allowing management with composer",
-            "time": "2017-02-04T22:24:17+00:00"
+            "type": "wordpress-plugin"
         },
         {
             "name": "johnpbloch/wordpress",
-            "version": "4.7.4.1",
+            "version": "4.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnpbloch/wordpress.git",
-                "reference": "ca36dbed576d21681efe92851f411ac2315a0ea5"
+                "reference": "24edf4daca6bc15ad3b78c5927468df487d47a37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnpbloch/wordpress/zipball/ca36dbed576d21681efe92851f411ac2315a0ea5",
-                "reference": "ca36dbed576d21681efe92851f411ac2315a0ea5",
+                "url": "https://api.github.com/repos/johnpbloch/wordpress/zipball/24edf4daca6bc15ad3b78c5927468df487d47a37",
+                "reference": "24edf4daca6bc15ad3b78c5927468df487d47a37",
                 "shasum": ""
             },
             "require": {
-                "johnpbloch/wordpress-core": "4.7.4.1",
-                "johnpbloch/wordpress-core-installer": "~0.2",
+                "johnpbloch/wordpress-core": "4.8.0",
+                "johnpbloch/wordpress-core-installer": "^1.0",
                 "php": ">=5.3.2"
             },
             "type": "package",
@@ -378,20 +390,20 @@
                 "cms",
                 "wordpress"
             ],
-            "time": "2017-05-01T23:34:21+00:00"
+            "time": "2017-06-08T15:12:19+00:00"
         },
         {
             "name": "johnpbloch/wordpress-core",
-            "version": "4.7.4.1",
+            "version": "4.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnpbloch/wordpress-core.git",
-                "reference": "637b1c6e997b28bf8767e6c87611f869e12e246e"
+                "reference": "58f209dfd66f61c4398a47cf53e90d378abc25d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnpbloch/wordpress-core/zipball/637b1c6e997b28bf8767e6c87611f869e12e246e",
-                "reference": "637b1c6e997b28bf8767e6c87611f869e12e246e",
+                "url": "https://api.github.com/repos/johnpbloch/wordpress-core/zipball/58f209dfd66f61c4398a47cf53e90d378abc25d7",
+                "reference": "58f209dfd66f61c4398a47cf53e90d378abc25d7",
                 "shasum": ""
             },
             "require": {
@@ -415,20 +427,20 @@
                 "cms",
                 "wordpress"
             ],
-            "time": "2017-05-01T23:28:59+00:00"
+            "time": "2017-06-08T15:12:14+00:00"
         },
         {
             "name": "johnpbloch/wordpress-core-installer",
-            "version": "0.2.1",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnpbloch/wordpress-core-installer.git",
-                "reference": "a04c2c383ef13aae077f36799ed2eafdebd618d2"
+                "reference": "e9e767f2d9f994f358c34b41def2c410ad8717f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnpbloch/wordpress-core-installer/zipball/a04c2c383ef13aae077f36799ed2eafdebd618d2",
-                "reference": "a04c2c383ef13aae077f36799ed2eafdebd618d2",
+                "url": "https://api.github.com/repos/johnpbloch/wordpress-core-installer/zipball/e9e767f2d9f994f358c34b41def2c410ad8717f2",
+                "reference": "e9e767f2d9f994f358c34b41def2c410ad8717f2",
                 "shasum": ""
             },
             "require": {
@@ -438,7 +450,8 @@
                 "composer/installers": "<1.0.6"
             },
             "require-dev": {
-                "composer/composer": "1.0.*@dev"
+                "composer/composer": "^1.0",
+                "phpunit/phpunit": ">=4.8.35"
             },
             "type": "composer-plugin",
             "extra": {
@@ -463,20 +476,20 @@
             "keywords": [
                 "wordpress"
             ],
-            "time": "2015-06-11T15:15:30+00:00"
+            "time": "2017-05-31T18:42:33+00:00"
         },
         {
             "name": "oscarotero/env",
-            "version": "v1.0.2",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oscarotero/env.git",
-                "reference": "0819fd764ca19ab880b8d9ed7a95ae4910f98f20"
+                "reference": "0f676e41d758fa984806c32e27f0cf7afa63d8db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oscarotero/env/zipball/0819fd764ca19ab880b8d9ed7a95ae4910f98f20",
-                "reference": "0819fd764ca19ab880b8d9ed7a95ae4910f98f20",
+                "url": "https://api.github.com/repos/oscarotero/env/zipball/0f676e41d758fa984806c32e27f0cf7afa63d8db",
+                "reference": "0f676e41d758fa984806c32e27f0cf7afa63d8db",
                 "shasum": ""
             },
             "require": {
@@ -505,7 +518,7 @@
             "keywords": [
                 "env"
             ],
-            "time": "2016-05-08T17:14:32+00:00"
+            "time": "2017-07-17T20:41:59+00:00"
         },
         {
             "name": "psr/http-message",
@@ -616,16 +629,16 @@
         },
         {
             "name": "theiconic/php-ga-measurement-protocol",
-            "version": "v2.6.0",
+            "version": "v2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/theiconic/php-ga-measurement-protocol.git",
-                "reference": "6b9d0a36b5e50e9d134508ccd7e8d6d404bc91e5"
+                "reference": "26c09a43a25235da85131c0fa060ec1fe2b2f16f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theiconic/php-ga-measurement-protocol/zipball/6b9d0a36b5e50e9d134508ccd7e8d6d404bc91e5",
-                "reference": "6b9d0a36b5e50e9d134508ccd7e8d6d404bc91e5",
+                "url": "https://api.github.com/repos/theiconic/php-ga-measurement-protocol/zipball/26c09a43a25235da85131c0fa060ec1fe2b2f16f",
+                "reference": "26c09a43a25235da85131c0fa060ec1fe2b2f16f",
                 "shasum": ""
             },
             "require": {
@@ -653,7 +666,7 @@
                 }
             ],
             "description": "Send data to Google Analytics from the server using PHP. This library fully implements GA measurement protocol.",
-            "time": "2017-04-10T01:57:30+00:00"
+            "time": "2017-06-30T02:41:52+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -706,16 +719,26 @@
             "time": "2016-09-01T10:05:43+00:00"
         },
         {
+            "name": "warfare-plugins/social-warfare-pro",
+            "version": "2.2.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/warfare-plugins/social-warfare-pro.git",
+                "reference": "2.2.11"
+            },
+            "type": "wordpress-plugin"
+        },
+        {
             "name": "wpackagist-plugin/autodescription",
-            "version": "2.9.1",
+            "version": "2.9.3",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/autodescription/",
-                "reference": "tags/2.9.1"
+                "reference": "tags/2.9.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/autodescription.2.9.1.zip",
+                "url": "https://downloads.wordpress.org/plugin/autodescription.2.9.3.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -807,15 +830,15 @@
         },
         {
             "name": "wpackagist-plugin/redirection",
-            "version": "2.5",
+            "version": "2.6.6",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/redirection/",
-                "reference": "tags/2.5"
+                "reference": "tags/2.6.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/redirection.2.5.zip",
+                "url": "https://downloads.wordpress.org/plugin/redirection.2.6.6.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -826,16 +849,36 @@
             "homepage": "https://wordpress.org/plugins/redirection/"
         },
         {
-            "name": "wpackagist-plugin/schema-app-structured-data-for-schemaorg",
-            "version": "1.7.0",
+            "name": "wpackagist-plugin/regenerate-thumbnails",
+            "version": "2.2.6",
             "source": {
                 "type": "svn",
-                "url": "https://plugins.svn.wordpress.org/schema-app-structured-data-for-schemaorg/",
-                "reference": "tags/1.7.0"
+                "url": "https://plugins.svn.wordpress.org/regenerate-thumbnails/",
+                "reference": "tags/2.2.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/schema-app-structured-data-for-schemaorg.1.7.0.zip",
+                "url": "https://downloads.wordpress.org/plugin/regenerate-thumbnails.2.2.6.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/regenerate-thumbnails/"
+        },
+        {
+            "name": "wpackagist-plugin/schema-app-structured-data-for-schemaorg",
+            "version": "1.8.0",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/schema-app-structured-data-for-schemaorg/",
+                "reference": "tags/1.8.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/schema-app-structured-data-for-schemaorg.1.8.0.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -847,15 +890,15 @@
         },
         {
             "name": "wpackagist-plugin/social-warfare",
-            "version": "2.2.3",
+            "version": "2.2.11",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/social-warfare/",
-                "reference": "tags/2.2.3"
+                "reference": "tags/2.2.11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/social-warfare.2.2.3.zip",
+                "url": "https://downloads.wordpress.org/plugin/social-warfare.2.2.11.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -864,6 +907,36 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/social-warfare/"
+        },
+        {
+            "name": "wpackagist-plugin/wordpress-importer",
+            "version": "0.6.3",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/wordpress-importer/",
+                "reference": "tags/0.6.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/wordpress-importer.0.6.3.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/wordpress-importer/"
+        },
+        {
+            "name": "ydlr/prizm-image",
+            "version": "2.4.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ydlr/prizm-image.git",
+                "reference": "lossless"
+            },
+            "type": "wordpress-plugin"
         },
         {
             "name": "ydlr/wpforms-ga",

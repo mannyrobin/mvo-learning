@@ -60,13 +60,13 @@
 		{
 			"type": "package",
 			"package": {
-				"name": "hipdevteam/social-warfare-pro",
-				"version": "2.2.6",
+				"name": "warfare-plugins/social-warfare-pro",
+				"version": "2.2.11",
 				"type": "wordpress-plugin",
 				"source": {
-					"url": "https://gitlab.com/hipdevteam/social-warfare-pro.git",
+					"url": "https://github.com/warfare-plugins/social-warfare-pro.git",
 					"type": "git",
-					"reference": "2.2.6"
+					"reference": "2.2.11"
 				}
 			}
 		},
@@ -82,6 +82,19 @@
 					"reference": "2.0.1"
 				}
 			}
+		},		
+		{
+			"type": "package",
+			"package": {
+				"name": "ydlr/prizm-image",
+				"version": "2.4.3",
+				"type": "wordpress-plugin",
+				"source": {
+					"url": "https://github.com/ydlr/prizm-image.git",
+					"type": "git",
+					"reference": "lossless"
+				}
+			}
 		}
   ],
   "require": {
@@ -93,7 +106,7 @@
     "roots/wp-password-bcrypt": "1.0.0",
 		"deliciousbrains/wp-migrate-db-pro": "1.7.1",
 		"deliciousbrains/wp-migrate-db-pro-media-files": "1.4.7",
-		"wpackagist-plugin/social-warfare": "^2.2.6",
+		"wpackagist-plugin/social-warfare": "^2.2.11",
 		"wpackagist-plugin/query-monitor": "*",
 		"wpackagist-plugin/duplicate-post": "*",
 		"wpackagist-plugin/nginx-cache": "*",
@@ -101,12 +114,12 @@
 		"wpackagist-plugin/duracelltomi-google-tag-manager": "*",
 		"wpackagist-plugin/autodescription": "*",
 		"wpackagist-plugin/schema-app-structured-data-for-schemaorg": "*",
-		"wpackagist-plugin/prizm-image": "*",
+		"ydlr/prizm-image": "*",
 		"wpackagist-plugin/regenerate-thumbnails": "*",
 		"wpackagist-plugin/wordpress-importer": "*",
 		"ydlr/wpforms-ga": "^0.1",
 		"hipdevteam/reviews-bb-module": "^2.0.0",
-		"hipdevteam/social-warfare-pro": "^2.2.6",
+		"warfare-plugins/social-warfare-pro": "^2.2.11",
 		"hipdevteam/bb-related-posts": "*"
   },
   "require-dev": {
