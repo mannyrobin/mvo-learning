@@ -95,6 +95,19 @@
 					"reference": "lossless"
 				}
 			}
+		},
+		{
+			"type": "package",
+			"package": {
+				"name": "ydlr/redirection",
+				"version": "2.6.6",
+				"type": "wordpress-plugin",
+				"source": {
+					"url": "https://github.com/ydlr/redirection.git",
+					"type": "git",
+					"reference": "404notify"
+				}
+			}
 		}
   ],
   "require": {
@@ -114,7 +127,9 @@
 		"wpackagist-plugin/duracelltomi-google-tag-manager": "*",
 		"wpackagist-plugin/autodescription": "*",
 		"wpackagist-plugin/schema-app-structured-data-for-schemaorg": "*",
+		"wpackagist-plugin/optinmonster": "*",
 		"ydlr/prizm-image": "*",
+		"ydlr/redirection": "*",
 		"wpackagist-plugin/regenerate-thumbnails": "*",
 		"wpackagist-plugin/wordpress-importer": "*",
 		"ydlr/wpforms-ga": "^0.1",
