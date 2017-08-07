@@ -30,3 +30,6 @@ vendor/*
 
 # Node
 node_modules
+
+# IDEs
+.idea/
