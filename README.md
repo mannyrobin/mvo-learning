@@ -1,16 +1,14 @@
-# Hip Medical Site
-Bedrock-based WordPress install for Hip medical clients.
+# Hip Med Site
 
-## Developement HOWTO
-1. Clone the repository into the web root of your development environment.
-2. Create `.env` with and populate with needed variables.
-3. Run `composer update` to pull plugins and dependencies.
-4. Run `git submodule init` to checkout parent theme.
-5. Activate Beaver Builder, Beaver Themer, and the Hip Med Child Theme
-6. Find file `start-content.xml` in the hip-bb-theme directory. Import that file into your project with the WordPress Importer.
+Base WordPress install for [Hip Creative](https://hip.agency) medical clients. It uses composer to manage plugins and dependencies and gulp build frontend assets.
 
-### Other Info
-- Try to work mostly with hip-med-child, Beaver Builder, and Beaver Themer.
-- If you do need to edit the parent theme, please push changes back to hipdevteam/hip-bb-theme repository and submit and merge request to master branch.
-- Remember to push changes to gitlab on a regular basis (whenever you finish a task and the site is in a working state). You don't need to wait until every task is finished.
-- Likewise, remember to pull changes back into your working branch on a regular branches. You never know when someone else has done some work that will be useful to you.
+## How to use 
+
+1. Clone and enter repo: `git clone git@gitlab.com:hipdevteam/hip-med-site && cd hip-med-site`
+2. Get submodules: `git submodules init && git submodules update`
+3. Install dependencies: `composer install`
+4. Create `.env` in root and populate with needed variables ( checkout `.env.example` for an example )
+
+## Additional Notes
+
+The project follows the directory structure of [Bedrock](https://roots.io/bedrock). Everything you'd normally put in `wp-config.php` is under `/config`. Everything you'd normally find in `/wp-content` is under `/web/app`
