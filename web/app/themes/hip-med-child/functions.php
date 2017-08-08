@@ -1,6 +1,14 @@
 <?php 
 
 /**
+ * Enqueues child theme scripts and styles
+ */
+add_action( 'wp_enqueue_scripts', 'hip_child_scripts_and_styles' );
+function hip_child_scripts_and_styles() {
+	wp_enqueue_style( 'main', get_stylesheet_directory_uri() . '/dist/css/main.css' );
+}
+
+/**
  * Adds an archive title field connection to BB
  * 
  * Unlike the default "Archive Title" field connection, this one can be customized
