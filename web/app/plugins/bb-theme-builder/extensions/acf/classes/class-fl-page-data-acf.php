@@ -47,10 +47,30 @@ final class FLPageDataACF {
 			case 'time_picker':
 				$content = isset( $object['value'] ) ? $object['value'] : '';
 				break;
+			case 'checkbox':
+				$values = array();
+
+				if ( ! is_array( $object['value'] ) ) {
+					break;
+				} elseif ( 'text' !== $settings->checkbox_format ) {
+					$content .= '<' . $settings->checkbox_format . '>';
+				}
+
+				foreach ( $object['value'] as $value ) {
+					$values[] = is_array( $value ) ? $value['label'] : $value;
+				}
+
+				if ( 'text' === $settings->checkbox_format ) {
+					$content = implode( ', ', $values );
+				} else {
+					$content .= '<li>' . implode( '</li><li>', $values ) . '</li>';
+					$content .= '</' . $settings->checkbox_format . '>';
+				}
+				break;
 			case 'date_picker':
 				if ( isset( $object['date_format'] ) && ! isset( $object['return_format'] ) ) {
-					$format  = self::js_date_format_to_php( $object['date_format'] );
-					$date    = DateTime::createFromFormat( 'Ymd', '20170512' );
+					$format  = self::js_date_format_to_php( $object['display_format'] );
+					$date    = DateTime::createFromFormat( 'Ymd',  $object['value'] );
 					$content = $date->format( $format );
 				} else {
 					$content = isset( $object['value'] ) ? $object['value'] : '';

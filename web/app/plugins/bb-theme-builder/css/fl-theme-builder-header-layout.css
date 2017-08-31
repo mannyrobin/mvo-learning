@@ -58,7 +58,7 @@ header.fl-builder-content[data-overlay="1"]:not(.fl-theme-builder-header-sticky)
 .fl-builder-edit body:not(.single-fl-theme-layout) header.fl-builder-content[data-overlay="1"] {
 	display: none;
 }
-body:not(.single-fl-theme-layout) header.fl-builder-content[data-overlay="1"]:not(.fl-theme-builder-header-scrolled) .fl-row-content-wrap,
-body:not(.single-fl-theme-layout) header.fl-builder-content[data-overlay="1"]:not(.fl-theme-builder-header-scrolled) .fl-col-content {
+body:not(.single-fl-theme-layout) header.fl-builder-content[data-overlay="1"]:not(.fl-theme-builder-header-scrolled):not([data-overlay-bg="default"]) .fl-row-content-wrap,
+body:not(.single-fl-theme-layout) header.fl-builder-content[data-overlay="1"]:not(.fl-theme-builder-header-scrolled):not([data-overlay-bg="default"]) .fl-col-content {
 	background: transparent;
 }

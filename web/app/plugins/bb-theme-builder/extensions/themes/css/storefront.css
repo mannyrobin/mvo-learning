@@ -30,3 +30,7 @@
 	padding: 0;
 	width: 100%;
 }
+
+body.single-product.fl-theme-builder-singular .fl-module-fl-woo-product-price p.price {
+	margin: 0px;
+}

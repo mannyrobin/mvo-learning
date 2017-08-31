@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e7527c9286452a12955db5ce5ba30e0",
+    "content-hash": "e5812002eabcd9e20792941cf79c0497",
     "packages": [
         {
             "name": "composer/installers",
@@ -720,25 +720,25 @@
         },
         {
             "name": "warfare-plugins/social-warfare-pro",
-            "version": "2.2.11",
+            "version": "2.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/warfare-plugins/social-warfare-pro.git",
-                "reference": "2.2.11"
+                "reference": "2.3.2"
             },
             "type": "wordpress-plugin"
         },
         {
             "name": "wpackagist-plugin/autodescription",
-            "version": "2.9.3",
+            "version": "2.9.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/autodescription/",
-                "reference": "tags/2.9.3"
+                "reference": "tags/2.9.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/autodescription.2.9.3.zip",
+                "url": "https://downloads.wordpress.org/plugin/autodescription.2.9.4.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -770,15 +770,15 @@
         },
         {
             "name": "wpackagist-plugin/duracelltomi-google-tag-manager",
-            "version": "1.7",
+            "version": "1.7.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/duracelltomi-google-tag-manager/",
-                "reference": "tags/1.7"
+                "reference": "tags/1.7.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/duracelltomi-google-tag-manager.1.7.zip",
+                "url": "https://downloads.wordpress.org/plugin/duracelltomi-google-tag-manager.1.7.1.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -850,15 +850,15 @@
         },
         {
             "name": "wpackagist-plugin/redirection",
-            "version": "2.6.6",
+            "version": "2.7.3",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/redirection/",
-                "reference": "tags/2.6.6"
+                "reference": "tags/2.7.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/redirection.2.6.6.zip",
+                "url": "https://downloads.wordpress.org/plugin/redirection.2.7.3.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -910,15 +910,15 @@
         },
         {
             "name": "wpackagist-plugin/social-warfare",
-            "version": "2.2.11",
+            "version": "2.3.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/social-warfare/",
-                "reference": "tags/2.2.11"
+                "reference": "tags/2.3.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/social-warfare.2.2.11.zip",
+                "url": "https://downloads.wordpress.org/plugin/social-warfare.2.3.2.zip",
                 "reference": null,
                 "shasum": null
             },

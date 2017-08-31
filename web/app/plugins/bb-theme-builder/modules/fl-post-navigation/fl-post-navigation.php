@@ -22,4 +22,24 @@ class FLPostNavigationModule extends FLBuilderModule {
 	}
 }
 
-FLBuilder::register_module( 'FLPostNavigationModule', array() );
+FLBuilder::register_module( 'FLPostNavigationModule', array(
+		'general'       => array(
+			'title'         => __( 'Settings', 'fl-theme-builder' ),
+			'sections'      => array(
+				'general'       => array(
+					'title'         => '',
+					'fields'        => array(
+						'in_same_term' => array(
+							'type'          => 'select',
+							'label'         => __( 'Navigate in same category', 'fl-theme-builder' ),
+							'default'       => '0',
+							'options'       => array(
+								'1'             => __( 'Enable', 'fl-theme-builder' ),
+								'0'             => __( 'Disable', 'fl-theme-builder' ),
+							),
+						),
+					),
+				),
+			),
+		),
+) );

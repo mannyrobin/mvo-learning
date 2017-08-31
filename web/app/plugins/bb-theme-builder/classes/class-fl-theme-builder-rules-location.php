@@ -597,37 +597,37 @@ final class FLThemeBuilderRulesLocation {
 				'locations' => array(
 					'site' => array(
 						'id'      => 'site',
-						'label'   => __( 'Entire Site', 'fl-theme-builder' ),
+						'label'   => esc_html__( 'Entire Site', 'fl-theme-builder' ),
 						'type'    => 'general',
 					),
 					'single' => array(
 						'id'      => 'single',
-						'label'   => __( 'All Singular', 'fl-theme-builder' ),
+						'label'   => esc_html__( 'All Singular', 'fl-theme-builder' ),
 						'type'    => 'general',
 					),
 					'archive' => array(
 						'id'      => 'archive',
-						'label'   => __( 'All Archives', 'fl-theme-builder' ),
+						'label'   => esc_html__( 'All Archives', 'fl-theme-builder' ),
 						'type'    => 'general',
 					),
 					'author' => array(
 						'id'      => 'author',
-						'label'   => __( 'Author Archives', 'fl-theme-builder' ),
+						'label'   => esc_html__( 'Author Archives', 'fl-theme-builder' ),
 						'type'    => 'general',
 					),
 					'date' => array(
 						'id'      => 'date',
-						'label'   => __( 'Date Archives', 'fl-theme-builder' ),
+						'label'   => esc_html__( 'Date Archives', 'fl-theme-builder' ),
 						'type'    => 'general',
 					),
 					'search' => array(
 						'id'      => 'search',
-						'label'   => __( 'Search Results', 'fl-theme-builder' ),
+						'label'   => esc_html__( 'Search Results', 'fl-theme-builder' ),
 						'type'    => 'general',
 					),
 					'404' => array(
 						'id'      => '404',
-						'label'   => __( '404 Page', 'fl-theme-builder' ),
+						'label'   => esc_html__( '404 Page', 'fl-theme-builder' ),
 						'type'    => 'general',
 					),
 				),
@@ -660,13 +660,13 @@ final class FLThemeBuilderRulesLocation {
 			// Add the post type.
 			$by_template_type['post'][ $post_type_slug ] = array(
 				'id'      => $post_type_slug,
-				'label'   => $post_type->labels->singular_name,
+				'label'   => esc_html( $post_type->labels->singular_name ),
 				'type'    => 'post',
 				'count'   => $count,
 			);
 
 			$by_post_type[ $post_type_slug ] = array(
-				'label'     => $post_type->labels->name,
+				'label'     => esc_html( $post_type->labels->name ),
 				'locations' => array(
 					$post_type_slug => $by_template_type['post'][ $post_type_slug ],
 				),
@@ -677,7 +677,7 @@ final class FLThemeBuilderRulesLocation {
 				$by_template_type['post'][ $post_type_slug . ':post:' . $post_type_slug ] =
 				$by_post_type[ $post_type_slug ]['locations'][ $post_type_slug . ':post:' . $post_type_slug ] = array(
 					'id'      => $post_type_slug . ':post:' . $post_type_slug,
-					'label'   => sprintf( _x( '%s Parent', '%s is a singular post type name', 'fl-theme-builder' ), $post_type->labels->singular_name ),
+					'label'   => sprintf( esc_html_x( '%s Parent', '%s is a singular post type name', 'fl-theme-builder' ), $post_type->labels->singular_name ),
 					'type'    => 'post',
 					'count'   => $count,
 				);
@@ -685,7 +685,7 @@ final class FLThemeBuilderRulesLocation {
 
 			// Add the post type archive.
 			$by_post_type[ $post_type_slug . '_archive' ] = array(
-				'label' => sprintf( _x( '%s Archives', '%s is a singular post type name', 'fl-theme-builder' ), $post_type->labels->singular_name ),
+				'label' => sprintf( esc_html_x( '%s Archives', '%s is a singular post type name', 'fl-theme-builder' ), $post_type->labels->singular_name ),
 				'locations' => array(),
 			);
 
@@ -693,7 +693,7 @@ final class FLThemeBuilderRulesLocation {
 
 				$by_template_type['archive'][ $post_type_slug ] = array(
 					'id'      => $post_type_slug,
-					'label'   => sprintf( _x( '%s Archive', '%s is a singular post type name', 'fl-theme-builder' ), $post_type->labels->singular_name ),
+					'label'   => sprintf( esc_html_x( '%s Archive', '%s is a singular post type name', 'fl-theme-builder' ), $post_type->labels->singular_name ),
 					'type'    => 'archive',
 				);
 
@@ -721,7 +721,7 @@ final class FLThemeBuilderRulesLocation {
 				$by_template_type['taxonomy'][ $taxonomy_slug ] =
 				$by_post_type[ $post_type_slug . '_archive' ]['locations'][ $taxonomy_slug ] = array(
 					'id'      => $taxonomy_slug,
-					'label'   => sprintf( _x( '%1$s %2$s Archive', '%1$s is post type label. %2$s is taxonomy label.', 'fl-theme-builder' ), $post_type->labels->singular_name, $label ),
+					'label'   => sprintf( esc_html_x( '%1$s %2$s Archive', '%1$s is post type label. %2$s is taxonomy label.', 'fl-theme-builder' ), $post_type->labels->singular_name, $label ),
 					'type'    => 'taxonomy',
 					'count'   => wp_count_terms( $taxonomy_slug ),
 				);
@@ -729,7 +729,7 @@ final class FLThemeBuilderRulesLocation {
 				$by_template_type['post'][ $post_type_slug . ':taxonomy:' . $taxonomy_slug ] =
 				$by_post_type[ $post_type_slug ]['locations'][ $post_type_slug . ':taxonomy:' . $taxonomy_slug ] = array(
 					'id'      => $post_type_slug . ':taxonomy:' . $taxonomy_slug,
-					'label'   => $post_type->labels->singular_name . ' ' . $label,
+					'label'   => esc_html( $post_type->labels->singular_name . ' ' . $label ),
 					'type'    => 'post',
 					'count'   => wp_count_terms( $taxonomy_slug ),
 				);

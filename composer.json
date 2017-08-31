@@ -61,12 +61,12 @@
 			"type": "package",
 			"package": {
 				"name": "warfare-plugins/social-warfare-pro",
-				"version": "2.2.11",
+				"version": "2.3.2",
 				"type": "wordpress-plugin",
 				"source": {
 					"url": "https://github.com/warfare-plugins/social-warfare-pro.git",
 					"type": "git",
-					"reference": "2.2.11"
+					"reference": "2.3.2"
 				}
 			}
 		},
@@ -119,7 +119,7 @@
     "roots/wp-password-bcrypt": "1.0.0",
 		"deliciousbrains/wp-migrate-db-pro": "1.7.1",
 		"deliciousbrains/wp-migrate-db-pro-media-files": "1.4.7",
-		"wpackagist-plugin/social-warfare": "^2.2.11",
+		"wpackagist-plugin/social-warfare": "2.3.2",
 		"wpackagist-plugin/query-monitor": "*",
 		"wpackagist-plugin/duplicate-post": "*",
 		"wpackagist-plugin/nginx-cache": "*",
@@ -134,7 +134,7 @@
 		"wpackagist-plugin/wordpress-importer": "*",
 		"ydlr/wpforms-ga": "^0.1",
 		"hipdevteam/reviews-bb-module": "^2.0.0",
-		"warfare-plugins/social-warfare-pro": "^2.2.11",
+		"warfare-plugins/social-warfare-pro": "2.3.2",
 		"hipdevteam/bb-related-posts": "*"
   },
   "require-dev": {

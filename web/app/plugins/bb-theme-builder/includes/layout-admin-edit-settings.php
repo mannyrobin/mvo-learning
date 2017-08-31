@@ -86,4 +86,17 @@
 		</td>
 	</tr>
 
+	<tr class="fl-mb-row fl-theme-layout-header-overlay-bg">
+		<td  class="fl-mb-row-heading">
+			<label><?php _e( 'Background', 'fl-theme-builder' ); ?></label>
+			<i class="fl-mb-row-heading-help dashicons dashicons-editor-help" title="<?php esc_html_e( 'Use either the default background color or a transparent background color until the page is scrolled.', 'fl-theme-builder' ); ?>"></i>
+		</td>
+		<td class="fl-mb-row-content">
+			<select name="fl-theme-layout-settings[overlay_bg]">
+				<option value="default" <?php selected( $settings['overlay_bg'], 'default' ); ?>><?php _e( 'Default', 'fl-theme-builder' ); ?></option>
+				<option value="transparent" <?php selected( $settings['overlay_bg'], 'transparent' ); ?>><?php _e( 'Transparent', 'fl-theme-builder' ); ?></option>
+			</select>
+		</td>
+	</tr>
+
 </table>

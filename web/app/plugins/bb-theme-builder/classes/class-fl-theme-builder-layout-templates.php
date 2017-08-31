@@ -149,10 +149,7 @@ final class FLThemeBuilderLayoutTemplates {
 			$types       = array( 'header', 'footer', 'archive', 'singular', '404' );
 
 			if ( $layout_type && in_array( $layout_type, $types ) ) {
-
-				FLBuilderModel::apply_core_template( $data['index'], $data['append'], $layout_type );
-
-				return true;
+				return FLBuilderModel::apply_core_template( $data['index'], $data['append'], $layout_type );
 			}
 		}
 
