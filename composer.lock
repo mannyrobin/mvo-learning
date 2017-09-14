@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e5812002eabcd9e20792941cf79c0497",
+    "content-hash": "07a49903d9c28b7dd75bd06cf5ffe526",
     "packages": [
         {
             "name": "composer/installers",
@@ -810,15 +810,15 @@
         },
         {
             "name": "wpackagist-plugin/optinmonster",
-            "version": "1.2.1",
+            "version": "1.2.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/optinmonster/",
-                "reference": "tags/1.2.1"
+                "reference": "tags/1.2.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/optinmonster.1.2.1.zip",
+                "url": "https://downloads.wordpress.org/plugin/optinmonster.1.2.2.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -830,15 +830,15 @@
         },
         {
             "name": "wpackagist-plugin/query-monitor",
-            "version": "2.13.4",
+            "version": "2.14.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/query-monitor/",
-                "reference": "tags/2.13.4"
+                "reference": "tags/2.14.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/query-monitor.2.13.4.zip",
+                "url": "https://downloads.wordpress.org/plugin/query-monitor.2.14.0.zip",
                 "reference": null,
                 "shasum": null
             },
