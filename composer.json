@@ -3,10 +3,6 @@
   "type": "project",
   "description": "WordPress boilerplate for a Hip Creative client site, specifically geared toward medical practices.",
   "homepage": "https://roots.io/bedrock/",
-  "config": {
-    "preferred-install": "dist"
-  },
-  "minimum-stability": "dev",
   "repositories": [
     {
       "type": "composer",
@@ -15,58 +11,13 @@
 		{
 			"type": "package",
 			"package": {
-				"name": "deliciousbrains/wp-migrate-db-pro",
-				"type": "wordpress-plugin",
-				"version": "1.7.1",
-				"dist": {
-					"type": "zip",
-					"url": "https://deliciousbrains.com/dl/wp-migrate-db-pro-latest.zip?licence_key=36b68ad8-fe9c-4fff-ae80-e3082798399e&site_url=composer-test.dev"
-				},
-				"require": {
-					"composer/installers": "~1.0.12"
-				}
-			}
-		},
-		{
-			"type": "package",
-			"package": {
-				"name": "deliciousbrains/wp-migrate-db-pro-media-files",
-				"type": "wordpress-plugin",
-				"version": "1.4.7",
-				"dist": {
-					"type": "zip",
-					"url": "https://deliciousbrains.com/dl/wp-migrate-db-pro-media-files-latest.zip?licence_key=36b68ad8-fe9c-4fff-ae80-e3082798399e&site_url=composer-test.dev"
-				},
-				"require": {
-					"composer/installers": "~1.0.12"
-				}
-			}
-		},
-		{
-			"type": "package",
-			"package": {
-				"name": "deliciousbrains/wp-migrate-db-pro-cli",
-				"type": "wordpress-plugin",
-				"version": "1.1",
-				"dist": {
-					"type": "zip",
-					"url": "https://deliciousbrains.com/dl/wp-migrate-db-pro-cli-latest.zip?licence_key=36b68ad8-fe9c-4fff-ae80-e3082798399e&site_url=composer-test.dev"
-				},
-				"require": {
-					"composer/installers": "~1.0.12"
-				}
-			}
-		},
-		{
-			"type": "package",
-			"package": {
 				"name": "warfare-plugins/social-warfare-pro",
-				"version": "2.3.2",
+				"version": "2.3.3",
 				"type": "wordpress-plugin",
 				"source": {
 					"url": "https://github.com/warfare-plugins/social-warfare-pro.git",
 					"type": "git",
-					"reference": "2.3.2"
+					"reference": "2.3.3"
 				}
 			}
 		},		
@@ -106,7 +57,7 @@
     "roots/wp-password-bcrypt": "1.0.0",
 		"deliciousbrains/wp-migrate-db-pro": "1.7.1",
 		"deliciousbrains/wp-migrate-db-pro-media-files": "1.4.7",
-		"wpackagist-plugin/social-warfare": "2.3.2",
+		"wpackagist-plugin/social-warfare": "2.3.3",
 		"wpackagist-plugin/query-monitor": "*",
 		"wpackagist-plugin/duplicate-post": "*",
 		"wpackagist-plugin/nginx-cache": "*",
@@ -120,7 +71,7 @@
 		"wpackagist-plugin/regenerate-thumbnails": "*",
 		"wpackagist-plugin/wordpress-importer": "*",
 		"ydlr/wpforms-ga": "^0.1",
-		"warfare-plugins/social-warfare-pro": "2.3.2",
+		"warfare-plugins/social-warfare-pro": "2.3.3",
 		"hipdevteam/bb-related-posts": "*",
 		"hipdevteam/reviews-bb-module": "*"
   },

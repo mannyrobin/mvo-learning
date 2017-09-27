@@ -1,3 +1,9 @@
+<h4>1.0.2.1 - 09/05/2017</h4>
+<p><strong>Bug Fixes</strong></p>
+<ul>
+	<li>Fixed core templates being applied instead of Themer templates due to incorrect BB 2.0 support logic.</li>
+</ul>
+
 <h4>1.0.2 - 08/23/2017</h4>
 <p><strong>Enhancements</strong></p>
 <ul>
