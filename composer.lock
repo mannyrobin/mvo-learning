@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "473da4beeeb3a50f0f7630ebe9b443fc",
+    "content-hash": "663b29b0609a93d2d5b0c91271e93368",
     "packages": [
         {
             "name": "composer/installers",
@@ -105,34 +105,6 @@
                 "zikula"
             ],
             "time": "2016-04-13T19:46:30+00:00"
-        },
-        {
-            "name": "deliciousbrains/wp-migrate-db-pro",
-            "version": "1.7.1",
-            "dist": {
-                "type": "zip",
-                "url": "https://deliciousbrains.com/dl/wp-migrate-db-pro-latest.zip?licence_key=36b68ad8-fe9c-4fff-ae80-e3082798399e&site_url=composer-test.dev",
-                "reference": null,
-                "shasum": null
-            },
-            "require": {
-                "composer/installers": "~1.0.12"
-            },
-            "type": "wordpress-plugin"
-        },
-        {
-            "name": "deliciousbrains/wp-migrate-db-pro-media-files",
-            "version": "1.4.7",
-            "dist": {
-                "type": "zip",
-                "url": "https://deliciousbrains.com/dl/wp-migrate-db-pro-media-files-latest.zip?licence_key=36b68ad8-fe9c-4fff-ae80-e3082798399e&site_url=composer-test.dev",
-                "reference": null,
-                "shasum": null
-            },
-            "require": {
-                "composer/installers": "~1.0.12"
-            },
-            "type": "wordpress-plugin"
         },
         {
             "name": "guzzlehttp/guzzle",

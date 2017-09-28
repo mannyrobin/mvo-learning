@@ -37,3 +37,7 @@ add_filter( 'get_the_archive_title', function( $title ) {
 	
 	return $title;
 });
+
+add_action( 'after_footer', function() {
+	do_shortcode( '[hip_tabbar]' );
+} );

@@ -55,8 +55,6 @@
     "johnpbloch/wordpress": "^4.8",
     "oscarotero/env": "^1.0",
     "roots/wp-password-bcrypt": "1.0.0",
-		"deliciousbrains/wp-migrate-db-pro": "1.7.1",
-		"deliciousbrains/wp-migrate-db-pro-media-files": "1.4.7",
 		"wpackagist-plugin/social-warfare": "2.3.3",
 		"wpackagist-plugin/query-monitor": "*",
 		"wpackagist-plugin/duplicate-post": "*",
