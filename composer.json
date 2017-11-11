@@ -2,7 +2,6 @@
   "name": "hipdevteam/hip-med-site",
   "type": "project",
   "description": "WordPress boilerplate for a Hip Creative client site, specifically geared toward medical practices.",
-  "homepage": "https://roots.io/bedrock/",
   "repositories": [
     {
       "type": "composer",
@@ -18,19 +17,6 @@
 					"url": "https://github.com/warfare-plugins/social-warfare-pro.git",
 					"type": "git",
 					"reference": "2.3.3"
-				}
-			}
-		},		
-		{
-			"type": "package",
-			"package": {
-				"name": "ydlr/prizm-image",
-				"version": "2.4.3",
-				"type": "wordpress-plugin",
-				"source": {
-					"url": "https://github.com/ydlr/prizm-image.git",
-					"type": "git",
-					"reference": "lossless"
 				}
 			}
 		},
@@ -64,7 +50,6 @@
 		"wpackagist-plugin/autodescription": "*",
 		"wpackagist-plugin/schema-app-structured-data-for-schemaorg": "*",
 		"wpackagist-plugin/optinmonster": "*",
-		"ydlr/prizm-image": "*",
 		"ydlr/redirection": "*",
 		"wpackagist-plugin/regenerate-thumbnails": "*",
 		"wpackagist-plugin/wordpress-importer": "*",
