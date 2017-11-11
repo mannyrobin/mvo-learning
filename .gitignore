@@ -9,7 +9,7 @@ web/app/plugins/wpforms-ga
 !web/app/plugins/butterbean-tinymce
 !web/app/plugins/bb-ultimate-addon
 !web/app/plugins/bbpowerpack
-!web/app/plugins/popup-maker-*
+!web/app/plugins/wp-migrate-db-*
 web/app/mu-plugins/*/
 web/app/upgrade
 web/app/uploads/*
@@ -33,3 +33,5 @@ node_modules
 
 # IDEs
 .idea/
+.kdev4/
+*.kdev4
