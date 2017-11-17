@@ -31,6 +31,11 @@ $max_height_mobile		= (isset( $settings->hover_card_max_height ) && $settings->h
 .fl-node-<?php echo $id; ?> .pp-hover-card .pp-hover-card-inner {
 	min-height: <?php echo $settings->hover_card_height['desktop']; ?>px;
 }
+.fl-node-<?php echo $id; ?> .pp-hover-card .pp-hover-card-image {
+	<?php if ( $settings->hover_card_img_width == '100' ) { ?>
+	max-width: 100% !important;
+	<?php } ?>
+}
 
 .fl-node-<?php echo $id; ?> .pp-hover-card.powerpack-style .pp-hover-card-inner {
 	display: table;

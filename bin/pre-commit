@@ -20,6 +20,7 @@ $filename_pattern = '/\.ph(tml|p)$/';
 $exclude_patterns = [
     "/\/web\/wp\//",
     "/\/vender\//",
+		"/web\/app\/plugins\//"
 ];
 
 $exit_status = 0;

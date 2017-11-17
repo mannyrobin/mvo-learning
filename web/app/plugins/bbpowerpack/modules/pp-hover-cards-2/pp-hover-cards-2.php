@@ -185,6 +185,15 @@ FLBuilder::register_module('PPHoverCardsModuleNew', array(
                     		),
                     	)
                     ),
+                    'hover_card_img_width'  => array(
+                        'type'                  => 'pp-switch',
+                        'label'                 => __('Image Maximum Width', 'bb-powerpack'),
+                        'default'               => '100',
+                        'options'               => array(
+                            '100'                   => __('100%', 'bb-powerpack'),
+                            'none'                  => __('None', 'bb-powerpack')
+                        )
+                    )
                 ),
             ),
             'hover_card_count'       => array( // Section

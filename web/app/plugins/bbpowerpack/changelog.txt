@@ -1,3 +1,10 @@
+== 1.6.1 ==
+Release date: November 17, 2017
+* Enhancement: Added Image Maximum Width field in Hover Cards 2 module to adjust image size manually
+* Fix: Font Size and Line Height were not working for responsive devices in Animated Headlines module
+* Fix: PHP error in panel functions that was breaking BB 2.0 settings
+* Fix: Fix Hover Cards 2 images were resized after updating to 1.6.0
+
 == 1.6.0 ==
 Release date: November 15, 2017
 * New: Animated Headlines module

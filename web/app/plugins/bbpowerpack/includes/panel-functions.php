@@ -67,7 +67,7 @@ add_filter( 'fl_builder_template_selector_data', 'pp_templates_selector_data_exc
  */
 function pp_template_details( $data, $template )
 {
-    if ( isset( $data['category']['powerpack-templates'] ) ) {
+    if ( is_array($data['category']) && isset( $data['category']['powerpack-templates'] ) ) {
 
         $scheme	= BB_PowerPack_Admin_Settings::$scheme;
 
@@ -98,9 +98,7 @@ function pp_template_details( $data, $template )
         $data['image'] = $image;
 
         // Remove the main category from data.
-        if ( isset( $data['category'] ) && isset( $data['category']['powerpack-templates'] ) ) {
-            unset($data['category']['powerpack-templates']);
-        }
+        unset($data['category']['powerpack-templates']);
     }
 
     return $data;
