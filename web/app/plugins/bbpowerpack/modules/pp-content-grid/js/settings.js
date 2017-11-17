@@ -29,10 +29,11 @@
                     }
 			   	} else {
 				   $('#fl-builder-settings-section-product-settings').hide();
-				   $('#fl-field-posts_product, #fl-field-tax_product_product_cat, #fl-field-tax_product_product_tag').hide();
                    $('#fl-field-more_link_text').show();
 			   	}
 			});
+
+			$('#fl-builder-settings-section-general select[name="post_type"]').trigger('change');
 
         },
 

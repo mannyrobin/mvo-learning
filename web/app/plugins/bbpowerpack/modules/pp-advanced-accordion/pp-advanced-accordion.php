@@ -13,15 +13,122 @@ class PPAccordionModule extends FLBuilderModule {
 		parent::__construct(array(
 			'name'          	=> __('Advanced Accordion', 'bb-powerpack'),
 			'description'   	=> __('Display a collapsible accordion of items.', 'bb-powerpack'),
-			'category'		=> BB_POWERPACK_CAT,
-            'dir'           => BB_POWERPACK_DIR . 'modules/pp-advanced-accordion/',
-            'url'           => BB_POWERPACK_URL . 'modules/pp-advanced-accordion/',
-            'editor_export' => true, // Defaults to true and can be omitted.
-            'enabled'       => true, // Defaults to true and can be omitted.
+			'group'         	=> pp_get_modules_group(),
+            'category'			=> pp_get_modules_cat( 'content' ),
+            'dir'           	=> BB_POWERPACK_DIR . 'modules/pp-advanced-accordion/',
+            'url'           	=> BB_POWERPACK_URL . 'modules/pp-advanced-accordion/',
+            'editor_export' 	=> true, // Defaults to true and can be omitted.
+            'enabled'       	=> true, // Defaults to true and can be omitted.
 			'partial_refresh'	=> true
 		));
 
 		$this->add_css('font-awesome');
+	}
+
+	/**
+	 * Get saved templates.
+	 *
+	 * @since 1.4
+	 */
+	public static function get_saved_templates( $type = 'layout' )
+    {
+        if ( is_admin() && isset( $_GET['page'] ) && 'pp-settings' == $_GET['page'] ) {
+            return;
+        }
+
+        $posts = get_posts( array(
+			'post_type' 		=> 'fl-builder-template',
+			'orderby' 			=> 'title',
+			'order' 			=> 'ASC',
+			'posts_per_page' 	=> '-1',
+			'tax_query'			=> array(
+				array(
+					'taxonomy'		=> 'fl-builder-template-type',
+					'field'			=> 'slug',
+					'terms'			=> $type
+				)
+			)
+		) );
+
+		$templates = array();
+
+        if ( count( $posts ) ) {
+            foreach ( $posts as $post ) {
+                $templates[$post->ID] = $post->post_title;
+            }
+        }
+
+        return $templates;
+    }
+
+	/**
+	 * Get saved modules.
+	 *
+	 * @since 1.4
+	 */
+	public static function get_saved_modules()
+	{
+		return self::get_saved_templates( 'module' );
+	}
+
+	/**
+	 * Get saved rows.
+	 *
+	 * @since 1.4
+	 */
+	public static function get_saved_rows()
+	{
+		return self::get_saved_templates( 'row' );
+	}
+
+	/**
+	 * Get saved layouts.
+	 *
+	 * @since 1.4
+	 */
+	public static function get_saved_layouts()
+	{
+		return self::get_saved_templates( 'layout' );
+	}
+
+	/**
+	 * Render content.
+	 *
+	 * @since 1.4
+	 */
+	public function render_content( $settings )
+	{
+		$html = '';
+
+		switch ( $settings->content_type ) {
+			case 'content':
+				$html = '<div itemprop="text">';
+				$html .= $settings->content;
+				$html .= '</div>';
+				break;
+			case 'photo':
+				$html = '<div itemprop="image">';
+				$html .= '<img src="'.$settings->content_photo_src.'" alt="" style="max-width: 100%;" />';
+				$html .= '</div>';
+				break;
+			case 'video':
+                global $wp_embed;
+                $html = $wp_embed->autoembed($settings->content_video);
+            	break;
+			case 'module':
+				$html = '[fl_builder_insert_layout id="'.$settings->content_module.'"]';
+				break;
+			case 'row':
+				$html = '[fl_builder_insert_layout id="'.$settings->content_row.'"]';
+				break;
+			case 'layout':
+				$html = '[fl_builder_insert_layout id="'.$settings->content_layout.'"]';
+				break;
+			default:
+				break;
+		}
+
+		return $html;
 	}
 }
 
@@ -181,6 +288,13 @@ FLBuilder::register_module('PPAccordionModule', array(
 							'primary'	=> __('Default', 'bb-powerpack'),
 							'secondary' => __('Active', 'bb-powerpack')
 						)
+                    ),
+					'label_background_opacity'    => array(
+                        'type'                 => 'text',
+                        'label'                => __('Background Opacity', 'bb-powerpack'),
+						'size'				   => 5,
+                        'description'          => '%',
+                        'default'              => '100',
                     ),
 					'label_text_color'      => array(
 						'type'      => 'pp-color',
@@ -415,6 +529,13 @@ FLBuilder::register_module('PPAccordionModule', array(
 							'property'	=> 'background-color'
 						)
 					),
+					'content_bg_opacity'    => array(
+                        'type'                 => 'text',
+                        'label'                => __('Background Opacity', 'bb-powerpack'),
+						'size'				   => 5,
+                        'description'          => '%',
+                        'default'              => '100',
+                    ),
 					'content_text_color'  => array(
 						'type'          => 'color',
 						'label'         => __('Text Color', 'bb-powerpack'),
@@ -852,11 +973,70 @@ FLBuilder::register_settings_form('pp_accordion_items_form', array(
 				'content'       => array(
 					'title'         => __('Content', 'bb-powerpack'),
 					'fields'        => array(
+						'content_type'	=> array(
+							'type'			=> 'select',
+							'label'			=> __('Type', 'bb-powerpack'),
+							'default'		=> 'content',
+							'options'		=> array(
+								'content'		=> __('Content', 'bb-powerpack'),
+								'photo'			=> __('Photo', 'bb-powerpack'),
+								'video'			=> __('Video', 'bb-powerpack'),
+								'module'		=> __('Saved Module', 'bb-powerpack'),
+								'row'			=> __('Saved Row', 'bb-powerpack'),
+								'layout'		=> __('Saved Layout', 'bb-powerpack'),
+							),
+							'toggle'		=> array(
+								'content'		=> array(
+									'fields'		=> array('content')
+								),
+								'photo'		=> array(
+									'fields'	=> array('content_photo')
+								),
+								'video'		=> array(
+									'fields'	=> array('content_video')
+								),
+								'module'	=> array(
+									'fields'	=> array('content_module')
+								),
+								'row'		=> array(
+									'fields'	=> array('content_row')
+								),
+								'layout'	=> array(
+									'fields'	=> array('content_layout')
+								)
+							)
+						),
 						'content'       => array(
 							'type'          => 'editor',
 							'label'         => '',
 							'connections'   => array( 'string', 'html', 'url' ),
-						)
+						),
+						'content_photo'	=> array(
+							'type'			=> 'photo',
+							'label'			=> __('Photo', 'bb-powerpack'),
+							'connections'   => array( 'photo' ),
+						),
+						'content_video'     => array(
+	                        'type'              => 'textarea',
+	                        'label'             => __('Embed Code / URL', 'bb-powerpack'),
+	                        'rows'              => 6,
+							'connections'   	=> array( 'string', 'html', 'url' ),
+	                    ),
+						'content_module'	=> array(
+							'type'				=> 'select',
+							'label'				=> __('Saved Module', 'bb-powerpack'),
+							'options'			=> PPAccordionModule::get_saved_modules()
+						),
+						'content_row'		=> array(
+							'type'				=> 'select',
+							'label'				=> __('Saved Row', 'bb-powerpack'),
+							'options'			=> PPAccordionModule::get_saved_rows()
+						),
+						'content_layout'	=> array(
+							'type'				=> 'select',
+							'label'				=> __('Saved Layout', 'bb-powerpack'),
+							'options'			=> PPAccordionModule::get_saved_layouts()
+						),
 					)
 				)
 			)

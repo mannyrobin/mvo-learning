@@ -1,6 +1,6 @@
 (function($) {
 
-	FLBuilderContentGrid = function(settings)
+	PPContentGrid = function(settings)
 	{
 		this.settings       = settings;
 		this.nodeClass      = '.fl-node-' + settings.id;
@@ -15,7 +15,7 @@
 		}
 	};
 
-	FLBuilderContentGrid.prototype = {
+	PPContentGrid.prototype = {
 
 		settings        : {},
 		nodeClass       : '',
@@ -52,7 +52,7 @@
 			var postFilterData = {
 				itemSelector: '.pp-content-post',
 				percentPosition: true,
-				transitionDuration: '0.6s',
+				transitionDuration: '0.4s',
 			};
 
 			if ( !this.masonry ) {
@@ -133,20 +133,65 @@
 		{
 			var highestBox = 0;
 			var contentHeight = 0;
+			var postElements = $(this.postClass);
 
-			if ( 0 === this.matchHeight ) {
+			if (0 === this.matchHeight) {
 				return;
 			}
 
-            $(this.postClass).css('height', '').each(function(){
+			if ( this.settings.layout === 'grid' ) {
+				var columns = this.settings.postColumns.desktop;
 
-                if($(this).height() > highestBox) {
-                	highestBox = $(this).height();
-                	contentHeight = $(this).find('.pp-content-post-data').outerHeight();
-                }
-            });
+				if (window.innerWidth <= 768) {
+					columns = this.settings.postColumns.tablet;
+				}
+				if (window.innerWidth <= 600) {
+					columns = this.settings.postColumns.mobile;
+				}
 
-            $(this.postClass).height(highestBox);
+				var rows = Math.round(postElements.length / columns);
+
+				if ( postElements.length % columns > 0 ) {
+					rows = rows + 1;
+				}
+
+				// range.
+				var j = 1,
+					k = columns;
+
+				for( var i = 0; i < rows; i++ ) {
+					// select number of posts in the current row.
+					var postsInRow = $(this.postClass + ':nth-child(n+' + j + '):nth-child(-n+' + k + ')');
+
+					// get height of the larger post element within the current row.
+					postsInRow.css('height', '').each(function () {
+						if ($(this).height() > highestBox) {
+							highestBox = $(this).height();
+							contentHeight = $(this).find('.pp-content-post-data').outerHeight();
+						}
+					});
+					// apply the height to all posts in the current row.
+					postsInRow.height(highestBox);
+
+					// increment range.
+					j = k + 1;
+					k = k + columns;
+					if ( k > postElements.length ) {
+						k = postElements.length;
+					}
+				}
+			} else {
+				// carousel layout.
+				postElements.css('height', '').each(function(){
+
+					if($(this).height() > highestBox) {
+						highestBox = $(this).height();
+						contentHeight = $(this).find('.pp-content-post-data').outerHeight();
+					}
+				});
+
+				postElements.height(highestBox);
+			}
             //$(this.postClass).find('.pp-content-post-data').css('min-height', contentHeight + 'px').addClass('pp-content-relative');
 		},
 
@@ -159,20 +204,33 @@
 
 		_infiniteScroll: function(settings)
 		{
-			$(this.wrapperClass).infinitescroll({
-				navSelector     : this.nodeClass + ' .pp-content-grid-pagination',
-				nextSelector    : this.nodeClass + ' .pp-content-grid-pagination a.next',
-				itemSelector    : this.postClass,
-				prefill         : true,
-				bufferPx        : 200,
-				animate			: false,
-				loading         : {
-					msgText         : 'Loading',
-					finishedMsg     : '',
-					img             : FLBuilderLayoutConfig.paths.pluginUrl + 'img/ajax-loader-grey.gif',
-					speed           : 1
+			var path 		= $(this.nodeClass + ' .pp-content-grid-pagination a.next').attr('href'),
+				pagePattern = /(.*?(\/|\&|\?)paged-[0-9]{1,}(\/|=))([0-9]{1,})+(.*)/,
+				pageMatched = null,
+				scrollData	= {
+					navSelector     : this.nodeClass + ' .pp-content-grid-pagination',
+					nextSelector    : this.nodeClass + ' .pp-content-grid-pagination a.next',
+					itemSelector    : this.postClass,
+					prefill         : true,
+					bufferPx        : 200,
+					loading         : {
+						msgText         : 'Loading',
+						finishedMsg     : '',
+						img             : FLBuilderLayoutConfig.paths.pluginUrl + 'img/ajax-loader-grey.gif',
+						speed           : 1
+					}
+				};
+
+			// Define path since Infinitescroll incremented our custom pagination '/paged-2/2/' to '/paged-3/2/'.
+			if ( pagePattern.test( path ) ) {
+				scrollData.path = function( currPage ){
+					pageMatched = path.match( pagePattern );
+					path = pageMatched[1] + currPage + pageMatched[5];
+					return path;
 				}
-			}, $.proxy(this._infiniteScrollComplete, this));
+			}
+
+			$(this.wrapperClass).infinitescroll( scrollData, $.proxy(this._infiniteScrollComplete, this) );
 
 			setTimeout(function(){
 				$(window).trigger('resize');

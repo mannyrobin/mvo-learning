@@ -16,7 +16,8 @@ class PPLogosGridModule extends FLBuilderModule {
         parent::__construct(array(
             'name'              => __('Logo Grid & Carousel', 'bb-powerpack'),
             'description'       => __('A module for Logo Grid & Carousel.', 'bb-powerpack'),
-            'category'		    => BB_POWERPACK_CAT,
+            'group'             => pp_get_modules_group(),
+            'category'		    => pp_get_modules_cat( 'creative' ),
             'dir'               => BB_POWERPACK_DIR . 'modules/pp-logos-grid/',
             'url'               => BB_POWERPACK_URL . 'modules/pp-logos-grid/',
             'editor_export'     => true, // Defaults to true and can be omitted.

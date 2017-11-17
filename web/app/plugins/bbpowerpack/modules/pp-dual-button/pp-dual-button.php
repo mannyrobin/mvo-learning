@@ -16,7 +16,8 @@ class PPDualButtonModule extends FLBuilderModule {
         parent::__construct(array(
             'name'          => __('Dual Button', 'bb-powerpack'),
             'description'   => __('A module for Dual Button.', 'bb-powerpack'),
-            'category'		=> BB_POWERPACK_CAT,
+            'group'         => pp_get_modules_group(),
+            'category'		=> pp_get_modules_cat( 'content' ),
             'dir'           => BB_POWERPACK_DIR . 'modules/pp-dual-button/',
             'url'           => BB_POWERPACK_URL . 'modules/pp-dual-button/',
             'editor_export' => true, // Defaults to true and can be omitted.
@@ -523,7 +524,7 @@ FLBuilder::register_module('PPDualButtonModule', array(
                         'default'   => '1',
                         'size'          => '5',
                         'maxlength'     => '5',
-						'description'   => _x( 'px', 'Value unit for border width. Such as: "14 px"', 'bb-powerpack' ),
+						'description'   => 'px',
                         'preview'   => array(
                             'type'  => 'css',
                             'selector'  => '.pp-dual-button-content .pp-button',
@@ -537,7 +538,7 @@ FLBuilder::register_module('PPDualButtonModule', array(
                         'default'   => '0',
                         'size'          => '5',
                         'maxlength'     => '5',
-						'description'   => _x( 'px', 'Value unit for border width. Such as: "14 px"', 'bb-powerpack' ),
+						'description'   => 'px',
                         'preview'   => array(
                             'type'            => 'css',
                             'rules'     => array(
@@ -570,7 +571,7 @@ FLBuilder::register_module('PPDualButtonModule', array(
                         'default'   => '200',
                         'size'          => '5',
                         'maxlength'     => '5',
-						'description'   => _x( 'px', 'Value unit for border width. Such as: "14 px"', 'bb-powerpack' ),
+						'description'   => 'px',
                         'preview'   => array(
                             'type'  => 'css',
                             'selector'  => '.pp-dual-button-content .pp-button',
@@ -584,7 +585,7 @@ FLBuilder::register_module('PPDualButtonModule', array(
                         'default'           => 10,
                         'size'              => 5,
                         'maxlength'         => 5,
-						'description'       => _x( 'px', 'Value unit for spacer width. Such as: "10 px"', 'bb-powerpack' ),
+						'description'       => 'px',
                         'preview'           => array(
                             'type'              => 'css',
                             'selector'          => '.pp-dual-button-content .pp-spacer',

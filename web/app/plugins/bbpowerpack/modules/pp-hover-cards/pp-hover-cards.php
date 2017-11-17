@@ -16,7 +16,8 @@ class PPHoverCardsModule extends FLBuilderModule {
         parent::__construct(array(
             'name'          => __('Hover Cards', 'bb-powerpack'),
             'description'   => __('Addon to display hover cards.', 'bb-powerpack'),
-            'category'		=> BB_POWERPACK_CAT,
+            'group'         => pp_get_modules_group(),
+            'category'		=> pp_get_modules_cat( 'creative' ),
             'dir'           => BB_POWERPACK_DIR . 'modules/pp-hover-cards/',
             'url'           => BB_POWERPACK_URL . 'modules/pp-hover-cards/',
             'editor_export' => true, // Defaults to true and can be omitted.

@@ -39,9 +39,19 @@ $modules = array(
 	'modules/pp-pricing-table/pp-pricing-table.php',
 	'modules/pp-business-hours/pp-business-hours.php',
 	'modules/pp-hover-cards-2/pp-hover-cards-2.php',
-	/*'modules/pp-3d-slider/pp-3d-slider.php',*/
+	'modules/pp-3d-slider/pp-3d-slider.php',
     'modules/fl-button/fl-button.php',
+    'modules/pp-table/pp-table.php',
+    'modules/pp-filterable-gallery/pp-filterable-gallery.php',
+    'modules/pp-advanced-menu/pp-advanced-menu.php',
+    'modules/pp-gallery/pp-gallery.php',
+    'modules/pp-animated-headlines/pp-animated-headlines.php',
 );
+
+/* Custom Grid */
+if ( class_exists('FLThemeBuilderLoader') ) {
+    $modules[] = 'modules/pp-custom-grid/pp-custom-grid.php';
+}
 
 /* Form Modules */
 if ( class_exists( 'GFForms' ) ) {

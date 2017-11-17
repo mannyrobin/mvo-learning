@@ -11,20 +11,24 @@ FLBuilderModel::default_settings($settings, array(
 	'show_author'		=> 'yes',
 	'show_date'			=> 'yes',
 	'show_categories'	=> 'no',
+	'meta_separator'	=> ' | ',
 	'show_content'		=> 'yes',
 	'content_type'		=> 'excerpt',
 	'content_length'	=> 300,
-	'show_more_link'	=> 'yes',
-	'more_link_type'	=> 'button',
+	'more_link_type'	=> 'box',
 	'more_link_text'	=> __('Read More', 'bb-powerpack'),
 	'post_grid_filters_display' => 'no',
 	'post_grid_filters'	=> 'none',
+	'all_filter_label'	=> __('All', 'bb-powerpack'),
 	'post_taxonomies'	=> 'none',
 	'product_rating'	=> 'yes',
 	'product_price'		=> 'yes',
 	'product_button'	=> 'yes',
 	'product_button_text'	=> __('Add to Cart', 'bb-powerpack')
 ));
+
+$settings = apply_filters( 'pp_cg_loop_settings', $settings );
+do_action( 'pp_cg_loop_settings_before_form', $settings ); // e.g Add custom FLBuilder::render_settings_field()
 
 ?>
 <div id="fl-builder-settings-section-source" class="fl-loop-data-source-select fl-builder-settings-section">
@@ -62,10 +66,13 @@ FLBuilderModel::default_settings($settings, array(
 			'label'         => __('Post Type', 'bb-powerpack'),
 			'toggle'		=> array(
 				'product'	=> array(
-					'fields'	=> array('product_rating', 'product_price', 'product_button', 'posts_product', 'tax_product_product_cat', 'tax_product_product_tag')
+					'sections'	=> array('product-settings'),
+					'fields'	=> array('product_rating')
+					//'fields'	=> array('product_rating', 'product_price', 'product_button')
 				),
 				'download'	=> array(
-					'fields'	=> array('product_price', 'product_button')
+					'sections'	=> array('product-settings')
+					//'fields'	=> array('product_price', 'product_button')
 				)
 			)
 		), $settings);
@@ -127,7 +134,7 @@ FLBuilderModel::default_settings($settings, array(
 	<div id="fl-builder-settings-section-filter" class="fl-builder-settings-section">
 		<h3 class="fl-builder-settings-title"><?php esc_html_e('Filter', 'bb-powerpack'); ?></h3>
 		<?php foreach(FLBuilderLoop::post_types() as $slug => $type) : ?>
-			<table class="fl-form-table fl-loop-builder-filter fl-loop-builder-<?php echo $slug; ?>-filter" <?php if($slug == $settings->post_type) echo 'style="display:table;"'; ?>>
+			<table class="fl-form-table fl-custom-query-filter fl-custom-query-<?php echo $slug; ?>-filter fl-loop-builder-filter fl-loop-builder-<?php echo $slug; ?>-filter" <?php if($slug == $settings->post_type) echo 'style="display:table;"'; ?>>
 			<?php
 
 			// Posts
@@ -194,12 +201,13 @@ FLBuilderModel::default_settings($settings, array(
 		),$settings);
 
 		FLBuilder::render_settings_field('content_type',  array(
-			'type'          => 'pp-switch',
+			'type'          => 'select',
 			'label'         => __('Content Type', 'bb-powerpack'),
 			'default'       => 'excerpt',
 			'options'       => array(
-				'excerpt'        => __('Excerpt', 'bb-powerpack'),
-				'content'           => __('Content', 'bb-powerpack')
+				'excerpt'       => __('Excerpt', 'bb-powerpack'),
+				'content'       => __('Limited Content', 'bb-powerpack'),
+				'full'          => __('Full Content', 'bb-powerpack'),
 			),
 			'toggle'		=> array(
 				'content' 		=> array(
@@ -218,26 +226,12 @@ FLBuilderModel::default_settings($settings, array(
 			'description' => __('words', 'bb-powerpack'),
 		),$settings);
 
-		FLBuilder::render_settings_field('show_more_link', array(
-			'type'          => 'pp-switch',
-			'label'         => __('Link', 'bb-powerpack'),
-			'default'       => 'yes',
-			'options'       => array(
-				'yes'          => __('Yes', 'bb-powerpack'),
-				'no'         => __('No', 'bb-powerpack'),
-			),
-			'toggle'		=> array(
-				'yes' 	=> array(
-					'fields'	=> array('more_link_type'),
-				)
-			)
-		), $settings);
-
 		FLBuilder::render_settings_field('more_link_type', array(
 			'type'          => 'select',
 			'label'         => __('Link Type', 'bb-powerpack'),
 			'default'       => 'box',
 			'options'       => array(
+				'none'         => __( 'None', 'bb-powerpack' ),
 				'title'         => __( 'Title', 'bb-powerpack' ),
 				'thumb'         => __( 'Thumbnail', 'bb-powerpack' ),
 				'title_thumb'   => __( 'Title + Thumbnail', 'bb-powerpack' ),
@@ -256,6 +250,7 @@ FLBuilderModel::default_settings($settings, array(
 			'type'          => 'text',
 			'label'         => __('Button Text', 'bb-powerpack'),
 			'default'       => __('Read More', 'bb-powerpack'),
+			'connections'	=> array('string'),
 			'preview'		=> array(
 				'type'	=> 'text',
 				'selector'	=> '.pp-content-grid-more'
@@ -273,7 +268,7 @@ FLBuilderModel::default_settings($settings, array(
 			),
 			'toggle'	=> array(
 				'yes'	=> array(
-					'fields'	=> array('post_grid_filters'),
+					'fields'	=> array('post_grid_filters', 'all_filter_label'),
 					'tabs'		=> array('filters_style'),
 					'sections'	=> array('filter_typography')
 				)
@@ -286,6 +281,13 @@ FLBuilderModel::default_settings($settings, array(
 			'label'		=> __('Select Post Filter', 'bb-powerpack'),
 			'default'	=> '',
 			'options'       => array()
+		), $settings);
+
+		FLBuilder::render_settings_field('all_filter_label', array(
+			'type'	=> 'text',
+			'label'	=> __('"All" Filter Label', 'bb-powerpack'),
+			'size'	=> 8,
+			'connections'	=> array('string')
 		), $settings);
 		?>
 	</table>
@@ -436,9 +438,22 @@ FLBuilderModel::default_settings($settings, array(
 			'default'	=> '',
 			'options'   => array()
 		), $settings);
+
+		// Separators
+		FLBuilder::render_settings_field('meta_separator', array(
+			'type'          => 'text',
+			'label'         => __('Meta Separator', 'bb-powerpack'),
+			'default'       => ' | ',
+			'size'			=> 5
+		), $settings);
 		?>
 	</table>
 </div>
+
+<?php
+do_action( 'pp_cg_loop_settings_after_form', $settings ); // e.g Add custom FLBuilder::render_settings_field()
+?>
+
 <script type="text/javascript">
 	;(function($) {
 		$('.fl-builder-pp-content-grid-settings select[name="post_type"]').on('change', function() {

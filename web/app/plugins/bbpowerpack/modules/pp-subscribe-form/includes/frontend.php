@@ -40,7 +40,7 @@
 				<div class="pp-form-error-message"><?php esc_html_e( 'Please enter a valid email address.', 'bb-powerpack' ); ?></div>
 			</div>
 
-			<div class="pp-form-button" data-wait-text="<?php esc_attr_e( 'Please Wait...', 'bb-powerpack' ); ?>">
+			<div class="pp-form-button pp-button-wrap" data-wait-text="<?php esc_attr_e( 'Please Wait...', 'bb-powerpack' ); ?>">
 
 				<?php
 
@@ -60,7 +60,8 @@
 						'text'              => $settings->btn_text,
 						'text_color'        => $settings->btn_text_color,
 						'text_hover_color'  => $settings->btn_text_hover_color,
-						'width'             => 'full'
+						'width'             => 'full',
+						'class'				=> 'pp-button'
 					));
 
 				?>

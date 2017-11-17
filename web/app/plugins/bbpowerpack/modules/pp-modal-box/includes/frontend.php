@@ -74,7 +74,7 @@
 				<?php } ?>
 				<div class="pp-modal-content<?php echo ('url' == $settings->modal_type || 'video' == $settings->modal_type) ? ' pp-modal-frame' : '' ;?>">
 					<div class="pp-modal-content-inner">
-						<?php echo $module->get_modal_content(); ?>
+						<?php echo $module->get_modal_content( $settings ); ?>
 					</div>
 				</div>
 			</div>

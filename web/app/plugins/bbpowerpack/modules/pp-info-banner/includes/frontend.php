@@ -1,5 +1,9 @@
 <div class="pp-info-banner-content <?php echo $settings->banner_image_arrangement; ?>">
 	<div class="pp-info-banner-inner">
+		<?php if( $settings->banner_image_arrangement == 'background' && $settings->banner_image ) { ?>
+			<div class="pp-info-banner-bg">
+			</div>
+		<?php } ?>
 		<?php if( $settings->banner_image_arrangement == 'static' && $settings->banner_image ) { ?>
 		<img src="<?php echo $settings->banner_image_src; ?>" class="pp-info-banner-img img-<?php echo $settings->banner_image_alignment; ?> animated" data-animation-class="<?php echo $settings->banner_image_effect; ?>" />
 		<?php } ?>

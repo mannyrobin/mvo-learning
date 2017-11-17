@@ -16,7 +16,8 @@ class PPModalBoxModule extends FLBuilderModule {
         parent::__construct(array(
             'name'          => __('Modal Box', 'bb-powerpack'),
             'description'   => __('Custom modal boxes with animation.', 'bb-powerpack'),
-            'category'		=> BB_POWERPACK_CAT,
+            'group'         => pp_get_modules_group(),
+            'category'		=> pp_get_modules_cat( 'lead_gen' ),
             'dir'           => BB_POWERPACK_DIR . 'modules/pp-modal-box/',
             'url'           => BB_POWERPACK_URL . 'modules/pp-modal-box/',
             'editor_export' => true, // Defaults to true and can be omitted.
@@ -52,33 +53,31 @@ class PPModalBoxModule extends FLBuilderModule {
         return $options;
     }
 
-    public function get_modal_content()
+    public function get_modal_content( $settings )
     {
-        $modal_type = $this->settings->modal_type;
+        $modal_type = $settings->modal_type;
 
         switch($modal_type) {
             case 'photo':
-                if ( isset( $this->settings->modal_type_photo_src ) ) {
-                    return '<img src="' . $this->settings->modal_type_photo_src . '" style="max-width: 100%;"/>';
+                if ( isset( $settings->modal_type_photo_src ) ) {
+                    return '<img src="' . $settings->modal_type_photo_src . '" style="max-width: 100%;"/>';
                 }
             break;
             case 'video':
                 global $wp_embed;
-                return $wp_embed->autoembed($this->settings->modal_type_video);
+                return $wp_embed->autoembed($settings->modal_type_video);
             break;
             case 'url':
-                return '<iframe data-src="' . $this->settings->modal_type_url . '" class="pp-modal-iframe" frameborder="0" width="100%" height="100%"></iframe>';
+                return '<iframe data-src="' . $settings->modal_type_url . '" class="pp-modal-iframe" frameborder="0" width="100%" height="100%"></iframe>';
             break;
             case 'content':
-                return $this->settings->modal_type_content;
+                return $settings->modal_type_content;
             break;
             case 'html':
-                return $this->settings->modal_type_html;
+                return $settings->modal_type_html;
             break;
             case 'templates':
-                ob_start();
-                echo do_shortcode('[fl_builder_insert_layout id="'.$this->settings->modal_type_templates.'"]');
-                return ob_get_clean();
+                return '[fl_builder_insert_layout id="'.$settings->modal_type_templates.'" type="fl-builder-template"]';
             break;
             default:
                 return;
@@ -126,12 +125,6 @@ FLBuilder::register_module('PPModalBoxModule', array(
                         'description'       => 'px',
                         'class'             => 'input-small',
                         'default'           => 550,
-                        'preview'           => array(
-                            'type'              => 'css',
-                            'selector'          => '.pp-modal',
-                            'property'          => 'width',
-                            'unit'              => 'px'
-                        )
                     ),
                     'modal_height_auto' => array(
                         'type'          => 'pp-switch',

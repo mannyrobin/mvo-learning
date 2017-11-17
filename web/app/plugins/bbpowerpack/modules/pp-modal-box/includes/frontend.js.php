@@ -49,9 +49,37 @@
         <?php echo ( class_exists( 'FLBuilderModel' ) && FLBuilderModel::is_builder_active() ) ? 'previewing: true' : 'previewing: false'; ?>
     };
 
+    $(document).on('click', function(e) {
+        if ( e && e.target.tagName === 'A' && e.target.href.indexOf('#modal-<?php echo $id; ?>') !== -1 ) {
+            modal_<?php echo $id; ?>['scrollTop'] = $(window).scrollTop();
+        }
+    });
+
     <?php if ( ! FLBuilderModel::is_builder_active() ) { ?>
     $(document).ready(function() {
         $('#modal-<?php echo $id; ?>').appendTo(document.body);
+
+        var tabHash     = window.location.hash;
+        var modalId     = window.location.hash.split('#modal-')[1];
+
+        // If the URL contains a hash beginning with modal, trigger that modal box.
+        if ( tabHash && tabHash.indexOf('modal-') >= 0 ) {
+            if ( modalId === '<?php echo $id; ?>' ) {
+                PPModal.init(modal_<?php echo $id; ?>);
+            }
+        }
+
+        $(window).on('hashchange', function() {
+            var tabHash     = window.location.hash;
+            var modalId     = window.location.hash.split('#modal-')[1];
+
+            // If the URL contains a hash beginning with modal, trigger that modal box.
+            if ( tabHash && tabHash.indexOf('modal-') >= 0 ) {
+                if ( modalId === '<?php echo $id; ?>' ) {
+                    PPModal.init(modal_<?php echo $id; ?>);
+                }
+            }
+        });
     });
     <?php } ?>
 

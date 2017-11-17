@@ -68,8 +68,37 @@
 <?php } ?>
 
 .fl-node-<?php echo $id; ?> .pp-pricing-table .pp-pricing-table-col.pp-pricing-table-matrix .pp-pricing-table-column {
+	background-color: transparent;
+	border: 0;
+	padding: 0;
+}
+
+.fl-node-<?php echo $id; ?> .pp-pricing-table .pp-pricing-table-col.pp-pricing-table-matrix .pp-pricing-table-column ul {
 	background-color: <?php echo ($settings->matrix_bg) ? '#' . $settings->matrix_bg : 'transparent'; ?>;
-	padding-bottom: 0;
+	<?php if( $settings->box_border != 'none' ) { ?>
+		border-width: <?php echo $settings->box_border_width; ?>px;
+		border-style: <?php echo $settings->box_border; ?>;
+		<?php if( $settings->box_border_color ) { ?> border-color: #<?php echo $settings->box_border_color; ?>; <?php } ?>
+	<?php } ?>
+	<?php if( $settings->box_border_radius >= 0 ) { ?> border-radius: <?php echo $settings->box_border_radius; ?>px; <?php } ?>
+	<?php if ( 'yes' == $settings->box_shadow_display ) { ?>
+    -webkit-box-shadow: <?php echo $settings->box_shadow['horizontal']; ?>px <?php echo $settings->box_shadow['vertical']; ?>px <?php echo $settings->box_shadow['blur']; ?>px <?php echo $settings->box_shadow['spread']; ?>px <?php echo pp_hex2rgba( '#'.$settings->box_shadow_color, $settings->box_shadow_opacity / 100 ); ?>;
+    -moz-box-shadow: <?php echo $settings->box_shadow['horizontal']; ?>px <?php echo $settings->box_shadow['vertical']; ?>px <?php echo $settings->box_shadow['blur']; ?>px <?php echo $settings->box_shadow['spread']; ?>px <?php echo pp_hex2rgba( '#'.$settings->box_shadow_color, $settings->box_shadow_opacity / 100 ); ?>;
+    -o-box-shadow: <?php echo $settings->box_shadow['horizontal']; ?>px <?php echo $settings->box_shadow['vertical']; ?>px <?php echo $settings->box_shadow['blur']; ?>px <?php echo $settings->box_shadow['spread']; ?>px <?php echo pp_hex2rgba( '#'.$settings->box_shadow_color, $settings->box_shadow_opacity / 100 ); ?>;
+    box-shadow: <?php echo $settings->box_shadow['horizontal']; ?>px <?php echo $settings->box_shadow['vertical']; ?>px <?php echo $settings->box_shadow['blur']; ?>px <?php echo $settings->box_shadow['spread']; ?>px <?php echo pp_hex2rgba( '#'.$settings->box_shadow_color, $settings->box_shadow_opacity / 100 ); ?>;
+    <?php } ?>
+	<?php if( $settings->box_padding['top'] >= 0 ) { ?>
+	padding-top: <?php echo $settings->box_padding['top']; ?>px;
+	<?php } ?>
+	<?php if( $settings->box_padding['right'] >= 0 ) { ?>
+	padding-right: <?php echo $settings->box_padding['right']; ?>px;
+	<?php } ?>
+	<?php if( $settings->box_padding['bottom'] >= 0 ) { ?>
+	padding-bottom: <?php echo $settings->box_padding['bottom']; ?>px;
+	<?php } ?>
+	<?php if( $settings->box_padding['left'] >= 0 ) { ?>
+	padding-left: <?php echo $settings->box_padding['left']; ?>px;
+	<?php } ?>
 }
 
 .fl-node-<?php echo $id; ?> .pp-pricing-table .pp-pricing-table-column .pp-pricing-featured-title {
@@ -381,6 +410,11 @@ FLBuilder::render_module_css('fl-button', $id . ' .pp-pricing-table-column-' . $
 
 
 @media only screen and ( max-width: 768px ) {
+
+	.fl-node-<?php echo $id; ?> .pp-pricing-table .pp-pricing-table-col.pp-pricing-table-matrix .pp-pricing-table-column .pp-pricing-table-title,
+	.fl-node-<?php echo $id; ?> .pp-pricing-table .pp-pricing-table-col.pp-pricing-table-matrix .pp-pricing-table-column .pp-pricing-table-price {
+		display: none;
+	}
 
 	.fl-node-<?php echo $id; ?> .pp-pricing-table .pp-pricing-table-col {
 		margin-right: auto;

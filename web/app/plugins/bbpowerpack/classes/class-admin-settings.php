@@ -24,6 +24,8 @@ final class BB_PowerPack_Admin_Settings {
      */
 	static public $templates_count;
 
+    static public $scheme = '';
+
 	/**
 	 * Initializes the admin settings.
 	 *
@@ -90,8 +92,7 @@ final class BB_PowerPack_Admin_Settings {
 	 */
 	static public function menu()
 	{
-        $admin_label = self::get_option( 'ppwl_admin_label' );
-        $admin_label = trim( $admin_label ) !== '' ? trim( $admin_label ) : esc_html__( 'PowerPack', 'bb-powerpack' );
+        $admin_label = pp_get_admin_label();
 
 		if ( current_user_can( 'manage_options' ) ) {
 
@@ -243,6 +244,15 @@ final class BB_PowerPack_Admin_Settings {
 		self::$errors[] = $message;
 	}
 
+    static public function is_network_admin()
+    {
+        if ( is_multisite() && isset( $_SERVER['HTTP_REFERER'] ) && preg_match( '#^'.network_admin_url().'#i', $_SERVER['HTTP_REFERER'] ) ) {
+	        return true;
+        }
+
+        return false;
+    }
+
     /**
 	 * Returns an option from the database for
 	 * the admin settings page.
@@ -282,7 +292,7 @@ final class BB_PowerPack_Admin_Settings {
 	 */
     static public function update_option( $key, $value, $network_override = true )
     {
-    	if ( is_network_admin() ) {
+    	if ( is_network_admin() || self::is_network_admin() ) {
     		update_site_option( $key, $value );
     	}
         // Delete the option if network overrides are allowed and the override checkbox isn't checked.
@@ -815,7 +825,11 @@ final class BB_PowerPack_Admin_Settings {
     static public function clear_enabled_templates()
     {
         if ( isset( $_GET['page'] ) && 'pp-settings' == $_GET['page'] && isset( $_GET['clear_enabled_templates'] ) ) {
-            self::delete_option( 'bb_powerpack_page_templates' );
+            self::update_option( 'bb_powerpack_page_templates', array('disabled') );
+            self::update_option( 'bb_powerpack_templates', array('disabled') );
+            self::delete_option( 'bb_powerpack_row_templates_type' );
+            self::delete_option( 'bb_powerpack_row_templates_all' );
+            self::delete_option( 'bb_powerpack_override_ms' );
         }
     }
 

@@ -16,7 +16,8 @@ class PPAnnouncementBarModule extends FLBuilderModule {
         parent::__construct(array(
             'name'          => __('Announcement Bar', 'bb-powerpack'),
             'description'   => __('Addon to add announement bar to the page.', 'bb-powerpack'),
-            'category'		=> BB_POWERPACK_CAT,
+            'group'         => pp_get_modules_group(),
+            'category'		=> pp_get_modules_cat( 'lead_gen' ),
             'dir'           => BB_POWERPACK_DIR . 'modules/pp-announcement-bar/',
             'url'           => BB_POWERPACK_URL . 'modules/pp-announcement-bar/',
             'editor_export' => true, // Defaults to true and can be omitted.
@@ -54,6 +55,7 @@ FLBuilder::register_module('PPAnnouncementBarModule', array(
                     'announcement_icon' => array(
                         'type'  => 'icon',
                         'label' => __('Icon', 'bb-powerpack'),
+                        'show_remove'    => true
                     ),
                     'announcement_content'  => array(
                         'type'      => 'textarea',

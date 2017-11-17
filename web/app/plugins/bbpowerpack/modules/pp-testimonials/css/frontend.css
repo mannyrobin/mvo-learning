@@ -126,7 +126,7 @@
 /* Layout 3 */
 .pp-testimonials .layout-3 .pp-testimonials-image {
 	float: left;
-	margin-right: 3%;
+	margin-right: 30px;
 	max-width: 150px;
 	width: 22%;
 }
@@ -186,9 +186,6 @@
 .pp-testimonials .layout-5 .pp-vertical-align {
 	margin: 0 auto;
 	width: 100%;
-}
-.pp-testimonials .layout-5 .pp-content-wrapper {
-	margin-top: 25px;
 }
 
 /* Wrappers */

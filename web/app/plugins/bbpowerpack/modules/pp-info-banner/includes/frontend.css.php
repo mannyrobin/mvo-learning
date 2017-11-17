@@ -6,26 +6,53 @@
     <?php if( $settings->banner_min_height ) { ?>
 	height: <?php echo $settings->banner_min_height; ?>px;
     <?php } ?>
-    <?php if( $settings->banner_border_type ) { ?>
+    <?php if( $settings->banner_border_type != 'no-border' ) { ?>
 	border-style: <?php echo $settings->banner_border_type; ?>;
     <?php } ?>
     border-color: <?php echo $settings->banner_border_color ? '#' . $settings->banner_border_color : 'transparent' ?>;
     <?php if( $settings->banner_border_width >= 0 ) { ?>
     border-width: <?php echo $settings->banner_border_width; ?>px;
     <?php } ?>
-    <?php if( $settings->banner_image_arrangement == 'background' && $settings->banner_image ) { ?>
-    background-image: url('<?php echo $settings->banner_image_src; ?>');
-    <?php } ?>
-    <?php if( $settings->banner_bg_size ) { ?>
-    background-size: <?php echo $settings->banner_bg_size; ?>;
-    <?php } ?>
-    <?php if( $settings->banner_bg_repeat ) { ?>
-    background-repeat: <?php echo $settings->banner_bg_repeat; ?>;
-    <?php } ?>
-    background-position: <?php echo $settings->banner_bg_position; ?>;
+	<?php if( $settings->banner_border_radius ) { ?>
+		border-radius: <?php echo $settings->banner_border_radius; ?>px;
+	<?php } ?>
 }
+<?php if( $settings->banner_image_arrangement == 'background' ) { ?>
+	.fl-node-<?php echo $id; ?> .pp-info-banner-content .pp-info-banner-bg {
+		<?php if( $settings->banner_image_arrangement == 'background' && $settings->banner_image ) { ?>
+	    background-image: url('<?php echo $settings->banner_image_src; ?>');
+	    <?php } ?>
+	    <?php if( $settings->banner_bg_size ) { ?>
+	    background-size: <?php echo $settings->banner_bg_size; ?>;
+	    <?php } ?>
+	    <?php if( $settings->banner_bg_repeat ) { ?>
+	    background-repeat: <?php echo $settings->banner_bg_repeat; ?>;
+	    <?php } ?>
+	    background-position: <?php echo $settings->banner_bg_position; ?>;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		-webkit-transition: all 0.5s ease;
+	    -moz-transition: all 0.5s ease;
+	    -ms-transition: all 0.5s ease;
+	    -o-transition: all 0.5s ease;
+	    transition: all 0.5s ease;
+	    will-change: transform;
+	}
+	.fl-node-<?php echo $id; ?> .pp-info-banner-content:hover .pp-info-banner-bg {
+        <?php if ( isset( $settings->banner_bg_hover_zoom ) && $settings->banner_bg_hover_zoom == 'enable' ) { ?>
+		-webkit-transform: scale(1.1);
+	    -moz-transform: scale(1.1);
+	    -o-transform: scale(1.1);
+	    -ms-transform: scale(1.1);
+	    -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=1.1, M12=0, M21=0, M22=1.1, SizingMethod='auto expand')";
+	    filter: progid:DXImageTransform.Microsoft.Matrix(M11=1.1, M12=0, M21=0, M22=1.1, SizingMethod='auto expand');
+	    transform: scale(1.1);
+        <?php } ?>
+	}
+<?php } ?>
 
-.fl-node-<?php echo $id; ?> .pp-info-banner-content:before {
+.fl-node-<?php echo $id; ?> .pp-info-banner-content .pp-info-banner-bg:before {
     content: "";
     display: block;
     position: absolute;
@@ -80,7 +107,7 @@
 }
 
 .fl-node-<?php echo $id; ?> .pp-info-banner-content .banner-title {
-    line-height: 1;
+    <?php if( $settings->banner_title_line_height ) { ?>line-height: <?php echo $settings->banner_title_line_height; ?><?php } ?>;
     <?php if( $settings->banner_title_font['family'] != 'Default' ) { ?>
 	<?php FLBuilderFonts::font_css( $settings->banner_title_font ); ?>
     <?php } ?>
@@ -129,9 +156,21 @@
     <?php if( $settings->banner_desc_margin >= 0 ) { ?>
 	margin-bottom: <?php echo $settings->banner_desc_margin; ?>px;
     <?php } ?>
+    <?php if( $settings->banner_desc_padding_top >= 0 ) { ?>
+    padding-top: <?php echo $settings->banner_desc_padding_top; ?>px;
+    <?php } ?>
+    <?php if( $settings->banner_desc_padding_bottom >= 0 ) { ?>
+    padding-bottom: <?php echo $settings->banner_desc_padding_bottom; ?>px;
+    <?php } ?>
+    <?php if( $settings->banner_desc_padding_left >= 0 ) { ?>
+    padding-left: <?php echo $settings->banner_desc_padding_left; ?>px;
+    <?php } ?>
+    <?php if( $settings->banner_desc_padding_right >= 0 ) { ?>
+    padding-right: <?php echo $settings->banner_desc_padding_right; ?>px;
+    <?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .pp-info-banner-content img {
+.fl-node-<?php echo $id; ?> .pp-info-banner-content img.pp-info-banner-img {
 	position: absolute;
 	display: block;
 	float: none;
@@ -139,7 +178,7 @@
 	margin: 0 auto;
 	max-width: none;
 	z-index: 1;
-    <?php if( $settings->banner_image_height >= 0 ) { ?>
+	<?php if( $settings->banner_image_height >= 0 ) { ?>
 	height: <?php echo $settings->banner_image_height; ?>px;
     <?php } ?>
 }
@@ -224,7 +263,9 @@
 
 
 .fl-node-<?php echo $id; ?> .pp-info-banner-content .banner-button {
+	<?php if( $settings->banner_button_border_type != 'no-border' ) { ?>
 	border-style: <?php echo $settings->banner_button_border_type; ?>;
+	<?php } ?>
     <?php if( $settings->banner_button_border_color ) { ?>
 	border-color: #<?php echo $settings->banner_button_border_color; ?>;
     <?php } ?>

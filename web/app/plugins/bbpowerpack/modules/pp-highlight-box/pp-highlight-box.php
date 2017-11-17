@@ -16,7 +16,8 @@ class PPHighlightBoxModule extends FLBuilderModule {
         parent::__construct(array(
             'name'          => __('Highlight Box', 'bb-powerpack'),
             'description'   => __('A module for Highlight Box.', 'bb-powerpack'),
-            'category'		=> BB_POWERPACK_CAT,
+            'group'         => pp_get_modules_group(),
+            'category'		=> pp_get_modules_cat( 'creative' ),
             'dir'           => BB_POWERPACK_DIR . 'modules/pp-highlight-box/',
             'url'           => BB_POWERPACK_URL . 'modules/pp-highlight-box/',
             'editor_export' => true, // Defaults to true and can be omitted.
@@ -193,7 +194,6 @@ FLBuilder::register_module('PPHighlightBoxModule', array(
                         'description'   => 'px',
                         'class'         => 'bb-box-input input-small',
                         'default'       => '20',
-                        'show_reset'    => true,
                         'preview'       => array(
                             'type'      => 'css',
                             'selector'  => '.pp-highlight-box-content',
@@ -207,7 +207,6 @@ FLBuilder::register_module('PPHighlightBoxModule', array(
                         'description'   => 'px',
                         'class'         => 'bb-box-input input-small',
                         'default'       => '20',
-                        'show_reset'    => true,
                         'preview'       => array(
                             'type'      => 'css',
                             'selector'  => '.pp-highlight-box-content',
@@ -221,7 +220,6 @@ FLBuilder::register_module('PPHighlightBoxModule', array(
                         'description'   => 'px',
                         'class'         => 'bb-box-input input-small',
                         'default'       => '20',
-                        'show_reset'    => true,
                         'preview'       => array(
                             'type'      => 'css',
                             'selector'  => '.pp-highlight-box-content',
@@ -235,11 +233,24 @@ FLBuilder::register_module('PPHighlightBoxModule', array(
                         'description'   => 'px',
                         'class'         => 'bb-box-input input-small',
                         'default'       => '20',
-                        'show_reset'    => true,
                         'preview'       => array(
                             'type'      => 'css',
                             'selector'  => '.pp-highlight-box-content',
                             'property'  => 'padding-right',
+                            'unit'      => 'px'
+                        )
+                    ),
+					'box_border_radius'   => array(
+                        'type'          => 'text',
+                        'label'         => __('Border Radius', 'bb-powerpack'),
+                        'description'   => 'px',
+                        'class'         => 'bb-box-input input-small',
+                        'default'       => 0,
+                        'show_reset'    => true,
+                        'preview'       => array(
+                            'type'      => 'css',
+                            'selector'  => '.pp-highlight-box-content',
+                            'property'  => 'border-radius',
                             'unit'      => 'px'
                         )
                     ),

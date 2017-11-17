@@ -145,6 +145,7 @@
     <?php echo ('' != $settings->content_text_color) ? 'color: #'.$settings->content_text_color.';' : ''; ?>
     padding: <?php echo $settings->modal_padding; ?>px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 .fl-node-<?php echo $id; ?> .pp-modal .pp-modal-content.pp-modal-frame:before,
 #modal-<?php echo $id; ?> .pp-modal .pp-modal-content.pp-modal-frame:before {

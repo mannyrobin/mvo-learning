@@ -13,7 +13,8 @@ class PPContentGridModule extends FLBuilderModule {
 		parent::__construct(array(
 			'name'          	=> __('Content Grid', 'bb-powerpack'),
 			'description'   	=> __('Display posts and pages in grid or carousel format.', 'bb-powerpack'),
-			'category'			=> BB_POWERPACK_CAT,
+			'group'         	=> pp_get_modules_group(),
+            'category'			=> pp_get_modules_cat( 'content' ),
             'dir'           	=> BB_POWERPACK_DIR . 'modules/pp-content-grid/',
             'url'           	=> BB_POWERPACK_URL . 'modules/pp-content-grid/',
 			'partial_refresh'	=> true
@@ -45,6 +46,21 @@ class PPContentGridModule extends FLBuilderModule {
 			$this->add_css( 'owl-theme', $this->url . 'css/owl.theme.css' );
 			$this->add_js( 'owl-jquery', $this->url . 'js/owl.carousel.min.js', array(), '', true );
 		}
+
+		// Jetpack sharing has settings to enable sharing on posts, post types and pages.
+		// If pages are disabled then jetpack will still show the share button in this module
+		// but will *not* enqueue its scripts and fonts.
+		// This filter forces jetpack to enqueue the sharing scripts.
+		add_filter( 'sharing_enqueue_scripts', '__return_true' );
+	}
+
+	/**
+	 * @since 1.3.1
+	 */
+	public function update( $settings ) {
+		global $wp_rewrite;
+		$wp_rewrite->flush_rules( false );
+		return $settings;
 	}
 
 
@@ -213,7 +229,7 @@ class PPContentGridModule extends FLBuilderModule {
 				'photo_source'  => 'library'
 			);
 
-			if ( $this->settings->show_more_link == 'yes' && ( $this->settings->more_link_type == 'thumb' || $this->settings->more_link_type == 'title_thumb' ) ) {
+			if ( $this->settings->more_link_type == 'button' || $this->settings->more_link_type == 'thumb' || $this->settings->more_link_type == 'title_thumb' ) {
 				$photo_settings['link_type'] = 'url';
 				$photo_settings['link_url'] = get_the_permalink( $id );
 			}
@@ -235,6 +251,119 @@ class PPContentGridModule extends FLBuilderModule {
 			$first_img = $matches[1][0];
 		}
 		return $first_img;
+	}
+
+	/**
+	 * Build base URL for our custom pagination.
+	 *
+	 * @param string $permalink_structure  The current permalink structure.
+	 * @param string $base  The base URL to parse
+	 * @since 1.3.1
+	 * @return string
+	 */
+	static public function build_base_url( $permalink_structure, $base ) {
+		// Check to see if we are using pretty permalinks
+		if ( ! empty( $permalink_structure ) ) {
+
+			if ( strrpos( $base, 'paged-' ) ) {
+				$base = substr_replace( $base, '', strrpos( $base, 'paged-' ), strlen( $base ) );
+			}
+
+			// Remove query string from base URL since paginate_links() adds it automatically.
+			// This should also fix the WPML pagination issue that was added since 1.10.2.
+			if ( count( $_GET ) > 0 ) {
+				$base = strtok( $base, '?' );
+			}
+
+			$base = untrailingslashit( $base );
+
+		} else {
+			$url_params = wp_parse_url( $base, PHP_URL_QUERY );
+
+			if ( empty( $url_params ) ) {
+				$base = trailingslashit( $base );
+			}
+		}
+
+		return $base;
+	}
+
+	/**
+	 * Build the custom pagination format.
+	 *
+	 * @param string $permalink_structure
+	 * @param string $base
+	 * @since 1.3.1
+	 * @return string
+	 */
+	static public function paged_format( $permalink_structure, $base ) {
+		if ( FLBuilderLoop::$loop_counter > 1 ) {
+			$page_prefix = 'paged-' . FLBuilderLoop::$loop_counter;
+		} else {
+			$page_prefix = empty( $permalink_structure ) ? 'paged' : 'page';
+		}
+
+		if ( ! empty( $permalink_structure ) ) {
+			$format = ! empty( $page_prefix ) ? '/' . $page_prefix . '/' : '/';
+			$format .= '%#%';
+			$format .= substr( $permalink_structure, -1 ) == '/' ? '/' : '';
+		} elseif ( empty( $permalink_structure ) || is_search() ) {
+			$parse_url = wp_parse_url( $base, PHP_URL_QUERY );
+			$format = empty( $parse_url ) ? '?' : '&';
+			$format .= $page_prefix . '=%#%';
+		}
+
+		return $format;
+	}
+
+	public function pagination( $query, $settings )
+	{
+		$total = 0;
+		$page = 0;
+		$paged = FLBuilderLoop::get_paged();
+		$total_posts_count = $settings->total_posts_count;
+		$posts_aval = $query->found_posts;
+		$permalink_structure = get_option('permalink_structure');
+		$base = untrailingslashit( html_entity_decode( get_pagenum_link() ) );
+
+		if( $settings->total_post == 'custom' && $total_posts_count != $posts_aval ) {
+
+			if( $total_posts_count > $posts_aval ) {
+				$page = $posts_aval / $settings->posts_per_page;
+				$total = $posts_aval % $settings->posts_per_page;
+			}
+			if( $total_posts_count < $posts_aval ) {
+				$page = $total_posts_count / $settings->posts_per_page;
+				$total = $total_posts_count % $settings->posts_per_page;
+			}
+
+			if( $total > 0 ) {
+				$page = $page + 1;
+			}
+
+		}
+		else {
+			$page = $query->max_num_pages;
+			//FLBuilderLoop::pagination($query);
+		}
+
+		if ( $page > 1 ) {
+
+			if ( ! $current_page = $paged ) {
+				$current_page = 1;
+			}
+
+			$base = self::build_base_url( $permalink_structure, $base );
+			$format = self::paged_format( $permalink_structure, $base );
+
+			echo paginate_links(array(
+				'base'	   => $base . '%_%',
+				'format'   => $format,
+				'current'  => $current_page,
+				'total'	   => $page,
+				'type'	   => 'list'
+			));
+		}
 	}
 
 }
@@ -1097,6 +1226,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'type'      => 'color',
                         'label'     => __('Background Color', 'bb-powerpack'),
 						'default'		=> '000000',
+						'show_reset' 	=> true,
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post .pp-post-image .pp-content-category-list',
@@ -1107,6 +1237,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'type'      => 'color',
                         'label'     => __('Text Color', 'bb-powerpack'),
 						'default'		=> 'ffffff',
+						'show_reset' 	=> true,
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post .pp-post-image .pp-content-category-list a, .pp-content-post .pp-post-image .pp-content-category-list',
@@ -1131,6 +1262,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'type'      => 'color',
                         'label'     => __('Overlay Color', 'bb-powerpack'),
 						'default'		=> '000000',
+						'show_reset' 	=> true,
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post .pp-post-image .pp-post-title',
@@ -1159,6 +1291,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'type'      => 'color',
                         'label'     => __('Day Background Color', 'bb-powerpack'),
 						'default'		=> 'f9f9f9',
+						'show_reset' 	=> true,
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post.pp-grid-style-5 .pp-content-post-date span.pp-post-day',
@@ -1169,6 +1302,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'type'      => 'color',
                         'label'     => __('Day Text Color', 'bb-powerpack'),
 						'default'		=> '888888',
+						'show_reset' 	=> true,
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post.pp-grid-style-5 .pp-content-post-date span.pp-post-day',
@@ -1179,6 +1313,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'type'      => 'color',
                         'label'     => __('Month Background Color', 'bb-powerpack'),
 						'default'		=> '000000',
+						'show_reset' 	=> true,
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post.pp-grid-style-5 .pp-content-post-date span.pp-post-month',
@@ -1189,6 +1324,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'type'      => 'color',
                         'label'     => __('Month Text Color', 'bb-powerpack'),
 						'default'		=> 'ffffff',
+						'show_reset' 	=> true,
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post.pp-grid-style-5 .pp-content-post-date span.pp-post-month',
@@ -1199,6 +1335,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'type'      => 'color',
                         'label'     => __('Background Color', 'bb-powerpack'),
 						'default'		=> '000000',
+						'show_reset' 	=> true,
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post.pp-grid-style-6 .pp-post-image .pp-content-post-date',
@@ -1209,6 +1346,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'type'      => 'color',
                         'label'     => __('Color', 'bb-powerpack'),
 						'default'		=> 'ffffff',
+						'show_reset' 	=> true,
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post.pp-grid-style-6 .pp-post-image .pp-content-post-date',
@@ -2111,7 +2249,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 					'title_font_color' 		=> array(
 						'type'			=> 'color',
 						'label'			=> __('Text Color', 'bb-powerpack'),
-						'show_reset'	=> 'true',
+						'show_reset'	=> true,
 						'preview'       => array(
 							'type'		=> 'css',
 							'rules'           => array(
@@ -2139,7 +2277,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 					'title_margin' 	=> array(
                     	'type' 				=> 'pp-multitext',
                     	'label' 			=> __('Margin', 'bb-powerpack'),
-                        'description'   	=> __( 'px', 'Value unit for font size. Such as: "14 px"', 'bb-powerpack' ),
+                        'description'   	=> 'px',
                         'default'       	=> array(
                             'top' 				=> 5,
                             'bottom' 			=> 5,
@@ -2291,7 +2429,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 					'description_margin' 	=> array(
                     	'type' 				=> 'pp-multitext',
                     	'label' 			=> __('Margin', 'bb-powerpack'),
-                        'description'   	=> __( 'px', 'Value unit for font size. Such as: "14 px"', 'bb-powerpack' ),
+                        'description'   	=> 'px',
                         'default'       	=> array(
                             'top' 				=> 5,
                             'bottom' 			=> 5,
@@ -2376,6 +2514,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'type'			=> 'color',
 						'label'			=> __('Text Color', 'bb-powerpack'),
 						'default'		=> '606060',
+						'show_reset' 	=> true,
 						'preview'       => array(
 							'type'		=> 'css',
 							'rules'			  => array(

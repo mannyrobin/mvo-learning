@@ -103,7 +103,8 @@ function pp_row_overlay( $form, $id ) {
         'default'   => 'full_width',
         'options'   => array(
             'full_width'    => __('Full', 'bb-powerpack'),
-            'half_width'    => __('Half', 'bb-powerpack'),
+            'half_width'    => __('Half Overlay - Left', 'bb-powerpack'),
+            'half_right'    => __('Half Overlay - Right', 'bb-powerpack'),
             'vertical_left' => __('Vertical Angled Left', 'bb-powerpack'),
             'vertical_right' => __('Vertical Angled Right', 'bb-powerpack'),
             'gradient'      => __('Gradient', 'bb-powerpack')
@@ -197,6 +198,7 @@ function pp_row_separators( $form, $id ) {
                             'wave'                      => __('Wave', 'bb-powerpack'),
                             'cloud'                     => __('Cloud', 'bb-powerpack'),
                             'slit'                      => __('Slit', 'bb-powerpack'),
+                            'water'                     => __('Water', 'bb-powerpack'),
                             'zigzag'                    => __('ZigZag', 'bb-powerpack'),
                         ),
                         'toggle'                    => array(
@@ -314,6 +316,7 @@ function pp_row_separators( $form, $id ) {
                             'wave'                      => __('Wave', 'bb-powerpack'),
                             'cloud'                     => __('Cloud', 'bb-powerpack'),
                             'slit'                      => __('Slit', 'bb-powerpack'),
+                            'water'                     => __('Water', 'bb-powerpack'),
                             'zigzag'                    => __('ZigZag', 'bb-powerpack'),
                         ),
                         'toggle'                    => array(
@@ -471,8 +474,18 @@ function pp_row_expandable( $form, $id ) {
                         'label'                 => __('Transition Speed', 'bb-powerpack'),
                         'default'               => 500,
                         'description'           => 'ms',
-                        'class'                 => 'input-small'
+                        'class'                 => 'input-small',
+                        'size'                  => 5
                     ),
+                    'er_default_state'  => array(
+                        'type'              => 'pp-switch',
+                        'label'             => __('Default State', 'bb-powerpack'),
+                        'default'           => 'collapsed',
+                        'options'           => array(
+                            'collapsed'         => __('Collapsed', 'bb-powerpack'),
+                            'expanded'          => __('Expaded', 'bb-powerpack')
+                        )
+                    )
                 )
             ),
             'er_title_style'    => array(
@@ -496,6 +509,7 @@ function pp_row_expandable( $form, $id ) {
                         'default'               => 18,
                         'description'           => 'px',
                         'class'                 => 'input-small',
+                        'size'                  => 5,
                         'preview'               => array(
                             'type'                  => 'css',
                             'selector'              => '.pp-er-title',
@@ -580,6 +594,7 @@ function pp_row_expandable( $form, $id ) {
                         'default'       => 12,
                         'description'   => 'px',
                         'class'         => 'input-small',
+                        'size'          => 5,
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-er-arrow',
@@ -630,6 +645,7 @@ function pp_row_expandable( $form, $id ) {
                         'default'           => 0,
                         'description'       => 'px',
                         'class'             => 'input-small',
+                        'size'              => 5,
                         'preview'           => array(
                             'type'              => 'css',
                             'selector'          => '.pp-er-arrow:before',
@@ -710,6 +726,7 @@ function pp_row_expandable( $form, $id ) {
                         'default'           => 0,
                         'description'       => 'px',
                         'class'             => 'input-small',
+                        'size'              => 5,
                         'preview'           => array(
                             'type'              => 'css',
                             'selector'          => '.pp-er-arrow:before',
@@ -737,7 +754,8 @@ function pp_row_expandable( $form, $id ) {
                         'label'         => __('Opacity', 'bb-powerpack'),
                         'default'       => 1,
                         'description'   => __('between 0 to 1', 'bb-powerpack'),
-                        'class'         => 'input-small'
+                        'class'         => 'input-small',
+                        'size'          => 5
                     ),
                     'er_title_padding'   => array(
                         'type'              => 'pp-multitext',
@@ -825,6 +843,24 @@ function pp_row_downarrow( $form, $id ) {
                         'class'                 => 'input-small',
                         'help'                  => __('If your theme uses a sticky header, then please enter the header height in px (numbers only) to avoid overlapping of row content.', 'bb-powerpack')
                     ),
+                    'da_animation'          => array(
+                        'type'                  => 'pp-switch',
+                        'label'                 => __('Enable Animation', 'bb-powerpack'),
+                        'default'               => 'no',
+                        'options'               => array(
+                            'yes'                   => __('Yes', 'bb-powerpack'),
+                            'no'                    => __('No', 'bb-powerpack')
+                        )
+                    ),
+                    'da_hide_mobile'    => array(
+                        'type'              => 'pp-switch',
+                        'label'             => __('Hide on Mobile', 'bb-powerpack'),
+                        'default'           => 'no',
+                        'options'           => array(
+                            'yes'               => __('Yes', 'bb-powerpack'),
+                            'no'                => __('No', 'bb-powerpack'),
+                        )
+                    )
                 )
             ),
             'da_style'      => array(

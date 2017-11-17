@@ -1,3 +1,6 @@
+.fl-node-<?php echo $id; ?> {
+    overflow-x: hidden;
+}
 .fl-node-<?php echo $id; ?> .pp-3d-slider.pp-user-agent-safari {
     z-index: 100007;
 }

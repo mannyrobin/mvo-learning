@@ -13,7 +13,8 @@ class PPSocialIconsModule extends FLBuilderModule {
 		parent::__construct(array(
 			'name'          	=> __('Social Icons', 'bb-powerpack'),
 			'description'   	=> __('Display a group of linked social icons.', 'bb-powerpack'),
-			'category'			=> BB_POWERPACK_CAT,
+			'group'         	=> pp_get_modules_group(),
+            'category'			=> pp_get_modules_cat( 'content' ),
             'dir'           	=> BB_POWERPACK_DIR . 'modules/pp-social-icons/',
             'url'           	=> BB_POWERPACK_URL . 'modules/pp-social-icons/',
 			'editor_export' 	=> true,
@@ -39,7 +40,7 @@ FLBuilder::register_module('PPSocialIconsModule', array(
 						'label'         => __('Icon', 'bb-powerpack'),
 						'form'          => 'social_icon_form', // ID from registered form below
 						'preview_text'  => 'icon', // Name of a field to use for the preview text
-						'multiple'      => true
+						'multiple'      => true,
 					)
 				)
 			)
@@ -105,6 +106,23 @@ FLBuilder::register_module('PPSocialIconsModule', array(
 						'maxlength'     => '2',
 						'size'          => '4',
 						'description'   => 'px'
+					),
+					'border_width'	=> array(
+						'type'			=> 'text',
+						'label'			=> __('Border', 'bb-powerpack'),
+						'default'		=> '0',
+						'size'			=> '4',
+						'description'	=> 'px'
+					),
+					'border_color'  => array(
+						'type'          => 'color',
+						'label'         => __('Border Color', 'bb-powerpack'),
+						'show_reset'    => true,
+					),
+					'border_hover_color'  => array(
+						'type'          => 'color',
+						'label'         => __('Border Hover Color', 'bb-powerpack'),
+						'show_reset'    => true,
 					),
 					'radius'		=> array(
 						'type'          => 'text',
@@ -178,10 +196,10 @@ FLBuilder::register_settings_form('social_icon_form', array(
 					'fields'        => array( // Section Fields
 						'icon'          => array(
 							'type'          => 'select',
-							'label'         => __('Select Icon', 'bb-powerpack'),
+							'label'         => __('Icon', 'bb-powerpack'),
 							'default'		=> '',
 							'options'		=> array(
-								''				=> __('None', 'bb-powerpack'),
+								'custom'		=> __('Custom Icon', 'bb-powerpack'),
 								'fa-envelope'	=> __('Email', 'bb-powerpack'),
 								'fa-facebook'	=> __('Facebook', 'bb-powerpack'),
 								'fa-twitter'	=> __('Twitter', 'bb-powerpack'),
@@ -195,11 +213,21 @@ FLBuilder::register_settings_form('social_icon_form', array(
 								'fa-github-alt'	=> __('GitHub', 'bb-powerpack'),
 								'fa-rss'		=> __('RSS', 'bb-powerpack'),
 								'fa-vimeo'		=> __('Vimeo', 'bb-powerpack'),
+							),
+							'toggle'		=> array(
+								'custom'		=> array(
+									'fields'		=> array('icon_custom')
+								)
 							)
+						),
+						'icon_custom'	=> array(
+							'type'			=> 'icon',
+							'label'         => __('Custom Icon', 'bb-powerpack'),
 						),
 						'link'          => array(
 							'type'          => 'link',
-							'label'         => __('Link', 'bb-powerpack')
+							'label'         => __('Link', 'bb-powerpack'),
+							'connections'	=> array('url')
 						),
 						'link_target'	=> array(
 							'type'          => 'select',
@@ -246,6 +274,28 @@ FLBuilder::register_settings_form('social_icon_form', array(
 								'type'          => 'none'
 							)
 						)
+					)
+				),
+				'border'	=> array(
+					'title'		=> __('Border', 'bb-powerpack'),
+					'fields'	=> array(
+						'border_width'	=> array(
+							'type'			=> 'text',
+							'label'			=> __('Border', 'bb-powerpack'),
+							'default'		=> '0',
+							'size'			=> '4',
+							'description'	=> 'px'
+						),
+						'border_color'  => array(
+							'type'          => 'color',
+							'label'         => __('Border Color', 'bb-powerpack'),
+							'show_reset'    => true,
+						),
+						'border_hover_color'  => array(
+							'type'          => 'color',
+							'label'         => __('Border Hover Color', 'bb-powerpack'),
+							'show_reset'    => true,
+						),
 					)
 				)
 			)

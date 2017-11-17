@@ -162,15 +162,14 @@ if ( ! empty( $settings->btn_bg_hover_color ) ) {
 <?php endif; ?>
 
 
-<?php // Transition
-	  if ('enable' == $settings->btn_button_transition): ?>
-.fl-builder-content .fl-node-<?php echo $id; ?> .fl-button,
-.fl-builder-content .fl-node-<?php echo $id; ?> .fl-button * {
-	transition: all 0.2s linear !important;
-    -moz-transition: all 0.2s linear !important;
-    -webkit-transition: all 0.2s linear !important;
-    -o-transition: all 0.2s linear !important;
-}
+<?php if ('enable' == $settings->btn_button_transition): ?>
+	.fl-builder-content .fl-node-<?php echo $id; ?> .fl-button,
+	.fl-builder-content .fl-node-<?php echo $id; ?> .fl-button * {
+		-webkit-transition: all 0.2s ease-in-out;
+	  	-moz-transition: all 0.2s ease-in-out;
+	  	-o-transition: all 0.2s ease-in-out;
+		transition: all 0.2s ease-in-out;
+	}
 <?php endif; ?>
 
 <?php if ( empty( $settings->btn_text ) ) : ?>
@@ -357,15 +356,16 @@ if ( ! empty( $settings->btn_bg_hover_color ) ) {
 	background-color: <?php echo $settings->input_field_bg_color ? pp_hex2rgba('#' . $settings->input_field_bg_color, $settings->input_field_background_opacity / 100 ) : 'transparent'; ?>;
 	border-width: 0;
 	border-color: <?php echo $settings->input_field_border_color ? '#' . $settings->input_field_border_color : 'transparent'; ?>;
-    <?php if( $settings->input_field_border_radius >= 0 ) { ?>
+    <?php if( $settings->input_field_border_width >= 0 ) { ?>
+		border-style: solid;
+    	<?php echo $settings->input_field_border_position; ?>-width: <?php echo $settings->input_field_border_width; ?>px;
+    <?php } ?>
+	<?php if( $settings->input_field_border_radius >= 0 ) { ?>
 	border-radius: <?php echo $settings->input_field_border_radius; ?>px;
     -moz-border-radius: <?php echo $settings->input_field_border_radius; ?>px;
     -webkit-border-radius: <?php echo $settings->input_field_border_radius; ?>px;
     -ms-border-radius: <?php echo $settings->input_field_border_radius; ?>px;
     -o-border-radius: <?php echo $settings->input_field_border_radius; ?>px;
-    <?php } ?>
-    <?php if( $settings->input_field_border_width >= 0 ) { ?>
-    <?php echo $settings->input_field_border_position; ?>-width: <?php echo $settings->input_field_border_width; ?>px;
     <?php } ?>
     <?php if( $settings->input_field_box_shadow == 'yes' ) { ?>
         box-shadow: <?php echo ($settings->input_shadow_direction == 'inset') ? $settings->input_shadow_direction : ''; ?> 0 0 10px #<?php echo $settings->input_shadow_color; ?>;
@@ -417,6 +417,7 @@ if ( ! empty( $settings->btn_bg_hover_color ) ) {
 .fl-node-<?php echo $id; ?> .pp-contact-form input[type=tel]:focus,
 .fl-node-<?php echo $id; ?> .pp-contact-form input[type=email]:focus {
 	border-color: <?php echo $settings->input_field_focus_color ? '#' . $settings->input_field_focus_color : 'transparent'; ?>;
+	outline: none;
 }
 
 .fl-node-<?php echo $id; ?> .pp-contact-form input[type=text]::-webkit-input-placeholder {

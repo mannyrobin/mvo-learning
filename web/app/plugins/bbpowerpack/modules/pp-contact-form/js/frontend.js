@@ -1,13 +1,13 @@
 (function($) {
 
-	FLBuilderContactForm = function( settings )
+	PPContactForm = function( settings )
 	{
 		this.settings	= settings;
 		this.nodeClass	= '.fl-node-' + settings.id;
 		this._init();
 	};
 
-	FLBuilderContactForm.prototype = {
+	PPContactForm.prototype = {
 
 		settings	: {},
 		nodeClass	: '',
@@ -125,7 +125,7 @@
 				noMessage 	= $( this.nodeClass + ' .pp-success-none' );
 
 			// On success show the success message
-			if (response === '1') {
+			if (typeof response.error !== 'undefined' && response.error === false) {
 
 				$( this.nodeClass + ' .pp-send-error' ).fadeOut();
 
@@ -143,6 +143,9 @@
 			// On failure show fail message and re-enable the send button
 			else {
 				$(this.nodeClass + ' .fl-button').removeClass('pp-disabled');
+				if ( typeof response.message !== 'undefined' ) {
+					$(this.nodeClass + ' .pp-send-error').html(response.message);
+				}
 				$(this.nodeClass + ' .pp-send-error').fadeIn();
 				return false;
 			}

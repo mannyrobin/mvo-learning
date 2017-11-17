@@ -19,6 +19,9 @@ FLBuilderModel::default_settings($settings, array(
 	)
 ));
 
+$settings = apply_filters( 'pp_tiles_loop_settings', $settings );
+do_action( 'pp_tiles_loop_settings_before_form', $settings ); // e.g Add custom FLBuilder::render_settings_field()
+
 ?>
 <div class="fl-custom-query fl-loop-data-source" data-source="custom_query">
 	<div id="fl-builder-settings-section-general" class="fl-loop-builder fl-builder-settings-section">
@@ -234,6 +237,10 @@ FLBuilderModel::default_settings($settings, array(
 	?>
 	</table>
 </div>
+
+<?php
+do_action( 'pp_tiles_loop_settings_after_form', $settings ); // e.g Add custom FLBuilder::render_settings_field()
+?>
 
 <script type="text/javascript">
 	;(function($) {

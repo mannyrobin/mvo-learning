@@ -16,7 +16,8 @@ class PPHoverCardsModuleNew extends FLBuilderModule {
         parent::__construct(array(
             'name'          => __('Hover Cards 2', 'bb-powerpack'),
             'description'   => __('Addon to display hover cards.', 'bb-powerpack'),
-            'category'		=> BB_POWERPACK_CAT,
+            'group'         => pp_get_modules_group(),
+            'category'		=> pp_get_modules_cat( 'creative' ),
             'dir'           => BB_POWERPACK_DIR . 'modules/pp-hover-cards-2/',
             'url'           => BB_POWERPACK_URL . 'modules/pp-hover-cards-2/',
             'editor_export' => true, // Defaults to true and can be omitted.
@@ -81,7 +82,8 @@ FLBuilder::register_module('PPHoverCardsModuleNew', array(
                     ),
                     'hover_card_height' => array(
                     	'type'              => 'pp-multitext',
-                    	'label' 		    => __('Height', 'bb-powerpack'),
+                        'label' 		    => __('Minimum Height', 'bb-powerpack'),
+                        'description'       => 'px',
                         'default'           => array(
                             'desktop'           => 300,
                             'tablet'            => '',
@@ -95,7 +97,77 @@ FLBuilder::register_module('PPHoverCardsModuleNew', array(
                                 'tooltip'       => __('Desktop', 'bb-powerpack'),
                                 'preview'       => array(
                                     'selector'      => '.pp-hover-card',
-                                    'property'      => 'height',
+                                    'property'      => 'min-height',
+                                    'unit'          => 'px'
+                                )
+                    		),
+                            'tablet' => array(
+                                'maxlength' => 3,
+                    			'icon'		=> 'fa-tablet',
+                                'placeholder'   => __('Tablet', 'bb-powerpack'),
+                                'tooltip'       => __('Tablet', 'bb-powerpack'),
+                    		),
+                            'mobile' => array(
+                                'maxlength' => 3,
+                    			'icon'		=> 'fa-mobile',
+                                'placeholder'   => __('Mobile', 'bb-powerpack'),
+                                'tooltip'       => __('Mobile', 'bb-powerpack'),
+                    		),
+                    	)
+                    ),
+                    'hover_card_max_height' => array(
+                    	'type'              => 'pp-multitext',
+                        'label' 		    => __('Maximum Height (optional)', 'bb-powerpack'),
+                        'description'       => 'px',
+                        'default'           => array(
+                            'desktop'           => '',
+                            'tablet'            => '',
+                            'mobile'            => ''
+                        ),
+                    	'options'  => array(
+                    		'desktop' => array(
+                                'maxlength'     => 3,
+                    			'icon'		    => 'fa-desktop',
+                                'placeholder'   => __('Desktop', 'bb-powerpack'),
+                                'tooltip'       => __('Desktop', 'bb-powerpack'),
+                                'preview'       => array(
+                                    'selector'      => '.pp-hover-card',
+                                    'property'      => 'max-height',
+                                    'unit'          => 'px'
+                                )
+                    		),
+                            'tablet' => array(
+                                'maxlength' => 3,
+                    			'icon'		=> 'fa-tablet',
+                                'placeholder'   => __('Tablet', 'bb-powerpack'),
+                                'tooltip'       => __('Tablet', 'bb-powerpack'),
+                    		),
+                            'mobile' => array(
+                                'maxlength' => 3,
+                    			'icon'		=> 'fa-mobile',
+                                'placeholder'   => __('Mobile', 'bb-powerpack'),
+                                'tooltip'       => __('Mobile', 'bb-powerpack'),
+                    		),
+                    	)
+                    ),
+                    'hover_card_max_width' => array(
+                    	'type'              => 'pp-multitext',
+                        'label' 		    => __('Maximum Width (optional)', 'bb-powerpack'),
+                        'description'       => 'px',
+                        'default'           => array(
+                            'desktop'           => '',
+                            'tablet'            => '',
+                            'mobile'            => ''
+                        ),
+                    	'options'  => array(
+                    		'desktop' => array(
+                                'maxlength'     => 3,
+                    			'icon'		    => 'fa-desktop',
+                                'placeholder'   => __('Desktop', 'bb-powerpack'),
+                                'tooltip'       => __('Desktop', 'bb-powerpack'),
+                                'preview'       => array(
+                                    'selector'      => '.pp-hover-card',
+                                    'property'      => 'max-width',
                                     'unit'          => 'px'
                                 )
                     		),

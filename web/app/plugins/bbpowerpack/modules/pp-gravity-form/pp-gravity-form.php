@@ -16,7 +16,8 @@ class PPGravityFormModule extends FLBuilderModule {
         parent::__construct(array(
             'name'          => __('Gravity Form', 'bb-powerpack'),
             'description'   => __('A module for Gravity Form.', 'bb-powerpack'),
-            'category'		=> BB_POWERPACK_CAT,
+            'group'         => pp_get_modules_group(),
+            'category'		=> pp_get_modules_cat( 'form_style' ),
             'dir'           => BB_POWERPACK_DIR . 'modules/pp-gravity-form/',
             'url'           => BB_POWERPACK_URL . 'modules/pp-gravity-form/',
             'editor_export' => true, // Defaults to true and can be omitted.
@@ -115,11 +116,20 @@ FLBuilder::register_module('PPGravityFormModule', array(
                             'none'     => __('Hide', 'bb-powerpack'),
                         ),
                     ),
+                    'form_ajax' => array(
+                        'type'      => 'pp-switch',
+                        'label'     => __('Enable AJAX', 'bb-powerpack'),
+                        'default'   => 'yes',
+                        'options'   => array(
+                            'yes'       => __('Yes', 'bb-powerpack'),
+                            'no'        => __('No', 'bb-powerpack')
+                        )
+                    ),
                     'form_tab_index'      => array(
                         'type'          => 'text',
                         'label'         => __('Tab Index', 'bb-powerpack'),
                         'class'         => 'bb-gf-input input-small',
-                        'default'       => 1,
+                        'default'       => 100,
                     ),
                 )
             ),
@@ -563,6 +573,33 @@ FLBuilder::register_module('PPGravityFormModule', array(
                             'false'         => __('No', 'bb-powerpack'),
                         )
                     ),
+                    'input_field_height'    => array(
+                        'type'                  => 'pp-switch',
+                        'label'                 => __('Height', 'bb-powerpack'),
+                        'default'               => 'auto',
+                        'options'               => array(
+                            'auto'                  => __('Auto', 'bb-powerpack'),
+                            'custom'                => __('Custom', 'bb-powerpack')
+                        ),
+                        'toggle'                => array(
+                            'custom'                => array(
+                                'fields'                => array('input_field_height_custom')
+                            )
+                        )
+                    ),
+                    'input_field_height_custom' => array(
+                        'type'                      => 'text',
+                        'label'                     => __('Custom Height', 'bb-powerpack'),
+                        'description'               => 'px',
+                        'default'                   => '45',
+                        'class'                     => 'bb-gf-input input-small',
+                        'preview'                   => array(
+                            'type'                      => 'css',
+                            'selector'                  => '.gform_wrapper .gfield input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .gform_wrapper .gfield select',
+                            'property'                  => 'height',
+                            'unit'                      => 'px'
+                        )
+                    ),
                     'input_field_text_alignment'    => array(
                         'type'                      => 'pp-switch',
                         'label'                     => __('Text Alignment', 'bb-powerpack'),
@@ -653,6 +690,71 @@ FLBuilder::register_module('PPGravityFormModule', array(
                     ),
                 )
             ),
+            'radio_cb_style'    => array(
+                'title'             => __('Radio & Checkbox', 'bb-powerpack'),
+                'fields'            => array(
+                    'radio_cb_style'    => array(
+                        'type'              => 'pp-switch',
+                        'label'             => __('Enable Custom Style', 'bb-powerpack'),
+                        'default'           => 'no',
+                        'options'           => array(
+                            'yes'               => __('Yes', 'bb-powerpack'),
+                            'no'                => __('No', 'bb-powerpack')
+                        ),
+                        'toggle'            => array(
+                            'yes'               => array(
+                                'fields'            => array('radio_cb_size', 'radio_cb_color', 'radio_cb_checked_color', 'radio_cb_border_width', 'radio_cb_border_color', 'radio_cb_radius', 'radio_cb_checkbox_radius')
+                            )
+                        )
+                    ),
+                    'radio_cb_size' => array(
+                        'type'          => 'text',
+                        'label'         => __('Size', 'bb-powerpack'),
+                        'default'       => '15',
+                        'description'   => 'px',
+                        'class'         => 'bb-gf-input input-small',
+                    ),
+                    'radio_cb_color'    => array(
+                        'type'              => 'color',
+                        'label'             => __('Color', 'bb-powerpack'),
+                        'default'           => 'dddddd',
+                        'show_reset'        => true
+                    ),
+                    'radio_cb_checked_color'    => array(
+                        'type'                      => 'color',
+                        'label'                     => __('Checked Color', 'bb-powerpack'),
+                        'default'                   => '999999',
+                        'show_reset'                => true
+                    ),
+                    'radio_cb_border_width' => array(
+                        'type'                  => 'text',
+                        'label'                 => __('Border Width', 'bb-powerpack'),
+                        'default'               => '1',
+                        'description'           => 'px',
+                        'class'                 => 'bb-gf-input input-small',
+                    ),
+                    'radio_cb_border_color' => array(
+                        'type'                  => 'color',
+                        'label'                 => __('Border Color', 'bb-powerpack'),
+                        'default'               => '',
+                        'show_reset'            => true
+                    ),
+                    'radio_cb_radius'   => array(
+                        'type'              => 'text',
+                        'label'             => __('Radio Round Corners', 'bb-powerpack'),
+                        'default'           => '50',
+                        'description'       => 'px',
+                        'class'             => 'bb-gf-input input-small',
+                    ),
+                    'radio_cb_checkbox_radius'   => array(
+                        'type'              => 'text',
+                        'label'             => __('Checkbox Round Corners', 'bb-powerpack'),
+                        'default'           => '0',
+                        'description'       => 'px',
+                        'class'             => 'bb-gf-input input-small',
+                    )
+                )
+            )
         )
     ),
     'button_style'      => array(

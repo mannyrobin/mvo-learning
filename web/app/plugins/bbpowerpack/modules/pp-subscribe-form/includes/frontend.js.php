@@ -1,6 +1,6 @@
 ;(function($) {
 
-	new FLBuilderSubscribeForm({
+	new PPSubscribeForm({
 		id: '<?php echo $id ?>',
 		type: '<?php echo $settings->box_type; ?>',
 		cookie: <?php echo absint($settings->display_after); ?>
@@ -15,7 +15,7 @@
 	<?php } ?>
 
 	<?php if ( ! FLBuilderModel::is_builder_active() && 'fixed_bottom' == $settings->box_type ) { ?>
-		$('.fl-module.fl-node-<?php echo $id; ?>').wrap('<div class="fl-builder-content pp-wrap-<?php echo $id; ?>"></div>');
+		$('.fl-module.fl-node-<?php echo $id; ?>').wrap('<div class="fl-builder-content fl-builder-content-<?php echo get_the_ID(); ?> pp-wrap-<?php echo $id; ?>" data-post-id="<?php echo get_the_ID(); ?>"></div>');
 		$('.fl-builder-content.pp-wrap-<?php echo $id; ?>').appendTo('body');
 	<?php } ?>
 
@@ -40,7 +40,8 @@
 								if ( $('.pp-subscribe-<?php echo $id; ?>.pp-subscribe-slidein').width() > $(window).width() ) {
 									$('.pp-subscribe-<?php echo $id; ?>').css({
 										'max-width': '90%',
-										'<?php echo $settings->slidein_position; ?>': '5%'
+										'<?php echo $settings->slidein_position; ?>': '5%',
+										'height': 'auto'
 									});
 								}
 							<?php } ?>

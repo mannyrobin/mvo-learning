@@ -37,28 +37,33 @@
   "require": {
     "php": ">=5.6",
     "composer/installers": "~1.0.12",
-    "vlucas/phpdotenv": "^2.0.1",
-    "johnpbloch/wordpress": "^4.8",
-    "oscarotero/env": "^1.0",
+    "johnpbloch/wordpress": "^4.9",
     "roots/wp-password-bcrypt": "1.0.0",
 		"wpackagist-plugin/social-warfare": "2.3.3",
 		"wpackagist-plugin/query-monitor": "*",
 		"wpackagist-plugin/duplicate-post": "*",
 		"wpackagist-plugin/nginx-cache": "*",
-		"wpackagist-plugin/redirection": "*",
 		"wpackagist-plugin/duracelltomi-google-tag-manager": "*",
 		"wpackagist-plugin/autodescription": "*",
 		"wpackagist-plugin/schema-app-structured-data-for-schemaorg": "*",
 		"wpackagist-plugin/optinmonster": "*",
-		"ydlr/redirection": "*",
 		"wpackagist-plugin/regenerate-thumbnails": "*",
 		"wpackagist-plugin/wordpress-importer": "*",
+		"wpackagist-plugin/smtp-mailer": "*",
+		"wpackagist-plugin/post-types-order": "*",
+		"wpackagist-plugin/post-type-archive-descriptions": "*",
+		"ydlr/redirection": "*",
 		"ydlr/wpforms-ga": "^0.1",
 		"warfare-plugins/social-warfare-pro": "2.3.3",
 		"hipdevteam/bb-related-posts": "*",
-		"hipdevteam/reviews-bb-module": "*"
+		"hipdevteam/reviews-bb-module": "*",
+		"hipdevteam/wpforms-gsheets": "*",
+		"hipdevteam/video-lightbox": "*",
+		"hipdevteam/hip-cta": "*"
   },
   "require-dev": {
+		"vlucas/phpdotenv": "^2.0.1",
+		"oscarotero/env": "^1.0"
   },
   "extra": {
     "installer-paths": {

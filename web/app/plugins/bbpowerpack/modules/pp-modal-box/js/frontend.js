@@ -60,7 +60,8 @@ var PPModal;
                         }
                         if('video' == PPModal.settings.type) {
                             var src = '';
-                            if(PPModal.modal().find('iframe, source').attr('src') === undefined) {
+                            var m_src = PPModal.modal().find('iframe, source').attr('src');
+                            if(m_src === undefined || m_src === '') {
                                 src = PPModal.modal().find('iframe, source').data('src');
                             } else {
                                 src = PPModal.modal().find('iframe, source').attr('src');
@@ -92,6 +93,7 @@ var PPModal;
             }, PPModal.settings.auto_load ? parseFloat(PPModal.settings.delay) * 1000 : 0);
         },
         hide: function() {
+            PPModal.modal().trigger('beforeclose');
             PPModal.modal().parent()
                 .removeClass(PPModal.settings.animation_exit+' animated')
                 .addClass(PPModal.settings.animation_exit+' animated')
@@ -102,6 +104,14 @@ var PPModal;
                     PPModal.isActive = false;
                     PPModal.reset();
                 });
+            if (window.location.hash) {
+                var hashVal = window.location.hash;
+                if ('#modal-' + PPModal.settings.id === hashVal) {
+                    var scrollTop = PPModal.settings.scrollTop || $(window).scrollTop();
+                    window.location.href = window.location.href.split('#')[0] + '#';
+                    $(window).scrollTop(scrollTop);
+                }
+            }
         },
         adjust: function() {
             var mH = 0, hH = 0, cH = 0, eq = 0;
@@ -176,7 +186,7 @@ var PPModal;
         reset: function() {
             if('url' == PPModal.settings.type || 'video' == PPModal.settings.type) {
                 var src = PPModal.modal().find('iframe, source').attr('src');
-                PPModal.modal().find('iframe, source').attr('data-src', src).removeAttr('src');
+                PPModal.modal().find('iframe, source').attr('data-src', src).attr('src', '');
                 if(PPModal.modal().find('video').length) {
                     PPModal.modal().find('video')[0].pause();
                 }

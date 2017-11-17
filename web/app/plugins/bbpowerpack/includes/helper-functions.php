@@ -49,12 +49,12 @@ function pp_get_upload_dir()
 {
 	$wp_info = wp_upload_dir();
 
-	if ( is_multisite() ) {
-		$wp_info = array(
-			'basedir' => ABSPATH . 'wp-content/uploads',
-			'baseurl' => network_site_url( '/wp-content/uploads' )
-		);
-	}
+	// Get main upload directory for every sub-sites.
+    if ( is_multisite() ) {
+        switch_to_blog(1);
+        $wp_info = wp_upload_dir();
+        restore_current_blog();
+    }
 
 	$dir_name = basename( BB_POWERPACK_DIR );
 
@@ -392,6 +392,21 @@ function pp_hex2rgba( $hex, $opacity )
 }
 
 /**
+ * Get color value hex or rgba
+ */
+function pp_get_color_value( $color )
+{
+    if ( $color == '' || ! $color ) {
+        return;
+    }
+    if ( false === strpos( $color, 'rgb' ) ) {
+        return '#' . $color;
+    } else {
+        return $color;
+    }
+}
+
+/**
  * Returns long day format.
  *
  * @since 1.2.2
@@ -464,4 +479,63 @@ function pp_get_user_agent()
 	{
 	   return 'firefox';
 	}
+}
+
+function pp_get_modules_categories( $cat = '' )
+{
+	$cats = array(
+		'creative'		=> __('Creative Modules', 'bb-powerpack'),
+		'content'		=> __('Content Modules', 'bb-powerpack'),
+		'lead_gen'		=> __('Lead Generation Modules', 'bb-powerpack'),
+		'form_style'	=> __('Form Styler Modules', 'bb-powerpack')
+	);
+
+	if ( empty( $cat ) ) {
+		return $cats;
+	}
+
+	if ( isset( $cats[$cat] ) ) {
+		return $cats[$cat];
+	} else {
+		return $cat;
+	}
+}
+
+/**
+ * Returns modules category name for Beaver Builder 2.0 compatibility.
+ *
+ * @since 1.3
+ * @return string
+ */
+function pp_get_modules_cat( $cat )
+{
+	return class_exists( 'FLBuilderUIContentPanel' ) ? pp_get_modules_categories( $cat ) : BB_POWERPACK_CAT;
+}
+
+/**
+ * Returns admin label for PowerPack settings.
+ *
+ * @since 1.3
+ * @return string
+ */
+function pp_get_admin_label()
+{
+	$admin_label = BB_PowerPack_Admin_Settings::get_option( 'ppwl_admin_label' );
+	$admin_label = trim( $admin_label ) !== '' ? trim( $admin_label ) : 'PowerPack';
+
+	return $admin_label;
+}
+
+/**
+ * Returns group name for BB 2.x.
+ *
+ * @since 1.5
+ * @return string
+ */
+function pp_get_modules_group()
+{
+	$group_name = BB_PowerPack_Admin_Settings::get_option( 'ppwl_builder_label' );
+	$group_name = trim( $group_name ) !== '' ? trim( $group_name ) : 'PowerPack ' . __('Modules', 'bb-powerpack');
+
+	return $group_name;
 }

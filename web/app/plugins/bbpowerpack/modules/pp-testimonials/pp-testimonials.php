@@ -16,7 +16,8 @@ class PPTestimonialsModule extends FLBuilderModule {
         parent::__construct(array(
             'name'          => __('Testimonials', 'bb-powerpack'),
             'description'   => __('Addon to display testimonials.', 'bb-powerpack'),
-            'category'		=> BB_POWERPACK_CAT,
+            'group'         => pp_get_modules_group(),
+            'category'		=> pp_get_modules_cat( 'content' ),
             'dir'           => BB_POWERPACK_DIR . 'modules/pp-testimonials/',
             'url'           => BB_POWERPACK_URL . 'modules/pp-testimonials/',
             'editor_export' => true, // Defaults to true and can be omitted.
@@ -32,6 +33,32 @@ class PPTestimonialsModule extends FLBuilderModule {
 		$this->add_css('font-awesome');
 		$this->add_css('pp-testimonials-form', BB_POWERPACK_URL . 'modules/pp-testimonials/css/fields.css');
 		$this->add_js('jquery-bxslider');
+    }
+
+    public function get_alt( $settings )
+    {
+        if(is_object($settings->photo)) {
+            $photo = $settings->photo;
+        }
+        else {
+            $photo = FLBuilderPhoto::get_attachment_data($settings->photo);
+        }
+
+        if(!empty($photo->alt)) {
+			return htmlspecialchars($photo->alt);
+		}
+		else if(!empty($photo->description)) {
+			return htmlspecialchars($photo->description);
+		}
+		else if(!empty($photo->caption)) {
+			return htmlspecialchars($photo->caption);
+		}
+		else if(!empty($photo->title)) {
+			return htmlspecialchars($photo->title);
+        }
+        else if(!empty($settings->title)) {
+            return htmlspecialchars($settings->title);
+        }
     }
 }
 
@@ -321,7 +348,7 @@ FLBuilder::register_module('PPTestimonialsModule', array(
                         'maxlength'     => '2',
                         'size'          => '5',
 						'label'         => __('Border Width', 'bb-powerpack'),
-                        'description'   => _x( 'px', 'Value unit for border width. Such as: "5 px"', 'bb-powerpack' ),
+                        'description'   => 'px',
                         'preview'       => array(
                             'type'          => 'css',
                             'rules'     => array(
@@ -401,7 +428,7 @@ FLBuilder::register_module('PPTestimonialsModule', array(
                         'maxlength'     => '3',
                         'size'          => '5',
 						'label'         => __('Round Corners', 'bb-powerpack'),
-                        'description'   => _x( 'px', 'Value unit for border radius. Such as: "5 px"', 'bb-powerpack' ),
+                        'description'   => 'px',
                         'preview'       => array(
                             'type'          => 'css',
                             'rules'     => array(
@@ -433,6 +460,64 @@ FLBuilder::register_module('PPTestimonialsModule', array(
                             ),
                         )
 					),
+					'box_shadow_setting'   => array(
+                        'type'                 => 'pp-switch',
+                        'label'                => __('Enable Shadow', 'bb-powerpack'),
+                        'default'              => 'no',
+                        'options'              => array(
+                            'yes'          => __('Yes', 'bb-powerpack'),
+                            'no'             => __('No', 'bb-powerpack'),
+                        ),
+                        'toggle'    =>  array(
+                            'yes'   => array(
+                                'fields'    => array('box_shadow', 'box_shadow_color', 'box_shadow_opacity')
+                            )
+                        )
+                    ),
+                    'box_shadow' 		=> array(
+                        'type'              => 'pp-multitext',
+                        'label'             => __('Box Shadow', 'bb-powerpack'),
+                        'default'           => array(
+                            'vertical'			=> 2,
+                            'horizontal'		=> 2,
+                            'blur'				=> 2,
+                            'spread'			=> 1
+                        ),
+                        'options'			=> array(
+                            'horizontal'		=> array(
+                                'placeholder'		=> __('Horizontal', 'bb-powerpack'),
+                                'tooltip'			=> __('Horizontal', 'bb-powerpack'),
+                                'icon'				=> 'fa-arrows-h'
+                            ),
+                            'vertical'			=> array(
+                                'placeholder'		=> __('Vertical', 'bb-powerpack'),
+                                'tooltip'			=> __('Vertical', 'bb-powerpack'),
+                                'icon'				=> 'fa-arrows-v'
+                            ),
+                            'blur'				=> array(
+                                'placeholder'		=> __('Blur', 'bb-powerpack'),
+                                'tooltip'			=> __('Blur', 'bb-powerpack'),
+                                'icon'				=> 'fa-circle-o'
+                            ),
+                            'spread'			=> array(
+                                'placeholder'		=> __('Spread', 'bb-powerpack'),
+                                'tooltip'			=> __('Spread', 'bb-powerpack'),
+                                'icon'				=> 'fa-paint-brush'
+                            ),
+                        )
+                    ),
+                    'box_shadow_color' => array(
+                        'type'              => 'color',
+                        'label'             => __('Shadow Color', 'bb-powerpack'),
+                        'default'           => '000000',
+                    ),
+                    'box_shadow_opacity' => array(
+                        'type'              => 'text',
+                        'label'             => __('Shadow Opacity', 'bb-powerpack'),
+                        'description'       => '%',
+                        'size'             => 5,
+                        'default'           => 30,
+                    ),
                     'layout_4_content_bg'    => array(
                         'type'      => 'color',
                         'label'     => __('Background Color', 'bb-powerpack'),
@@ -588,7 +673,7 @@ FLBuilder::register_module('PPTestimonialsModule', array(
                         'size'          => '5',
                         'maxlength'     => '2',
 						'label'         => __('Font Size', 'bb-powerpack'),
-						'description'   => _x( 'px', 'Value unit for font size. Such as: "14 px"', 'bb-powerpack' ),
+						'description'   => 'px',
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-testimonials-heading',
@@ -628,7 +713,7 @@ FLBuilder::register_module('PPTestimonialsModule', array(
                         'size'          => '5',
                         'maxlength'     => '2',
 						'label'         => __('Font Size', 'bb-powerpack'),
-						'description'   => _x( 'px', 'Value unit for font size. Such as: "14 px"', 'bb-powerpack' ),
+						'description'   => 'px',
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-testimonials-title',
@@ -699,7 +784,7 @@ FLBuilder::register_module('PPTestimonialsModule', array(
                         'size'          => '5',
                         'maxlength'     => '2',
 						'label'         => __('Font Size', 'bb-powerpack'),
-						'description'   => _x( 'px', 'Value unit for font size. Such as: "14 px"', 'bb-powerpack' ),
+						'description'   => 'px',
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-testimonials-subtitle',
@@ -770,7 +855,7 @@ FLBuilder::register_module('PPTestimonialsModule', array(
                         'size'          => '5',
                         'maxlength'     => '2',
 						'label'         => __('Font Size', 'bb-powerpack'),
-						'description'   => _x( 'px', 'Value unit for font size. Such as: "14 px"', 'bb-powerpack' ),
+						'description'   => 'px',
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-testimonials-content',

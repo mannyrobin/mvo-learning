@@ -82,8 +82,9 @@ if ( ! class_exists( 'PP_Media_Fields' ) ) {
 
     }
 
-    if ( is_plugin_active( 'beaver-builder-lite-version' . '/fl-builder.php' ) ||
-    	( defined('FL_BUILDER_VERSION') && version_compare( FL_BUILDER_VERSION, '1.10', '<'  ) ) ) {
-    	$pp_media_fields = PP_Media_Fields::get_instance();
-    }
+    // if ( is_plugin_active( 'beaver-builder-lite-version' . '/fl-builder.php' ) ||
+    // 	( defined('FL_BUILDER_VERSION') && version_compare( FL_BUILDER_VERSION, '1.10', '<'  ) ) ) {
+    // 	$pp_media_fields = PP_Media_Fields::get_instance();
+    // }
+    $pp_media_fields = PP_Media_Fields::get_instance();
 }

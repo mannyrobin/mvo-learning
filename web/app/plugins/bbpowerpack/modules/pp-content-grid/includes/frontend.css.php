@@ -13,10 +13,10 @@ $post_columns_mobile = ( 100 - $space_mobile ) / $settings->post_grid_count['mob
     position: relative;
     float: left;
 }
-.fl-node-<?php echo $id; ?> .pp-post-filters {
+.fl-node-<?php echo $id; ?> ul.pp-post-filters {
 	text-align: <?php echo $settings->filter_alignment; ?>;
 }
-.fl-node-<?php echo $id; ?> .pp-post-filters li {
+.fl-node-<?php echo $id; ?> ul.pp-post-filters li {
 	background: <?php echo ($settings->filter_background['primary']) ? '#'.$settings->filter_background['primary'] : 'transparent'; ?>;
 	<?php if( $settings->filter_border_color['primary'] ) { ?>border-color: #<?php echo $settings->filter_border_color['primary']; ?>;<?php } ?>
 	<?php if( $settings->filter_border_radius >= 0 ) { ?>border-radius: <?php echo $settings->filter_border_radius; ?>px;<?php } ?>
@@ -44,8 +44,8 @@ $post_columns_mobile = ( 100 - $space_mobile ) / $settings->post_grid_count['mob
    <?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .pp-post-filters li:hover,
-.fl-node-<?php echo $id; ?> .pp-post-filters li.pp-filter-active {
+.fl-node-<?php echo $id; ?> ul.pp-post-filters li:hover,
+.fl-node-<?php echo $id; ?> ul.pp-post-filters li.pp-filter-active {
 	background: <?php echo ($settings->filter_background['secondary']) ? '#'.$settings->filter_background['secondary'] : 'transparent'; ?>;
 	<?php if( $settings->filter_color['secondary'] ) { ?>color: #<?php echo $settings->filter_color['secondary']; ?>;<?php } ?>
 	<?php if( $settings->filter_border_color['secondary'] ) { ?>border-color: #<?php echo $settings->filter_border_color['secondary']; ?>;<?php } ?>
@@ -450,12 +450,11 @@ if($settings->layout == 'grid' || $settings->layout == 'carousel') { // GRID ?>
 
 
 .fl-node-<?php echo $id; ?> .pp-content-post .pp-content-body {
-    <?php $body_padding_top = $settings->post_content_padding['top']; ?>
-    <?php if ( $settings->post_grid_style_select == 'style-8' ) { $body_padding_top = 0; ?>
+    <?php if ( $settings->post_grid_style_select == 'style-8' ) { ?>
         float: left;
         width: <?php echo $settings->show_image == 'yes' ? '60%' : '100%'; ?>;
     <?php } ?>
-	padding-top: <?php echo $body_padding_top; ?>px;
+	padding-top: <?php echo $settings->post_content_padding['top']; ?>px;
 	padding-right: <?php echo $settings->post_content_padding['right']; ?>px;
 	padding-bottom: <?php echo $settings->post_content_padding['bottom']; ?>px;
 	padding-left: <?php echo $settings->post_content_padding['left']; ?>px;
@@ -554,7 +553,7 @@ if($settings->layout == 'grid' || $settings->layout == 'carousel') { // GRID ?>
 	.fl-node-<?php echo $id; ?> .pp-content-grid-pagination li span.page-numbers {
 		font-size: <?php echo $settings->pagination_font_size['tablet']; ?>px;
 	}
-	.fl-node-<?php echo $id; ?> .pp-post-filters li {
+	.fl-node-<?php echo $id; ?> ul.pp-post-filters li {
 	   font-size: <?php echo $settings->filter_font_size['tablet']; ?>px;
 	}
 }
@@ -589,7 +588,7 @@ if($settings->layout == 'grid' || $settings->layout == 'carousel') { // GRID ?>
 		<?php if( $settings->title_font_size_toggle == 'custom' && $settings->title_custom_font_size['mobile'] ) { ?>
 			font-size: <?php echo $settings->title_custom_font_size['mobile']; ?>px;
 		<?php } ?>
-		
+
 		<?php if( $settings->title_line_height_toggle == 'custom' && $settings->title_custom_line_height['mobile'] ) { ?>
 			line-height: <?php echo $settings->title_custom_line_height['mobile']; ?>;
 		<?php } ?>
@@ -621,7 +620,15 @@ if($settings->layout == 'grid' || $settings->layout == 'carousel') { // GRID ?>
 	.fl-node-<?php echo $id; ?> .pp-content-grid-pagination li span.page-numbers {
 		font-size: <?php echo $settings->pagination_font_size['mobile']; ?>px;
 	}
-	.fl-node-<?php echo $id; ?> .pp-post-filters li {
-	   font-size: <?php echo $settings->filter_font_size['mobile']; ?>px;
+	.fl-node-<?php echo $id; ?> ul.pp-post-filters li {
+	   	font-size: <?php echo $settings->filter_font_size['mobile']; ?>px;
+	}
+}
+
+@media only screen and ( max-width: 480px ) {
+	.fl-node-<?php echo $id; ?> ul.pp-post-filters li {
+		display: block;
+		text-align: center;
+		margin-right: 0;
 	}
 }

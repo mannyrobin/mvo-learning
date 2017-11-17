@@ -16,7 +16,8 @@ class PPContactForm7Module extends FLBuilderModule {
         parent::__construct(array(
             'name'          => __('Contact Form 7', 'bb-powerpack'),
             'description'   => __('A module for Contact Form 7.', 'bb-powerpack'),
-            'category'		=> BB_POWERPACK_CAT,
+            'group'         => pp_get_modules_group(),
+            'category'		=> pp_get_modules_cat( 'form_style' ),
             'dir'           => BB_POWERPACK_DIR . 'modules/pp-contact-form-7/',
             'url'           => BB_POWERPACK_URL . 'modules/pp-contact-form-7/',
             'editor_export' => true, // Defaults to true and can be omitted.
@@ -439,6 +440,36 @@ FLBuilder::register_module('PPContactForm7Module', array(
                             'out'                       => __('Outside', 'bb-powerpack'),
                             'inset'                     => __('Inside', 'bb-powerpack'),
                         ),
+                    ),
+                )
+            ),
+            'placeholder_style'      => array( // Section
+                'title'         => __('Placeholder', 'bb-powerpack'), // Section Title
+                'fields'        => array( // Section Fields
+                    'show_placeholder' 	=> array(
+                        'type'          => 'pp-switch',
+                        'label'         => __('Show Placeholder', 'bb-powerpack'),
+                        'default'       => 'yes',
+                        'options'		=> array(
+                       		'yes'	         => __('Yes', 'bb-powerpack'),
+                       		'no'	         => __('No', 'bb-powerpack'),
+                        ),
+                        'toggle' => array(
+                            'yes' => array(
+                                'fields' => array('placeholder_color')
+                            )
+                        )
+                    ),
+                    'placeholder_color'  => array(
+                        'type'                  => 'color',
+                        'label'                 => __('Color', 'bb-powerpack'),
+                        'default'               => '999999',
+                        'show_reset'            => true,
+                        'preview'               => array(
+                            'type'              => 'css',
+                            'selector'          => '.pp-cf7-content input[type=text]::-webkit-input-placeholder, .pp-cf7-content input[type=tel]::-webkit-input-placeholder, .pp-cf7-content input[type=email]::-webkit-input-placeholder, .pp-cf7-content textarea::-webkit-input-placeholder',
+                            'property'          => 'color'
+                        )
                     ),
                 )
             ),

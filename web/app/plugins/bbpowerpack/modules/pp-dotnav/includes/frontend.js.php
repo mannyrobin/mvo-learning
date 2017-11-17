@@ -56,7 +56,9 @@
                 }
             }
             lastAnimation = timeNow;
-        }).on('pointerdown touchstart', function(e) {
+        });
+        <?php if ( isset( $settings->scroll_touch ) && 'enable' == $settings->scroll_touch ) { ?>
+        $(document).on('pointerdown touchstart', function(e) {
             var touches = e.originalEvent.touches;
             if (touches && touches.length) {
                 startY = touches[0].screenY;
@@ -89,6 +91,7 @@
                 }
             }
         });
+        <?php } ?>
     <?php } ?>
     <?php if ( 'enable' == $settings->scroll_keys ) { ?>
         $(document).keydown(function(e) {
