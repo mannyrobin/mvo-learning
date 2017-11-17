@@ -54,7 +54,7 @@ class CacheBuster
 	{
 		if (! defined('DONOTCACHEPAGE')
 			&& class_exists('FLBuilderModel')
-			&& FLBuilderModel::is_builder_active() ) {
+			&& \FLBuilderModel::is_builder_active() ) {
 				define('DONOTCACHEPAGE', true);
 		}
 	}
