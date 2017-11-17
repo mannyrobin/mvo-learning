@@ -64,7 +64,16 @@
 		"hipdevteam/hip-cta": "*"
   },
   "require-dev": {
+		"squizlabs/php_codesniffer": "3.*"
   },
+	"scripts": {
+		"post-install-cmd": [
+			"bash bin/setup.sh"
+		],
+		"post-update-cmd": [
+			"bash bin/setup.sh"
+		]
+	},
   "extra": {
     "installer-paths": {
       "web/app/mu-plugins/{$name}/": ["type:wordpress-muplugin"],

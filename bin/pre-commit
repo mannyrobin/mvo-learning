@@ -1,0 +1,85 @@
+#!/usr/bin/env php
+
+<?php
+
+class Enable
+{
+    const PHP_LINT = true;
+    const PHP_CS = true;
+    const PHP_MD = false;
+    const DEBUG_MODE = false;
+}
+
+$output = [];
+$return = 0;
+
+exec("git diff-index --cached --name-only HEAD", $output);
+
+// don't check files that aren't PHP
+$filename_pattern = '/\.ph(tml|p)$/';
+$exclude_patterns = [
+    "/\/web\/wp\//",
+    "/\/vender\//",
+];
+
+$exit_status = 0;
+// First we remove those files that does not suit our needs
+foreach ($output as $key => $file) {
+    foreach ($exclude_patterns as $exclude_pattern) {
+        if (preg_match($exclude_pattern, $file)) {
+            unset($output[$key]);
+            continue 2;
+        }
+    }
+    if (!preg_match($filename_pattern, $file)) {
+        unset($output[$key]);
+        continue;
+    }
+    if (!file_exists($file)) {
+        // if the file has been moved or deleted,
+        // the old filename should be skipped
+        unset($output[$key]);
+        continue;
+    }
+}
+if (Enable::PHP_LINT) {
+    foreach ($output as $file) {
+        $lint_output = [];
+        exec("git show :" . escapeshellarg($file) . " | php -l ", $lint_output, $return);
+        if ($return == 0) {
+            continue;
+        }
+        echo implode("\n", $lint_output), " {$file}\n";
+        $exit_status = 1;
+    }
+}
+if ($exit_status != 0) {
+    exit($exit_status);
+}
+if (Enable::PHP_MD) {
+    foreach ($output as $file) {
+        $md_output = [];
+        exec("phpmd " . escapeshellarg($file) . " text build/phpmd.xml", $md_output, $return);
+        if ($return == 0) {
+            continue;
+        }
+        echo str_replace('STDIN', escapeshellarg($file), implode("\n", $md_output)), "\n";
+        $exit_status = 1;
+    }
+}
+
+if (Enable::PHP_CS) {
+    foreach ($output as $file) {
+        $cs_output = [];
+        exec("git show :" . escapeshellarg($file) . " | vendor/bin/phpcs --standard=phpcs.xml --encoding=utf-8", $cs_output, $return);
+        if ($return == 0) {
+            continue;
+        }
+        echo str_replace('STDIN', escapeshellarg($file), implode("\n", $cs_output)), "\n";
+        $exit_status = 1;
+    }
+}
+if (Enable::DEBUG_MODE) {
+    exit(1);
+}
+exit($exit_status);
