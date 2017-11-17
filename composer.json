@@ -39,6 +39,8 @@
     "composer/installers": "~1.0.12",
     "johnpbloch/wordpress": "^4.9",
     "roots/wp-password-bcrypt": "1.0.0",
+		"vlucas/phpdotenv": "^2.0.1",
+		"oscarotero/env": "^1.0",
 		"wpackagist-plugin/social-warfare": "2.3.3",
 		"wpackagist-plugin/query-monitor": "*",
 		"wpackagist-plugin/duplicate-post": "*",
@@ -62,8 +64,6 @@
 		"hipdevteam/hip-cta": "*"
   },
   "require-dev": {
-		"vlucas/phpdotenv": "^2.0.1",
-		"oscarotero/env": "^1.0"
   },
   "extra": {
     "installer-paths": {

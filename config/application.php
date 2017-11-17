@@ -6,20 +6,18 @@ $root_dir = dirname(__DIR__);
 /** @var string Document Root */
 $webroot_dir = $root_dir . '/web';
 
-if ( class_exists( 'Env' ) ) { 
-	/**
-	* Expose global env() function from oscarotero/env
-	*/
-	Env::init();
+/**
+ * Expose global env() function from oscarotero/env
+ */
+Env::init();
 
-	/**
-	* Use Dotenv to set required environment variables and load .env file in root
-	*/
-	$dotenv = new Dotenv\Dotenv($root_dir);
-	if (file_exists($root_dir . '/.env')) {
-			$dotenv->load();
-			$dotenv->required(['DB_NAME', 'DB_USER', 'DB_PASSWORD', 'WP_HOME', 'WP_SITEURL']);
-	}
+/**
+ * Use Dotenv to set required environment variables and load .env file in root
+ */
+$dotenv = new Dotenv\Dotenv($root_dir);
+if (file_exists($root_dir . '/.env')) {
+    $dotenv->load();
+    $dotenv->required(['DB_NAME', 'DB_USER', 'DB_PASSWORD', 'WP_HOME', 'WP_SITEURL']);
 }
 
 /**
