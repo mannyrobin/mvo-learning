@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1c130fb39fb7db8b00196611183a819",
+    "content-hash": "007ed545053ad20bd298f13491bbc72d",
     "packages": [
         {
             "name": "composer/installers",
@@ -213,16 +213,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.34",
+            "version": "v0.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "4d0d438e323929579cabf0b4d420177a96835c6d"
+                "reference": "8c3926a9dafcd1bc86e5af06a1bb7e4aa931c73c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/4d0d438e323929579cabf0b4d420177a96835c6d",
-                "reference": "4d0d438e323929579cabf0b4d420177a96835c6d",
+                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/8c3926a9dafcd1bc86e5af06a1bb7e4aa931c73c",
+                "reference": "8c3926a9dafcd1bc86e5af06a1bb7e4aa931c73c",
                 "shasum": ""
             },
             "require": {
@@ -246,7 +246,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2017-11-11T00:27:24+00:00"
+            "time": "2017-11-18T00:23:16+00:00"
         },
         {
             "name": "google/auth",
@@ -551,6 +551,38 @@
             "type": "wordpress-plugin",
             "notification-url": "https://packagist.org/downloads/",
             "time": "2017-04-06T13:56:29+00:00"
+        },
+        {
+            "name": "hipdevteam/staff",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/hipdevteam/staff.git",
+                "reference": "acbd783d042f0b9db959d7bb0ffbed7188f18ea2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fstaff/repository/archive.zip?sha=acbd783d042f0b9db959d7bb0ffbed7188f18ea2",
+                "reference": "acbd783d042f0b9db959d7bb0ffbed7188f18ea2",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": ">=1.0",
+                "pimple/pimple": "~3.0"
+            },
+            "require-dev": {
+                "lucatume/wp-browser": "^1.21",
+                "site5/phantoman": "^2.0"
+            },
+            "type": "wordpress-plugin",
+            "autoload": {
+                "psr-4": {
+                    "HipStaff\\": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Everything needed to manage staff members for Hip client sites.",
+            "time": "2017-11-19T21:29:00+00:00"
         },
         {
             "name": "hipdevteam/video-lightbox",
@@ -1422,15 +1454,15 @@
         },
         {
             "name": "wpackagist-plugin/autodescription",
-            "version": "2.9.4",
+            "version": "3.0.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/autodescription/",
-                "reference": "tags/2.9.4"
+                "reference": "trunk"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/autodescription.2.9.4.zip",
+                "url": "https://downloads.wordpress.org/plugin/autodescription.zip?timestamp=1511121326",
                 "reference": null,
                 "shasum": null
             },
