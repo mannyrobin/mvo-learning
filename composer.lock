@@ -213,16 +213,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.35",
+            "version": "v0.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "8c3926a9dafcd1bc86e5af06a1bb7e4aa931c73c"
+                "reference": "2fd7d2876fbc0174faddba3241956a1393536159"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/8c3926a9dafcd1bc86e5af06a1bb7e4aa931c73c",
-                "reference": "8c3926a9dafcd1bc86e5af06a1bb7e4aa931c73c",
+                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/2fd7d2876fbc0174faddba3241956a1393536159",
+                "reference": "2fd7d2876fbc0174faddba3241956a1393536159",
                 "shasum": ""
             },
             "require": {
@@ -246,7 +246,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2017-11-18T00:23:16+00:00"
+            "time": "2017-11-25T00:23:12+00:00"
         },
         {
             "name": "google/auth",
@@ -649,20 +649,20 @@
         },
         {
             "name": "johnpbloch/wordpress",
-            "version": "4.9.0",
+            "version": "4.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnpbloch/wordpress.git",
-                "reference": "b15c463dc04c79483058a3da16865c356393408d"
+                "reference": "988875c1ec9f0474d1f77038b7a52f91125fc5f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnpbloch/wordpress/zipball/b15c463dc04c79483058a3da16865c356393408d",
-                "reference": "b15c463dc04c79483058a3da16865c356393408d",
+                "url": "https://api.github.com/repos/johnpbloch/wordpress/zipball/988875c1ec9f0474d1f77038b7a52f91125fc5f4",
+                "reference": "988875c1ec9f0474d1f77038b7a52f91125fc5f4",
                 "shasum": ""
             },
             "require": {
-                "johnpbloch/wordpress-core": "4.9.0",
+                "johnpbloch/wordpress-core": "4.9.1",
                 "johnpbloch/wordpress-core-installer": "^1.0",
                 "php": ">=5.3.2"
             },
@@ -684,27 +684,27 @@
                 "cms",
                 "wordpress"
             ],
-            "time": "2017-11-16T01:32:51+00:00"
+            "time": "2017-11-29T21:57:18+00:00"
         },
         {
             "name": "johnpbloch/wordpress-core",
-            "version": "4.9.0",
+            "version": "4.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnpbloch/wordpress-core.git",
-                "reference": "bf2ed9c364d35bcabd15c4bb139c2581ea8513a9"
+                "reference": "e47f6652557c3160ee432c2fca5594ac1a8698f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnpbloch/wordpress-core/zipball/bf2ed9c364d35bcabd15c4bb139c2581ea8513a9",
-                "reference": "bf2ed9c364d35bcabd15c4bb139c2581ea8513a9",
+                "url": "https://api.github.com/repos/johnpbloch/wordpress-core/zipball/e47f6652557c3160ee432c2fca5594ac1a8698f5",
+                "reference": "e47f6652557c3160ee432c2fca5594ac1a8698f5",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
             },
             "provide": {
-                "wordpress/core-implementation": "4.9.0"
+                "wordpress/core-implementation": "4.9.1"
             },
             "type": "wordpress-core",
             "notification-url": "https://packagist.org/downloads/",
@@ -724,7 +724,7 @@
                 "cms",
                 "wordpress"
             ],
-            "time": "2017-11-16T01:32:46+00:00"
+            "time": "2017-11-29T21:57:13+00:00"
         },
         {
             "name": "johnpbloch/wordpress-core-installer",
@@ -897,16 +897,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.7",
+            "version": "2.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "f4b6a522dfa1fd1e477c9cfe5909d5b31f098c0b"
+                "reference": "c9a3fe35e20eb6eeaca716d6a23cde03f52d1558"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/f4b6a522dfa1fd1e477c9cfe5909d5b31f098c0b",
-                "reference": "f4b6a522dfa1fd1e477c9cfe5909d5b31f098c0b",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/c9a3fe35e20eb6eeaca716d6a23cde03f52d1558",
+                "reference": "c9a3fe35e20eb6eeaca716d6a23cde03f52d1558",
                 "shasum": ""
             },
             "require": {
@@ -985,7 +985,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2017-10-23T05:04:54+00:00"
+            "time": "2017-11-29T06:38:08+00:00"
         },
         {
             "name": "pimple/pimple",
@@ -1454,15 +1454,15 @@
         },
         {
             "name": "wpackagist-plugin/autodescription",
-            "version": "3.0.0",
+            "version": "3.0.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/autodescription/",
-                "reference": "trunk"
+                "reference": "tags/3.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/autodescription.zip?timestamp=1511121326",
+                "url": "https://downloads.wordpress.org/plugin/autodescription.3.0.2.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -1474,15 +1474,15 @@
         },
         {
             "name": "wpackagist-plugin/duplicate-post",
-            "version": "3.2",
+            "version": "3.2.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/duplicate-post/",
-                "reference": "tags/3.2"
+                "reference": "tags/3.2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/duplicate-post.3.2.zip",
+                "url": "https://downloads.wordpress.org/plugin/duplicate-post.3.2.1.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -1494,15 +1494,15 @@
         },
         {
             "name": "wpackagist-plugin/duracelltomi-google-tag-manager",
-            "version": "1.7.1",
+            "version": "1.7.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/duracelltomi-google-tag-manager/",
-                "reference": "tags/1.7.1"
+                "reference": "tags/1.7.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/duracelltomi-google-tag-manager.1.7.1.zip",
+                "url": "https://downloads.wordpress.org/plugin/duracelltomi-google-tag-manager.1.7.2.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -1514,15 +1514,15 @@
         },
         {
             "name": "wpackagist-plugin/nginx-cache",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/nginx-cache/",
-                "reference": "tags/1.0.2"
+                "reference": "tags/1.0.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/nginx-cache.1.0.2.zip",
+                "url": "https://downloads.wordpress.org/plugin/nginx-cache.1.0.3.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -1634,15 +1634,15 @@
         },
         {
             "name": "wpackagist-plugin/schema-app-structured-data-for-schemaorg",
-            "version": "1.8.1",
+            "version": "1.9.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/schema-app-structured-data-for-schemaorg/",
-                "reference": "tags/1.8.1"
+                "reference": "tags/1.9.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/schema-app-structured-data-for-schemaorg.1.8.1.zip",
+                "url": "https://downloads.wordpress.org/plugin/schema-app-structured-data-for-schemaorg.1.9.2.zip",
                 "reference": null,
                 "shasum": null
             },
