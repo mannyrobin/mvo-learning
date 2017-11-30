@@ -43,7 +43,7 @@ class CacheBuster
 		// Nginx Cache
 		if (class_exists('NginxCache')) {
 			$nginxCache = new NginxCache();
-			$nginxCache->flush_zone_once();
+			$nginxCache->purge_zone_once();
 		}
 		error_log('Cleared Caches');
 	}
