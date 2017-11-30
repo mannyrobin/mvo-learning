@@ -1,0 +1,16 @@
+image: ubuntu:17.10
+publish:
+  stage: deploy
+  only:
+    refs:
+      - master
+  environment:
+    name: production
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh 
+    - '[[ -f /.dockerenv ]] && echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts'
+  script:
+    - ssh yodeler@107.170.246.26 ./deploy bbtheme production
