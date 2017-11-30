@@ -565,16 +565,16 @@
         },
         {
             "name": "hipdevteam/landing-pages",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/landing-pages.git",
-                "reference": "eaddeeae86d393bbb96212a7ed7632312ee99051"
+                "reference": "8686526890010f22cb82f1aac363e746c497fb7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Flanding-pages/repository/archive.zip?sha=eaddeeae86d393bbb96212a7ed7632312ee99051",
-                "reference": "eaddeeae86d393bbb96212a7ed7632312ee99051",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Flanding-pages/repository/archive.zip?sha=8686526890010f22cb82f1aac363e746c497fb7e",
+                "reference": "8686526890010f22cb82f1aac363e746c497fb7e",
                 "shasum": ""
             },
             "require": {
@@ -593,7 +593,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Everything needed to manage landing pages for Hip client sites.",
-            "time": "2017-11-28T16:33:19+00:00"
+            "time": "2017-11-30T17:56:26+00:00"
         },
         {
             "name": "hipdevteam/reviews-bb-module",
