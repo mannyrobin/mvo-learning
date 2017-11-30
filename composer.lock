@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "007ed545053ad20bd298f13491bbc72d",
+    "content-hash": "154bd8756747c59721030d36d225ff28",
     "packages": [
         {
             "name": "composer/installers",
@@ -503,6 +503,38 @@
             "time": "2017-11-08T15:34:49+00:00"
         },
         {
+            "name": "hipdevteam/conditions",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/hipdevteam/conditions.git",
+                "reference": "63443ca5fa726fe8bdc9e406d2166d5c91d95927"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fconditions/repository/archive.zip?sha=63443ca5fa726fe8bdc9e406d2166d5c91d95927",
+                "reference": "63443ca5fa726fe8bdc9e406d2166d5c91d95927",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": ">=1.0",
+                "pimple/pimple": "~3.0"
+            },
+            "require-dev": {
+                "lucatume/wp-browser": "^1.21",
+                "site5/phantoman": "^2.0"
+            },
+            "type": "wordpress-plugin",
+            "autoload": {
+                "psr-4": {
+                    "Hip\\Conditions\\": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Everything needed to manage conditions for Hip client sites.",
+            "time": "2017-11-21T17:06:09+00:00"
+        },
+        {
             "name": "hipdevteam/hip-cta",
             "version": "0.3.5",
             "source": {
@@ -530,6 +562,38 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Simple, flexible calls-to-action for WordPress-based marketing sites.",
             "time": "2017-11-05T18:54:30+00:00"
+        },
+        {
+            "name": "hipdevteam/landing-pages",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/hipdevteam/landing-pages.git",
+                "reference": "eaddeeae86d393bbb96212a7ed7632312ee99051"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Flanding-pages/repository/archive.zip?sha=eaddeeae86d393bbb96212a7ed7632312ee99051",
+                "reference": "eaddeeae86d393bbb96212a7ed7632312ee99051",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": ">=1.0",
+                "pimple/pimple": "~3.0"
+            },
+            "require-dev": {
+                "lucatume/wp-browser": "^1.21",
+                "site5/phantoman": "^2.0"
+            },
+            "type": "wordpress-plugin",
+            "autoload": {
+                "psr-4": {
+                    "Hip\\LP\\": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Everything needed to manage landing pages for Hip client sites.",
+            "time": "2017-11-28T16:33:19+00:00"
         },
         {
             "name": "hipdevteam/reviews-bb-module",

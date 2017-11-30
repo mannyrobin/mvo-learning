@@ -62,7 +62,9 @@
 		"hipdevteam/wpforms-gsheets": "*",
 		"hipdevteam/video-lightbox": "*",
 		"hipdevteam/hip-cta": "*",
-		"hipdevteam/staff": "*"
+		"hipdevteam/staff": "*",
+		"hipdevteam/conditions": "*",
+		"hipdevteam/landing-pages": "*"
   },
   "require-dev": {
 		"squizlabs/php_codesniffer": "3.*"
