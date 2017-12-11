@@ -28,7 +28,7 @@ web/.htaccess
 !.env.example
 
 # Composer
-vendor/*
+/vendor/*
 !vendor/.gitkeep
 
 # Node
