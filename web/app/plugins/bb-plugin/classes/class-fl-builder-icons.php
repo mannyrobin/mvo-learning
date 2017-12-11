@@ -28,15 +28,15 @@ final class FLBuilderIcons {
 		if ( self::$sets ) {
 			return self::$sets;
 		}
-
+		global $blog_id;
 		// Check to see if we should pull sets from the main site.
 		if ( is_multisite() ) {
 
-			$blog_id		= defined( 'BLOG_ID_CURRENT_SITE' ) ? BLOG_ID_CURRENT_SITE : 1;
+			$id		= defined( 'BLOG_ID_CURRENT_SITE' ) ? BLOG_ID_CURRENT_SITE : 1;
 			$enabled_icons	= get_option( '_fl_builder_enabled_icons' );
 
-			if ( empty( $enabled_icons ) ) {
-				switch_to_blog( $blog_id );
+			if ( ( $id != $blog_id ) || empty( $enabled_icons ) ) {
+				switch_to_blog( $id );
 			}
 		}
 
