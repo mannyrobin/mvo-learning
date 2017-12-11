@@ -6,10 +6,10 @@ class CacheBuster
 {
 	public static function init()
 	{
-		add_action('upgrader_process_complete', array( __class__, 'clear_caches' ));
-		add_action('fl_builder_after_save_layout', array( __class__, 'clear_caches' ));
-		add_action('fl_builder_after_save_user_template', array( __class__, 'clear_caches' ));
-		add_action('fl_builder_cache_cleared', array( __class__, 'clear_caches' ));
+		add_action('upgrader_process_complete', array( __class__, 'clearCaches' ));
+		add_action('fl_builder_after_save_layout', array( __class__, 'clearCaches' ));
+		add_action('fl_builder_after_save_user_template', array( __class__, 'clearCaches' ));
+		add_action('fl_builder_cache_cleared', array( __class__, 'clearCaches' ));
 		add_action('template_redirect', array( __class__, 'donotcache' ));
 	}
 	/**
