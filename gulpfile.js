@@ -4,7 +4,7 @@ var gulp = require('gulp'),
 	cleancss = require('gulp-clean-css'),
 	util = require('gulp-util'),
 	log = util.log,
-	childtheme = 'web/app/themes/hip-med-child/'
+	childtheme = 'web/app/themes/hip-med-child/';
 
 gulp.task('sass', function() {
 	log( 'Generate CSS files ' + ( new Date()).toString() );
