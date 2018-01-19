@@ -213,12 +213,12 @@ body {
 
 #wpforms-builder .wpforms-toolbar .wpforms-left {
 	position: absolute;
-	left: 15px;
-	top: 14px;
+	left: 12px;
+	top: 12px;
 }
 
 #wpforms-builder .wpforms-toolbar .wpforms-left img {
-	height: 46px;
+	height: 50px;
 }
 
 #wpforms-builder .wpforms-toolbar .wpforms-center {
@@ -525,6 +525,10 @@ body {
 	position: relative;
 }
 
+#wpforms-builder .wpforms-panel-sidebar-section.upgrade-modal {
+	opacity: 0.5;
+}
+
 #wpforms-builder .wpforms-panel-sidebar-section.default {
 	display: none;
 }
@@ -667,6 +671,195 @@ body {
 }
 
 
+/* Bulk Add
+-------------------------------------------------------------- */
+
+#wpforms-builder .toggle-bulk-add-display {
+	font-size: 11px;
+	color: #999;
+	text-decoration: none;
+	float: right;
+}
+
+#wpforms-builder .toggle-bulk-add-display:hover {
+	color: #666;
+	text-decoration: underline;
+}
+
+#wpforms-builder .bulk-add-display {
+	background-color: #fff;
+	/*height: 122px;*/
+	overflow: hidden;
+	border: 1px solid #ddd;
+	margin: 0 0 5px 0;
+	display: none;
+}
+
+#wpforms-builder .bulk-add-display .heading {
+	padding: 5px 10px;
+	margin: 0;
+	border-bottom: 1px solid #eee;
+	font-weight: 700;
+	background: #f1f1f1;
+	font-size: 13px;
+}
+
+#wpforms-builder .bulk-add-display .heading a {
+	float: right;
+	display: inline-block;
+	font-weight: 400;
+	text-decoration: none;
+	font-size: 11px;
+	padding-top: 2px;
+	color: #999;
+}
+
+#wpforms-builder .bulk-add-display .heading a:hover {
+	text-decoration: underline;
+}
+
+#wpforms-builder .bulk-add-display ul {
+	margin: 0;
+	display: none;
+}
+
+#wpforms-builder .bulk-add-display li  {
+	list-style: none;
+	margin: 0 !important;
+	border: none !important;
+	padding: 0 !important;
+}
+
+#wpforms-builder .bulk-add-display li a {
+	display: block;
+	text-decoration: none;
+	padding: 5px 10px;
+	border-bottom: 1px solid #eee;
+}
+
+#wpforms-builder .bulk-add-display li a:hover {
+	background-color: #f9f9f9;
+	text-decoration: underline;
+}
+
+#wpforms-builder .bulk-add-display textarea {
+	height: 85px;
+	margin: 0;
+	font-size: 12px;
+	font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+	width: 100% !important;
+	padding: 5px 10px !important;
+	display: block;
+	border: none !important;
+}
+
+#wpforms-builder .bulk-add-display button {
+	background-color: #0e6cad;
+	color: #fff;
+	border: none;
+	display: block;
+	-webkit-appearance: none;
+	font-size: 12px;
+	font-weight: 500;
+	padding: 5px;
+	cursor: pointer;
+	text-align: center;
+	width: 100%;
+}
+
+#wpforms-builder .bulk-add-display button:hover {
+	background-color: #0B568A;
+}
+
+
+/* Layout Selector
+-------------------------------------------------------------- */
+
+#wpforms-builder .toggle-layout-selector-display {
+	font-size: 11px;
+	color: #999;
+	text-decoration: none;
+	float: right;
+}
+
+#wpforms-builder .toggle-layout-selector-display:hover {
+	color: #666;
+	text-decoration: underline;
+}
+
+#wpforms-builder .layout-selector-display {
+	background-color: #fff;
+	height: 122px;
+	overflow: hidden;
+	border: 1px solid #ddd;
+	margin: 0 0 5px 0;
+	display: none;
+}
+
+#wpforms-builder .layout-selector-display .heading {
+	display:block;
+	padding: 5px 10px;
+	margin: 0;
+	border-bottom: 1px solid #eee;
+	font-weight: 700;
+	background: #f1f1f1;
+	font-size: 13px;
+}
+
+#wpforms-builder .layout-selector-display-layout {
+	width: 25%;
+	float: left;
+	padding: 10px 10px 0 10px;
+	cursor: pointer;
+}
+
+#wpforms-builder .layout-selector-display span {
+	background-color: #b1bac3;
+	height: 30px;
+	float: left;
+	border: 1px solid #fff;
+	-webkit-transition: background-color 0.2s ease-in-out;
+	-moz-transition:    background-color 0.2s ease-in-out;
+	-ms-transition:     background-color 0.2s ease-in-out;
+	-o-transition:      background-color 0.2s ease-in-out;
+	transition:         background-color 0.2s ease-in-out;
+}
+
+#wpforms-builder .layout-selector-display-layout:hover span,
+#wpforms-builder .layout-selector-display-columns span:hover {
+	background-color: #0073aa;
+}
+
+#wpforms-builder .layout-selector-display span.one-half {
+	width: 50%;
+}
+
+#wpforms-builder .layout-selector-display span.one-third {
+	width: 33.333333%;
+}
+
+#wpforms-builder .layout-selector-display span.two-third {
+	width: 66.666666%;
+}
+
+#wpforms-builder .layout-selector-display span.one-fourth {
+	width: 25%;
+}
+
+#wpforms-builder .layout-selector-display span.two-fourth {
+	width: 50%;
+}
+
+#wpforms-builder .layout-selector-display-columns {
+	padding: 10px 10px 0 10px;
+}
+
+#wpforms-builder .layout-selector-display-columns span {
+	height: 70px;
+	cursor: pointer;
+	border: 2px solid #fff;
+}
+
 
 /* Smart Tags
 -------------------------------------------------------------- */
@@ -690,6 +883,7 @@ body {
 	background-color: #fff;
 	max-height: 100px;
 	overflow-y: scroll;
+	overflow-x: hidden;
 	border: 1px solid #ddd;
 	margin: 0 0 5px 0;
 	display: none;
@@ -726,106 +920,69 @@ body {
 /* jquery confirm modals
 -------------------------------------------------------------- */
 
-.jconfirm.white .jconfirm-bg {
-	background-color: rgba(107,107,107,0.7)
-}
-
-.jconfirm-box-container {
-	width: 100%;
-	max-width: 450px;
-	margin: 0 auto;
-}
-
-.jconfirm-box-container.modal-wide {
-	max-width: 700px
-}
-
-.jconfirm.white .jconfirm-box {
+body div.jconfirm div.jconfirm-box-container div.jconfirm-box {
 	border-radius: 0;
-	padding: 30px;
-	text-align: center;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-.jconfirm.white .modal-wide .jconfirm-box {
-	padding: 50px;
+body div.jconfirm div.jconfirm-box div.jconfirm-content-pane {
+	margin-bottom: 20px;
 }
 
-.jconfirm.white .jconfirm-box div.title {
-	padding: 0;
-	font-size: 26px;
-	line-height: normal;
-	color: #444;
-	margin: 0 0 20px 0;
-}
-
-.jconfirm.white .jconfirm-box div.content {
-	padding: 0;
-	color: #666;
+body div.jconfirm div.jconfirm-box div.jconfirm-content {
 	font-size: 16px;
-	margin: 0 0 20px 0;
-	line-height: 1.6;
+	color: #555;
+	line-height: 1.5;
 }
 
-.jconfirm.white .modal-wide .jconfirm-box div.content {
-	margin: 0 0 40px 0;
-}
-
-.jconfirm.white .jconfirm-box .buttons {
-	padding: 0;
-	float: none;
-}
-
-.jconfirm.white .jconfirm-box .buttons button {
-	border-radius: 3px;
-	padding: 8px 15px;
-	font-size: 15px;
-	margin: 0 5px;
-	cursor: pointer;
-}
-
-.jconfirm.white .jconfirm-box .closeIcon {
+body div.jconfirm div.jconfirm-box div.jconfirm-content p {
 	font-size: 16px;
+	color: #555;
+	line-height: 1.5;
+	margin: 0 0 16px;
 }
 
-.jconfirm.white .jconfirm-box .closeIcon .glyphicon-remove:before {
-	font-family: 'FontAwesome';
-	content:"\f00d";
-}
-
-.jconfirm.white .jconfirm-box input[type=text] {
+body div.jconfirm div.jconfirm-box input[type=text] {
 	display: block;
-	width: 100%;
+	width: 99%;
 	border: 1px solid #d6d6d6;
-	padding: 6px 8px;
+	padding: 10px;
 	box-shadow: none;
-	margin-top: 20px;
+	margin: 20px auto 0 auto;
 }
 
-.jconfirm.white .jconfirm-box #wpforms-embed-shortcode {
+body div.jconfirm div.jconfirm-box #wpforms-embed-shortcode {
 	margin: 20px 0;
 	text-align: center;
 	font-size: 24px;
 	padding: 8px 5px;
 }
 
-.jconfirm.white .jconfirm-box #wpforms-embed-shortcode:disabled {
+body div.jconfirm div.jconfirm-box #wpforms-embed-shortcode:disabled {
 	color: #333;
 }
 
-.jconfirm.white .jconfirm-box .error {
+body div.jconfirm div.jconfirm-box button.btn-confirm {
+	background-color: #e27730;
+	color: #fff;
+	outline: none;
+}
+
+body div.jconfirm div.jconfirm-box button.btn-confirm:hover {
+	background-color: #b85a1b;
+	border-color: #b85a1b;
+}
+
+body div.jconfirm div.jconfirm-box .error {
 	display: none;
 	color: red;
 }
 
-.jconfirm.white .jconfirm-box button.cancel {
-	background-color: #aaa;
-}
-
-.jconfirm.white .jconfirm-box button.confirm {
-	background-color: #83c11f;
-	outline: none;
-}
-
-.jconfirm.white .jconfirm-box button.confirm:hover {
-	background-color: #75ac1c;
+body div.jconfirm div.jconfirm-box .jconfirm-title-c .jconfirm-icon-c {
+	-webkit-transition: none !important;
+	transition: none !important;
+	-webkit-transform: none !important;
+	-ms-transform: none !important;
+	transform: none !important;
+	font-size: 45px !important;
 }

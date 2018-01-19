@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Constant Contact integration.
  *
@@ -7,7 +8,7 @@
  * @since      1.3.6
  * @license    GPL-2.0+
  * @copyright  Copyright (c) 2017, WPForms LLC
-*/
+ */
 class WPForms_Constant_Contact extends WPForms_Provider {
 
 	/**
@@ -49,9 +50,9 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 
 		if ( is_admin() ) {
 			// Admin notice requesting connecting
-			add_action( 'admin_notices',                            array( $this, 'connect_request' ) );
+			add_action( 'admin_notices', array( $this, 'connect_request' ) );
 			add_action( 'wp_ajax_wpforms_constant_contact_dismiss', array( $this, 'connect_dismiss' ) );
-			add_action( 'wpforms_admin_page',                       array( $this, 'learn_more_page' ) );
+			add_action( 'wpforms_admin_page', array( $this, 'learn_more_page' ) );
 
 			// Provide option to override sign up link
 			$sign_up = get_option( 'wpforms_constant_contact_signup', false );
@@ -65,22 +66,27 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 	 * Process and submit entry to provider.
 	 *
 	 * @since 1.3.6
+	 *
 	 * @param array $fields
 	 * @param array $entry
 	 * @param array $form_data
+	 * @param int $entry_id
+	 *
+	 * @return void
 	 */
 	public function process_entry( $fields, $entry, $form_data, $entry_id = 0 ) {
 
 		// Only run if this form has a connections for this provider
-		if ( empty( $form_data['providers'][$this->slug] ) )
+		if ( empty( $form_data['providers'][ $this->slug ] ) ) {
 			return;
+		}
 
 		$providers = get_option( 'wpforms_providers' );
 		$results   = array();
 
 		// Fire for each connection ------------------------------------------//
 
-		foreach ( $form_data['providers'][$this->slug] as $connection ) :
+		foreach ( $form_data['providers'][ $this->slug ] as $connection ) :
 
 			// Before proceeding make sure required fields are configured
 			if ( empty( $connection['fields']['email'] ) ) {
@@ -93,7 +99,7 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 			$account_id = $connection['account_id'];
 			$email_data = explode( '.', $connection['fields']['email'] );
 			$email_id   = $email_data[0];
-			$email      = $fields[$email_id]['value'];
+			$email      = $fields[ $email_id ]['value'];
 			$data       = array();
 
 			$this->api_connect( $account_id );
@@ -105,7 +111,7 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 
 			// Check for conditionals
 			$pass = $this->process_conditionals( $fields, $entry, $form_data, $connection );
-			if ( !$pass ) {
+			if ( ! $pass ) {
 				wpforms_log(
 					__( 'Constant Contact Subscription stopped by conditional logic', 'wpforms' ),
 					$fields,
@@ -119,7 +125,7 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 			}
 
 			// Check to see if the lead already exists in Constant Contact.
-			$response = wp_remote_get( 'https://api.constantcontact.com/v2/contacts?api_key=' . $this->api_key . '&access_token=' . $this->access_token . '&email=' . $email, array( 'sslverify' => false ) );
+			$response = wp_remote_get( 'https://api.constantcontact.com/v2/contacts?api_key=' . $this->api_key . '&access_token=' . $this->access_token . '&email=' . $email );
 			$contact  = json_decode( wp_remote_retrieve_body( $response ), true );
 
 			// Return early if there was a problem.
@@ -139,7 +145,7 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 			// Setup Merge Vars ---------------------------------------------//
 			$merge_vars = array();
 
-			foreach( $connection['fields'] as $name => $merge_var ) {
+			foreach ( $connection['fields'] as $name => $merge_var ) {
 
 				// Don't include Email or Full name fields
 				if ( 'email' == $name ) {
@@ -153,15 +159,15 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 
 				$merge_var = explode( '.', $merge_var );
 				$id        = $merge_var[0];
-				$key       = !empty( $merge_var[1] ) ? $merge_var[1] : 'value';
-				$type      = !empty( $merge_var[2] ) ? $merge_var[2] : 'text';
+				$key       = ! empty( $merge_var[1] ) ? $merge_var[1] : 'value';
+				$type      = ! empty( $merge_var[2] ) ? $merge_var[2] : 'text';
 
 				// Check if mapped form field has a value
-				if ( empty( $fields[$id][$key] ) ) {
+				if ( empty( $fields[ $id ][ $key ] ) ) {
 					continue;
 				}
 
-				$value = $fields[$id][$key];
+				$value = $fields[ $id ][ $key ];
 
 				// Constant Contact doesn't native URL field so it has to be
 				// stored in a custom field.
@@ -179,10 +185,10 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 				// separate it.
 				if ( 'full_name' == $name ) {
 					$names = explode( ' ', $value );
-					if ( !empty( $names[0] ) ) {
+					if ( ! empty( $names[0] ) ) {
 						$merge_vars['first_name'] = $names[0];
 					}
-					if ( !empty( $names[1] ) ) {
+					if ( ! empty( $names[1] ) ) {
 						$merge_vars['last_name'] = $names[1];
 					}
 					continue;
@@ -193,34 +199,34 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 				if ( 'address' == $name ) {
 
 					// Only support Address fields
-					if ( 'address' != $fields[$id]['type'] ) {
+					if ( 'address' != $fields[ $id ]['type'] ) {
 						continue;
 					}
 
 					// Postal code may be in extended US format
 					$postal = array( 'code' => '', 'subcode' => '' );
-					if ( !empty( $fields[$id]['postal'] ) ) {
-						$p                 = explode( '-', $fields[$id]['postal'] );
-						$postal['code']    = !empty( $p[0] ) ? $p[0] : '';
-						$postal['subcode'] = !empty( $p[1] ) ? $p[1] : '';
+					if ( ! empty( $fields[ $id ]['postal'] ) ) {
+						$p                 = explode( '-', $fields[ $id ]['postal'] );
+						$postal['code']    = ! empty( $p[0] ) ? $p[0] : '';
+						$postal['subcode'] = ! empty( $p[1] ) ? $p[1] : '';
 					}
 
 					$merge_vars['addresses'] = array(
 						array(
 							'address_type'    => 'BUSINESS',
-							'city'            => !empty( $fields[$id]['city'] ) ? $fields[$id]['city'] : '',
-							'country_code'    => !empty( $fields[$id]['country'] ) ? $fields[$id]['country'] : '',
-							'line1'           => !empty( $fields[$id]['address1'] ) ? $fields[$id]['address1'] : '',
-							'line2'           => !empty( $fields[$id]['address2'] ) ? $fields[$id]['address2'] : '',
+							'city'            => ! empty( $fields[ $id ]['city'] ) ? $fields[ $id ]['city'] : '',
+							'country_code'    => ! empty( $fields[ $id ]['country'] ) ? $fields[ $id ]['country'] : '',
+							'line1'           => ! empty( $fields[ $id ]['address1'] ) ? $fields[ $id ]['address1'] : '',
+							'line2'           => ! empty( $fields[ $id ]['address2'] ) ? $fields[ $id ]['address2'] : '',
 							'postal_code'     => $postal['code'],
-							'state'           => !empty( $fields[$id]['state'] ) ? $fields[$id]['state'] : '',
+							'state'           => ! empty( $fields[ $id ]['state'] ) ? $fields[ $id ]['state'] : '',
 							'sub_postal_code' => $postal['subcode'],
 						),
 					);
 					continue;
 				}
 
-				$merge_vars[$name] = $value;
+				$merge_vars[ $name ] = $value;
 			}
 
 			// Process in API ------------------------------------------------//
@@ -237,7 +243,7 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 
 						// If they are already assigned to this list, return early.
 						if ( isset( $list['id'] ) && $list_id == $list['id'] ) {
-							return true;
+							return;
 						}
 					}
 
@@ -263,7 +269,6 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 				$args = array(
 					'body'      => json_encode( $data ),
 					'method'    => 'PUT',
-					'sslverify' => false,
 					'headers'   => array(
 						'Content-Type' => 'application/json',
 					),
@@ -285,7 +290,6 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 				// Args to use
 				$args = array(
 					'body'      => json_encode( $data ),
-					'sslverify' => false,
 					'headers'   => array(
 						'Content-Type' => 'application/json',
 					),
@@ -311,28 +315,31 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 		endforeach;
 	}
 
-	//************************************************************************//
+	// ************************************************************************//
 	//
-	//	API methods - these methods interact directly with the provider API.
+	// API methods - these methods interact directly with the provider API.
 	//
-	//************************************************************************//
+	// ************************************************************************//
 
 	/**
 	 * Authenticate with the API.
 	 *
 	 * @since 1.3.6
+	 *
 	 * @param array $data
 	 * @param string $form_id
+	 *
 	 * @return mixed id or error object
 	 */
 	public function api_auth( $data = array(), $form_id = '' ) {
 
 		$id        = uniqid();
 		$providers = get_option( 'wpforms_providers', array() );
-		$providers[$this->slug][$id] = array(
-			'access_token'        => sanitize_text_field( $data['authcode'] ),
-			'label'               => sanitize_text_field( $data['label'] ),
-			'date'                => time(),
+
+		$providers[ $this->slug ][ $id ] = array(
+			'access_token' => sanitize_text_field( $data['authcode'] ),
+			'label'        => sanitize_text_field( $data['label'] ),
+			'date'         => time(),
 		);
 		update_option( 'wpforms_providers', $providers );
 
@@ -342,19 +349,21 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 	/**
 	 * Establish connection object to API.
 	 *
-	 * @since 1.3.6 [<description>]
+	 * @since 1.3.6
+	 *
 	 * @param string $account_id
-	 * @return mixed array or error object
+	 *
+	 * @return mixed array or error object.
 	 */
 	public function api_connect( $account_id ) {
 
-		if ( !empty( $this->api[$account_id] ) ) {
-			return $this->api[$account_id];
+		if ( ! empty( $this->api[ $account_id ] ) ) {
+			return $this->api[ $account_id ];
 		} else {
 			$providers = get_option( 'wpforms_providers' );
-			if ( !empty( $providers[$this->slug][$account_id] ) ) {
-				$this->api[$account_id] = true;
-				$this->access_token     = $providers[$this->slug][$account_id]['access_token'];
+			if ( ! empty( $providers[ $this->slug ][ $account_id ] ) ) {
+				$this->api[ $account_id ] = true;
+				$this->access_token       = $providers[ $this->slug ][ $account_id ]['access_token'];
 			} else {
 				return $this->error( 'API error' );
 			}
@@ -365,26 +374,28 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 	 * Retrieve provider account lists.
 	 *
 	 * @since 1.3.6
+	 *
 	 * @param string $connection_id
 	 * @param string $account_id
+	 *
 	 * @return mixed array or error object
 	 */
 	public function api_lists( $connection_id = '', $account_id = '' ) {
 
 		$this->api_connect( $account_id );
 
-		$request = wp_remote_get( 'https://api.constantcontact.com/v2/lists?api_key=' . $this->api_key . '&access_token=' . $this->access_token, array( 'sslverify' => false ) );
+		$request = wp_remote_get( 'https://api.constantcontact.com/v2/lists?api_key=' . $this->api_key . '&access_token=' . $this->access_token );
 		$lists   = json_decode( wp_remote_retrieve_body( $request ), true );
-		$return  = array();
 
 		if ( empty( $lists ) ) {
 			wpforms_log(
-				__( 'Constant Contact API error', 'wpforms' ),
+				__( 'Constant Contact API Error', 'wpforms' ),
 				'',
 				array(
 					'type' => array( 'provider', 'error' ),
 				)
 			);
+
 			return $this->error( 'API list error: Constant API error' );
 		}
 
@@ -395,8 +406,11 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 	 * Retrieve provider account list fields.
 	 *
 	 * @since 1.3.6
+	 *
 	 * @param string $connection_id
 	 * @param string $account_id
+	 * @param string $list_id
+	 *
 	 * @return mixed array or error object
 	 */
 	public function api_fields( $connection_id = '', $account_id = '', $list_id = '' ) {
@@ -454,11 +468,11 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 	}
 
 
-	//************************************************************************//
+	// ************************************************************************//
 	//
-	//	Output methods - these methods generally return HTML for the builder.
+	// Output methods - these methods generally return HTML for the builder.
 	//
-	//************************************************************************//
+	// ************************************************************************//
 
 	/**
 	 * Provider account authorize fields HTML.
@@ -469,32 +483,32 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 	public function output_auth() {
 
 		$providers = get_option( 'wpforms_providers' );
-		$class     = !empty( $providers[$this->slug] ) ? 'hidden' : '';
+		$class     = ! empty( $providers[ $this->slug ] ) ? 'hidden' : '';
 
 		$output = '<div class="wpforms-provider-account-add ' . $class . ' wpforms-connection-block">';
 
-			$output .= sprintf( '<h4>%s</h4>', __( 'Add New Account', 'wpforms' ) );
+		$output .= sprintf( '<h4>%s</h4>', __( 'Add New Account', 'wpforms' ) );
 
-			$output .= '<p>';
-				$output .= __( 'Please fill out all of the fields below to register your new Constant Contact account.' , 'wpforms' );
-				$output .= '<br><a href="https://wpforms.com/docs/how-to-connect-constant-contact-with-wpforms/" target="_blank" rel="noopener noreferrer">';
-					$output .= __( 'Click here for documentation on connecting WPForms with Constant Contact.', 'wpforms' );
-				$output .= '</a>';
-			$output .= '</p>';
+		$output .= '<p>';
+		$output .= __( 'Please fill out all of the fields below to register your new Constant Contact account.', 'wpforms' );
+		$output .= '<br><a href="https://wpforms.com/docs/how-to-connect-constant-contact-with-wpforms/" target="_blank" rel="noopener noreferrer">';
+		$output .= __( 'Click here for documentation on connecting WPForms with Constant Contact.', 'wpforms' );
+		$output .= '</a>';
+		$output .= '</p>';
 
-			$output .= '<p class="wpforms-alert wpforms-alert-warning">';
-				$output .= __( 'Because Constant Contact requires external authentication, you will need to register WPForms with Constant Contact before you can proceed.', 'wpforms' );
-			$output .= '</p>';
+		$output .= '<p class="wpforms-alert wpforms-alert-warning">';
+		$output .= __( 'Because Constant Contact requires external authentication, you will need to register WPForms with Constant Contact before you can proceed.', 'wpforms' );
+		$output .= '</p>';
 
-			$output .= '<p class=""><strong><a onclick="window.open(this.href,\'\',\'resizable=yes,location=no,width=750,height=500,status\'); return false" href="https://oauth2.constantcontact.com/oauth2/oauth/siteowner/authorize?response_type=code&client_id=c58xq3r27udz59h9rrq7qnvf&redirect_uri=https://wpforms.com/oauth/constant-contact/" class="btn">';
-				$output .= __( 'Click here to register with Constant Contact', 'wpforms' );
-			$output .= '</a></strong></p>';
+		$output .= '<p class=""><strong><a onclick="window.open(this.href,\'\',\'resizable=yes,location=no,width=750,height=500,status\'); return false" href="https://oauth2.constantcontact.com/oauth2/oauth/siteowner/authorize?response_type=code&client_id=c58xq3r27udz59h9rrq7qnvf&redirect_uri=https://wpforms.com/oauth/constant-contact/" class="btn">';
+		$output .= __( 'Click here to register with Constant Contact', 'wpforms' );
+		$output .= '</a></strong></p>';
 
-			$output .= sprintf( '<input type="text" data-name="authcode" placeholder="%s %s" class="wpforms-required">', $this->name, __( 'Authorization Code', 'wpforms' ) );
+		$output .= sprintf( '<input type="text" data-name="authcode" placeholder="%s %s" class="wpforms-required">', $this->name, __( 'Authorization Code', 'wpforms' ) );
 
-			$output .= sprintf( '<input type="text" data-name="label" placeholder="%s %s" class="wpforms-required">', $this->name, __( 'Account Nickname', 'wpforms' ) );
+		$output .= sprintf( '<input type="text" data-name="label" placeholder="%s %s" class="wpforms-required">', $this->name, __( 'Account Nickname', 'wpforms' ) );
 
-			$output .= sprintf( '<button data-provider="%s">%s</button>', $this->slug, __( 'Connect', 'wpforms' ) );
+		$output .= sprintf( '<button data-provider="%s">%s</button>', $this->slug, __( 'Connect', 'wpforms' ) );
 
 		$output .= '</div>';
 
@@ -505,8 +519,10 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 	 * Provider account list groups HTML.
 	 *
 	 * @since 1.3.6
+	 *
 	 * @param string $connection_id
 	 * @param array $connection
+	 *
 	 * @return string
 	 */
 	public function output_groups( $connection_id = '', $connection = array() ) {
@@ -524,25 +540,26 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 		// Only display if Constant Contact account has not been setup
 		$providers = get_option( 'wpforms_providers', array() );
 
-		if ( !empty( $providers[$this->slug] ) ) {
+		if ( ! empty( $providers[ $this->slug ] ) ) {
 			return;
 		}
 		?>
 		<div class="wpforms-alert wpforms-alert-info">
 			<p><?php _e( 'Get the most out of <strong>WPForms</strong> &mdash; use it with an active Constant Contact account.', 'wpforms' ); ?></p>
 			<p>
-				<a href="<?php echo $this->sign_up; ?>" style="margin-right: 10px;" class="button-primary" target="_blank" rel="noopener noreferrer"><?php _e( 'Try Constant Contact for Free', 'wpforms' ); ?></a>
+				<a href="<?php echo $this->sign_up; ?>" style="margin-right: 10px;" class="button-primary" target="_blank"
+				   rel="noopener noreferrer"><?php _e( 'Try Constant Contact for Free', 'wpforms' ); ?></a>
 				<?php printf( __( 'Learn More about the <a href="%s" target="_blank" rel="noopener noreferrer">power of email marketing</a>', 'wpforms' ), admin_url( 'admin.php?page=wpforms-page&wpforms-page=constant-contact' ) ); ?>
 			</p>
 		</div>
 		<?php
 	}
 
-	//************************************************************************//
+	// ************************************************************************//
 	//
-	//	Integrations tab methods - these methods relate to the settings page.
+	// Integrations tab methods - these methods relate to the settings page.
 	//
-	//************************************************************************//
+	// ************************************************************************//
 
 	/**
 	 * Form fields to add a new provider account.
@@ -552,17 +569,17 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 	public function integrations_tab_new_form() {
 
 		$output = '<p>';
-			$output .= '<a href="https://wpforms.com/docs/how-to-connect-constant-contact-with-wpforms/" target="_blank" rel="noopener noreferrer">';
-				$output .= __( 'Click here for documentation on connecting WPForms with Constant Contact.', 'wpforms' );
-			$output .= '</a>';
+		$output .= '<a href="https://wpforms.com/docs/how-to-connect-constant-contact-with-wpforms/" target="_blank" rel="noopener noreferrer">';
+		$output .= __( 'Click here for documentation on connecting WPForms with Constant Contact.', 'wpforms' );
+		$output .= '</a>';
 		$output .= '</p>';
 
 		$output .= '<p class="wpforms-alert wpforms-alert-warning">';
-			$output .= __( 'Because Constant Contact requires external authentication, you will need to register WPForms with Constant Contact before you can proceed.', 'wpforms' );
+		$output .= __( 'Because Constant Contact requires external authentication, you will need to register WPForms with Constant Contact before you can proceed.', 'wpforms' );
 		$output .= '</p>';
 
 		$output .= '<p class=""><strong><a onclick="window.open(this.href,\'\',\'resizable=yes,location=no,width=800,height=600,status\'); return false" href="https://oauth2.constantcontact.com/oauth2/oauth/siteowner/authorize?response_type=code&client_id=c58xq3r27udz59h9rrq7qnvf&redirect_uri=https://wpforms.com/oauth/constant-contact/" class="btn">';
-			$output .= __( 'Click here to register with Constant Contact', 'wpforms' );
+		$output .= __( 'Click here to register with Constant Contact', 'wpforms' );
 		$output .= '</a></strong></p>';
 
 		$output .= sprintf( '<input type="text" name="authcode" placeholder="%s %s" class="wpforms-required">', $this->name, __( 'Authorization Code', 'wpforms' ) );
@@ -572,11 +589,11 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 		echo $output;
 	}
 
-	//************************************************************************//
+	// ************************************************************************//
 	//
-	//	Other functionality.
+	// Other functionality.
 	//
-	//************************************************************************//
+	// ************************************************************************//
 
 	/**
 	 * Add admin notices to connect to Constant Contact.
@@ -591,12 +608,12 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 		}
 
 		// Don't display on WPForms admin content pages
-		if ( !empty( $_GET['wpforms-page'] ) ) {
+		if ( ! empty( $_GET['wpforms-page'] ) ) {
 			return;
 		}
 
 		// Don't display if user is about to connect via Settings page
-		if ( !empty( $_GET['wpforms-integration'] ) && $this->slug == $_GET['wpforms-integration'] ) {
+		if ( ! empty( $_GET['wpforms-integration'] ) && $this->slug == $_GET['wpforms-integration'] ) {
 			return;
 		}
 
@@ -605,18 +622,19 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 		$cc_notice = get_option( 'wpforms_constant_contact', false );
 		$providers = get_option( 'wpforms_providers', array() );
 
-		if ( ! $cc_notice  || !empty( $providers[$this->slug] )  ) {
+		if ( ! $cc_notice || ! empty( $providers[ $this->slug ] ) ) {
 			return;
 		}
 
 		// Output the notice message.
 		$connect    = admin_url( 'admin.php?page=wpforms-settings&wpforms-integration=constant-contact#!wpforms-tab-providers' );
-		$learn_more = admin_url( 'admin.php?page=wpforms-page&wpforms-page=constant-contact ');
+		$learn_more = admin_url( 'admin.php?page=wpforms-page&wpforms-page=constant-contact ' );
 		?>
 		<div class="notice notice-info is-dismissible wpforms-constant-contact-notice">
 			<p><?php _e( 'Get the most out of the <strong>WPForms</strong> plugin &mdash; use it with an active Constant Contact account.', 'wpforms' ); ?></p>
 			<p>
-				<a href="<?php echo $this->sign_up; ?>" class="button-primary" target="_blank" rel="noopener noreferrer"><?php _e( 'Try Constant Contact for Free', 'wpforms' ); ?></a>
+				<a href="<?php echo $this->sign_up; ?>" class="button-primary" target="_blank"
+				   rel="noopener noreferrer"><?php _e( 'Try Constant Contact for Free', 'wpforms' ); ?></a>
 				<a href="<?php echo $connect; ?>" class="button-secondary"><?php _e( 'Connect your existing account', 'wpforms' ); ?></a>
 				<?php printf( __( 'Learn More about the <a href="%s">power of email marketing</a>', 'wpforms' ), $learn_more ); ?>
 			</p>
@@ -625,12 +643,15 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 			.wpforms-constant-contact-notice {
 				border-left-color: #1a5285;
 			}
+
 			.wpforms-constant-contact-notice p:first-of-type {
 				margin: 16px 0 8px;
 			}
+
 			.wpforms-constant-contact-notice p:last-of-type {
 				margin: 8px 0 16px;
 			}
+
 			.wpforms-constant-contact-notice .button-primary,
 			.wpforms-constant-contact-notice .button-secondary {
 				display: inline-block;
@@ -638,10 +659,10 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 			}
 		</style>
 		<script type="text/javascript">
-			jQuery(function($){
-				$(document).on('click', '.wpforms-constant-contact-notice button', function( event ) {
+			jQuery(function ($) {
+				$(document).on('click', '.wpforms-constant-contact-notice button', function (event) {
 					event.preventDefault();
-					$.post( ajaxurl, { action: 'wpforms_constant_contact_dismiss' } );
+					$.post(ajaxurl, {action: 'wpforms_constant_contact_dismiss'});
 					$('.wpforms-constant-contact-notice').remove();
 				});
 			});
@@ -677,15 +698,16 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 			<p><?php _e( 'Wondering if email marketing is really worth your time?', 'wpforms' ); ?></p>
 			<p><?php _e( 'Email is hands-down the most effective way to nurture leads and turn them into customers, with a return on investment (ROI) of <strong>$44 back for every $1 spent</strong> according to Direct Marketing Association.', 'wpforms' ); ?></p>
 			<p><?php _e( 'Here are 3 big reasons why every smart business in the world has an email list:', 'wpforms' ); ?></p>
-			<a href="<?php echo $this->sign_up; ?>" target="_blank" rel="noopener noreferrer"><img src="<?php echo WPFORMS_PLUGIN_URL; ?>assets/images/cc-about-logo.png" class="logo"></a>
+			<a href="<?php echo $this->sign_up; ?>" target="_blank" rel="noopener noreferrer"><img
+						src="<?php echo WPFORMS_PLUGIN_URL; ?>assets/images/cc-about-logo.png" class="logo"></a>
 			<ol class="reasons">
 				<li><?php _e( '<strong>Email is still #1</strong> - At least 91% of consumers check their email on a daily basis. You get direct access to your subscribers, without having to play by social media&#39;s rules and algorithms.', 'wpforms' ); ?></li>
 				<li><?php _e( '<strong>You own your email list</strong> - Unlike with social media, your list is your property and no one can revoke your access to it.', 'wpforms' ); ?></li>
 				<li><?php _e( '<strong>Email converts</strong> - People who buy products marketed through email spend 138% more than those who don&#39;t receive email offers.', 'wpforms' ); ?></li>
 			</ol>
 			<p><?php _e( 'That&#39;s why it&#39;s crucial to start collecting email addresses and building your list as soon as possible.', 'wpforms' ); ?></p>
-			<p><?php printf( __( 'For more details, see this guide on <a href="%s" target="_blank" rel="noopener noreferrer">why building your email list is so important.', 'wpforms' ), $more ); ?></a></p>
-			<hr />
+			<p><?php printf( __( 'For more details, see this guide on <a href="%s" target="_blank" rel="noopener noreferrer">why building your email list is so important</a>.', 'wpforms' ), $more ); ?></p>
+			<hr/>
 			<h2><?php _e( 'You&#39;ve Already Started - Here&#39;s the Next Step (It&#39;s Easy)', 'wpforms' ); ?></h2>
 			<p><?php _e( 'Here are the 3 things you need to build an email list:', 'wpforms' ); ?></p>
 			<ol>
@@ -694,7 +716,8 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 				<li><strong><?php _e( 'The Best Email Marketing Service', 'wpforms' ); ?></strong></li>
 			</ol>
 			<p><?php _e( 'With a powerful email marketing service like Constant Contact, you can instantly send out mass notifications and beautifully designed newsletters to engage your subscribers.', 'wpforms' ); ?></p>
-			<p><a href="<?php echo $this->sign_up; ?>" class="button" target="_blank" rel="noopener noreferrer"><?php _e( 'Get Started with Constant Contact for Free', 'wpforms' ); ?></a></p>
+			<p><a href="<?php echo $this->sign_up; ?>" class="button" target="_blank"
+			      rel="noopener noreferrer"><?php _e( 'Get Started with Constant Contact for Free', 'wpforms' ); ?></a></p>
 			<p><?php _e( 'WPForms plugin makes it fast and easy to capture all kinds of visitor information right from your WordPress site - even if you don&#39;t have a Constant Contact account.', 'wpforms' ); ?></p>
 			<p><?php _e( 'But when you combine WPForms with Constant Contact, you can nurture your contacts and engage with them even after they leave your website. When you use Constant Contact + WPForms together, you can:', 'wpforms' ); ?></p>
 			<ul>
@@ -702,8 +725,9 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 				<li><?php _e( 'Create and send professional email newsletters', 'wpforms' ); ?></li>
 				<li><?php _e( 'Get expert marketing and support', 'wpforms' ); ?></li>
 			</ul>
-			<p><a href="<?php echo $this->sign_up; ?>" target="_blank" rel="noopener noreferrer"><strong><?php _e( 'Try Constant Contact Today', 'wpforms' ); ?></strong></a></p>
-			<hr />
+			<p><a href="<?php echo $this->sign_up; ?>" target="_blank"
+			      rel="noopener noreferrer"><strong><?php _e( 'Try Constant Contact Today', 'wpforms' ); ?></strong></a></p>
+			<hr/>
 			<h2><?php _e( 'WPForms Makes List Building Easy', 'wpforms' ); ?></h2>
 			<p><?php _e( 'When creating WPForms, our goal was to make a WordPress forms plugin that&#39;s both EASY and POWERFUL.', 'wpforms' ); ?></p>
 			<p><?php _e( 'We made the form creation process extremely intuitive, so you can create a form to start capturing emails within 5 minutes or less.', 'wpforms' ); ?></p>
@@ -733,27 +757,32 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 			.notice {
 				display: none;
 			}
-			.about-wrap{
+
+			.about-wrap {
 				padding: 15px;
 				max-width: 970px;
 			}
+
 			.about-wrap h1 {
 				color: #1a5285;
 				font-size: 30px;
 				margin: 0 0 15px 0;
 			}
+
 			.about-wrap h2 {
 				color: #1a5285;
 				font-size: 26px;
 				margin: 0 0 15px 0;
 				text-align: left;
 			}
+
 			.about-wrap p {
 				font-size: 16px;
 				font-weight: 300;
 				color: #333;
 				margin: 1.2em 0;
 			}
+
 			.about-wrap ul,
 			.about-wrap ol {
 				margin: 1.6em 2.5em 2em;
@@ -761,48 +790,60 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 				font-size: 16px;
 				font-weight: 300;
 			}
+
 			.about-wrap ul {
 				list-style: disc;
 			}
+
 			.about-wrap li {
 				margin-bottom: 0.8em;
 			}
+
 			.about-wrap hr {
 				margin: 2.2em 0;
 			}
+
 			.about-wrap .logo {
 				float: right;
 				margin-top: 0.8em;
 			}
+
 			.about-wrap .reasons {
-				margin: 2.2em 0 2.2em 2em;
-				margin-right: 400px;
+				margin: 2.2em 400px 2.2em 2em;
 			}
+
 			.about-wrap .reasons li {
 				margin-bottom: 1.4em;
 			}
+
 			.about-wrap .steps {
 				clear: both;
 				overflow: hidden;
 			}
+
 			.about-wrap .step {
 				width: 46%;
 				float: left;
 			}
+
 			.about-wrap .step {
 				margin-bottom: 1.4em;
 			}
+
 			.about-wrap .step2,
 			.about-wrap .step4 {
 				float: right;
 			}
+
 			.about-wrap .step3 {
 				clear: both;
 			}
+
 			.about-wrap .dashicons-yes {
 				color: #19BE19;
 				font-size: 26px;
 			}
+
 			.about-wrap .button {
 				background-color: #0078C3;
 				border: 1px solid #005990;
@@ -816,31 +857,39 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 				padding: 14px 30px;
 				text-align: center;
 			}
+
 			.about-wrap .button:hover,
 			.about-wrap .button:focus {
 				background-color: #005990;
 				color: #fff
 			}
+
 			@media only screen and (max-width: 767px) {
 				.about-wrap {
 					padding: 0;
 				}
+
 				.about-wrap h1 {
 					font-size: 26px;
 				}
+
 				.about-wrap h2 {
 					font-size: 22px;
 				}
+
 				.about-wrap p {
 					font-size: 14px;
 				}
+
 				.about-wrap ul,
 				.about-wrap ol {
 					font-size: 14px;
 				}
+
 				.about-wrap .logo {
 					width: 120px;
 				}
+
 				.about-wrap .reasons {
 					margin-right: 150px;
 				}
@@ -849,4 +898,5 @@ class WPForms_Constant_Contact extends WPForms_Provider {
 		<?php
 	}
 }
+
 new WPForms_Constant_Contact;

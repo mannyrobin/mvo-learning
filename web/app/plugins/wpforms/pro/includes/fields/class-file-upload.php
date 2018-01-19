@@ -7,7 +7,7 @@
  * @since      1.0.0
  * @license    GPL-2.0+
  * @copyright  Copyright (c) 2016, WPForms LLC
-*/
+ */
 class WPForms_Field_File_Upload extends WPForms_Field {
 
 	/**
@@ -16,7 +16,7 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 	 * @since 1.0.0
 	 * @var array
 	 */
-	private $blacklist;
+	private $blacklist = array( 'ade', 'adp', 'app', 'asp', 'bas', 'bat', 'cer', 'cgi', 'chm', 'cmd', 'com', 'cpl', 'crt', 'csh', 'csr', 'dll', 'drv', 'exe', 'fxp', 'flv', 'hlp', 'hta', 'htaccess', 'htm', 'htpasswd', 'inf', 'ins', 'isp', 'jar', 'js', 'jse', 'jsp', 'ksh', 'lnk', 'mdb', 'mde', 'mdt', 'mdw', 'msc', 'msi', 'msp', 'mst', 'ops', 'pcd', 'php', 'pif', 'pl', 'prg', 'ps1', 'ps2', 'py', 'rb', 'reg', 'scr', 'sct', 'sh', 'shb', 'shs', 'sys', 'swf', 'tmp', 'torrent', 'url', 'vb', 'vbe', 'vbs', 'vbscript', 'wsc', 'wsf', 'wsf', 'wsh' );
 
 	/**
 	 * Primary class constructor.
@@ -32,83 +32,91 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 		$this->order = 15;
 		$this->group = 'fancy';
 
-		// Setup files we will not allow
-		$this->blacklist = array(
-			'ade',
-			'adp',
-			'app',
-			'asp',
-			'bas',
-			'bat',
-			'cer',
-			'cgi',
-			'chm',
-			'cmd',
-			'com',
-			'cpl',
-			'crt',
-			'csh',
-			'csr',
-			'dll',
-			'drv',
-			'exe',
-			'fxp',
-			'flv',
-			'hlp',
-			'hta',
-			'htaccess',
-			'htm',
-			'htpasswd',
-			'inf',
-			'ins',
-			'isp',
-			'jar',
-			'js',
-			'jse',
-			'jsp',
-			'ksh',
-			'lnk',
-			'mdb',
-			'mde',
-			'mdt',
-			'mdw',
-			'msc',
-			'msi',
-			'msp',
-			'mst',
-			'ops',
-			'pcd',
-			'php',
-			'pif',
-			'pl',
-			'prg',
-			'ps1',
-			'ps2',
-			'py',
-			'rb',
-			'reg',
-			'scr',
-			'sct',
-			'sh',
-			'shb',
-			'shs',
-			'sys',
-			'swf',
-			'tmp',
-			'torrent',
-			'url',
-			'vb',
-			'vbe',
-			'vbs',
-			'vbscript',
-			'wsc',
-			'wsf',
-			'wsf',
-			'wsh',
-		);
+		// Define additional field properties.
+		add_filter( 'wpforms_field_properties_file-upload' , array( $this, 'field_properties' ), 5, 3 );
 
-		// Customize value format for HTML emails
+		// Customize value format for HTML emails.
 		add_filter( 'wpforms_html_field_value', array( $this, 'html_email_value' ), 10, 4 );
+
+		// Maybe format/upload file depending on the conditional visiblity state.
+		add_action( 'wpforms_process_format_after', array( $this, 'format_conditional' ), 6, 1 );
+	}
+
+	/**
+	 * Define additional field properties.
+	 *
+	 * @since 1.3.7
+	 * @param array $properties
+	 * @param array $field
+	 * @param array $form_data
+	 * @return array
+	 */
+	public function field_properties( $properties, $field, $form_data ) {
+
+		$form_id  = absint( $form_data['id'] );
+		$field_id = absint( $field['id'] );
+
+		// Input Primary: adjust name.
+		$properties['inputs']['primary']['attr']['name'] = "wpforms_{$form_id}_{$field_id}";
+
+		// Input Primary: allowed file extensions.
+		if ( ! empty( $field['extensions'] ) ) {
+
+			// User provided specific extensions.
+			$extensions = explode( ',', strtolower( preg_replace( '/[^A-Za-z0-9,]/', '', $field['extensions'] ) ) );
+
+		} else {
+
+			// No extensions specified, use WordPress defaults.
+			$extensions = array();
+			$allowed    = get_allowed_mime_types();
+
+			foreach ( $allowed as $wordpress_extensions => $mime ) {
+				$exts = explode( '|', $wordpress_extensions );
+				foreach ( $exts as $ext ) {
+					$valid = true;
+					foreach ( $this->blacklist as $nope ) {
+						if ( strpos( $ext, $nope ) !== false ) {
+							$valid = false;
+							break;
+						}
+					}
+					if ( $valid ) {
+						$extensions[] = strtolower( preg_replace( '/[^A-Za-z0-9 ]/', '', $ext ) );
+					}
+				}
+			}
+		}
+		$properties['inputs']['primary']['data']['rule-extension'] = implode( ',', $extensions );
+
+		// Input Primary: max file size
+		$properties['inputs']['primary']['data']['rule-maxsize'] = $this->max_file_size( $field );
+
+		return $properties;
+	}
+
+	/**
+	 * Customize format for HTML email notifications.
+	 *
+	 * @since 1.1.3
+	 * @param string $val
+	 * @param array $field
+	 * @param array $form_data
+	 * @param string $context
+	 * @return string
+	 */
+	public function html_email_value( $val, $field, $form_data = '', $context = '' ) {
+
+		if ( ! empty( $field['value'] ) && 'file-upload' === $field['type'] ) {
+
+			return sprintf(
+				'<a href="%s" rel="noopener" target="_blank">%s</a>',
+				esc_url( $field['value'] ),
+				sanitize_text_field( $field['file_original'] )
+			);
+		}
+
+		return $val;
 	}
 
 	/**
@@ -119,21 +127,24 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 	 */
 	public function field_options( $field ) {
 
-		//--------------------------------------------------------------------//
-		// Basic field options
-		//--------------------------------------------------------------------//
+		// -------------------------------------------------------------------//
+		// Basic field options.
+		// -------------------------------------------------------------------//
 
-		// Options open markup
-		$this->field_option( 'basic-options', $field, array( 'markup' => 'open' ) );
+		// Options open markup.
+		$args = array(
+			'markup' => 'open',
+		);
+		$this->field_option( 'basic-options', $field, $args );
 
-		// Label
+		// Label.
 		$this->field_option( 'label', $field );
 
-		// Description
+		// Description.
 		$this->field_option( 'description', $field );
 
-		// Allowed extensions
-		$ext_label = $this->field_element(
+		// Allowed extensions.
+		$lbl = $this->field_element(
 			'label',
 			$field,
 			array(
@@ -143,74 +154,95 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 			),
 			false
 		);
-		$ext_field = $this->field_element(
+		$fld = $this->field_element(
 			'text',
 			$field,
 			array(
 				'slug'  => 'extensions',
-				'value' => !empty( $field['extensions'] ) ? $field['extensions'] : '',
+				'value' => ! empty( $field['extensions'] ) ? $field['extensions'] : '',
 			),
 			false
 		);
-		$this->field_element( 'row', $field, array( 'slug' => 'extensions', 'content' => $ext_label . $ext_field ) );
+		$args = array(
+			'slug'    => 'extensions',
+			'content' => $lbl . $fld,
+		);
+		$this->field_element( 'row', $field, $args );
 
-		// Max filesize
-		$ms_label  = $this->field_element(
+		// Max filesize.
+		$lbl  = $this->field_element(
 			'label',
 			$field,
 			array(
 				'slug'    => 'max_size',
 				'value'   => __( 'Max File Size', 'wpforms' ),
-				'tooltip' => __( 'Enter the max file size, in megabytyes, to allow. If left blank, the value defaults to the maximum size the server allows which is ', 'wpforms' ) . wpforms_max_upload(),
+				'tooltip' => sprintf( __( 'Enter the max file size, in megabytes, to allow. If left blank, the value defaults to the maximum size the server allows which is %s.', 'wpforms' ), wpforms_max_upload() ),
 			),
 			false
 		);
-		$ms_field = $this->field_element(
+		$fld = $this->field_element(
 			'text',
 			$field,
 			array(
 				'slug'  => 'max_size',
-				'value' => !empty( $field['max_size'] ) ? $field['max_size'] : '',
+				'value' => ! empty( $field['max_size'] ) ? $field['max_size'] : '',
 			),
 			false
 		);
-		$this->field_element( 'row', $field, array( 'slug' => 'max_size', 'content' => $ms_label . $ms_field ) );
+		$args = array(
+			'slug'    => 'max_size',
+			'content' => $lbl . $fld,
+		);
+		$this->field_element( 'row', $field, $args );
 
-		// Required toggle
+		// Required toggle.
 		$this->field_option( 'required', $field );
 
-		// Options close markup
-		$this->field_option( 'basic-options', $field, array( 'markup' => 'close' ) );
+		// Options close markup.
+		$args = array(
+			'markup' => 'close',
+		);
+		$this->field_option( 'basic-options', $field, $args );
 
-		//--------------------------------------------------------------------//
-		// Advanced field options
-		//--------------------------------------------------------------------//
+		// -------------------------------------------------------------------//
+		// Advanced field options.
+		// -------------------------------------------------------------------//
 
-		// Options open markup
-		$this->field_option( 'advanced-options', $field, array( 'markup' => 'open' ) );
+		// Options open markup.
+		$args = array(
+			'markup' => 'open',
+		);
+		$this->field_option( 'advanced-options', $field, $args );
 
-		// Hide Label
+		// Hide Label.
 		$this->field_option( 'label_hide', $field );
 
-		// Custom CSS classes
-		$this->field_option( 'css', $field );
-
-		// Use Media Libary toggle
-		$output  = $this->field_element(
+		// Media Libary toggle.
+		$fld  = $this->field_element(
 			'checkbox',
 			$field,
 			array(
 				'slug'    => 'media_library',
-				'value'   => !empty( $field['media_library'] ) ? 1 : '',
+				'value'   => ! empty( $field['media_library'] ) ? 1 : '',
 				'desc'    => __( 'Store file in WordPress Media Library', 'wpforms' ),
 				'tooltip' => __( 'Check this option to store the final uploaded file in the WordPress Media Library', 'wpforms' ),
 			),
 			false
 		);
-		$this->field_element( 'row', $field, array( 'slug' => 'media_library', 'content' => $output ) );
+		$args = array(
+			'slug'    => 'media_library',
+			'content' => $fld,
+		);
+		$this->field_element( 'row', $field, $args );
 
-		// Options close markup
-		$this->field_option( 'advanced-options', $field, array( 'markup' => 'close' ) );
+		// Custom CSS classes.
+		$this->field_option( 'css', $field );
+
+		// Options close markup.
+		$args = array(
+			'markup' => 'close',
+		);
+		$this->field_option( 'advanced-options', $field, $args );
 	}
 
 	/**
@@ -221,13 +253,13 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 	 */
 	public function field_preview( $field ) {
 
-		// Label
+		// Label.
 		$this->field_preview_option( 'label', $field );
 
-		// File upload
+		// Primary input.
 		echo '<input type="file" class="primary-input" disabled>';
 
-		// Description
+		// Description.
 		$this->field_preview_option( 'description', $field );
 	}
 
@@ -236,75 +268,18 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 	 *
 	 * @since 1.0.0
 	 * @param array $field
+	 * @param array $deprecated
 	 * @param array $form_data
 	 */
-	public function field_display( $field, $field_atts, $form_data ) {
+	public function field_display( $field, $deprecated, $form_data ) {
 
-		// Setup and sanitize the necessary data
-		$field             = apply_filters( 'wpforms_file_upload_field_display', $field, $field_atts, $form_data );
-		$field_required    = !empty( $field['required'] ) ? ' required' : '';
-		$field_class       = implode( ' ', array_map( 'sanitize_html_class', $field_atts['input_class'] ) );
-		$field_id          = implode( ' ', array_map( 'sanitize_html_class', $field_atts['input_id'] ) );
-		$field_data        = '';
+		// Define data.
+		$primary = $field['properties']['inputs']['primary'];
 
-		// Build a comma separated list of extensions to validate against
-		if ( !empty( $field['extensions'] ) ) {
-
-			// Various sanitization tasks
-			$extensions = str_replace(' ', '', strtolower( $field['extensions'] ) );
-			$extensions = str_replace('.', '', $extensions );
-			$extensions = explode( ',', $extensions );
-
-			foreach( $extensions as $key => $extension ) {
-				$extensions[$key] = preg_replace("/[^A-Za-z0-9 ]/", '', $extension );
-			}
-
-		} else {
-
-			// If no extensions are provided we allow what WordPress allows
-			$extensions       = array();
-			$wordpress_allows = get_allowed_mime_types();
-
-			foreach( $wordpress_allows as $wordpress_extensions => $wordpress_mime ) {
-
-				$exts = explode( '|', $wordpress_extensions );
-
-				foreach( $exts as $ext ) {
-
-					// Compare against blacklist
-					$valid = true;
-					foreach( $this->blacklist as $nope ) {
-						if ( strpos( $ext, $nope ) !== FALSE ) {
-							$valid = false;
-							break;
-						}
-					}
-					if ( $valid ) {
-						$extensions[] = strtolower( preg_replace("/[^A-Za-z0-9 ]/", '', $ext ) );
-					}
-				}
-			}
-		}
-		$field_data = sprintf( 'data-rule-extension="%s"', implode( ',', $extensions ) );
-
-		// Max file size
-		$field_data .= sprintf( ' data-rule-maxsize="%d"', $this->max_file_size( $field ) );
-
-		if ( !empty( $field_atts['input_data'] ) ) {
-			foreach ( $field_atts['input_data'] as $key => $val ) {
-			  $field_data .= ' data-' . $key . '="' . $val . '"';
-			}
-		}
-
-		// Primary file upload field
-		printf(
-			'<input type="file" name="wpforms_%d_%d" id="%s" class="%s" %s %s>',
-			$form_data['id'],
-			$field['id'],
-			$field_id,
-			$field_class,
-			$field_required,
-			$field_data
+		// Primary field.
+		printf( '<input type="file" %s %s>',
+			wpforms_html_attributes( $primary['id'], $primary['class'], $primary['data'], $primary['attr'] ),
+			$primary['required']
 		);
 	}
 
@@ -318,23 +293,24 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 	 */
 	public function validate( $field_id, $field_submit, $form_data ) {
 
-		$field     = $form_data['fields'][$field_id];
+		$field     = $form_data['fields'][ $field_id ];
+		$form_id   = absint( $form_data['id'] );
 		$file_slug = 'wpforms_' . $form_data['id'] . '_' . $field_id;
 
-		//--------------------------------------------------------------------//
-		// If upload is not required and nothing is uploaded, don't process
-		//--------------------------------------------------------------------//
-		if ( empty( $field['required'] ) && $_FILES[$file_slug]['error'] == 4  ) {
+		// -------------------------------------------------------------------//
+		// If upload is not required and nothing is uploaded, don't process.
+		// -------------------------------------------------------------------//
+		if ( empty( $field['required'] ) && 4 == $_FILES[ $file_slug ]['error'] ) {
 			return;
 		}
 
-		//--------------------------------------------------------------------//
-		// Basic upload validation
-		//--------------------------------------------------------------------//
-		if ( $_FILES[$file_slug]['error'] != 0 && $_FILES[$file_slug]['error'] != 4  ) {
+		// -------------------------------------------------------------------//
+		// Basic upload validation.
+		// -------------------------------------------------------------------//
+		if ( 0 != $_FILES[ $file_slug ]['error'] && 4 != $_FILES[ $file_slug ]['error'] ) {
 
-			$upload_error_strings = array(
-				 false,
+			$errors = array(
+				false,
 				__( 'The uploaded file exceeds the upload_max_filesize directive in php.ini.', 'wpforms' ),
 				__( 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.', 'wpforms' ),
 				__( 'The uploaded file was only partially uploaded.', 'wpforms' ),
@@ -344,54 +320,51 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 				__( 'Failed to write file to disk.', 'wpforms' ),
 				__( 'File upload stopped by extension.', 'wpforms' ),
 			);
-			wpforms()->process->errors[$form_data['id']][$field_id] = __( 'File upload error. ', 'wpforms' ) . $upload_error_strings[ $_FILES[$file_slug]['error'] ];
+			wpforms()->process->errors[ $form_id ][ $field_id ] = sprintf( __( 'File upload error. %s', 'wpforms' ), $errors[ $_FILES[ $file_slug ]['error'] ] );
 			return;
 		}
 
-		//--------------------------------------------------------------------//
-		// Validate if file is required and provided
-		//--------------------------------------------------------------------//
-		if ( !empty( $field['required'] ) && ( empty( $_FILES[$file_slug]['tmp_name'] ) || $_FILES[$file_slug]['error'] == 4 ) ) {
+		// -------------------------------------------------------------------//
+		// Validate if file is required and provided.
+		// -------------------------------------------------------------------//
+		if ( ! empty( $field['required'] ) && ( empty( $_FILES[ $file_slug ]['tmp_name'] ) || 4 == $_FILES[ $file_slug ]['error'] ) ) {
 
-			wpforms()->process->errors[$form_data['id']][$field_id] = apply_filters( 'wpforms_required_label', __( 'This field is required', 'wpforms' ) );
+			wpforms()->process->errors[ $form_id ][ $field_id ] = apply_filters( 'wpforms_required_label', __( 'This field is required.', 'wpforms' ) );
 			return;
 		}
 
-		//--------------------------------------------------------------------//
-		// Validate file size
-		//--------------------------------------------------------------------//
+		// -------------------------------------------------------------------//
+		// Validate file size.
+		// -------------------------------------------------------------------//
 		$max_size = $this->max_file_size( $field );
-		if ( $_FILES[$file_slug]['size'] > $max_size ) {
+		if ( $_FILES[ $file_slug ]['size'] > $max_size ) {
 
-			$error = sprintf( '%s (%s)', __( 'File exceeds max size allowed', 'wpforms' ), wpforms_size_to_megabytes( $max_size ) );
-			wpforms()->process->errors[$form_data['id']][$field_id] = $error;
+			wpforms()->process->errors[ $form_id ][ $field_id ] = sprintf( '%s (%s)', __( 'File exceeds max size allowed', 'wpforms' ), wpforms_size_to_megabytes( $max_size ) );
 			return;
 		}
 
-		//--------------------------------------------------------------------//
-		// Validate extension against blacklist
-		//
+		// -------------------------------------------------------------------//
+		// Validate extension against blacklist.
 		// There are certain extensions we do not allow under any circumstances,
 		// with no exceptions, for security purposes. Validate against this
 		// blacklist below, before proceeded any further.
-		//--------------------------------------------------------------------//
+		// -------------------------------------------------------------------//
 		$valid = true;
-		$ext   = strtolower( pathinfo( $_FILES[$file_slug]['name'], PATHINFO_EXTENSION ) );
+		$ext   = strtolower( pathinfo( $_FILES[ $file_slug ]['name'], PATHINFO_EXTENSION ) );
 		$nope  = $this->blacklist;
 
-		// Make sure file has an extension first
+		// Make sure file has an extension first.
 		if ( empty( $ext ) ) {
-			wpforms()->process->errors[$form_data['id']][$field_id] = __( 'File must have an extension.', 'wpforms' );
+			wpforms()->process->errors[ $form_id ][ $field_id ] = __( 'File must have an extension.', 'wpforms' );
 			return;
 		}
 
 		foreach ( $nope as $extension ) {
-
-			// Instead of doing the chech with in_array, we do a string compare.
+			// Instead of doing the check with in_array, we do a string compare.
 			// This way 'php' will hit for php3, php4, php5 etc.
 			if ( strpos( $extension, $ext ) !== FALSE ) {
 				$valid = false;
-				wpforms()->process->errors[$form_data['id']][$field_id] = __( 'File type is not allowed.', 'wpforms' );
+				wpforms()->process->errors[ $form_id ][ $field_id ] = __( 'File type is not allowed.', 'wpforms' );
 				break;
 			}
 		}
@@ -399,36 +372,32 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 			return;
 		}
 
-		//--------------------------------------------------------------------//
-		// Validate extension against user provided setting
-		//--------------------------------------------------------------------//
-		if ( !empty( $field['extensions'] ) ) {
+		// -------------------------------------------------------------------//
+		// Validate extension against user provided setting.
+		// -------------------------------------------------------------------//
+		if ( ! empty( $field['extensions'] ) ) {
 
-			// Remove spaces and periods, convert to array
-			$allow = str_replace( '.', '', $field['extensions'] );
-			$allow = str_replace( ' ', '', $allow );
-			$allow = explode( ',', $allow );
+			$allow = explode( ',', strtolower( preg_replace( '/[^A-Za-z0-9,]/', '', $field['extensions'] ) ) );
 
-			if ( !in_array( $ext , $allow ) ) {
-				wpforms()->process->errors[$form_data['id']][$field_id] = __( 'File type is not allowed.', 'wpforms' );
+			if ( ! in_array( $ext , $allow, true ) ) {
+				wpforms()->process->errors[ $form_id ][ $field_id ] = __( 'File type is not allowed.', 'wpforms' );
 				return;
 			}
 		}
 
-		//--------------------------------------------------------------------//
-		// Validate file against what WordPress is set to allow
-		//
+		// -------------------------------------------------------------------//
+		// Validate file against what WordPress is set to allow.
 		// At the end of the day, if you try to upload a file that WordPress
 		// doesn't allow, we won't allow it either. Users can use a plugin to
 		// filter the allowed mime types in WordPress if this is an issue.
-		//--------------------------------------------------------------------//
-		$wp_filetype     = wp_check_filetype_and_ext( $_FILES[$file_slug]['tmp_name'], $_FILES[$file_slug]['name'] );
+		// -------------------------------------------------------------------//
+		$wp_filetype     = wp_check_filetype_and_ext( $_FILES[ $file_slug ]['tmp_name'], $_FILES[ $file_slug ]['name'] );
 		$ext             = empty( $wp_filetype['ext'] ) ? '' : $wp_filetype['ext'];
 		$type            = empty( $wp_filetype['type'] ) ? '' : $wp_filetype['type'];
 		$proper_filename = empty( $wp_filetype['proper_filename'] ) ? '' : $wp_filetype['proper_filename'];
 
 		if ( $proper_filename || ! $ext || ! $type ) {
-			wpforms()->process->errors[$form_data['id']][$field_id] = __( 'File type is not allowed.', 'wpforms' );
+			wpforms()->process->errors[ $form_id ][ $field_id ] = __( 'File type is not allowed.', 'wpforms' );
 			return;
 		}
 	}
@@ -443,15 +412,20 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 	 */
 	public function format( $field_id, $field_submit, $form_data ) {
 
-		$name      = !empty( $form_data['fields'][$field_id]['label'] ) ? sanitize_text_field( $form_data['fields'][$field_id]['label'] ) : '';
-		$field     = $form_data['fields'][$field_id];
-		$file_slug = 'wpforms_' . $form_data['id'] . '_' . $field_id;
+		$name      = ! empty( $form_data['fields'][ $field_id ] ['label'] ) ? $form_data['fields'][ $field_id ]['label'] : '';
+		$field     = $form_data['fields'][ $field_id ];
+		$form_id   = absint( $form_data['id'] );
+		$file_slug = sprintf( 'wpforms_%d_%d', $form_id, $field_id );
+		$file      = $_FILES[ $file_slug ];
+		$visible   = isset( wpforms()->process->fields[ $field_id ]['visible'] ) ? wpforms()->process->fields[ $field_id ]['visible'] : false;
 
-		// If there was no file uploaded stop here before we continue with the
-		// upload process
-		if ( $_FILES[$file_slug]['error'] !== 0 ) {
-			wpforms()->process->fields[$field_id] = array(
-				'name'          => $name,
+		// If there was no file uploaded or if this field has conditional logic
+		// rules active, stop here before we continue with the
+		// upload process.
+		if ( 0 !== $file['error'] || in_array( $field_id, $form_data['conditional_fields'] ) ) {
+
+			wpforms()->process->fields[ $field_id ] = array(
+				'name'          => sanitize_text_field( $name ),
 				'value'         => '',
 				'file'          => '',
 				'file_original' => '',
@@ -459,42 +433,50 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 				'id'            => absint( $field_id ),
 				'type'          => $this->type,
 			);
+			if ( $visible ) {
+				wpforms()->process->fields[ $field_id ]['visible'] = $visible;
+			}
 			return;
 		}
 
-		$file_info            = pathinfo( strtolower( $_FILES[$file_slug]['name'] ) );
+		// Define data.
+		$file_name            = sanitize_file_name( $file['name'] );
+		$file_ext             = pathinfo( $file_name, PATHINFO_EXTENSION );
+		$file_base            = wp_basename( $file_name, ".$file_ext" );
+		$file_name_new        = sprintf( '%s-%s.%s', $file_base, uniqid(), strtolower( $file_ext ) );
 		$uploads              = wp_upload_dir();
-		$form_directory       = absint( $form_data['id'] ) . '-' . md5( $form_data['id'] . $form_data['created'] );
+		$form_directory       = absint( $form_id ) . '-' . md5( $form_id . $form_data['created'] );
 		$wpforms_uploads_root = trailingslashit( $uploads['basedir'] ) . 'wpforms';
 		$wpforms_uploads_form = trailingslashit( $wpforms_uploads_root ) . $form_directory;
-		$file_name_original   = sanitize_text_field( $file_info['filename'] . '.' . $file_info['extension'] );
-		$file_name            = sanitize_file_name( $file_info['filename'] . '-' . uniqid() . '.' . $file_info['extension'] );
-		$file_new             = trailingslashit( $wpforms_uploads_form ) . $file_name;
-		$file_url             = trailingslashit( $uploads['baseurl'] ) . 'wpforms/' . trailingslashit( $form_directory ) . $file_name;
+		$file_new             = trailingslashit( $wpforms_uploads_form ) . $file_name_new;
+		$file_url             = trailingslashit( $uploads['baseurl'] ) . 'wpforms/' . trailingslashit( $form_directory ) . $file_name_new;
 		$attachment_id        = '0';
 
-		// Check for form upload directory destination
+		// Check for form upload directory destination.
 		if ( ! file_exists( $wpforms_uploads_form ) ) {
 			wp_mkdir_p( $wpforms_uploads_form );
 		}
 
-		// Check if the index.html exists in the root uploads director, if not create it
+		// Check if the index.html exists in the root uploads director, if not create it.
 		if ( ! file_exists( trailingslashit( $wpforms_uploads_root ) . 'index.html' ) ) {
 			file_put_contents( trailingslashit( $wpforms_uploads_root ) . 'index.html', '' );
 		}
 
-		// Check if the index.html exists in the form uploads director, if not create it
+		// Check if the index.html exists in the form uploads director, if not create it.
 		if ( ! file_exists( trailingslashit( $wpforms_uploads_form ) . 'index.html' ) ) {
 			file_put_contents( trailingslashit( $wpforms_uploads_form ) . 'index.html', '' );
 		}
 
-		// Move the file to the uploads dir - similar to _wp_handle_upload()
-		$move_new_file = @ move_uploaded_file( $_FILES[$file_slug]['tmp_name'], $file_new );
+		// Move the file to the uploads dir - similar to _wp_handle_upload().
+		$move_new_file = @ move_uploaded_file( $file['tmp_name'], $file_new );
 		if ( false === $move_new_file ) {
 			wpforms_log(
 				'Upload Error, could not upload file',
 				$file_url,
-				array( 'type' => array( 'entry', 'error' ), 'form_id' => $form_data['id'] )
+				array(
+					'type'    => array( 'entry', 'error' ),
+					'form_id' => $form_data['id'],
+				)
 			);
 			return;
 		}
@@ -504,25 +486,25 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 		$perms = $stat['mode'] & 0000666;
 		@ chmod( $file_new, $perms );
 
-		// Maybe move file to the WordPress media library
-		if ( !empty( $field['media_library'] ) && '1' === $field['media_library'] ) {
+		// Maybe move file to the WordPress media library.
+		if ( ! empty( $field['media_library'] ) && '1' === $field['media_library'] ) {
 
-			// Include necessary code from core
+			// Include necessary code from core.
 			require_once( ABSPATH . 'wp-admin/includes/media.php' );
 			require_once( ABSPATH . 'wp-admin/includes/file.php' );
 			require_once( ABSPATH . 'wp-admin/includes/image.php' );
 
-			// Copy our file into WordPress uploads
+			// Copy our file into WordPress uploads.
 			$file_args = array(
 				'error'    => '',
 				'tmp_name' => $file_new,
-				'name'     => $file_name,
-				'type'     => $_FILES[$file_slug]['type'],
-				'size'     => $_FILES[$file_slug]['size'],
+				'name'     => $file_name_new,
+				'type'     => $file['type'],
+				'size'     => $file['size'],
 			);
-			$file = wp_handle_sideload( $file_args, array( 'test_form' => false ) );
+			$upload = wp_handle_sideload( $file_args, array( 'test_form' => false ) );
 
-			// Create the attachment for the file
+			// Create the attachment for the file.
 			$attachment_args = array(
 				'post_type'      => 'attachment',
 				'post_type'      => '',
@@ -530,32 +512,83 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 				'post_status'    => 'publish',
 				'post_mime_type' => $file['type'],
 			);
-			$attachment_id = wp_insert_attachment( $attachment_args, $file['file'] );
+			$attachment_id = wp_insert_attachment( $attachment_args, $upload['file'] );
 
-			// Generate attachment meta
-			$meta = wp_generate_attachment_metadata( $attachment_id, $file['file'] );
+			// Generate attachment meta.
+			$meta = wp_generate_attachment_metadata( $attachment_id, $upload['file'] );
 			wp_update_attachment_metadata( $attachment_id,  $meta );
 
-			// Update file url/name
-			$file_url  = $file['url'];
-			$file_name = basename( $file['url'] );
+			// Update file url/name.
+			$file_url      = wp_get_attachment_url( $attachment_id );
+			$file_name_new = basename( $file_url );
 
-			// Remove the original non-media library file
+			// Remove the original non-media library file.
 			@ unlink( $file_new );
-		}
+		} // End if().
 
-		// Finally, set field info
-		wpforms()->process->fields[$field_id] = array(
-			'name'          => $name,
-			'value'         => esc_url( $file_url ),
-			'file'          => $file_name,
-			'file_original' => $file_name_original,
-			'ext'           => $file_info['extension'],
+		// Set final field details.
+		wpforms()->process->fields[ $field_id ] = array(
+			'name'          => sanitize_text_field( $name ),
+			'value'         => esc_url_raw( $file_url ),
+			'file'          => $file_name_new,
+			'file_original' => $file_name,
+			'ext'           => $file_ext,
 			'attachment_id' => absint( $attachment_id ),
 			'id'            => absint( $field_id ),
 			'type'          => $this->type,
 		);
 
+		if ( $visible ) {
+			wpforms()->process->fields[ $field_id ]['visible'] = $visible;
+		}
+	}
+
+	/**
+	 * Format, sanitize, and upload files for fields that have conditional logic
+	 * rules applied.
+	 *
+	 * @since 1.3.8
+	 * @param array $form_data
+	 */
+	public function format_conditional( $form_data ) {
+
+		// If the form contains no fields with conditional logic no need to
+		// continue processing.
+		if ( empty( $form_data['conditional_fields'] ) ) {
+			return;
+		}
+
+		// Loop through each field that has conditional logic rules.
+		foreach ( $form_data['conditional_fields'] as $key => $field_id ) {
+
+			// We are only concerned with file upload fields.
+			if ( 'file-upload' !== wpforms()->process->fields[ $field_id ]['type'] ) {
+				continue;
+			}
+
+			// If the upload field was no visible at submit then ignore it.
+			if ( empty( wpforms()->process->fields[ $field_id ]['visible'] ) ) {
+				continue;
+			}
+
+			// If there are errors pertaining to this form, its not going to
+			// process, so bail and avoid file upload.
+			if ( ! empty( wpforms()->process->errors[ $form_data['id'] ] ) ) {
+				continue;
+			}
+
+			// We made it this far, so we can assume we have a file upload field
+			// which was visible during submit, inside a form which does not
+			// contain any errors, so at last we can proceed with uploading the
+			// file.
+
+			// Unset this field from conditional fields so the format method
+			// will proceed.
+			unset( $form_data['conditional_fields'][ $key ] );
+
+			// Upload the file and celebrate.
+			$this->format( $field_id, '', $form_data );
+		}
 	}
 
 	/**
@@ -567,39 +600,16 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 	 */
 	public function max_file_size( $field ) {
 
-		if ( !empty( $field['max_size'] ) ) {
+		if ( ! empty( $field['max_size'] ) ) {
 
 			// Strip any suffix provided (eg M, MB etc), which leaves is wit the raw MB value
-			$max_size = preg_replace( "/[^0-9.]/", '', $field['max_size'] );
+			$max_size = preg_replace( '/[^0-9.]/', '', $field['max_size'] );
 			$max_size = wpforms_size_to_bytes( $max_size . 'M' );
 
 		} else {
 			$max_size = wpforms_max_upload( true );
 		}
 		return $max_size;
-	}
-
-	/**
-	 * Customize format for HTML email notifications.
-	 *
-	 * @since 1.1.3
-	 * @param string $val
-	 * @param array $field
-	 * @param array $form_data
-	 * @return string
-	 */
-	public function html_email_value( $val, $field, $form_data = '', $context = '' ) {
-
-		if ( !empty( $field['value'] ) && 'file-upload' == $field['type'] ) {
-
-			return sprintf(
-				'<a href="%s" rel="noopener" target="_blank">%s</a>',
-				esc_url( $field['value'] ),
-				sanitize_text_field( $field['file_original'] )
-			);
-		}
-
-		return $val;
 	}
 }
 new WPForms_Field_File_Upload;

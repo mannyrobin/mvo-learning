@@ -1,4 +1,5 @@
 <?php
+
 /**
  * All the form goodness and basics.
  *
@@ -9,7 +10,7 @@
  * @since      1.0.0
  * @license    GPL-2.0+
  * @copyright  Copyright (c) 2016, WPForms LLC
-*/
+ */
 class WPForms_Form_Handler {
 
 	/**
@@ -34,9 +35,10 @@ class WPForms_Form_Handler {
 	public function register_cpt() {
 
 		// Custom post type arguments, which can be filtered if needed
-		$args = apply_filters( 'wpforms_post_type_args',
+		$args = apply_filters(
+			'wpforms_post_type_args',
 			array(
-				'labels'              => array(),
+				'label'               => 'WPForms',
 				'public'              => false,
 				'exclude_from_search' => true,
 				'show_ui'             => false,
@@ -56,17 +58,18 @@ class WPForms_Form_Handler {
 	 * Adds "WPForm" item to new-content admin bar menu item.
 	 *
 	 * @since 1.1.7.2
+	 *
 	 * @param object $wp_admin_bar
 	 */
 	public function admin_bar( $wp_admin_bar ) {
 
-		if ( !is_admin_bar_showing() || !current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) ) {
+		if ( ! is_admin_bar_showing() || ! current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) ) {
 			return;
 		}
 
 		$args = array(
-			'id'     => 'wpform',
-			'title'  => 'WPForm',
+			'id'     => 'wpforms',
+			'title'  => __( 'WPForms', 'wpforms' ),
 			'href'   => admin_url( 'admin.php?page=wpforms-builder' ),
 			'parent' => 'new-content',
 		);
@@ -77,8 +80,11 @@ class WPForms_Form_Handler {
 	 * Fetches forms
 	 *
 	 * @since 1.0.0
-	 * @param int $id
+	 *
+	 * @param mixed $id
 	 * @param array $args
+	 *
+	 * @return array|bool|null|WP_Post
 	 */
 	public function get( $id = '', $args = array() ) {
 
@@ -88,16 +94,15 @@ class WPForms_Form_Handler {
 			return false;
 		}
 
-		if ( !empty( $id ) ) {
+		if ( ! empty( $id ) ) {
 
 			// @todo add $id array support
 			// If ID is provided, we get a single form
 			$forms = get_post( absint( $id ) );
 
-			if ( !empty( $args['content_only'] ) && !empty( $forms ) && 'wpforms' == $forms->post_type ) {
-	 			$forms = wpforms_decode( $forms->post_content );
+			if ( ! empty( $args['content_only'] ) && ! empty( $forms ) && 'wpforms' === $forms->post_type ) {
+				$forms = wpforms_decode( $forms->post_content );
 			}
-
 		} else {
 
 			// No ID provided, get multiple forms
@@ -124,17 +129,20 @@ class WPForms_Form_Handler {
 	}
 
 	/**
-	 * Deletes forms
+	 * Delete forms.
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param array $ids
+	 *
 	 * @return boolean
 	 */
 	public function delete( $ids = array() ) {
 
 		// Check for permissions
-		if ( !current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) )
+		if ( ! current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) ) {
 			return false;
+		}
 
 		if ( ! is_array( $ids ) ) {
 			$ids = array( $ids );
@@ -147,10 +155,12 @@ class WPForms_Form_Handler {
 			$form = wp_delete_post( $id, true );
 
 			if ( class_exists( 'WPForms_Entry_Handler' ) ) {
-				$entries = wpforms()->entry->delete_by( 'form_id', $id );
+				wpforms()->entry->delete_by( 'form_id', $id );
+				wpforms()->entry_meta->delete_by( 'form_id', $id );
+				wpforms()->entry_fields->delete_by( 'form_id', $id );
 			}
 
-			if ( ! $form  ) {
+			if ( ! $form ) {
 				return false;
 			}
 		}
@@ -162,37 +172,42 @@ class WPForms_Form_Handler {
 	 * Add new form.
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param string $title
 	 * @param array $args
+	 * @param array $data
+	 *
 	 * @return mixed
 	 */
 	public function add( $title = '', $args = array(), $data = array() ) {
 
 		// Check for permissions
-		if ( !current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) )
+		if ( ! current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) ) {
 			return false;
+		}
 
 		// Must have a title
-		if ( empty( $title ) )
+		if ( empty( $title ) ) {
 			return false;
+		}
 
-		$args = apply_filters( 'wpforms_create_form_args' , $args, $data );
+		$args = apply_filters( 'wpforms_create_form_args', $args, $data );
 
 		$form_content = array(
 			'field_id' => '0',
 			'settings' => array(
 				'form_title' => sanitize_text_field( $title ),
-				'form_desc' => '',
+				'form_desc'  => '',
 			),
 		);
 
 		// Merge args and create the form
-		$form = wp_parse_args(
+		$form    = wp_parse_args(
 			$args,
 			array(
-				'post_title'  => esc_html( $title ),
-				'post_status' => 'publish',
-				'post_type'   => 'wpforms',
+				'post_title'   => esc_html( $title ),
+				'post_status'  => 'publish',
+				'post_type'    => 'wpforms',
 				'post_content' => wpforms_encode( $form_content ),
 			)
 		);
@@ -207,9 +222,13 @@ class WPForms_Form_Handler {
 	 * Updates form
 	 *
 	 * @since 1.0.0
-	 * @param string $title
+	 *
+	 * @param string $form_id
+	 * @param array $data
 	 * @param array $args
+	 *
 	 * @return mixed
+	 * @internal param string $title
 	 */
 	public function update( $form_id = '', $data = array(), $args = array() ) {
 
@@ -217,11 +236,13 @@ class WPForms_Form_Handler {
 		remove_filter( 'content_save_pre', 'balanceTags', 50 );
 
 		// Check for permissions
-		if ( !current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) )
+		if ( ! current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) ) {
 			return false;
+		}
 
-		if ( empty( $data ) )
+		if ( empty( $data ) ) {
 			return false;
+		}
 
 		if ( empty( $form_id ) ) {
 			$form_id = $data['id'];
@@ -229,28 +250,28 @@ class WPForms_Form_Handler {
 
 		$data = wp_unslash( $data );
 
-		if ( !empty( $data['settings']['form_title'] ) ) {
+		if ( ! empty( $data['settings']['form_title'] ) ) {
 			$title = $data['settings']['form_title'];
 		} else {
 			$title = get_the_title( $form_id );
 		}
 
-		if ( !empty( $data['settings']['form_desc'] ) ) {
+		if ( ! empty( $data['settings']['form_desc'] ) ) {
 			$desc = $data['settings']['form_desc'];
 		} else {
 			$desc = '';
 		}
 
-		$data['field_id'] = !empty( $data['field_id'] ) ? absint( $data['field_id'] ) : '0';
+		$data['field_id'] = ! empty( $data['field_id'] ) ? absint( $data['field_id'] ) : '0';
 
-		// Perserve form meta.
+		// Preserve form meta.
 		$meta = $this->get_meta( $form_id );
 		if ( $meta ) {
 			$data['meta'] = $meta;
 		}
 
 		// Preserve field meta.
-		if ( isset( $data['fields'] ) )	{
+		if ( isset( $data['fields'] ) ) {
 			foreach ( $data['fields'] as $i => $field_data ) {
 				if ( isset( $field_data['id'] ) ) {
 					$field_meta = $this->get_field_meta( $form_id, $field_data['id'] );
@@ -261,18 +282,30 @@ class WPForms_Form_Handler {
 			}
 		}
 
-		// Sanitize - don't allow tags for users who do not have appropriate cap
-		if ( !current_user_can( 'unfiltered_html' ) ) {
+		// Sanitize - don't allow tags for users who do not have appropriate cap.
+		if ( ! current_user_can( 'unfiltered_html' ) ) {
 			array_walk_recursive( $data, 'wp_strip_all_tags' );
 		}
 
-		$form = array(
-			'ID'           => $form_id,
-			'post_title'   => esc_html( $title ),
-			'post_excerpt' => $desc,
-			'post_content' => wpforms_encode( $data ),
+		// Sanitize notification names.
+		foreach ( $data['settings']['notifications'] as $id => &$notification ) {
+			if ( ! empty( $notification['notification_name'] ) ) {
+				$notification['notification_name'] = sanitize_text_field( $notification['notification_name'] );
+			}
+		}
+
+		$form = apply_filters(
+			'wpforms_save_form_args',
+			array(
+				'ID'           => $form_id,
+				'post_title'   => esc_html( $title ),
+				'post_excerpt' => $desc,
+				'post_content' => wpforms_encode( $data ),
+			),
+			$data,
+			$args
 		);
-		$form    = apply_filters( 'wpforms_save_form_args', $form, $data, $args );
+
 		$form_id = wp_update_post( $form );
 
 		do_action( 'wpforms_save_form', $form_id, $form );
@@ -284,14 +317,17 @@ class WPForms_Form_Handler {
 	 * Duplicate forms.
 	 *
 	 * @since 1.1.4
+	 *
 	 * @param array $ids
+	 *
 	 * @return boolean
 	 */
 	public function duplicate( $ids = array() ) {
 
-		// Check for permissions
-		if ( !current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) )
+		// Check for permissions.
+		if ( ! current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) ) {
 			return false;
+		}
 
 		if ( ! is_array( $ids ) ) {
 			$ids = array( $ids );
@@ -301,28 +337,28 @@ class WPForms_Form_Handler {
 
 		foreach ( $ids as $id ) {
 
-			// Get original entry
+			// Get original entry.
 			$form = get_post( $id );
 
-			// Confirm form exists
+			// Confirm form exists.
 			if ( ! $form || empty( $form ) ) {
 				return false;
 			}
 
-			// Get the form data
+			// Get the form data.
 			$new_form_data = wpforms_decode( $form->post_content );
 
-			// Remove form ID from title if present
-			$new_form_data['settings']['form_title'] = str_replace('(ID #' . absint( $id ) . ')', '', $new_form_data['settings']['form_title'] );
+			// Remove form ID from title if present.
+			$new_form_data['settings']['form_title'] = str_replace( '(ID #' . absint( $id ) . ')', '', $new_form_data['settings']['form_title'] );
 
-			// Create the duplicate form
-			$new_form = array(
-				'post_author'    => $form->post_author,
-				'post_content'   => wpforms_encode( $new_form_data ),
-				'post_excerpt'   => $form->post_excerpt,
-				'post_status'    => $form->post_status,
-				'post_title'     => $new_form_data['settings']['form_title'],
-				'post_type'      => $form->post_type,
+			// Create the duplicate form.
+			$new_form    = array(
+				'post_author'  => $form->post_author,
+				'post_content' => wpforms_encode( $new_form_data ),
+				'post_excerpt' => $form->post_excerpt,
+				'post_status'  => $form->post_status,
+				'post_title'   => $new_form_data['settings']['form_title'],
+				'post_type'    => $form->post_type,
 			);
 			$new_form_id = wp_insert_post( $new_form );
 
@@ -330,13 +366,13 @@ class WPForms_Form_Handler {
 				return false;
 			}
 
-			// Set new form title
+			// Set new form name.
 			$new_form_data['settings']['form_title'] .= ' (ID #' . absint( $new_form_id ) . ')';
 
-			// Set new form ID
+			// Set new form ID.
 			$new_form_data['id'] = absint( $new_form_id );
 
-			// Update new duplicate form
+			// Update new duplicate form.
 			$new_form_id = $this->update( $new_form_id, $new_form_data );
 
 			if ( ! $new_form_id || is_wp_error( $new_form_id ) ) {
@@ -351,25 +387,31 @@ class WPForms_Form_Handler {
 	 * Get the next available field ID and increment by one.
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param int $form_id
+	 *
 	 * @return mixed int or false
 	 */
 	public function next_field_id( $form_id ) {
 
-		// Check for permissions
-		if ( !current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) )
+		// Check for permissions.
+		if ( ! current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) ) {
 			return false;
+		}
 
-		if ( empty( $form_id ) )
+		if ( empty( $form_id ) ) {
 			return false;
+		}
 
-		$form = $this->get( $form_id, array( 'content_only' => true ) );
+		$form = $this->get( $form_id, array(
+			'content_only' => true,
+		) );
 
-		if ( !empty( $form['field_id'] ) ) {
+		if ( ! empty( $form['field_id'] ) ) {
 			$field_id = absint( $form['field_id'] );
-			$form['field_id']++;
+			$form['field_id'] ++;
 		} else {
-			$field_id = '0';
+			$field_id         = '0';
 			$form['field_id'] = '1';
 		}
 
@@ -382,28 +424,131 @@ class WPForms_Form_Handler {
 	 * Get private meta information for a form.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @param string $form_id
+	 * @param string $field
+	 *
+	 * @return bool
 	 */
 	public function get_meta( $form_id, $field = '' ) {
 
-		if ( empty( $form_id ) )
+		if ( empty( $form_id ) ) {
 			return false;
+		}
 
-		$data = $this->get( $form_id, array( 'content_only' => true ) );
+		$data = $this->get( $form_id, array(
+			'content_only' => true,
+		) );
 
 		if ( isset( $data['meta'] ) ) {
 			if ( empty( $field ) ) {
 				return $data['meta'];
-			} elseif ( isset( $data['meta'][$field] ) ) {
-				return $data['meta'][$field];
+			} elseif ( isset( $data['meta'][ $field ] ) ) {
+				return $data['meta'][ $field ];
 			}
 		}
+
 		return false;
+	}
+
+	/**
+	 * Update or add form meta information to a form.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param int $form_id
+	 * @param string $meta_key
+	 * @param string $meta_value
+	 *
+	 * @return bool
+	 */
+	public function update_meta( $form_id, $meta_key, $meta_value ) {
+
+		// Check for permissions
+		if ( ! current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) ) {
+			return false;
+		}
+
+		if ( empty( $form_id ) || empty( $meta_key ) ) {
+			return false;
+		}
+
+		$form = get_post( absint( $form_id ) );
+
+		if ( empty( $form ) ) {
+			return false;
+		}
+
+		$data     = wpforms_decode( $form->post_content );
+		$meta_key = wpforms_sanitize_key( $meta_key );
+
+		$data['meta'][ $meta_key ] = $meta_value;
+
+		$form    = array(
+			'ID'           => $form_id,
+			'post_content' => wpforms_encode( $data ),
+		);
+		$form    = apply_filters( 'wpforms_update_form_meta_args', $form, $data );
+		$form_id = wp_update_post( $form );
+
+		do_action( 'wpforms_update_form_meta', $form_id, $form, $meta_key, $meta_value );
+
+		return $form_id;
+	}
+
+	/**
+	 * Delete form meta information from a form.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param int $form_id
+	 * @param string $meta_key
+	 *
+	 * @return bool
+	 */
+	public function delete_meta( $form_id, $meta_key ) {
+
+		// Check for permissions
+		if ( ! current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) ) {
+			return false;
+		}
+
+		if ( empty( $form_id ) || empty( $meta_key ) ) {
+			return false;
+		}
+
+		$form = get_post( absint( $form_id ) );
+
+		if ( empty( $form ) ) {
+			return false;
+		}
+
+		$data     = wpforms_decode( $form->post_content );
+		$meta_key = wpforms_sanitize_key( $meta_key );
+
+		unset( $data['meta'][ $meta_key ] );
+
+		$form    = array(
+			'ID'           => $form_id,
+			'post_content' => wpforms_encode( $data ),
+		);
+		$form    = apply_filters( 'wpforms_delete_form_meta_args', $form, $data );
+		$form_id = wp_update_post( $form );
+
+		do_action( 'wpforms_delete_form_meta', $form_id, $form, $meta_key );
+
+		return $form_id;
 	}
 
 	/**
 	 * Get private meta information for a form field.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @param string $form_id
+	 * @param string $field_id
+	 *
+	 * @return bool
 	 */
 	public function get_field( $form_id, $field_id = '' ) {
 
@@ -411,7 +556,9 @@ class WPForms_Form_Handler {
 			return false;
 		}
 
-		$data = $this->get( $form_id, array( 'content_only' => true ) );
+		$data = $this->get( $form_id, array(
+			'content_only' => true,
+		) );
 
 		return isset( $data['fields'][ $field_id ] ) ? $data['fields'][ $field_id ] : false;
 	}
@@ -420,6 +567,11 @@ class WPForms_Form_Handler {
 	 * Get private meta information for a form field.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @param string $form_id
+	 * @param string $field
+	 *
+	 * @return bool
 	 */
 	public function get_field_meta( $form_id, $field = '' ) {
 

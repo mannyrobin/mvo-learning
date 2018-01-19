@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DB class
  *
@@ -10,13 +11,14 @@
  * @since      1.1.6
  * @license    GPL-2.0+
  * @copyright  Copyright (c) 2016, WPForms LLC
-*/
+ */
 abstract class WPForms_DB {
 
 	/**
 	 * Database table name.
 	 *
 	 * @since 1.1.6
+	 *
 	 * @var string
 	 */
 	public $table_name;
@@ -25,6 +27,7 @@ abstract class WPForms_DB {
 	 * Database version.
 	 *
 	 * @since 1.1.6
+	 *
 	 * @var string
 	 */
 	public $version;
@@ -33,42 +36,41 @@ abstract class WPForms_DB {
 	 * Primary key (unique field) for the database table.
 	 *
 	 * @since 1.1.6
+	 *
 	 * @var string
 	 */
 	public $primary_key;
 
 	/**
-	 * Primay class constructor.
-	 *
+	 * Primary class constructor.
 	 * Sub-classes should define $table_name, $version, and $primary_key here.
 	 *
 	 * @since 1.1.6
 	 */
-	public function __construct() {}
+	public function __construct() {
+	}
 
 	/**
 	 * Retrieves the list of columns for the database table.
-	 *
 	 * Sub-classes should define an array of columns here.
 	 *
 	 * @since 1.1.6
+	 *
 	 * @return array List of columns.
 	 */
 	public function get_columns() {
-
 		return array();
 	}
 
 	/**
 	 * Retrieves column defaults.
-	 *
 	 * Sub-classes can define default for any/all of columns defined in the get_columns() method.
 	 *
 	 * @since 1.1.6
+	 *
 	 * @return array All defined column defaults.
 	 */
 	public function get_column_defaults() {
-		
 		return array();
 	}
 
@@ -76,16 +78,18 @@ abstract class WPForms_DB {
 	 * Retrieves a row from the database based on a given row ID.
 	 *
 	 * @since 1.1.6
+	 *
 	 * @param int $row_id Row ID.
-	 * @return array|null|object|void
+	 *
+	 * @return null|object
 	 */
 	public function get( $row_id ) {
 
 		global $wpdb;
 
-		return $wpdb->get_row( 
-			$wpdb->prepare( 
-				"SELECT * FROM $this->table_name WHERE $this->primary_key = %s LIMIT 1;", 
+		return $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$this->table_name} WHERE {$this->primary_key} = %s LIMIT 1;",
 				$row_id
 			)
 		);
@@ -95,9 +99,11 @@ abstract class WPForms_DB {
 	 * Retrieves a row based on column and row ID.
 	 *
 	 * @since 1.1.6
-	 * @param string $column Column name
+	 *
+	 * @param string $column Column name.
 	 * @param int|string $row_id Row ID.
-	 * @return object|null Database query result object or null on failure
+	 *
+	 * @return object|null|bool Database query result object or null on failure
 	 */
 	public function get_by( $column, $row_id ) {
 
@@ -107,10 +113,10 @@ abstract class WPForms_DB {
 			return false;
 		}
 
-		return $wpdb->get_row( 
-			$wpdb->prepare( 
-				"SELECT * FROM $this->table_name WHERE $column = '%s' LIMIT 1;", 
-				$row_id 
+		return $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM $this->table_name WHERE $column = '%s' LIMIT 1;",
+				$row_id
 			)
 		);
 	}
@@ -119,8 +125,10 @@ abstract class WPForms_DB {
 	 * Retrieves a value based on column name and row ID.
 	 *
 	 * @since 1.1.6
-	 * @param string $column Column name
-	 * @param int|string $row_id Row ID
+	 *
+	 * @param string $column Column name.
+	 * @param int|string $row_id Row ID.
+	 *
 	 * @return string|null Database query result (as string), or null on failure
 	 */
 	public function get_column( $column, $row_id ) {
@@ -131,10 +139,10 @@ abstract class WPForms_DB {
 			return false;
 		}
 
-		return $wpdb->get_var( 
-			$wpdb->prepare( 
-				"SELECT $column FROM $this->table_name WHERE $this->primary_key = '%s' LIMIT 1;", 
-				$row_id 
+		return $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT $column FROM $this->table_name WHERE $this->primary_key = '%s' LIMIT 1;",
+				$row_id
 			)
 		);
 	}
@@ -143,22 +151,24 @@ abstract class WPForms_DB {
 	 * Retrieves one column value based on another given column and matching value.
 	 *
 	 * @since 1.1.6
-	 * @param string $column Column name
+	 *
+	 * @param string $column Column name.
 	 * @param string $column_where Column to match against in the WHERE clause.
-	 * @param $column_value Value to match to the column in the WHERE clause.
+	 * @param string $column_value Value to match to the column in the WHERE clause.
+	 *
 	 * @return string|null Database query result (as string), or null on failure
 	 */
 	public function get_column_by( $column, $column_where, $column_value ) {
-		
+
 		global $wpdb;
 
 		if ( empty( $column ) || empty( $column_where ) || empty( $column_value ) || ! array_key_exists( $column, $this->get_columns() ) ) {
 			return false;
 		}
 
-		return $wpdb->get_var( 
-			$wpdb->prepare( 
-				"SELECT $column FROM $this->table_name WHERE $column_where = %s LIMIT 1;", 
+		return $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT $column FROM $this->table_name WHERE $column_where = %s LIMIT 1;",
 				$column_value
 			)
 		);
@@ -170,8 +180,10 @@ abstract class WPForms_DB {
 	 * Please note: inserting a record flushes the cache.
 	 *
 	 * @since 1.1.6
-	 * @param array  $data Column data
-	 * @param string $type Optional. Data type context
+	 *
+	 * @param array $data Column data.
+	 * @param string $type Optional. Data type context.
+	 *
 	 * @return int ID for the newly inserted record
 	 */
 	public function add( $data, $type = '' ) {
@@ -193,12 +205,10 @@ abstract class WPForms_DB {
 		$data = array_intersect_key( $data, $column_formats );
 
 		// Reorder $column_formats to match the order of columns given in $data
-		$data_keys = array_keys( $data );
+		$data_keys      = array_keys( $data );
 		$column_formats = array_merge( array_flip( $data_keys ), $column_formats );
 
 		$wpdb->insert( $this->table_name, $data, $column_formats );
-
-		wp_cache_flush();
 
 		do_action( 'wpforms_post_insert_' . $type, $wpdb->insert_id, $data );
 
@@ -207,11 +217,13 @@ abstract class WPForms_DB {
 
 	/**
 	 * Inserts a new record into the database. This runs the add method.
-	 * 
+	 *
 	 * Please note: inserting a record flushes the cache.
 	 *
 	 * @since 1.1.6
-	 * @param array  $data Column data
+	 *
+	 * @param array $data Column data.
+	 *
 	 * @return int ID for the newly inserted record
 	 */
 	public function insert( $data ) {
@@ -225,11 +237,13 @@ abstract class WPForms_DB {
 	 * Please note: updating a record flushes the cache.
 	 *
 	 * @since 1.1.6
+	 *
 	 * @param string $row_id Row ID for the record being updated.
-	 * @param array  $data   Optional. Array of columns and associated data to update. Default empty array.
-	 * @param string $where  Optional. Column to match against in the WHERE clause. If empty, $primary_key
+	 * @param array $data Optional. Array of columns and associated data to update. Default empty array.
+	 * @param string $where Optional. Column to match against in the WHERE clause. If empty, $primary_key
 	 *                       will be used. Default empty.
-	 * @param string $type   Optional. Data type context, e.g. 'affiliate', 'creative', etc. Default empty.
+	 * @param string $type Optional. Data type context, e.g. 'affiliate', 'creative', etc. Default empty.
+	 *
 	 * @return bool False if the record could not be updated, true otherwise.
 	 */
 	public function update( $row_id, $data = array(), $where = '', $type = '' ) {
@@ -257,17 +271,15 @@ abstract class WPForms_DB {
 		$data = array_intersect_key( $data, $column_formats );
 
 		// Reorder $column_formats to match the order of columns given in $data
-		$data_keys = array_keys( $data );
+		$data_keys      = array_keys( $data );
 		$column_formats = array_merge( array_flip( $data_keys ), $column_formats );
 
 		if ( false === $wpdb->update( $this->table_name, $data, array( $where => $row_id ), $column_formats ) ) {
 			return false;
 		}
 
-		wp_cache_flush();
-
 		do_action( 'wpforms_post_update_' . $type, $data );
-		
+
 		return true;
 	}
 
@@ -277,7 +289,9 @@ abstract class WPForms_DB {
 	 * Please note: successfully deleting a record flushes the cache.
 	 *
 	 * @since 1.1.6
+	 *
 	 * @param int|string $row_id Row ID.
+	 *
 	 * @return bool False if the record could not be deleted, true otherwise.
 	 */
 	public function delete( $row_id = 0 ) {
@@ -295,8 +309,6 @@ abstract class WPForms_DB {
 			return false;
 		}
 
-		wp_cache_flush();
-
 		do_action( 'wpforms_post_delete', $row_id );
 
 		return true;
@@ -308,12 +320,14 @@ abstract class WPForms_DB {
 	 * Please note: successfully deleting a record flushes the cache.
 	 *
 	 * @since 1.1.6
+	 *
 	 * @param string $column
 	 * @param int|string $row_id Row ID.
+	 *
 	 * @return bool False if the record could not be deleted, true otherwise.
 	 */
 	public function delete_by( $column, $row_id ) {
-		
+
 		global $wpdb;
 
 		if ( empty( $column ) || empty( $row_id ) || ! array_key_exists( $column, $this->get_columns() ) ) {
@@ -323,8 +337,6 @@ abstract class WPForms_DB {
 		if ( false === $wpdb->query( $wpdb->prepare( "DELETE FROM $this->table_name WHERE $column = %s", $row_id ) ) ) {
 			return false;
 		}
-
-		wp_cache_flush();
 
 		do_action( 'wpforms_post_delete', $row_id );
 
@@ -336,15 +348,17 @@ abstract class WPForms_DB {
 	 * Check if the given table exists.
 	 *
 	 * @since 1.1.6
-	 * @param  string $table The table name
-	 * @return bool If the table name exists
+	 *
+	 * @param  string $table The table name.
+	 *
+	 * @return string|null If the table name exists.
 	 */
 	public function table_exists( $table ) {
-		
+
 		global $wpdb;
-		
+
 		$table = sanitize_text_field( $table );
-		
-		return $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE '%s'", $table ) ) === $table;
+
+		return $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) === $table;
 	}
 }

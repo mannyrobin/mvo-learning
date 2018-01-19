@@ -82,78 +82,71 @@ class WPForms_Entry_Meta_Handler extends WPForms_DB {
 		$args  = wp_parse_args( $args, $defaults );
 
 		if ( $args['number'] < 1 ) {
-			$args['number'] = 999999999999;
+			$args['number'] = PHP_INT_MAX;
 		}
 
 		$where = '';
 
-		// Allowed int arg items
+		// Allowed int arg items.
 		$keys = array( 'id', 'entry_id', 'form_id', 'user_id' );
 		foreach ( $keys as $key ) {
-
-			if ( ! empty( $args[$key] ) ) {
-				if ( is_array( $args[$key] ) ) {
-					$ids = implode( ',', array_map( 'intval', $args[$key] ) );
-				} else {
-					$ids = intval( $args[$key] );
-				}
-				$where .= empty( $where ) ? "WHERE" : "AND";
-				$where .= " `{$key}` IN( {$ids} ) ";
+			// Value `$args[ $key ]` can be a natural number and a numeric string.
+			// We should skip empty string values, but continue working with '0'.
+			// For some reason using `==` makes various parts of the code work.
+			if ( '' == $args[ $key ] ) {
+				continue;
 			}
-		}
 
-		// Allowed string arg items
-		$keys = array( 'status', 'type' );
-		foreach( $keys as $key ) {
-
-			if ( !empty( $args[$key] ) ) {
-				$where .= empty( $where ) ? "WHERE" : "AND";
-				$where .= " `{$key}` = '" . esc_sql( $args[$key] ) ."' ";
-			}
-		}
-
-		// Orderby
-		$orderby = ! array_key_exists( $args['orderby'], $this->get_columns() ) ? $this->primary_key : $args['orderby'];
-
-		// Order
-		if ( 'ASC' === strtoupper( $args['order'] ) ) {
-			$order = 'ASC';
-		} else {
-			$order = 'DESC';
-		}
-
-		// Check for primed cache
-		if ( true === $count ) {
-			$cache_key = md5( 'wpforms_entry_meta_count' . serialize( $args ) );
-		} else {
-			$cache_key = md5( 'wpforms_entry_meta_' . serialize( $args ) );
-		}
-		$results = wp_cache_get( $cache_key, 'wpforms_entry_meta' );
-
-		if ( false === $results ) {
-
-			if ( true === $count ) {
-
-				$results = absint( $wpdb->get_var( "SELECT COUNT({$this->primary_key}) FROM {$this->table_name} {$where};" ) );
-
+			if ( is_array( $args[ $key ] ) && ! empty( $args[ $key ] ) ) {
+				$ids = implode( ',', array_map( 'intval', $args[ $key ] ) );
 			} else {
-
-				$results = $wpdb->get_results(
-					$wpdb->prepare(
-						"SELECT * FROM {$this->table_name} {$where} ORDER BY {$orderby} {$order} LIMIT %d, %d;",
-						absint( $args['offset'] ),
-						absint( $args['number'] )
-					)
-				);
+				$ids = intval( $args[ $key ] );
 			}
+			$where .= empty( $where ) ? 'WHERE' : 'AND';
+			$where .= " `{$key}` IN( {$ids} ) ";
+		}
 
-			wp_cache_set( $cache_key, $results, 'wpforms_entry_meta', 3600 );
+		// Allowed string arg items.
+		$keys = array( 'status', 'type' );
+		foreach ( $keys as $key ) {
+
+			if ( ! empty( $args[ $key ] ) ) {
+				$where .= empty( $where ) ? 'WHERE' : 'AND';
+				$where .= " `{$key}` = '" . esc_sql( $args[ $key ] ) . "' ";
+			}
+		}
+
+		// Orderby.
+		$args['orderby'] = ! array_key_exists( $args['orderby'], $this->get_columns() ) ? $this->primary_key : $args['orderby'];
+
+		// Offset.
+		$args['offset'] = absint( $args['offset'] );
+
+		// Number.
+		$args['number'] = absint( $args['number'] );
+
+		// Order.
+		if ( 'ASC' === strtoupper( $args['order'] ) ) {
+			$args['order'] = 'ASC';
+		} else {
+			$args['order'] = 'DESC';
+		}
+
+		if ( true === $count ) {
+
+			$results = absint( $wpdb->get_var( "SELECT COUNT({$this->primary_key}) FROM {$this->table_name} {$where};" ) );
+
+		} else {
+
+			$results = $wpdb->get_results(
+				"SELECT * FROM {$this->table_name} {$where} ORDER BY {$args['orderby']} {$args['order']} LIMIT {$args['offset']}, {$args['number']};"
+			);
 		}
 
 		return $results;
 	}
 
-	/** 
+	/**
 	 * Create custom entry meta database table.
 	 *
 	 * @since 1.1.6
@@ -186,6 +179,6 @@ class WPForms_Entry_Meta_Handler extends WPForms_DB {
 			KEY entry_id (entry_id)
 		) {$charset_collate};";
 
-		$db = dbDelta( $sql );	
+		dbDelta( $sql );
 	}
 }

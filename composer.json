@@ -11,12 +11,12 @@
 			"type": "package",
 			"package": {
 				"name": "warfare-plugins/social-warfare-pro",
-				"version": "2.3.3",
+				"version": "2.3.4",
 				"type": "wordpress-plugin",
 				"source": {
 					"url": "https://github.com/warfare-plugins/social-warfare-pro.git",
 					"type": "git",
-					"reference": "2.3.3"
+					"reference": "2.3.4"
 				}
 			}
 		},
@@ -24,7 +24,7 @@
 			"type": "package",
 			"package": {
 				"name": "ydlr/redirection",
-				"version": "2.6.6",
+				"version": "2.10",
 				"type": "wordpress-plugin",
 				"source": {
 					"url": "https://github.com/ydlr/redirection.git",
@@ -41,7 +41,7 @@
     "roots/wp-password-bcrypt": "1.0.0",
 		"vlucas/phpdotenv": "^2.0.1",
 		"oscarotero/env": "^1.0",
-		"wpackagist-plugin/social-warfare": "2.3.3",
+		"wpackagist-plugin/social-warfare": "2.3.4",
 		"wpackagist-plugin/query-monitor": "*",
 		"wpackagist-plugin/duplicate-post": "*",
 		"wpackagist-plugin/nginx-cache": "*",
@@ -56,7 +56,7 @@
 		"wpackagist-plugin/post-type-archive-descriptions": "*",
 		"ydlr/redirection": "*",
 		"ydlr/wpforms-ga": "^0.1",
-		"warfare-plugins/social-warfare-pro": "2.3.3",
+		"warfare-plugins/social-warfare-pro": "2.3.4",
 		"hipdevteam/bb-related-posts": "*",
 		"hipdevteam/reviews-bb-module": "*",
 		"hipdevteam/wpforms-gsheets": "*",
@@ -79,7 +79,11 @@
 	},
   "extra": {
     "installer-paths": {
-      "web/app/mu-plugins/{$name}/": ["type:wordpress-muplugin"],
+      "web/app/mu-plugins/{$name}/": [
+				"type:wordpress-muplugin",
+				"ydlr/redirection",
+				"wpackagist-plugin/duplicate-post"
+			],
       "web/app/plugins/{$name}/": ["type:wordpress-plugin"],
       "web/app/themes/{$name}/": ["type:wordpress-theme"]
     },

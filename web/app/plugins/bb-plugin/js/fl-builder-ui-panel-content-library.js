@@ -801,6 +801,7 @@
                 arrowX,
                 animationDuration = this.$el.css('animation-duration');
 
+            if ( $button.length == 0 ) return;
             this.$el.css('animation-duration', '0s');
             this.show();
             panelOffset = $panel[0].getBoundingClientRect();

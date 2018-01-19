@@ -22,6 +22,7 @@ class PPModalBoxModule extends FLBuilderModule {
             'url'           => BB_POWERPACK_URL . 'modules/pp-modal-box/',
             'editor_export' => true, // Defaults to true and can be omitted.
             'enabled'       => true, // Defaults to true and can be omitted.
+            'icon'				=> 'star-filled.svg',
         ));
 
         if ( class_exists( 'FLBuilderModel' ) && FLBuilderModel::is_builder_active() ) {
@@ -404,6 +405,7 @@ FLBuilder::register_module('PPModalBoxModule', array(
                         'type'              => 'text',
                         'label'             => __('Button Text', 'bb-powerpack'),
                         'default'           => __('Click Here', 'bb-powerpack'),
+                        'connections'        => array('string', 'html'),
                         'preview'           => array(
                             'type'              => 'text',
                             'selector'          => '.pp-modal-trigger'

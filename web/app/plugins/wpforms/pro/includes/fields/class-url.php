@@ -1,4 +1,5 @@
 <?php
+
 /**
  * URL text field.
  *
@@ -29,46 +30,87 @@ class WPForms_Field_URL extends WPForms_Field {
 	 * Field options panel inside the builder.
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param array $field
 	 */
 	public function field_options( $field ) {
 
-		//--------------------------------------------------------------------//
-		// Basic field options
-		//--------------------------------------------------------------------//
-		
-		$this->field_option( 'basic-options', $field, array( 'markup' => 'open' ) );
-		$this->field_option( 'label',         $field );
-		$this->field_option( 'description',   $field );
-		$this->field_option( 'required',      $field );
-		$this->field_option( 'basic-options', $field, array( 'markup' => 'close' ) );
+		// -------------------------------------------------------------------//
+		// Basic field options.
+		// -------------------------------------------------------------------//
 
-		//--------------------------------------------------------------------//
-		// Advanced field options
-		//--------------------------------------------------------------------//
-	
-		$this->field_option( 'advanced-options', $field, array( 'markup' => 'open' ) );
-		$this->field_option( 'size',             $field );
-		$this->field_option( 'placeholder',      $field );
-		$this->field_option( 'label_hide',       $field );
-		$this->field_option( 'css',              $field );
-		$this->field_option( 'advanced-options', $field, array( 'markup' => 'close' ) );
+		// Options open markup.
+		$args = array(
+			'markup' => 'open',
+		);
+		$this->field_option( 'basic-options', $field, $args );
+
+		// Label.
+		$this->field_option( 'label', $field );
+
+		// Description.
+		$this->field_option( 'description', $field );
+
+		// Required toggle.
+		$this->field_option( 'required', $field );
+
+		// Options close markup.
+		$args = array(
+			'markup' => 'close',
+		);
+		$this->field_option( 'basic-options', $field, $args );
+
+		// -------------------------------------------------------------------//
+		// Advanced field options.
+		// -------------------------------------------------------------------//
+
+		// Options open markup.
+		$args = array(
+			'markup' => 'open',
+		);
+		$this->field_option( 'advanced-options', $field, $args );
+
+		// Size.
+		$this->field_option( 'size', $field );
+
+		// Placeholder.
+		$this->field_option( 'placeholder', $field );
+
+		// Hide label.
+		$this->field_option( 'label_hide', $field );
+
+		// Default value.
+		$this->field_option( 'default_value', $field );
+
+		// Custom CSS classes.
+		$this->field_option( 'css', $field );
+
+		// Options close markup.
+		$args = array(
+			'markup' => 'close',
+		);
+		$this->field_option( 'advanced-options', $field, $args );
 	}
 
 	/**
 	 * Field preview inside the builder.
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param array $field
 	 */
 	public function field_preview( $field ) {
 
-		$placeholder = !empty( $field['placeholder'] ) ? esc_attr( $field['placeholder'] ) : '';
+		// Define data.
+		$placeholder = ! empty( $field['placeholder'] ) ? esc_attr( $field['placeholder'] ) : '';
 
+		// Label.
 		$this->field_preview_option( 'label', $field );
-		
-		printf( '<input type="url" placeholder="%s" class="primary-input" disabled>', $placeholder );
-		
+
+		// Primary input.
+		echo '<input type="url" placeholder="' . $placeholder . '" class="primary-input" disabled>';
+
+		// Description.
 		$this->field_preview_option( 'description', $field );
 	}
 
@@ -76,36 +118,21 @@ class WPForms_Field_URL extends WPForms_Field {
 	 * Field display on the form front-end.
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param array $field
+	 * @param array $deprecated
 	 * @param array $form_data
 	 */
-	public function field_display( $field, $field_atts, $form_data ) {
+	public function field_display( $field, $deprecated, $form_data ) {
 
-		// Setup and sanitize the necessary data
-		$field             = apply_filters( 'wpforms_url_field_display', $field, $field_atts, $form_data );
-		$field_placeholder = !empty( $field['placeholder']) ? esc_attr( $field['placeholder'] ) : '';
-		$field_required    = !empty( $field['required'] ) ? ' required' : '';
-		$field_class       = implode( ' ', array_map( 'sanitize_html_class', $field_atts['input_class'] ) );
-		$field_id          = implode( ' ', array_map( 'sanitize_html_class', $field_atts['input_id'] ) );
-		$field_value       = !empty( $field['default_value'] ) ? esc_attr( apply_filters( 'wpforms_process_smart_tags', $field['default_value'], $form_data ) ) : '';
-		$field_data        = '';
+		// Define data.
+		$primary = $field['properties']['inputs']['primary'];
 
-		if ( !empty( $field_atts['input_data'] ) ) {
-			foreach ( $field_atts['input_data'] as $key => $val ) {
-			  $field_data .= ' data-' . $key . '="' . $val . '"';
-			}
-		}
-
-		// Primary text field
-		printf( 
-			'<input type="url" name="wpforms[fields][%d]" id="%s" class="%s" value="%s" placeholder="%s" %s %s>',
-			$field['id'],
-			$field_id,
-			$field_class,
-			$field_value,
-			$field_placeholder,
-			$field_required,
-			$field_data
+		// Primary field.
+		printf(
+			'<input type="url" %s %s>',
+			wpforms_html_attributes( $primary['id'], $primary['class'], $primary['data'], $primary['attr'] ),
+			$primary['required']
 		);
 	}
 
@@ -113,6 +140,7 @@ class WPForms_Field_URL extends WPForms_Field {
 	 * Validates field on form submit.
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param int $field_id
 	 * @param array $field_submit
 	 * @param array $form_data
@@ -122,13 +150,15 @@ class WPForms_Field_URL extends WPForms_Field {
 		$form_id = $form_data['id'];
 
 		// Basic required check - If field is marked as required, check for entry data
-		if ( !empty( $form_data['fields'][$field_id]['required'] ) && empty( $field_submit ) ) {
-			wpforms()->process->errors[$form_id][$field_id] = apply_filters( 'wpforms_required_label', __('This field is required', 'wpforms' ) );
+		if ( ! empty( $form_data['fields'][ $field_id ]['required'] ) && empty( $field_submit ) ) {
+			wpforms()->process->errors[ $form_id ][ $field_id ] = apply_filters( 'wpforms_required_label', __( 'This field is required.', 'wpforms' ) );
 		}
+
 		// Check that URL is valid format
-		if ( !empty( $field_submit ) && !wpforms_is_url( $field_submit ) ) {
-			wpforms()->process->errors[$form_id][$field_id] = apply_filters( 'wpforms_valid_url_label', __('Please enter a valid URL', 'wpforms' ) );
+		if ( ! empty( $field_submit ) && ! wpforms_is_url( $field_submit ) ) {
+			wpforms()->process->errors[ $form_id ][ $field_id ] = apply_filters( 'wpforms_valid_url_label', __( 'Please enter a valid URL.', 'wpforms' ) );
 		}
 	}
 }
+
 new WPForms_Field_URL;

@@ -1,13 +1,13 @@
 <?php
 /**
- * Process and vaidate form entries.
+ * Process and validate form entries.
  *
  * @package    WPForms
  * @author     WPForms
  * @since      1.0.0
  * @license    GPL-2.0+
  * @copyright  Copyright (c) 2016, WPForms LLC
-*/
+ */
 class WPForms_Process {
 
 	/**
@@ -51,11 +51,11 @@ class WPForms_Process {
 	 */
 	public function listen() {
 
-		if ( !empty( $_GET['wpforms_return'] ) ) {
+		if ( ! empty( $_GET['wpforms_return'] ) ) {
 			$this->entry_confirmation_redirect( '', $_GET['wpforms_return'] );
 		}
 
-		if ( !empty( $_POST['wpforms']['id'] ) ) {
+		if ( ! empty( $_POST['wpforms']['id'] ) ) {
 			$this->process( stripslashes_deep( $_POST['wpforms'] ) );
 		}
 	}
@@ -64,7 +64,8 @@ class WPForms_Process {
 	 * Process the form entry.
 	 *
 	 * @since 1.0.0
-	 * @param array $form $_POST object
+	 *
+	 * @param array $entry $_POST object.
 	 */
 	public function process( $entry ) {
 
@@ -74,9 +75,9 @@ class WPForms_Process {
 		$form         = wpforms()->form->get( $form_id );
 		$honeypot     = false;
 
-		// Validate form is real and active (published)
-		if ( !$form || 'publish' != $form->post_status ) {
-			$this->errors[$form_id]['header'] = __( 'Invalid form.', 'wpforms' );
+		// Validate form is real and active (published).
+		if ( ! $form || 'publish' !== $form->post_status ) {
+			$this->errors[ $form_id ]['header'] = __( 'Invalid form.', 'wpforms' );
 			return;
 		}
 
@@ -90,64 +91,82 @@ class WPForms_Process {
 		do_action( 'wpforms_process_before', $entry, $form_data );
 		do_action( "wpforms_process_before_{$form_id}", $entry, $form_data );
 
-		// Validate fields
+		// Validate fields.
 		foreach ( $form_data['fields'] as $field ) {
 
 			$field_id     = $field['id'];
 			$field_type   = $field['type'];
-			$field_submit = isset( $entry['fields'][$field_id] ) ? $entry['fields'][$field_id] : '';
+			$field_submit = isset( $entry['fields'][ $field_id ] ) ? $entry['fields'][ $field_id ] : '';
 
 			do_action( "wpforms_process_validate_{$field_type}", $field_id, $field_submit, $form_data );
 		}
 
-		// reCAPTCHA check
+		// reCAPTCHA check.
 		$site_key   = wpforms_setting( 'recaptcha-site-key', '' );
 		$secret_key = wpforms_setting( 'recaptcha-secret-key', '' );
-		if ( !empty( $site_key ) && !empty( $secret_key ) && isset( $form_data['settings']['recaptcha'] ) && '1' == $form_data['settings']['recaptcha'] ) {
-			if ( !empty( $_POST['g-recaptcha-response'] ) ) {
+		if (
+			! empty( $site_key ) &&
+			! empty( $secret_key ) &&
+			isset( $form_data['settings']['recaptcha'] ) &&
+			'1' == $form_data['settings']['recaptcha']
+		) {
+			if ( ! empty( $_POST['g-recaptcha-response'] ) ) {
 				$data  = wp_remote_get( 'https://www.google.com/recaptcha/api/siteverify?secret=' . $secret_key . '&response=' . $_POST['g-recaptcha-response'] );
 				$data  = json_decode( wp_remote_retrieve_body( $data ) );
 				if ( empty( $data->success ) ) {
-					$this->errors[$form_id]['recaptcha'] = __( 'Incorrect reCAPTCHA, please try again.', 'wpforms' );
+					$this->errors[ $form_id ]['recaptcha'] = __( 'Incorrect reCAPTCHA, please try again.', 'wpforms' );
 				}
 			} else {
-				$this->errors[$form_id]['recaptcha'] = __( 'reCAPTCHA is required.', 'wpforms' );
+				$this->errors[ $form_id ]['recaptcha'] = __( 'reCAPTCHA is required.', 'wpforms' );
 			}
 		}
 
-		// One last error check - don't proceed if there are any errors
-		if ( !empty( $this->errors[$form_id] ) ) {
-			$this->errors[$form_id]['header'] = __( 'Form has not been submitted, please see the errors below.', 'wpforms' );
+		// Initial error check.
+		// Don't proceed if there are any errors thus far. We provide a filter
+		// so that other features, such as conditional logic, have the ability
+		// to adjust blocking errors.
+		$errors = apply_filters( 'wpforms_process_initial_errors', $this->errors, $form_data );
+
+		if ( ! empty( $errors[ $form_id ] ) ) {
+			if ( empty( $this->errors[ $form_id ]['header'] ) ) {
+				$errors[ $form_id ]['header'] = __( 'Form has not been submitted, please see the errors below.', 'wpforms' );
+			}
+			$this->errors = $errors;
 			return;
 		}
 
-		// Validate honeypot
-		if ( !empty( $form_data['settings']['honeypot'] ) && '1' == $form_data['settings']['honeypot'] ) {
-			if ( isset( $entry['hp'] ) && !empty( $entry['hp'] ) ) {
+		// Validate honeypot.
+		if (
+			! empty( $form_data['settings']['honeypot'] ) &&
+			'1' == $form_data['settings']['honeypot'] &&
+			! empty( $entry['hp'] )
+		) {
 				$honeypot = __( 'WPForms honeypot field triggered.', 'wpforms' );
-			}
 		}
 
 		$honeypot = apply_filters( 'wpforms_process_honeypot', $honeypot, $this->fields, $entry, $form_data );
 
-		// Only trigger the processing (saving/sending entries, etc) if the entry
+		// Only trigger the processing (saving/sending entries, etc) if the entry.
 		// is not spam.
-		if ( !$honeypot ) {
+		if ( ! $honeypot ) {
 
-			// Pass the form created date into the form data
+			// Pass the form created date into the form data.
 			$form_data['created'] = $form->post_date;
 
 			// Format fields
-			foreach ( $form_data['fields'] as $field ) {
+			foreach ( (array) $form_data['fields'] as $field ) {
 
 				$field_id     = $field['id'];
 				$field_type   = $field['type'];
-				$field_submit = isset( $entry['fields'][$field_id] ) ? $entry['fields'][$field_id] : '';
+				$field_submit = isset( $entry['fields'][ $field_id ] ) ? $entry['fields'][ $field_id ] : '';
 
 				do_action( "wpforms_process_format_{$field_type}", $field_id, $field_submit, $form_data );
 			}
 
-			// Process hooks/filter - this is where most add-ons should hook
+			// This hook is for internal purposes and should not be leveraged.
+			do_action( 'wpforms_process_format_after', $form_data );
+
+			// Process hooks/filter - this is where most addons should hook
 			// because at this point we have completed all field validation and
 			// formatted the data.
 			$this->fields = apply_filters( 'wpforms_process_filter', $this->fields, $entry, $form_data );
@@ -157,27 +176,27 @@ class WPForms_Process {
 
 			$this->fields = apply_filters( 'wpforms_process_after_filter', $this->fields, $entry, $form_data );
 
-			// One last error check - don't proceed if there are any errors
-			if ( ! empty( $this->errors[$form_id] ) ) {
-				if ( empty( $this->errors[$form_id]['header'] ) ) {
-					$this->errors[$form_id]['header'] = __( 'Form has not been submitted, please see the errors below.', 'wpforms' );
+			// One last error check - don't proceed if there are any errors.
+			if ( ! empty( $this->errors[ $form_id ] ) ) {
+				if ( empty( $this->errors[ $form_id ]['header'] ) ) {
+					$this->errors[ $form_id ]['header'] = __( 'Form has not been submitted, please see the errors below.', 'wpforms' );
 				}
 				return;
 			}
 
-			// Success - add entry to database
+			// Success - add entry to database.
 			$entry_id = $this->entry_save( $this->fields, $entry, $form_data['id'], $form_data );
 
-			// Success - send email notification
+			// Success - send email notification.
 			$this->entry_email( $this->fields, $entry, $form_data, $entry_id, 'entry' );
 
-			// Pass completed and formatted fields in POST
+			// Pass completed and formatted fields in POST.
 			$_POST['wpforms']['complete'] = $this->fields;
 
-			// Pass entry ID in POST
+			// Pass entry ID in POST.
 			$_POST['wpforms']['entry_id'] = $entry_id;
 
-			// Logs entry depending on log levels set
+			// Logs entry depending on log levels set.
 			wpforms_log(
 				'Entry',
 				$this->fields,
@@ -188,13 +207,13 @@ class WPForms_Process {
 				)
 			);
 
-			// Post-process hooks
+			// Post-process hooks.
 			do_action( 'wpforms_process_complete', $this->fields, $entry, $form_data, $entry_id );
 			do_action( "wpforms_process_complete_{$form_id}", $this->fields, $entry, $form_data, $entry_id );
 
 		} else {
 
-			// Logs spam entry depending on log levels set
+			// Logs spam entry depending on log levels set.
 			wpforms_log(
 				'Spam Entry',
 				array( $honeypot, $entry ),
@@ -203,7 +222,7 @@ class WPForms_Process {
 					'form_id' => $form_data['id'],
 				)
 			);
-		}
+		} // End if().
 
 		$this->entry_confirmation_redirect( $form_data );
 	}
@@ -212,6 +231,7 @@ class WPForms_Process {
 	 * Validate the form return hash.
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param string $hash
 	 * @return mixed false for invalid or form id
 	 */
@@ -220,13 +240,14 @@ class WPForms_Process {
 		$query_args = base64_decode( $hash );
 		parse_str( $query_args );
 
-		// Verify hash matches
-		if ( $hash != wp_hash( $form_id . ',' . $entry_id ) ) {
+		// Verify hash matches.
+		if ( wp_hash( $form_id . ',' . $entry_id ) !== $hash ) {
 			return false;
 		}
 
-		// Get lead and verify it is attached to the form we received with it
+		// Get lead and verify it is attached to the form we received with it.
 		$entry = wpforms()->entry->get( $entry_id );
+
 		if ( $form_id != $entry->form_id ) {
 			return false;
 		}
@@ -238,43 +259,47 @@ class WPForms_Process {
 	 * Redirects user to a page or URL specified in the form confirmation settings.
 	 *
 	 * @since 1.0.0
-	 * @param array $form_data
+	 *
+	 * @param array|string $form_data
 	 * @param string $hash
 	 */
 	public function entry_confirmation_redirect( $form_data = '', $hash = '' ) {
 
 		$url = '';
 
-		if ( !empty( $hash ) ) {
+		if ( ! empty( $hash ) ) {
 
 			$form_id = $this->validate_return_hash( $hash );
 
-			if ( !$form_id )
+			if ( ! $form_id ) {
 				return;
+			}
 
 			// Get form
-			$form_data = wpforms()->form->get( $form_id, array( 'content_only' => true ) );
+			$form_data = wpforms()->form->get( $form_id, array(
+				'content_only' => true,
+			) );
 		}
 
-		// Redirect if needed, to either a page or URL, after form processing
-		if ( !empty( $form_data['settings']['confirmation_type'] ) && $form_data['settings']['confirmation_type'] != 'message' ) {
+		// Redirect if needed, to either a page or URL, after form processing.
+		if ( ! empty( $form_data['settings']['confirmation_type'] ) && 'message' !== $form_data['settings']['confirmation_type'] ) {
 
-			if ( $form_data['settings']['confirmation_type'] == 'redirect' ) {
+			if ( 'redirect' === $form_data['settings']['confirmation_type'] ) {
 				$url = apply_filters( 'wpforms_process_smart_tags', $form_data['settings']['confirmation_redirect'], $form_data, $this->fields, $this->entry_id );
 			}
 
-			if ( $form_data['settings']['confirmation_type'] == 'page' ) {
+			if ( 'page' === $form_data['settings']['confirmation_type'] ) {
 				$url = get_permalink( (int) $form_data['settings']['confirmation_page'] );
 			}
 		}
 
-		if ( !empty( $form_data['id'] ) ) {
+		if ( ! empty( $form_data['id'] ) ) {
 			$form_id = $form_data['id'];
 		} else {
 			return;
 		}
 
-		if ( !empty( $url ) ) {
+		if ( ! empty( $url ) ) {
 			$url = apply_filters( 'wpforms_process_redirect_url', $url, $form_id, $this->fields );
 			wp_redirect( esc_url_raw( $url ) );
 			do_action( 'wpforms_process_redirect', $form_id );
@@ -287,15 +312,20 @@ class WPForms_Process {
 	 * Sends entry email notifications.
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param array $fields
 	 * @param array $entry
 	 * @param array $form_data
 	 * @param array $entry_id
+	 * @param string $context
 	 */
 	public function entry_email( $fields, $entry, $form_data, $entry_id, $context = '' ) {
 
-		// Check that the form was configured for email notifcations
-		if ( empty( $form_data['settings']['notification_enable'] ) || '1' != $form_data['settings']['notification_enable'] ) {
+		// Check that the form was configured for email notifications.
+		if (
+			empty( $form_data['settings']['notification_enable'] ) ||
+			'1' != $form_data['settings']['notification_enable']
+		) {
 			return;
 		}
 
@@ -306,7 +336,7 @@ class WPForms_Process {
 
 		$fields = apply_filters( 'wpforms_entry_email_data', $fields, $entry, $form_data );
 
-		// Backwards compatibility for notifications before v1.2.3
+		// Backwards compatibility for notifications before v1.2.3.
 		if ( empty( $form_data['settings']['notifications'] ) ) {
 			$notifications[1] = array(
 				'email'          => $form_data['settings']['notification_email'],
@@ -320,7 +350,7 @@ class WPForms_Process {
 			$notifications = $form_data['settings']['notifications'];
 		}
 
-		foreach( $notifications as $notification_id => $notification ) {
+		foreach ( $notifications as $notification_id => $notification ) {
 
 			if ( empty( $notification['email'] ) ) {
 				continue;
@@ -334,17 +364,17 @@ class WPForms_Process {
 
 			$email  = array();
 
-			// Setup email properties
+			// Setup email properties.
 			$email['address']        = explode( ',', apply_filters( 'wpforms_process_smart_tags', $notification['email'], $form_data, $fields, $this->entry_id ) );
 			$email['address']        = array_map( 'sanitize_email', $email['address'] );
-			$email['subject']        = !empty( $notification['subject'] ) ? $notification['subject'] : sprintf( __( 'New %s Entry', 'wpforms ' ), $form_data['settings']['form_title'] );
-			$email['sender_address'] = !empty( $notification['sender_address'] ) ? $notification['sender_address'] : get_option( 'admin_email' );
-			$email['sender_name']    = !empty( $notification['sender_name'] ) ? $notification['sender_name'] : get_bloginfo( 'name' );
-			$email['replyto']        = !empty( $notification['replyto'] ) ? $notification['replyto'] : false;
-			$email['message']        = !empty( $notification['message'] ) ? $notification['message'] : '{all_fields}';
+			$email['subject']        = ! empty( $notification['subject'] ) ? $notification['subject'] : sprintf( _x( 'New %s Entry', 'Form name', 'wpforms ' ), $form_data['settings']['form_title'] );
+			$email['sender_address'] = ! empty( $notification['sender_address'] ) ? $notification['sender_address'] : get_option( 'admin_email' );
+			$email['sender_name']    = ! empty( $notification['sender_name'] ) ? $notification['sender_name'] : get_bloginfo( 'name' );
+			$email['replyto']        = ! empty( $notification['replyto'] ) ? $notification['replyto'] : false;
+			$email['message']        = ! empty( $notification['message'] ) ? $notification['message'] : '{all_fields}';
 			$email                   = apply_filters( 'wpforms_entry_email_atts', $email, $fields, $entry, $form_data, $notification_id );
 
-			// Create new email
+			// Create new email.
 			$emails = new WPForms_WP_Emails;
 			$emails->__set( 'form_data',    $form_data               );
 			$emails->__set( 'fields',       $fields                  );
@@ -353,25 +383,29 @@ class WPForms_Process {
 			$emails->__set( 'from_address', $email['sender_address'] );
 			$emails->__set( 'reply_to',     $email['replyto']        );
 
-			// Maybe include CC
-			if ( !empty( $notification['carboncopy'] ) && wpforms_setting( 'email-carbon-copy', false ) ) {
+			// Maybe include CC.
+			if ( ! empty( $notification['carboncopy'] ) && wpforms_setting( 'email-carbon-copy', false ) ) {
 				$emails->__set( 'cc', $notification['carboncopy'] );
 			}
 
-			// Go
-			foreach( $email['address'] as $address ) {
+			// Go.
+			foreach ( $email['address'] as $address ) {
 				$emails->send( trim( $address ), $email['subject'], $email['message'] );
 			}
-		}
+		} // End foreach().
 	}
 
 	/**
 	 * Saves entry to database.
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param array $fields
 	 * @param array $entry
-	 * @param array $form_data
+	 * @param int $form_id
+	 * @param array|string $form_data
+	 *
+	 * @return int
 	 */
 	public function entry_save( $fields, $entry, $form_id, $form_data = '' ) {
 

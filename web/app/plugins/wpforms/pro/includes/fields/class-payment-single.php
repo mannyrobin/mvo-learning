@@ -38,7 +38,7 @@ class WPForms_Field_Payment_Single extends WPForms_Field {
 		//--------------------------------------------------------------------//
 		// Basic field options
 		//--------------------------------------------------------------------//
-		
+
 		//$this->field_option( 'meta',        $field );
 		$this->field_option( 'basic-options', $field, array( 'markup' => 'open' ) );
 		$this->field_option( 'label',         $field );
@@ -65,11 +65,11 @@ class WPForms_Field_Payment_Single extends WPForms_Field {
 
 		$this->field_option( 'required',      $field );
 		$this->field_option( 'basic-options', $field, array( 'markup' => 'close' ) );
-	
+
 		//--------------------------------------------------------------------//
 		// Advanced field options
 		//--------------------------------------------------------------------//
-	
+
 		$this->field_option( 'advanced-options', $field, array( 'markup' => 'open' ) );
 		$this->field_option( 'size',             $field );
 		$this->field_option( 'placeholder',      $field );
@@ -124,7 +124,7 @@ class WPForms_Field_Payment_Single extends WPForms_Field {
 		$field_class           = implode( ' ', array_map( 'sanitize_html_class', $field_atts['input_class'] ) );
 		$field_id              = implode( ' ', array_map( 'sanitize_html_class', $field_atts['input_id'] ) );
 		$field_value           = !empty( $field['price'] ) ? wpforms_sanitize_amount( $field['price'] ) : '';
-		$field_value_formatted = !empty( $field_value ) ? wpforms_format_amount( $field_value ) : ''; 
+		$field_value_formatted = !empty( $field_value ) ? wpforms_format_amount( $field_value ) : '';
 		$field_data            = '';
 		$field_format          = !empty( $field['format'] ) ? $field['format'] : 'single';
 
@@ -145,7 +145,7 @@ class WPForms_Field_Payment_Single extends WPForms_Field {
 			}
 
 			// Primary price field
-			printf( 
+			printf(
 				'<input type="hidden" name="wpforms[fields][%d]" id="%s" class="%s" value="%s">',
 				$field['id'],
 				$field_id,
@@ -156,10 +156,10 @@ class WPForms_Field_Payment_Single extends WPForms_Field {
 		elseif ( $field_format == 'user' ) :
 
 			// Max file size
-			$field_data .= ' data-rule-currency=\'["$",false]\''; 
+			$field_data .= ' data-rule-currency=\'["$",false]\'';
 
 			// Primary text field
-			printf( 
+			printf(
 				'<input type="text" name="wpforms[fields][%d]" id="%s" class="%s wpforms-payment-user-input" value="%s" placeholder="%s" %s %s>',
 				$field['id'],
 				$field_id,
@@ -185,8 +185,8 @@ class WPForms_Field_Payment_Single extends WPForms_Field {
 
 		// If field is required, check for data
 		if ( !empty( $form_data['fields'][$field_id]['required'] ) && empty( $field_submit ) ) {
-			
-			wpforms()->process->errors[$form_data['id']][$field_id] = apply_filters( 'wpforms_required_label', __( 'This field is required', 'wpforms' ) );
+
+			wpforms()->process->errors[$form_data['id']][$field_id] = apply_filters( 'wpforms_required_label', __( 'This field is required.', 'wpforms' ) );
 			return;
 		}
 
@@ -215,7 +215,7 @@ class WPForms_Field_Payment_Single extends WPForms_Field {
 		$name  = !empty( $field['label'] ) ? sanitize_text_field( $field['label'] ) : '';
 
 		// Only trust the value if the field is user format
-		if ( $field['format'] == 'user' ) { 
+		if ( $field['format'] == 'user' ) {
 			$amount = wpforms_sanitize_amount( $field_submit );
 		} else {
 			$amount = wpforms_sanitize_amount( $field['price'] );
@@ -234,8 +234,8 @@ class WPForms_Field_Payment_Single extends WPForms_Field {
 
 	/**
 	 * This filter is used to toggle the visbility on the field when displaying
-	 * on the front-end. 
-	 * 
+	 * on the front-end.
+	 *
 	 * If the format is set to hidden make sure the field does not show.
 	 *
 	 * @since 1.0.0

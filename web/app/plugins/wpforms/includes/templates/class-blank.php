@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Blank form template.
  *
@@ -7,7 +8,7 @@
  * @since      1.0.0
  * @license    GPL-2.0+
  * @copyright  Copyright (c) 2016, WPForms LLC
-*/
+ */
 class WPForms_Template_Blank extends WPForms_Template {
 
 	/**
@@ -23,6 +24,7 @@ class WPForms_Template_Blank extends WPForms_Template {
 		$this->includes    = '';
 		$this->icon        = '';
 		$this->modal       = '';
+		$this->core        = true;
 		$this->data        = array(
 			'field_id' => '1',
 			'fields'   => array(),
@@ -37,4 +39,5 @@ class WPForms_Template_Blank extends WPForms_Template {
 		);
 	}
 }
+
 new WPForms_Template_Blank;

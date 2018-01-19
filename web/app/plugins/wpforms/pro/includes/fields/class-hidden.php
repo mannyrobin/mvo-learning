@@ -33,16 +33,38 @@ class WPForms_Field_Hidden extends WPForms_Field {
 	 */
 	public function field_options( $field ) {
 
-		//--------------------------------------------------------------------//
-		// Basic field options
-		//--------------------------------------------------------------------//
+		// -------------------------------------------------------------------//
+		// Basic field options.
+		// -------------------------------------------------------------------//
 
-		$this->field_option( 'basic-options', $field, array( 'markup' => 'open' ) );
-		$this->field_option( 'label',         $field );
+		// Options open markup.
+		$args = array(
+			'markup' => 'open',
+		);
+		$this->field_option( 'basic-options', $field, $args );
+
+		// Label.
+		$this->field_option( 'label', $field );
+
+		// Set label to disabled.
+		$args = array(
+			'type'  => 'hidden',
+			'slug'  => 'label_disable',
+			'value' => '1',
+		);
+		$this->field_element( 'text',  $field, $args );
+
+		// Default value.
 		$this->field_option( 'default_value', $field );
-		$this->field_element( 'text',  $field, array( 'type' => 'hidden', 'slug' => 'label_disable', 'value' => '1' ) );
-		$this->field_option( 'css',           $field );
-		$this->field_option( 'basic-options', $field, array( 'markup' => 'close' ) );
+
+		// Custom CSS classes.
+		$this->field_option( 'css', $field );
+
+		// Options close markup.
+		$args = array(
+			'markup' => 'close',
+		);
+		$this->field_option( 'basic-options', $field, $args );
 	}
 
 	/**
@@ -53,9 +75,11 @@ class WPForms_Field_Hidden extends WPForms_Field {
 	 */
 	public function field_preview( $field ) {
 
+		// Label.
 		$this->field_preview_option( 'label', $field );
 
-		printf( '<input type="text" class="primary-input" disabled>' );
+		// Primary input.
+		echo '<input type="text" class="primary-input" disabled>';
 	}
 
 	/**
@@ -63,31 +87,17 @@ class WPForms_Field_Hidden extends WPForms_Field {
 	 *
 	 * @since 1.0.0
 	 * @param array $field
+	 * @param array $deprecated
 	 * @param array $form_data
 	 */
-	public function field_display( $field, $field_atts, $form_data ) {
+	public function field_display( $field, $deprecated, $form_data ) {
 
-		// Setup and sanitize the necessary data
-		$field             = apply_filters( 'wpforms_hidden_field_display', $field, $field_atts, $form_data );
-		$field_class       = implode( ' ', array_map( 'sanitize_html_class', $field_atts['input_class'] ) );
-		$field_id          = implode( ' ', array_map( 'sanitize_html_class', $field_atts['input_id'] ) );
-		$field_value       = !empty( $field['default_value'] ) ? esc_attr( apply_filters( 'wpforms_process_smart_tags', $field['default_value'], $form_data ) ) : '';
-		$field_data        = '';
+		// Define data.
+		$primary = $field['properties']['inputs']['primary'];
 
-		if ( !empty( $field_atts['input_data'] ) ) {
-			foreach ( $field_atts['input_data'] as $key => $val ) {
-				$field_data .= ' data-' . $key . '="' . $val . '"';
-			}
-		}
-
-		// Primary hidden field
-		printf(
-			'<input type="hidden" name="wpforms[fields][%d]" id="%s" class="%s" value="%s" %s>',
-			$field['id'],
-			$field_id,
-			$field_class,
-			$field_value,
-			$field_data
+		// Primary field.
+		printf( '<input type="hidden" %s>',
+			wpforms_html_attributes( $primary['id'], $primary['class'], $primary['data'], $primary['attr'] )
 		);
 	}
 }

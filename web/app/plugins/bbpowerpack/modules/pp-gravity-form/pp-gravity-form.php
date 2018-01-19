@@ -22,6 +22,7 @@ class PPGravityFormModule extends FLBuilderModule {
             'url'           => BB_POWERPACK_URL . 'modules/pp-gravity-form/',
             'editor_export' => true, // Defaults to true and can be omitted.
             'enabled'       => true, // Defaults to true and can be omitted.
+            'icon'				=> 'editor-table.svg',
         ));
     }
 }
@@ -407,7 +408,7 @@ FLBuilder::register_module('PPGravityFormModule', array(
                         'default'       => 1,
                         'preview'       => array(
                             'type'      => 'css',
-                            'selector'  => '.gform_wrapper .gsection',
+                            'selector'  => '.pp-gf-content .gform_wrapper .gsection',
                             'property'  => 'border-bottom-width',
                             'unit'      => 'px'
                         )
@@ -420,8 +421,21 @@ FLBuilder::register_module('PPGravityFormModule', array(
                         'show_reset'    => true,
                         'preview'           => array(
                             'type'          => 'css',
-                            'selector'      => '.gform_wrapper .gsection',
+                            'selector'      => '.pp-gf-content .gform_wrapper .gsection',
                             'property'      => 'border-bottom-color'
+                        )
+                    ),
+                    'section_field_margin'    => array(
+                        'type'              => 'text',
+                        'label'             => __('Margin Bottom', 'bb-powerpack'),
+                        'description'       => 'px',
+                        'class'             => 'bb-gf-input input-small',
+                        'default'           => '20',
+                        'preview'           => array(
+                            'type'          => 'css',
+                            'selector'      => '.pp-gf-content .gform_wrapper .gsection',
+                            'property'      => 'margin-bottom',
+                            'unit'          => 'px'
                         )
                     ),
 				)
@@ -753,6 +767,128 @@ FLBuilder::register_module('PPGravityFormModule', array(
                         'description'       => 'px',
                         'class'             => 'bb-gf-input input-small',
                     )
+                )
+            ),
+            'file_upload_style' => array(
+                'title' => __('File Upload', 'bb-powerpack'),
+                'fields'    => array(
+                    'file_bg_color'  => array(
+                        'type'                  => 'color',
+                        'label'                 => __('Background Color', 'bb-powerpack'),
+                        'default'               => '',
+                        'show_reset'            => true,
+                        'preview'               => array(
+                            'type'              => 'css',
+                            'selector'          => '.gform_wrapper .gfield input[type=file]',
+                            'property'          => 'background-color'
+                        )
+                    ),
+                    'file_text_color'  => array(
+                        'type'                  => 'color',
+                        'label'                 => __('Color', 'bb-powerpack'),
+                        'default'               => '',
+                        'show_reset'            => true,
+                        'preview'               => array(
+                            'type'              => 'css',
+                            'selector'          => '.gform_wrapper .gfield input[type=file]',
+                            'property'          => 'color'
+                        )
+                    ),
+                    'file_border_style' 	=> array(
+                        'type'          => 'pp-switch',
+                        'label'         => __('Border Style', 'bb-powerpack'),
+                        'default'       => 'none',
+                        'options'		=> array(
+                            'none'		=> __('None', 'bb-powerpack'),
+                            'solid'		=> __('Solid', 'bb-powerpack'),
+                       		'dashed'	=> __('Dashed', 'bb-powerpack'),
+                       		'dotted'	=> __('Dotted', 'bb-powerpack'),
+                        ),
+                        'preview'       => array(
+                            'type'      => 'css',
+                            'selector'  => '.gform_wrapper .gfield input[type=file]',
+                            'property'  => 'border-style'
+                        ),
+                        'toggle'    => array(
+                            'solid' => array(
+                                'fields'    => array('file_border_width', 'file_border_color')
+                            ),
+                            'dashed' => array(
+                                'fields'    => array('file_border_width', 'file_border_color')
+                            ),
+                            'dotted' => array(
+                                'fields'    => array('file_border_width', 'file_border_color')
+                            )
+                        )
+                    ),
+                    'file_border_width'      => array(
+                        'type'          => 'text',
+                        'label'         => __('Border Width', 'bb-powerpack'),
+                        'description'   => 'px',
+                        'class'         => 'bb-cf-input input-small',
+                        'default'       => '',
+                        'preview'       => array(
+                            'type'      => 'css',
+                            'selector'  => '.gform_wrapper .gfield input[type=file]',
+                            'property'  => 'border-width',
+                            'unit'      => 'px'
+                        )
+                    ),
+                    'file_border_color'     => array(
+                        'type'          => 'color',
+                        'label'         => __('Border Color', 'bb-powerpack'),
+                        'default'       => '',
+                        'show_reset'    => true,
+                        'preview'       => array(
+                            'type'      => 'css',
+                            'selector'  => '.gform_wrapper .gfield input[type=file]',
+                            'property'  => 'border-color'
+                        )
+                    ),
+                    'file_horizontal_padding'      => array(
+                        'type'          => 'text',
+                        'label'         => __('Horizontal Padding', 'bb-powerpack'),
+                        'description'   => 'px',
+                        'class'         => 'bb-cf-input input-small',
+                        'default'       => '',
+                        'preview'       => array(
+                            'type'      => 'css',
+                            'rules'     => array(
+                                array(
+                                    'selector'  => '.gform_wrapper .gfield input[type=file]',
+                                    'property'  => 'padding-left',
+                                    'unit'      => 'px'
+                                ),
+                                array(
+                                    'selector'  => '.gform_wrapper .gfield input[type=file]',
+                                    'property'  => 'padding-right',
+                                    'unit'      => 'px'
+                                ),
+                            )
+                        )
+                    ),
+                    'file_vertical_padding'      => array(
+                        'type'          => 'text',
+                        'label'         => __('Vertical Padding', 'bb-powerpack'),
+                        'description'   => 'px',
+                        'class'         => 'bb-cf-input input-small',
+                        'default'       => '',
+                        'preview'       => array(
+                            'type'      => 'css',
+                            'rules'     => array(
+                                array(
+                                    'selector'  => '.gform_wrapper .gfield input[type=file]',
+                                    'property'  => 'padding-top',
+                                    'unit'      => 'px'
+                                ),
+                                array(
+                                    'selector'  => '.gform_wrapper .gfield input[type=file]',
+                                    'property'  => 'padding-bottom',
+                                    'unit'      => 'px'
+                                ),
+                            )
+                        )
+                    ),
                 )
             )
         )
@@ -1148,6 +1284,18 @@ FLBuilder::register_module('PPGravityFormModule', array(
 			'section_typography'	=> array(
 				'title'	=> __( 'Sections', 'bb-powerpack' ),
 				'fields'	=> array(
+                    'section_font' => array(
+                        'type'          => 'font',
+                        'default'		=> array(
+                            'family'		=> 'Default',
+                            'weight'		=> 300
+                        ),
+                        'label'         => __('Font', 'bb-powerpack'),
+                        'preview'         => array(
+                            'type'            => 'font',
+                            'selector'        => '.gform_wrapper h2.gsection_title'
+                        )
+                    ),
 					'section_font_size'      => array(
                         'type'          => 'text',
                         'label'         => __('Font Size', 'bb-powerpack'),

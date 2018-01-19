@@ -51,7 +51,7 @@ class WPForms_Builder_Panel_Providers extends WPForms_Builder_Panel {
 			'wpforms-builder-providers',
 			'wpforms_builder_providers',
 			array(
-				'url'                => esc_url( home_url( add_query_arg( array('view' => 'providers' ) ) ) ),
+				'url'                => esc_url( add_query_arg( array( 'view' => 'providers' ) ) ),
 				'confirm_save'       => __( 'We need to save your progress to continue to the Marketing panel. Is that OK?', 'wpforms' ),
 				'confirm_connection' => __( 'Are you sure you want to delete this connecton?', 'wpforms' ),
 				'prompt_connection'  => __( 'Enter a %type% nickname', 'wpforms' ),
@@ -86,10 +86,10 @@ class WPForms_Builder_Panel_Providers extends WPForms_Builder_Panel {
 	 */
 	public function panel_content() {
 
-		// An array of all the active provider add-ons
+		// An array of all the active provider addons
 		$providers_active = apply_filters( 'wpforms_providers_available', array() );
 
-		if ( !$this->form ) {
+		if ( ! $this->form ) {
 
 			// Check if there is a form created. When no form has been created
 			// yet let the user know we need a form to setup a provider.
@@ -97,25 +97,28 @@ class WPForms_Builder_Panel_Providers extends WPForms_Builder_Panel {
 				_e( 'You need to <a href="#" class="wpforms-panel-switch" data-panel="setup">setup your form</a> before you can manage these settings.', 'wpforms' );
 			echo '</div>';
 			return;
-		} if ( empty( $providers_active ) ) {
+		}
 
-			// Check for active provider add-ons. When no provider add-ons are
+		if ( empty( $providers_active ) ) {
+
+			// Check for active provider addons. When no provider addons are
 			// activated let the user know they need to install/activate an
-			// add-on to setup a provider
+			// addon to setup a provider.
 			echo '<div class="wpforms-panel-content-section wpforms-panel-content-section-info">';
 				echo '<h5>' . __( 'Install Your Marketing Integration', 'wpforms' ) . '</h5>';
-				echo '<p>' . sprintf( __( 'It seems you do not have any marketing add-ons activated. You can head over to the <a href="%s">Add-Ons page</a> to install and activate the add-on for your provider.', 'wpforms' ), admin_url( 'admin.php?page=wpforms-addons' ) ) . '</p>';
+				echo '<p>' . sprintf( __( 'It seems you do not have any marketing addons activated. You can head over to the <a href="%s">Addons page</a> to install and activate the addon for your provider.', 'wpforms' ), admin_url( 'admin.php?page=wpforms-addons' ) ) . '</p>';
 			echo '</div>';
-		}  else {
+		} else {
 
-			// Everything is good - display default instructions
+			// Everything is good - display default instructions.
 			echo '<div class="wpforms-panel-content-section wpforms-panel-content-section-default">';
 				echo '<h5>' . __( 'Select Your Marketing Integration', 'wpforms' ) . '</h5>';
-				echo '<p>' . __( 'Select your email marketing service provider or CRM from the options on the left. If you don\'t see your email marketing service listed, then let us know and we\'ll do our best to get it added as fast as possible', 'wpforms' ) . '</p>';
+				echo '<p>' . __( 'Select your email marketing service provider or CRM from the options on the left. If you don\'t see your email marketing service listed, then let us know and we\'ll do our best to get it added as fast as possible.', 'wpforms' ) . '</p>';
 			echo '</div>';
 		}
 
 		do_action( 'wpforms_providers_panel_content', $this->form );
 	}
 }
+
 new WPForms_Builder_Panel_Providers;

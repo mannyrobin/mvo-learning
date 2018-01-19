@@ -171,16 +171,22 @@
     <?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .gform_wrapper .gsection {
+.fl-node-<?php echo $id; ?> .pp-gf-content .gform_wrapper .gsection {
 	<?php if( $settings->section_border_width >= 0 ) { ?>
 	border-bottom-width: <?php echo $settings->section_border_width; ?>px;
 	<?php } ?>
 	<?php if( $settings->section_border_color ) { ?>
 	border-bottom-color: #<?php echo $settings->section_border_color; ?>;
-	<?php } ?>
+    <?php } ?>
+    <?php if( $settings->section_field_margin >= 0 ) { ?>
+        margin-bottom: <?php echo $settings->section_field_margin; ?>px;
+    <?php } ?>
 }
 
 .fl-node-<?php echo $id; ?> .gform_wrapper h2.gsection_title {
+    <?php if( $settings->section_font['family'] != 'Default' ) { ?>
+    <?php FLBuilderFonts::font_css( $settings->section_font ); ?>
+    <?php } ?>
 	<?php if( $settings->section_text_color ) { ?>
 	color: #<?php echo $settings->section_text_color; ?>;
 	<?php } ?>
@@ -466,6 +472,32 @@
         <?php endif; ?>
     }
 <?php endif; ?>
+
+.fl-node-<?php echo $id; ?> .gform_wrapper .gfield input[type=file] {
+    background-color: <?php echo $settings->file_bg_color ? '#' . $settings->file_bg_color : 'transparent'; ?>;
+    <?php if( $settings->file_text_color ) { ?>color: #<?php echo $settings->file_text_color; ?>;<?php } ?>
+    <?php if( $settings->file_border_width >= 0 ) { ?>
+    border-width: <?php echo $settings->file_border_width; ?>px;
+    <?php } ?>
+    <?php if( $settings->file_border_color ) { ?>
+    border-color: #<?php echo $settings->file_border_color; ?>;
+    <?php } ?>
+    <?php if( $settings->file_border_style ) { ?>
+    border-style: <?php echo $settings->file_border_style; ?>;
+    <?php } ?>
+    <?php if( $settings->file_vertical_padding ) { ?>
+    padding-top: <?php echo $settings->file_vertical_padding; ?>px;
+    <?php } ?>
+    <?php if( $settings->file_vertical_padding ) { ?>
+    padding-bottom: <?php echo $settings->file_vertical_padding; ?>px;
+    <?php } ?>
+    <?php if( $settings->file_horizontal_padding ) { ?>
+    padding-left: <?php echo $settings->file_horizontal_padding; ?>px;
+    <?php } ?>
+    <?php if( $settings->file_horizontal_padding ) { ?>
+    padding-right: <?php echo $settings->file_horizontal_padding; ?>px;
+    <?php } ?>
+}
 
 .fl-node-<?php echo $id; ?> .gform_wrapper .validation_error,
 .fl-node-<?php echo $id; ?> .gform_wrapper li.gfield.gfield_error,

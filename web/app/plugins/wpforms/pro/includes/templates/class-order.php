@@ -22,9 +22,10 @@ class WPForms_Template_Order extends WPForms_Template {
 		$this->description = __( 'Collect Payments for product and service orders with this ready-made form template. You can add and remove fields as needed.', 'wpforms' );
 		$this->includes    = '';
 		$this->icon        = '';
+		$this->core        = true;
 		$this->modal       = array(
 			'title'   => __( 'Don&#39;t Forget', 'wpforms' ),
-			'message' => __( 'Click the payments tab to configure your payment provider', 'wpforms' ),
+			'message' => __( 'Click the Payments tab to configure your payment provider', 'wpforms' ),
 		);
 		$this->data        = array(
 			'field_id' => '7',

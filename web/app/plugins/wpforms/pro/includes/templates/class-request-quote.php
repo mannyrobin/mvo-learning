@@ -23,6 +23,7 @@ class WPForms_Template_Request_Quote extends WPForms_Template {
 		$this->includes    = '';
 		$this->icon        = '';
 		$this->modal       = '';
+		$this->core        = true;
 		$this->data        = array(
 			'field_id' => '5',
 			'fields'   => array(

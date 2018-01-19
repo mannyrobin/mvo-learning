@@ -70,6 +70,11 @@
 	margin: 5px 0 0 0;
 }
 
+.wpforms-container .wpforms-field-description-before {
+	font-size: 0.85em;
+	margin: 0 0 5px 0;
+}
+
 /* Labels and sub-labels */
 .wpforms-container .wpforms-field-label {
 	display: block;
@@ -283,6 +288,7 @@
 .wpforms-container.inline-fields .wpforms-field  {
 	display: table-cell;
 	padding-right: 2%;
+	vertical-align: top;
 }
 
 .wpforms-container.inline-fields .wpforms-submit-container {
@@ -430,7 +436,7 @@
 
 .wpforms-container .wpforms-page-indicator {
 	margin: 0 0 20px 0;
-	overflow: auto;
+	overflow: hidden;
 }
 
 /** Circles theme **/
@@ -522,6 +528,146 @@
 	top: 0;
 }
 
+/* Notices
+----------------------------------------------------------------------------- */
+
+div.wpforms-container .wpforms-notice {
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-left-width: 12px;
+	color: #333;
+	font-size: 16px;
+	line-height: 1.5;
+	margin-bottom: 30px;
+	padding: 20px 36px 20px 26px;
+	position: relative;
+}
+
+div.wpforms-container .wpforms-notice .wpforms-delete {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	background-color: rgba(10, 10, 10, 0.2);
+	border: none;
+	border-radius: 290486px;
+	cursor: pointer;
+	display: inline-block;
+	height: 20px;
+	margin: 0;
+	padding: 0;
+	outline: none;
+	vertical-align: top;
+	width: 20px;
+	position: absolute;
+	right: 10px;
+	top: 10px;
+}
+
+div.wpforms-container .wpforms-notice .wpforms-delete:before,
+div.wpforms-container .wpforms-notice .wpforms-delete:after {
+	background-color: #fff;
+	content: "";
+	display: block;
+	left: 50%;
+	position: absolute;
+	top: 50%;
+	-webkit-transform: translateX(-50%) translateY(-50%) rotate(45deg);
+	transform: translateX(-50%) translateY(-50%) rotate(45deg);
+	-webkit-transform-origin: center center;
+	transform-origin: center center;
+}
+
+div.wpforms-container .wpforms-notice .wpforms-delete:before {
+	height: 2px;
+	width: 50%;
+}
+
+div.wpforms-container .wpforms-notice .wpforms-delete:after {
+	height: 50%;
+	width: 2px;
+}
+
+div.wpforms-container .wpforms-notice .wpforms-delete:hover,
+div.wpforms-container .wpforms-notice .wpforms-delete:focus  {
+	background-color: rgba(10, 10, 10, 0.3);
+}
+
+div.wpforms-container .wpforms-notice a {
+	text-decoration: underline;
+}
+
+div.wpforms-container .wpforms-notice p {
+	margin: 0 0 20px 0;
+}
+
+div.wpforms-container .wpforms-notice p:last-of-type {
+	margin-bottom: 0;
+}
+
+div.wpforms-container-full .wpforms-notice.wpforms-info .wpforms-notice-action,
+div.wpforms-container-full .wpforms-notice.wpforms-info {
+	border-color: #3273dc
+}
+
+div.wpforms-container-full .wpforms-notice.wpforms-success .wpforms-notice-action,
+div.wpforms-container-full .wpforms-notice.wpforms-success {
+	border-color: #23d160
+}
+
+div.wpforms-container-full .wpforms-notice.wpforms-warning .wpforms-notice-action,
+div.wpforms-container-full .wpforms-notice.wpforms-warning {
+	border-color: #ffdd57
+}
+
+div.wpforms-container-full .wpforms-notice.wpforms-error .wpforms-notice-action,
+div.wpforms-container-full .wpforms-notice.wpforms-error {
+	border-color: #ff3860
+}
+
+div.wpforms-container-full .wpforms-notice .wpforms-notice-actions {
+	margin-top: 20px;
+}
+
+div.wpforms-container-full .wpforms-notice .wpforms-notice-action {
+	border: 2px solid;
+	margin-right: 20px;
+	padding: 5px;
+	text-decoration: none;
+}
+div.wpforms-container-full .wpforms-notice .wpforms-notice-action:hover,
+div.wpforms-container-full .wpforms-notice .wpforms-notice-action:focus,
+div.wpforms-container-full .wpforms-notice .wpforms-notice-action:active {
+	color: #fff;
+}
+
+div.wpforms-container-full .wpforms-notice.wpforms-info .wpforms-notice-action:hover,
+div.wpforms-container-full .wpforms-notice.wpforms-info .wpforms-notice-action:focus,
+div.wpforms-container-full .wpforms-notice.wpforms-info .wpforms-notice-action:active {
+	background-color: #3273dc;
+}
+
+div.wpforms-container-full .wpforms-notice.wpforms-success .wpforms-notice-action:hover,
+div.wpforms-container-full .wpforms-notice.wpforms-success .wpforms-notice-action:focus,
+div.wpforms-container-full .wpforms-notice.wpforms-success .wpforms-notice-action:active {
+	background-color: #23d160;
+}
+
+div.wpforms-container-full .wpforms-notice.wpforms-warning .wpforms-notice-action:hover,
+div.wpforms-container-full .wpforms-notice.wpforms-warning .wpforms-notice-action:focus,
+div.wpforms-container-full .wpforms-notice.wpforms-warning .wpforms-notice-action:active {
+	background-color: #ffdd57;
+	color: inherit;
+}
+
+div.wpforms-container-full .wpforms-notice.wpforms-error .wpforms-notice-action:hover,
+div.wpforms-container-full .wpforms-notice.wpforms-error .wpforms-notice-action:focus,
+div.wpforms-container-full .wpforms-notice.wpforms-error .wpforms-notice-action:active {
+	background-color: #ff3860;
+}
 
 /* Misc
 ----------------------------------------------------------------------------- */
@@ -598,6 +744,16 @@
 	}
 	.wpforms-container .wpforms-page-indicator.connector .wpforms-page-indicator-page-number {
 		display: none;
+	}
+
+	/* Date-Time field */
+	.wpforms-container .wpforms-field-date-time .wpforms-one-half {
+		width: 100%;
+		margin-left: 0;
+		float: none;
+	}
+	.wpforms-container .wpforms-field-date-time .wpforms-one-half:first-of-type {
+		margin-bottom: 8px;
 	}
 
 	/* Preset layout - single line */
