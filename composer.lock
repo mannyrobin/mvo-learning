@@ -1700,15 +1700,15 @@
         },
         {
             "name": "wpackagist-plugin/schema-app-structured-data-for-schemaorg",
-            "version": "1.9.2",
+            "version": "1.9.5",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/schema-app-structured-data-for-schemaorg/",
-                "reference": "tags/1.9.2"
+                "reference": "tags/1.9.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/schema-app-structured-data-for-schemaorg.1.9.2.zip",
+                "url": "https://downloads.wordpress.org/plugin/schema-app-structured-data-for-schemaorg.1.9.5.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -1728,7 +1728,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/smtp-mailer.zip?timestamp=1510899133",
+                "url": "https://downloads.wordpress.org/plugin/smtp-mailer.zip?timestamp=1513498762",
                 "reference": null,
                 "shasum": null
             },
@@ -1881,7 +1881,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.6"

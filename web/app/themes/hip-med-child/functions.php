@@ -66,3 +66,23 @@ function show_hidden_meta_boxes($hidden, $screen)
  
 	return $hidden;
 }
+
+/* Settings css in child theme */
+
+function child_theme_settings_styles(){
+    $general_settings = General\Settings::getSettings();
+    ob_start();
+    ?>
+    <style type="text/css">
+        header .top-header.style-1 ul.menu li.top-menu-btn a{
+            background-color: <?php echo $general_settings['secondary_color'];?>;
+        }
+        header .top-header.style-1 ul.menu li.top-menu-btn a:hover{
+            background-color: #<?php echo (new Helpers\PHPColors\Color($general_settings['secondary_color']))->darken(5);?>;
+        }
+    </style>
+
+    <?php
+    return ob_get_flush();
+}
+add_action('wp_head', 'child_theme_settings_styles');
