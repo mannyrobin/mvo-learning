@@ -3,10 +3,10 @@
 	{
 		this.settings       = settings;
 		this.nodeClass      = '.fl-node-' + settings.id;
-		this.wrapperClass   = this.nodeClass + ' .pp-gallery-' + this.settings.layout;
-		this.postClass      = this.wrapperClass + ' .pp-gallery-' + this.settings.layout + '-item';
+		this.wrapperClass   = this.nodeClass + ' .pp-photo-gallery';
+		this.itemClass      = this.wrapperClass + ' .pp-photo-gallery-item';
 
-		if(this._hasPosts()) {
+		if(this._hasItem()) {
 			this._initLayout();
 		}
 	};
@@ -16,12 +16,12 @@
 		settings        : {},
 		nodeClass       : '',
 		wrapperClass    : '',
-		postClass       : '',
+		itemClass       : '',
 		gallery         : null,
 
-		_hasPosts: function()
+		_hasItem: function()
 		{
-			return $(this.postClass).length > 0;
+			return $(this.itemClass).length > 0;
 		},
 
 		_initLayout: function()
@@ -30,30 +30,46 @@
 				this._masonryLayout();
 			}
 
-			$(this.postClass).css('visibility', 'visible');
+			if ( this.settings.layout === 'justified' ) {
+				this._justifiedLayout();
+			}
+
+			$(this.itemClass).css('visibility', 'visible');
 		},
 
 		_masonryLayout: function()
 		{
 			var wrap = $(this.wrapperClass);
 
-			var masonryData = {
+			var isotopeData = {
 				itemSelector: '.pp-gallery-masonry-item',
 				percentPosition: true,
 				transitionDuration: '0.6s',
-			};
-
-			masonryData = $.extend( {}, masonryData, {
 				masonry: {
 					columnWidth: '.pp-gallery-masonry-item',
 					gutter: '.pp-photo-space'
 				},
-			} );
+			};
 
 			wrap.imagesLoaded( $.proxy( function() {
-                $(this.nodeClass).find('.pp-masonry-content').isotope(masonryData);
+				$(this.nodeClass).find('.pp-photo-gallery').isotope(isotopeData);
 			}, this ) );
 		},
+
+		_justifiedLayout: function()
+		{
+			var wrap = $(this.wrapperClass);
+
+			wrap.imagesLoaded( $.proxy(function () {
+				$(this.wrapperClass).justifiedGallery({
+					margins: this.settings.spacing,
+					rowHeight: this.settings.rowheight,
+					maxRowHeight: this.settings.maxrowheight,
+					lastRow: this.settings.lastrow,
+				});
+			}, this));
+		},
+
 
 	};
 

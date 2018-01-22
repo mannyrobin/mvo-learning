@@ -22,6 +22,7 @@ class WPForms_Template_Donation extends WPForms_Template {
 		$this->description = __( 'Start collecting donation payments on your website with this ready-made Donation form. You can add and remove fields as needed.', 'wpforms' );
 		$this->includes    = '';
 		$this->icon        = '';
+		$this->core        = true;
 		$this->modal       = array(
 			'title'   => __( 'Don&#39;t Forget', 'wpforms' ),
 			'message' => __( 'Click the Payments tab to configure your payment provider', 'wpforms' ),

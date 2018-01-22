@@ -7,7 +7,7 @@
  * @since      1.0.0
  * @license    GPL-2.0+
  * @copyright  Copyright (c) 2016, WPForms LLC
-*/
+ */
 class WPForms_Builder {
 
 	/**
@@ -64,7 +64,7 @@ class WPForms_Builder {
 		$page = isset( $_GET['page'] ) ? $_GET['page'] : '';
 
 		// Only load if we are actually on the builder
-		if ( $page == 'wpforms-builder' ) {
+		if ( 'wpforms-builder' === $page ) {
 
 			// Load form if found
 			$form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : false;
@@ -73,7 +73,7 @@ class WPForms_Builder {
 				// Default view for with an existing form is fields panel
 				$this->view = isset( $_GET['view'] ) ? $_GET['view'] : 'fields';
 			} else {
-				// Defualt view for new field is the setup panel
+				// Default view for new field is the setup panel
 				$this->view = isset( $_GET['view'] ) ? $_GET['view'] : 'setup';
 			}
 
@@ -89,10 +89,11 @@ class WPForms_Builder {
 			// Load builder panels
 			$this->load_panels();
 
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueues' ) );
-			add_action( 'wpforms_admin_page',    array( $this, 'output'   ) );
+			add_action( 'admin_enqueue_scripts',      array( $this, 'enqueues'       ) );
+			add_action( 'admin_print_footer_scripts', array( $this, 'footer_scripts' ) );
+			add_action( 'wpforms_admin_page',         array( $this, 'output'         ) );
 
-			// Provide hook for add-ons
+			// Provide hook for addons
 			do_action( 'wpforms_builder_init', $this->view );
 
 			add_filter( 'teeny_mce_plugins', array( $this, 'tinymce_buttons' ) );
@@ -103,12 +104,15 @@ class WPForms_Builder {
 	 * Define TinyMCE buttons to use with our fancy editor instances.
 	 *
 	 * @since 1.0.3
+	 *
 	 * @param array $buttons
+	 *
 	 * @return array
 	 */
 	public function tinymce_buttons( $buttons ) {
 
 		$buttons = array( 'colorpicker', 'lists', 'wordpress', 'wpeditimage', 'wplink' );
+
 		return $buttons;
 	}
 
@@ -172,14 +176,14 @@ class WPForms_Builder {
 			'jquery-confirm',
 			WPFORMS_PLUGIN_URL . 'assets/css/jquery-confirm.min.css',
 			null,
-			'2.0.0'
+			'3.3.2'
 		);
 
 		wp_enqueue_style(
 			'minicolors',
 			WPFORMS_PLUGIN_URL . 'assets/css/jquery.minicolors.css',
 			null,
-			'2.2.3'
+			'2.2.6'
 		);
 
 		wp_enqueue_style(
@@ -194,88 +198,97 @@ class WPForms_Builder {
 		wp_enqueue_media();
 		wp_enqueue_script( 'jquery-ui-sortable' );
 		wp_enqueue_script( 'jquery-ui-draggable' );
+		wp_enqueue_script( 'wp-util' );
 
 		wp_enqueue_script(
 			'serialize-object',
 			WPFORMS_PLUGIN_URL . 'assets/js/jquery.serialize-object.min.js',
 			array( 'jquery' ),
-			'2.5.0',
-			false
+			'2.5.0'
 		);
 
 		wp_enqueue_script(
 			'tooltipster',
 			WPFORMS_PLUGIN_URL . 'assets/js/jquery.tooltipster.min.js',
 			array( 'jquery' ),
-			'3.3.0',
-			false
+			'3.3.0'
 		);
 
 		wp_enqueue_script(
 			'jquery-confirm',
 			WPFORMS_PLUGIN_URL . 'assets/js/jquery.jquery-confirm.min.js',
-			array(),
-			'2.0.0',
-			false
+			array( 'jquery' ),
+			'3.3.2'
 		);
 
 		wp_enqueue_script(
 			'matchheight',
 			WPFORMS_PLUGIN_URL . 'assets/js/jquery.matchHeight-min.js',
 			array( 'jquery' ),
-			'0.7.0',
-			false
+			'0.7.0'
 		);
 
 		wp_enqueue_script(
 			'insert-at-caret',
 			WPFORMS_PLUGIN_URL . 'assets/js/jquery.insert-at-caret.min.js',
 			array( 'jquery' ),
-			'1.1.4',
-			false
+			'1.1.4'
 		);
 
 		wp_enqueue_script(
 			'minicolors',
 			WPFORMS_PLUGIN_URL . 'assets/js/jquery.minicolors.min.js',
 			array( 'jquery' ),
-			'2.2.3',
-			false
+			'2.2.6'
 		);
 
 		wp_enqueue_script(
 			'conditionals',
 			WPFORMS_PLUGIN_URL . 'assets/js/jquery.conditionals.min.js',
 			array( 'jquery' ),
-			'1.0.0',
-			false
+			'1.0.0'
+		);
+
+		wp_enqueue_script(
+			'listjs',
+			WPFORMS_PLUGIN_URL . 'assets/js/list.min.js',
+			array( 'jquery' ),
+			'1.5.0'
 		);
 
 		wp_enqueue_script(
 			'wpforms-utils',
 			WPFORMS_PLUGIN_URL . 'assets/js/admin-utils.js',
-			array( 'jquery', 'serialize-object' ),
-			WPFORMS_VERSION,
-			false
+			array( 'serialize-object' ),
+			WPFORMS_VERSION
 		);
 
 		wp_enqueue_script(
 			'wpforms-builder',
 			WPFORMS_PLUGIN_URL . 'assets/js/admin-builder.js',
-			array( 'jquery', 'serialize-object', 'tooltipster' ),
-			WPFORMS_VERSION,
-			false
+			array( 'wpforms-utils', 'jquery-ui-sortable', 'jquery-ui-draggable', 'tooltipster', 'jquery-confirm' ),
+			WPFORMS_VERSION
 		);
 
 		$strings = array(
+			'and'                    => __( 'AND', 'wpforms' ),
 			'ajax_url'               => admin_url( 'admin-ajax.php' ),
-			'date_select_day'        => __( 'DD', 'wpforms' ),
-			'date_select_month'      => __( 'MM', 'wpforms' ),
+			'bulk_add_button'        => __( 'Add New Choices', 'wpforms '),
+			'bulk_add_show'          => __( 'Bulk Add', 'wpforms' ),
+			'bulk_add_hide'          => __( 'Hide Bulk Add', 'wpforms' ),
+			'bulk_add_heading'       => __( 'Add Choices (one per line)', 'wpforms '),
+			'bulk_add_placeholder'   => __( "Blue\nRed\nGreen", 'wpforms '),
+			'bulk_add_presets_show'  => __( 'Show presets', 'wpforms '),
+			'bulk_add_presets_hide'  => __( 'Hide presets', 'wpforms '),
+			'date_select_day'        => 'DD',
+			'date_select_month'      => 'MM',
+			'debug'                  => wpforms_debug(),
 			'dynamic_choice_limit'   => __( 'The {source} {type} contains over {limit} items ({total}). This may make the field difficult for your vistors to use and/or cause the form to be slow.', 'wpforms' ),
 			'cancel'                 => __( 'Cancel', 'wpforms' ),
 			'ok'                     => __( 'OK', 'wpforms' ),
 			'close'                  => __( 'Close', 'wpforms' ),
 			'conditionals_change'    => __( 'Due to form changes, conditional logic rules have been removed or updated:', 'wpforms' ),
+			'conditionals_disable'   => __( 'Are you sure you want to disable conditional logic? This will remove the rules for this field or setting.' ),
 			'field'                  => __( 'Field', 'wpforms' ),
 			'field_locked'           => __( 'Field Locked', 'wpforms' ),
 			'field_locked_msg'       => __( 'This field cannot be deleted or duplicated.', 'wpforms' ),
@@ -288,16 +301,23 @@ class WPForms_Builder {
 			'notification_prompt'    => __( 'Enter a notification name', 'wpforms' ),
 			'notification_ph'        => __( 'Eg: User Confirmation', 'wpforms' ),
 			'notification_error'     => __( 'You must provide a notification name', 'wpforms' ),
-			'notification_error2'    => __( 'Form must contain one notification. To disable all notifications use the setting Notifications dropdown setting.', 'wpforms' ),
+			'notification_error2'    => __( 'Form must contain one notification. To disable all notifications use the Notifications dropdown setting.', 'wpforms' ),
+			'notification_def_name'  => __( 'Default Notification', 'wpforms' ),
+			'save'                   => __( 'Save', 'wpforms' ),
 			'saving'                 => __( 'Saving ...', 'wpforms' ),
 			'saved'                  => __( 'Saved!', 'wpforms' ),
 			'save_exit'              => __( 'Save and Exit', 'wpforms' ),
+			'saved_state'            => '',
+			'layout_selector_show'   => __( 'Show Layouts', 'wpforms' ),
+			'layout_selector_hide'   => __( 'Hide Layouts', 'wpforms' ),
+			'layout_selector_layout' => __( 'Select your layout', 'wpforms' ),
+			'layout_selector_column' => __( 'Select your column', 'wpforms' ),
 			'loading'                => __( 'Loading', 'wpforms' ),
-			'template_name'          => !empty( $this->template['name'] ) ? $this->template['name'] : '',
-			'template_slug'          => !empty( $this->template['slug'] ) ? $this->template['slug'] : '',
-			'template_modal_title'   => !empty( $this->template['modal']['title'] ) ? $this->template['modal']['title'] : '',
-			'template_modal_msg'     => !empty( $this->template['modal']['message'] ) ? $this->template['modal']['message'] : '',
-			'template_modal_display' => !empty( $this->template['modal_display'] ) ? $this->template['modal_display'] : '',
+			'template_name'          => ! empty( $this->template['name'] ) ? $this->template['name'] : '',
+			'template_slug'          => ! empty( $this->template['slug'] ) ? $this->template['slug'] : '',
+			'template_modal_title'   => ! empty( $this->template['modal']['title'] ) ? $this->template['modal']['title'] : '',
+			'template_modal_msg'     => ! empty( $this->template['modal']['message'] ) ? $this->template['modal']['message'] : '',
+			'template_modal_display' => ! empty( $this->template['modal_display'] ) ? $this->template['modal_display'] : '',
 			'template_select'        => __( 'Use Template', 'wpforms' ),
 			'template_confirm'       => __( 'Changing templates on an existing form will DELETE existing form fields. Are you sure you want apply the new template?', 'wpforms' ),
 			'embed_modal'            => __( 'You are almost done. To embed this form on your site, please paste the following shortcode inside a post or page.', 'wpforms' ),
@@ -308,13 +328,25 @@ class WPForms_Builder {
 			'delete_confirm'         => __( 'Are you sure you want to delete this field?', 'wpforms' ),
 			'duplicate_confirm'      => __( 'Are you sure you want to duplicate this field?', 'wpforms' ),
 			'duplicate_copy'         => __( '(copy)', 'wpforms'),
-			'error_title'            => __( 'Please enter a form title.', 'wpforms' ),
+			'error_title'            => __( 'Please enter a form name.', 'wpforms' ),
 			'error_choice'           => __( 'This item must contain at least one choice.', 'wpforms' ),
 			'off'                    => __( 'Off', 'wpforms' ),
 			'on'                     => __( 'On', 'wpforms' ),
+			'or'                     => __( 'or', 'wpforms' ),
 			'other'                  => __( 'Other', 'wpforms' ),
+			'operator_is'            => __( 'is', 'wpforms' ),
+			'operator_is_not'        => __( 'is not', 'wpforms' ),
+			'operator_empty'         => __( 'empty', 'wpforms' ),
+			'operator_not_empty'     => __( 'not empty', 'wpforms' ),
+			'operator_contains'      => __( 'contains', 'wpforms' ),
+			'operator_not_contains'  => __( 'does not contain', 'wpforms' ),
+			'operator_starts'        => __( 'starts with', 'wpforms' ),
+			'operator_ends'          => __( 'ends with', 'wpforms' ),
+			'payments_entries_off'   => __( 'Form entries must be stored to accept payments. Please enable saving form entries in the General settings first.', 'wpforms' ),
 			'previous'               => __( 'Previous', 'wpforms' ),
-			'saved_state'            => '',
+			'rule_create'            => __( 'Create new rule', 'wpforms' ),
+			'rule_create_group'      => __( 'Add new group', 'wpforms' ),
+			'rule_delete'            => __( 'Delete rule', 'wpforms' ),
 			'smart_tags'             => wpforms()->smart_tags->get(),
 			'smart_tags_show'        => __( 'Show Smart Tags', 'wpforms' ),
 			'smart_tags_hide'        => __( 'Hide Smart Tags', 'wpforms' ),
@@ -323,8 +355,14 @@ class WPForms_Builder {
 		);
 		$strings = apply_filters( 'wpforms_builder_strings', $strings, $this->form );
 
-		if ( !empty( $_GET['form_id'] ) ) {
-			$strings['preview_url'] = add_query_arg( array( 'new_window' => 1 ), wpforms()->preview->form_preview_url( $_GET['form_id'] ) );
+		if ( ! empty( $_GET['form_id'] ) ) {
+			$strings['preview_url'] = add_query_arg(
+				array(
+					'new_window' => 1,
+				),
+				wpforms()->preview->form_preview_url( $_GET['form_id'] )
+			);
+			$strings['entries_url'] = esc_url_raw( admin_url( 'admin.php?page=wpforms-entries&view=list&form_id=' . intval( $_GET['form_id'] ) ) );
 		}
 
 		wp_localize_script(
@@ -333,8 +371,48 @@ class WPForms_Builder {
 			$strings
 		);
 
-		// Hook for add-ons
+		// Hook for addons
 		do_action( 'wpforms_builder_enqueues', $this->view );
+	}
+
+	/**
+	 * Footer JavaScript.
+	 *
+	 * @since 1.3.7
+	 */
+	public function footer_scripts() {
+
+		$choices = array(
+			'countries' => array(
+				'name'    => __( 'Countries', 'wpforms' ),
+				'choices' => array_values( wpforms_countries() ),
+			),
+			'countries_postal' => array(
+				'name'    => __( 'Countries Postal Code', 'wpforms' ),
+				'choices' => array_keys( wpforms_countries() ),
+			),
+			'states' => array(
+				'name'    => __( 'States', 'wpforms' ),
+				'choices' => array_values( wpforms_us_states() ),
+			),
+			'states_postal' => array(
+				'name'    => __( 'States Postal Code', 'wpforms' ),
+				'choices' => array_keys( wpforms_us_states() ),
+			),
+			'months' => array(
+				'name'    => __( 'Months', 'wpforms' ),
+				'choices' => array_values( wpforms_months() ),
+			),
+			'days' => array(
+				'name'    => __( 'Days', 'wpforms' ),
+				'choices' => array_values( wpforms_days() ),
+			),
+		);
+		$choices = apply_filters( 'wpforms_builder_preset_choices', $choices );
+
+		echo '<script type="text/javascript">wpforms_preset_choices=' . wp_json_encode( $choices ) . '</script>';
+
+		do_action( 'wpforms_builder_print_footer_scripts' );
 	}
 
 	/**
@@ -344,7 +422,7 @@ class WPForms_Builder {
 	 */
 	public function output() {
 
-		$form_id   = $this->form ? absint( $this->form->ID ): '';
+		$form_id   = $this->form ? absint( $this->form->ID ) : '';
 		$form_data = $this->form ? wpforms_decode( $this->form->post_content ) : false;
 		?>
 		<div id="wpforms-builder">
@@ -370,7 +448,7 @@ class WPForms_Builder {
 
 					<div class="wpforms-left">
 
-						<img src="<?php echo WPFORMS_PLUGIN_URL; ?>assets/images/logo-builder.png" alt="Sullie WPForms mascot">
+						<img src="<?php echo WPFORMS_PLUGIN_URL; ?>assets/images/sullie-alt.png" alt="Sullie WPForms mascot">
 
 					</div>
 
@@ -432,4 +510,5 @@ class WPForms_Builder {
 		<?php
 	}
 }
+
 new WPForms_Builder;

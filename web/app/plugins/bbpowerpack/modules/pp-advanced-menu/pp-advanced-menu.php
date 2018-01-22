@@ -21,6 +21,7 @@ class PPAdvancedMenu extends FLBuilderModule {
             'url'           => BB_POWERPACK_URL . 'modules/pp-advanced-menu/',
             'editor_export' => true, // Defaults to true and can be omitted.
             'enabled'       => true, // Defaults to true and can be omitted.
+            'icon'				=> 'hamburger-menu.svg',
         ));
 
     }
@@ -632,6 +633,20 @@ FLBuilder::register_module('PPAdvancedMenu', array(
 			'submenu_style'	=> array(
 				'title'		=> __( 'Sub Menu', 'bb-powerpack' ),
 				'fields'	=> array(
+					'submenu_spacing' => array(
+						'type'          => 'text',
+						'label'         => __( 'Submenu Spacing', 'bb-powerpack' ),
+						'default'       => '0',
+						'maxlength'     => '5',
+						'size'          => '4',
+						'description'   => 'px',
+						'preview'      => array(
+							'type'         => 'css',
+							'selector'		=> 'ul.sub-menu',
+							'property'		=> 'padding',
+							'unit'			=> 'px'
+						),
+					),
 					'submenu_border_width'   => array(
                         'type'      => 'pp-multitext',
                         'label'     => __('Border', 'bb-powerpack'),
@@ -757,6 +772,18 @@ FLBuilder::register_module('PPAdvancedMenu', array(
                         'description'       => '%',
                         'size'             => 5,
                         'default'           => 30,
+					),
+					'submenu_container_bg_color' => array(
+                        'type'       => 'color',
+                        'label'      => __('Container Background Color', 'bb-powerpack'),
+                        'default'    => '',
+                        'show_reset' => true,
+						'preview'         => array(
+							'type'            => 'css',
+							'selector'        => 'ul.sub-menu',
+							'property'        => 'background-color',
+						),
+						'help'		=> __('You can set sub-menu container background color if you are using mega menu.', 'bb-powerpack')
                     ),
 					'submenu_background_color' => array(
                         'type'       => 'color',

@@ -19,7 +19,8 @@ class PPAccordionModule extends FLBuilderModule {
             'url'           	=> BB_POWERPACK_URL . 'modules/pp-advanced-accordion/',
             'editor_export' 	=> true, // Defaults to true and can be omitted.
             'enabled'       	=> true, // Defaults to true and can be omitted.
-			'partial_refresh'	=> true
+			'partial_refresh'	=> true,
+			'icon'				=> 'layout.svg',
 		));
 
 		$this->add_css('font-awesome');
@@ -270,6 +271,16 @@ FLBuilder::register_module('PPAccordionModule', array(
 						'default'		=> '',
 						'size'			=> 5,
 						'help'			=> __('Add item number to expand by default.', 'bb-powerpack')
+					),
+					'responsive_collapse'	=> array(
+						'type'					=> 'pp-switch',
+						'label'					=> __('Responsive Collapse All', 'bb-powerpack'),
+						'default'				=> 'no',
+						'options'				=> array(
+							'yes'					=> __('Yes', 'bb-powerpack'),
+							'no'					=> __('No', 'bb-powerpack'),
+						),
+						'help'					=> __('Items will not appear as expanded on responsive devices until user clicks on it.', 'bb-powerpack')
 					)
 				)
 			),

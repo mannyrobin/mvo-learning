@@ -51,11 +51,18 @@
 
 <?php if( $settings->form_bg_image && $settings->form_bg_type == 'image' ) { ?>
 .fl-node-<?php echo $id; ?> .pp-ff-content:before {
+    content: "";
+	display: block;
+	position: absolute;;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
 	background-color: <?php echo ( $settings->form_bg_overlay ) ? pp_hex2rgba('#' . $settings->form_bg_overlay, $settings->form_bg_overlay_opacity / 100 ) : 'transparent'; ?>;
 }
 <?php } ?>
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .frm-show-form  .frm_section_heading h3 {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .frm-show-form  .frm_section_heading h3 {
     <?php if( $settings->section_field_padding['top'] >= 0 ) { ?>
 	padding-top: <?php echo $settings->section_field_padding['top']; ?>px;
 	<?php } ?>
@@ -95,20 +102,20 @@
     <?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_icon_font {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .frm_icon_font {
     <?php if( $settings->section_field_color ) { ?>
     color: #<?php echo $settings->section_field_color; ?>;
     <?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field {
 	list-style-type: none !important;
     <?php if( $settings->input_field_margin >= 0 ) { ?>
 	margin-bottom: <?php echo $settings->input_field_margin; ?>px;
     <?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style h3.frm_form_title,
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms h3.frm_form_title,
 .fl-node-<?php echo $id; ?> .pp-ff-content .pp-form-title {
     <?php if( $settings->title_color ) { ?>
     color: #<?php echo $settings->title_color; ?>;
@@ -139,13 +146,13 @@
 	display: <?php echo ($settings->form_custom_title_desc == 'yes') ? 'block' : 'none'; ?>;
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style h3.frm_form_title {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms h3.frm_form_title {
 	<?php if( $settings->form_custom_title_desc == 'yes' ) { ?>
 	display: none;
 	<?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_form_title + div.frm_description p,
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .frm_form_title + div.frm_description p,
 .fl-node-<?php echo $id; ?> .pp-ff-content .pp-form-description {
     <?php if( $settings->description_font_family['family'] != 'Default' ) { ?>
     <?php FLBuilderFonts::font_css( $settings->description_font_family ); ?>
@@ -176,13 +183,13 @@
     display: <?php echo ($settings->form_custom_title_desc == 'yes') ? 'block' : 'none'; ?>;
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_form_title + div.frm_description {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .frm_form_title + div.frm_description {
 	<?php if( $settings->form_custom_title_desc == 'yes' ) { ?>
 	display: none;
 	<?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style label.frm_primary_label {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms label.frm_primary_label {
     <?php if( $settings->form_label_color ) { ?>
 	color: #<?php echo $settings->form_label_color; ?>;
     <?php } ?>
@@ -198,9 +205,9 @@
     text-transform: <?php echo $settings->label_text_transform; ?>;
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field.frm_third div.frm_description,
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style label,
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_form_field.frm_html_container {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field.frm_third div.frm_description,
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms label,
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .frm_form_field.frm_html_container {
     <?php if( $settings->form_label_color ) { ?>
     color: #<?php echo $settings->form_label_color; ?>;
     <?php } ?>
@@ -209,8 +216,8 @@
     <?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input + .frm_description,
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select + .frm_description {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field input + .frm_description,
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field select + .frm_description {
     <?php if( $settings->input_desc_font_size['desktop'] && $settings->input_desc_size == 'custom' ) { ?>
     font-size: <?php echo $settings->input_desc_font_size['desktop']; ?>px;
     <?php } ?>
@@ -225,9 +232,9 @@
     <?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type='radio']):not([type='checkbox']):not([type='submit']):not([type='button']):not([type='image']):not([type='file']),
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select,
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field input:not([type='radio']):not([type='checkbox']):not([type='submit']):not([type='button']):not([type='image']):not([type='file']),
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field select,
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field textarea {
     <?php if( $settings->input_field_text_color ) { ?>
     color: #<?php echo $settings->input_field_text_color; ?>;
     <?php } ?>
@@ -278,29 +285,29 @@
     text-transform: <?php echo $settings->input_text_transform; ?>;
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_dropzone {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .frm_dropzone {
     background-color: <?php echo $settings->input_field_bg_color ? pp_hex2rgba('#' . $settings->input_field_bg_color, $settings->input_field_background_opacity / 100 ) : 'transparent'; ?>;
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type='radio']):not([type='checkbox']):not([type='submit']):not([type='button']):not([type='image']):not([type='file']),
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field input:not([type='radio']):not([type='checkbox']):not([type='submit']):not([type='button']):not([type='image']):not([type='file']),
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field select {
     <?php if( $settings->input_field_height ) { ?>
     height: <?php echo $settings->input_field_height; ?>px;
     <?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field textarea {
     <?php if( $settings->input_textarea_height ) { ?>
     height: <?php echo $settings->input_textarea_height; ?>px;
     <?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input,
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field input,
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field select {
     margin-bottom: <?php echo ( $settings->input_field_margin * 40 ) / 100 ?>px;
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input::-webkit-input-placeholder {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field input::-webkit-input-placeholder {
     <?php if( $settings->input_placeholder_color && $settings->input_placeholder_display == 'block' ) { ?>
     color: #<?php echo $settings->input_placeholder_color; ?>;
     <?php } else { ?>
@@ -308,7 +315,7 @@
 	opacity: 0;
     <?php } ?>
 }
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:-moz-placeholder {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field input:-moz-placeholder {
     <?php if( $settings->input_placeholder_color && $settings->input_placeholder_display == 'block' ) { ?>
     color: #<?php echo $settings->input_placeholder_color; ?>;
     <?php } else { ?>
@@ -316,22 +323,14 @@
 	opacity: 0;
     <?php } ?>
 }
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input::-moz-placeholder {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field input::-moz-placeholder {
     <?php if( $settings->input_placeholder_color && $settings->input_placeholder_display == 'block' ) { ?>
     color: #<?php echo $settings->input_placeholder_color; ?>;
     <?php } else { ?>
     color: transparent;
     <?php } ?>
 }
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:-ms-input-placeholder {
-    <?php if( $settings->input_placeholder_color && $settings->input_placeholder_display == 'block' ) { ?>
-    color: #<?php echo $settings->input_placeholder_color; ?>;
-    <?php } else { ?>
-    color: transparent;
-	opacity: 0;
-    <?php } ?>
-}
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select::-webkit-input-placeholder {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field input:-ms-input-placeholder {
     <?php if( $settings->input_placeholder_color && $settings->input_placeholder_display == 'block' ) { ?>
     color: #<?php echo $settings->input_placeholder_color; ?>;
     <?php } else { ?>
@@ -339,7 +338,7 @@
 	opacity: 0;
     <?php } ?>
 }
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select:-moz-placeholder {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field select::-webkit-input-placeholder {
     <?php if( $settings->input_placeholder_color && $settings->input_placeholder_display == 'block' ) { ?>
     color: #<?php echo $settings->input_placeholder_color; ?>;
     <?php } else { ?>
@@ -347,7 +346,15 @@
 	opacity: 0;
     <?php } ?>
 }
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select::-moz-placeholder {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field select:-moz-placeholder {
+    <?php if( $settings->input_placeholder_color && $settings->input_placeholder_display == 'block' ) { ?>
+    color: #<?php echo $settings->input_placeholder_color; ?>;
+    <?php } else { ?>
+    color: transparent;
+	opacity: 0;
+    <?php } ?>
+}
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field select::-moz-placeholder {
     <?php if( $settings->input_placeholder_color ) { ?>
     color: #<?php echo $settings->input_placeholder_color; ?>;
     <?php } else { ?>
@@ -355,7 +362,7 @@
 	opacity: 0;
     <?php } ?>
 }
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select:-ms-input-placeholder {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field select:-ms-input-placeholder {
     <?php if( $settings->input_placeholder_color ) { ?>
     color: #<?php echo $settings->input_placeholder_color; ?>;
     <?php } else { ?>
@@ -363,7 +370,7 @@
 	opacity: 0;
     <?php } ?>
 }
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea::-webkit-input-placeholder {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field textarea::-webkit-input-placeholder {
     <?php if( $settings->input_placeholder_color && $settings->input_placeholder_display == 'block' ) { ?>
     color: #<?php echo $settings->input_placeholder_color; ?>;
     <?php } else { ?>
@@ -371,7 +378,7 @@
 	opacity: 0;
     <?php } ?>
 }
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea:-moz-placeholder {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field textarea:-moz-placeholder {
     <?php if( $settings->input_placeholder_color ) { ?>
     color: #<?php echo $settings->input_placeholder_color; ?>;
     <?php } else { ?>
@@ -379,7 +386,7 @@
 	opacity: 0;
     <?php } ?>
 }
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea::-moz-placeholder {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field textarea::-moz-placeholder {
     <?php if( $settings->input_placeholder_color && $settings->input_placeholder_display == 'block' ) { ?>
     color: #<?php echo $settings->input_placeholder_color; ?>;
     <?php } else { ?>
@@ -387,7 +394,7 @@
 	opacity: 0;
     <?php } ?>
 }
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea:-ms-input-placeholder {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field textarea:-ms-input-placeholder {
     <?php if( $settings->input_placeholder_color && $settings->input_placeholder_display == 'block' ) { ?>
     color: #<?php echo $settings->input_placeholder_color; ?>;
     <?php } else { ?>
@@ -396,22 +403,22 @@
     <?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type='radio']):not([type='checkbox']):not([type='submit']):not([type='button']):not([type='image']):not([type='file']):focus,
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select:focus,
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea:focus {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field input:not([type='radio']):not([type='checkbox']):not([type='submit']):not([type='button']):not([type='image']):not([type='file']):focus,
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field select:focus,
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field textarea:focus {
     border-color: <?php echo $settings->input_field_focus_color ? '#' . $settings->input_field_focus_color : 'transparent'; ?>;
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_submit {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .frm_submit {
     <?php if( $settings->button_alignment ) { ?>
     text-align: <?php echo $settings->button_alignment; ?>;
     <?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=submit],
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=button],
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=reset],
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_submit button {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms input[type=submit],
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms input[type=button],
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms input[type=reset],
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .frm_submit button {
     <?php if( $settings->button_text_color['primary'] ) { ?>
 	color: #<?php echo $settings->button_text_color['primary']; ?>;
     <?php } ?>
@@ -448,10 +455,10 @@
     <?php if( $settings->button_width == 'true' ) { ?>width: 100%; <?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=submit]:hover,
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=button]:hover,
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=reset]:hover,
-.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_submit button:hover {
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms input[type=submit]:hover,
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms input[type=button]:hover,
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms input[type=reset]:hover,
+.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .frm_submit button:hover {
     <?php if( $settings->button_text_color['secondary'] ) { ?>
 	color: #<?php echo $settings->button_text_color['secondary']; ?>;
     <?php } ?>
@@ -461,7 +468,7 @@
     <?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .frm_style_formidable-style.with_frm_style .frm_error_style {
+.fl-node-<?php echo $id; ?> .frm_forms .frm_error_style {
     <?php if( $settings->validation_error_font_size['desktop'] && $settings->validation_error_size == 'custom' ) { ?>
 	font-size: <?php echo $settings->validation_error_font_size['desktop']; ?>px;
     <?php } ?>
@@ -475,7 +482,7 @@
     background-color: <?php echo $settings->validation_error_bg_color ? '#' . $settings->validation_error_bg_color : 'transparent'; ?>
 }
 
-.fl-node-<?php echo $id; ?> .frm_style_formidable-style.with_frm_style .frm_error {
+.fl-node-<?php echo $id; ?> .frm_forms .frm_error {
     <?php if( $settings->validation_message ) { ?>
 	display: <?php echo $settings->validation_message; ?>;
     <?php } ?>
@@ -484,7 +491,7 @@
     <?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .frm_style_formidable-style.with_frm_style .frm_message {
+.fl-node-<?php echo $id; ?> .frm_forms .frm_message {
     <?php if( $settings->success_message_font_size['desktop'] && $settings->success_message_size == 'custom' ) { ?>
 	font-size: <?php echo $settings->success_message_font_size['desktop']; ?>px;
     <?php } ?>
@@ -496,7 +503,7 @@
 }
 
 @media only screen and (max-width: 768px) {
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style h3.frm_form_title,
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms h3.frm_form_title,
     .fl-node-<?php echo $id; ?> .pp-ff-content .pp-form-title {
         <?php if( $settings->title_font_size['tablet'] && $settings->title_size == 'custom' ) { ?>
         font-size: <?php echo $settings->title_font_size['tablet']; ?>px;
@@ -505,7 +512,7 @@
         line-height: <?php echo $settings->title_line_height['tablet']; ?>;
         <?php } ?>
     }
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_form_title + div.frm_description p,
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .frm_form_title + div.frm_description p,
     .fl-node-<?php echo $id; ?> .pp-ff-content .pp-form-description {
         <?php if( $settings->description_font_size['tablet'] && $settings->description_size == 'custom' ) { ?>
         font-size: <?php echo $settings->description_font_size['tablet']; ?>px;
@@ -514,19 +521,19 @@
         line-height: <?php echo $settings->description_line_height['tablet']; ?>;
         <?php } ?>
     }
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style label.frm_primary_label {
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms label.frm_primary_label {
         <?php if( $settings->label_font_size['tablet'] && $settings->label_size == 'custom' ) { ?>
         font-size: <?php echo $settings->label_font_size['tablet']; ?>px;
         <?php } ?>
     }
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type='radio']):not([type='checkbox']):not([type='submit']):not([type='button']):not([type='image']):not([type='file']),
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select,
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea {
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field input:not([type='radio']):not([type='checkbox']):not([type='submit']):not([type='button']):not([type='image']):not([type='file']),
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field select,
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field textarea {
         <?php if( $settings->input_font_size['tablet'] && $settings->input_size == 'custom' ) { ?>
         font-size: <?php echo $settings->input_font_size['tablet']; ?>px;
         <?php } ?>
     }
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input + .frm_description {
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field input + .frm_description {
         <?php if( $settings->input_desc_font_size['tablet'] && $settings->input_desc_size == 'custom' ) { ?>
         font-size: <?php echo $settings->input_desc_font_size['tablet']; ?>px;
         <?php } ?>
@@ -534,21 +541,21 @@
         line-height: <?php echo $settings->input_desc_line_height['tablet']; ?>;
         <?php } ?>
     }
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=submit],
-	.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=button],
-	.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=reset],
-	.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_submit button {
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms input[type=submit],
+	.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms input[type=button],
+	.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms input[type=reset],
+	.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .frm_submit button {
         <?php if( $settings->button_font_size['tablet'] && $settings->button_size == 'custom' ) { ?>
         font-size: <?php echo $settings->button_font_size['tablet']; ?>px;
         <?php } ?>
     }
-    .fl-node-<?php echo $id; ?> .frm_style_formidable-style.with_frm_style .frm_error_style {
+    .fl-node-<?php echo $id; ?> .frm_forms .frm_error_style {
         <?php if( $settings->validation_error_font_size['tablet'] && $settings->validation_error_size == 'custom' ) { ?>
     	font-size: <?php echo $settings->validation_error_font_size['tablet']; ?>px;
         <?php } ?>
     }
 
-    .fl-node-<?php echo $id; ?> .frm_style_formidable-style.with_frm_style .frm_message {
+    .fl-node-<?php echo $id; ?> .frm_forms .frm_message {
         <?php if( $settings->success_message_font_size['tablet'] && $settings->success_message_size == 'custom' ) { ?>
     	font-size: <?php echo $settings->success_message_font_size['tablet']; ?>px;
         <?php } ?>
@@ -556,7 +563,7 @@
 }
 
 @media only screen and (max-width: 480px) {
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style h3.frm_form_title,
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms h3.frm_form_title,
     .fl-node-<?php echo $id; ?> .pp-ff-content .pp-form-title {
         <?php if( $settings->title_font_size['mobile'] && $settings->title_size == 'custom' ) { ?>
         font-size: <?php echo $settings->title_font_size['mobile']; ?>px;
@@ -566,7 +573,7 @@
         <?php } ?>
     }
 
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_form_title + div.frm_description p,
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .frm_form_title + div.frm_description p,
     .fl-node-<?php echo $id; ?> .pp-ff-content .pp-form-description {
         <?php if( $settings->description_font_size['mobile'] && $settings->description_size == 'custom' ) { ?>
         font-size: <?php echo $settings->description_font_size['mobile']; ?>px;
@@ -575,19 +582,19 @@
         line-height: <?php echo $settings->description_line_height['mobile']; ?>;
         <?php } ?>
     }
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style label.frm_primary_label {
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms label.frm_primary_label {
         <?php if( $settings->label_font_size['mobile'] && $settings->label_size == 'custom' ) { ?>
         font-size: <?php echo $settings->label_font_size['mobile']; ?>px;
         <?php } ?>
     }
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type='radio']):not([type='checkbox']):not([type='submit']):not([type='button']):not([type='image']):not([type='file']),
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select,
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea {
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field input:not([type='radio']):not([type='checkbox']):not([type='submit']):not([type='button']):not([type='image']):not([type='file']),
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field select,
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field textarea {
         <?php if( $settings->input_font_size['mobile'] && $settings->input_size == 'custom' ) { ?>
         font-size: <?php echo $settings->input_font_size['mobile']; ?>px;
         <?php } ?>
     }
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input + .frm_description {
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .form-field input + .frm_description {
         <?php if( $settings->input_desc_font_size['mobile'] && $settings->input_desc_size == 'custom' ) { ?>
         font-size: <?php echo $settings->input_desc_font_size['mobile']; ?>px;
         <?php } ?>
@@ -595,20 +602,20 @@
         line-height: <?php echo $settings->input_desc_line_height['mobile']; ?>;
         <?php } ?>
     }
-    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=submit],
-	.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=button],
-	.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=reset],
-	.fl-node-<?php echo $id; ?> .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_submit button {
+    .fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms input[type=submit],
+	.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms input[type=button],
+	.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms input[type=reset],
+	.fl-node-<?php echo $id; ?> .pp-ff-content .frm_forms .frm_submit button {
         <?php if( $settings->button_font_size['mobile'] && $settings->button_size == 'custom' ) { ?>
         font-size: <?php echo $settings->button_font_size['mobile']; ?>px;
         <?php } ?>
     }
-    .fl-node-<?php echo $id; ?> .frm_style_formidable-style.with_frm_style .frm_error_style {
+    .fl-node-<?php echo $id; ?> .frm_forms .frm_error_style {
         <?php if( $settings->validation_error_font_size['mobile'] && $settings->validation_error_size == 'custom' ) { ?>
     	font-size: <?php echo $settings->validation_error_font_size['mobile']; ?>px;
         <?php } ?>
     }
-    .fl-node-<?php echo $id; ?> .frm_style_formidable-style.with_frm_style .frm_message {
+    .fl-node-<?php echo $id; ?> .frm_forms .frm_message {
         <?php if( $settings->success_message_font_size['mobile'] && $settings->success_message_size == 'custom' ) { ?>
     	font-size: <?php echo $settings->success_message_font_size['mobile']; ?>px;
         <?php } ?>

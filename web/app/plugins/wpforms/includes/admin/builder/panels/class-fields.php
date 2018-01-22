@@ -39,10 +39,10 @@ class WPForms_Builder_Panel_Fields extends WPForms_Builder_Panel {
 	public function enqueues() {
 
 		// CSS
-		wp_enqueue_style( 
-			'wpforms-builder-fields', 
-			WPFORMS_PLUGIN_URL . 'assets/css/admin-builder-fields.css', 
-			null, 
+		wp_enqueue_style(
+			'wpforms-builder-fields',
+			WPFORMS_PLUGIN_URL . 'assets/css/admin-builder-fields.css',
+			null,
 			WPFORMS_VERSION
 		);
 	}
@@ -53,7 +53,7 @@ class WPForms_Builder_Panel_Fields extends WPForms_Builder_Panel {
 	 * @since 1.0.0
 	 */
 	public function panel_sidebar() {
-		
+
 		// Sidebar contents are not valid unless we have a form
 		if ( !$this->form ) {
 			return;
@@ -116,10 +116,10 @@ class WPForms_Builder_Panel_Fields extends WPForms_Builder_Panel {
 				</div>
 
 				<p class="wpforms-field-recaptcha">
-					<img src="<?php echo WPFORMS_PLUGIN_URL; ?>/assets/images/recaptcha-placeholder.png">
+					<img src="<?php echo WPFORMS_PLUGIN_URL; ?>/assets/images/recaptcha-placeholder.png" style="max-width: 304px;">
 				</p>
 
-				<?php 
+				<?php
 				$submit = !empty( $this->form_data['settings']['submit_text'] ) ? esc_attr( $this->form_data['settings']['submit_text'] ) : __( 'Submit', 'wpforms' );
 				printf( '<p class="wpforms-field-submit"><input type="submit" value="%s" class="wpforms-field-submit-button"></p>', $submit );
 				?>
@@ -172,9 +172,9 @@ class WPForms_Builder_Panel_Fields extends WPForms_Builder_Panel {
 				echo '<div class="wpforms-add-fields-buttons">';
 
 					foreach( $group['fields'] as $field ) {
-						
+
 						$class = !empty( $field['class'] ) ? sanitize_html_class( $field['class'] ) : '';
-						
+
 						echo '<button class="wpforms-add-fields-button ' . $class . '" id="wpforms-add-fields-' . esc_attr( $field['type'] ) . '" data-field-type="' . esc_attr( $field['type'] ) . '">';
 							if ( $field['icon'] ) {
 								echo '<i class="fa ' . esc_attr( $field['icon'] ) . '"></i> ';
@@ -209,11 +209,11 @@ class WPForms_Builder_Panel_Fields extends WPForms_Builder_Panel {
 			$class = apply_filters( 'wpforms_builder_field_option_class', '', $field );
 
 			printf( '<div class="wpforms-field-option wpforms-field-option-%s %s" id="wpforms-field-option-%d" data-field-id="%d">', esc_attr( $field['type'] ), $class, $field['id'], $field['id'] );
-				
+
 				printf( '<input type="hidden" name="fields[%d][id]" value="%d" class="wpforms-field-option-hidden-id">', $field['id'], $field['id'] );
-				
+
 				printf( '<input type="hidden" name="fields[%d][type]" value="%s" class="wpforms-field-option-hidden-type">', $field['id'], esc_attr( $field['type'] ) );
-				
+
 				do_action( "wpforms_builder_fields_options_{$field['type']}", $field );
 
 			echo '</div>';
@@ -246,13 +246,13 @@ class WPForms_Builder_Panel_Fields extends WPForms_Builder_Panel {
 			$css .= isset( $field['meta']['delete'] ) && $field['meta']['delete'] === false ? ' no-delete' : '';
 
 			$css = apply_filters( 'wpforms_field_preview_class', $css, $field );
-			
+
 			printf( '<div class="wpforms-field wpforms-field-%s %s" id="wpforms-field-%d" data-field-id="%d" data-field-type="%s">', $field['type'], $css, $field['id'], $field['id'], $field['type'] );
-				
+
 				printf( '<a href="#" class="wpforms-field-duplicate" title="%s"><i class="fa fa-files-o" aria-hidden="true"></i></a>', __( 'Duplicate Field', 'wpforms' ) );
 
 				printf( '<a href="#" class="wpforms-field-delete" title="%s"><i class="fa fa-times-circle" aria-hidden="true"></i></a>', __( 'Delete Field', 'wpforms' ) );
-				
+
 				printf( '<span class="wpforms-field-helper">%s</span>', __( 'Click to edit. Drag to reorder.', 'wpforms' ) );
 
 				do_action( "wpforms_builder_fields_previews_{$field['type']}", $field );

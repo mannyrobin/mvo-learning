@@ -107,6 +107,9 @@ for( $i = 0; $i < count( $settings->card_content ); $i++ ) {
 	$card = $settings->card_content[$i];
 	$padding = (array)$card->hover_card_box_padding;
 ?>
+.fl-node-<?php echo $id; ?> .pp-hover-card-<?php echo $i; ?> {
+	border-radius: <?php echo $card->hover_card_box_border_radius; ?>px;
+}
 .fl-node-<?php echo $id; ?> .pp-hover-card-<?php echo $i; ?> .pp-hover-card-inner {
 	<?php if ( $card->hover_card_bg_type == 'color' ) { ?>
 	background: <?php echo $card->hover_card_bg_color == '' ? 'none' : '#' . $card->hover_card_bg_color; ?>;
@@ -123,14 +126,18 @@ for( $i = 0; $i < count( $settings->card_content ); $i++ ) {
 	<?php  } ?>
 }
 
+.fl-node-<?php echo $id; ?> .pp-hover-card-<?php echo $i; ?>:hover .pp-hover-card-overlay {
+	<?php if ( $card->hover_card_bg_type != 'color' ) { ?>
+	background: #<?php echo $card->hover_card_overlay; ?>;
+	opacity: <?php echo $card->hover_card_overlay_opacity; ?>
+	<?php } ?>
+}
+
 .fl-node-<?php echo $id; ?> .pp-hover-card-<?php echo $i; ?> img {
 	border-radius: <?php echo $card->hover_card_box_border_radius; ?>px;
-	transition: opacity 0.3s linear;
 }
 .fl-node-<?php echo $id; ?> .pp-hover-card-<?php echo $i; ?>:hover img {
-	<?php if ( $card->hover_card_bg_type != 'color' ) { ?>
-	opacity: <?php echo $card->hover_card_overlay_opacity; ?>;
-	<?php } ?>
+	
 }
 
 <?php if ( $card->hover_card_bg_type == 'color' ) { ?>
@@ -170,6 +177,7 @@ for( $i = 0; $i < count( $settings->card_content ); $i++ ) {
 	<?php if( $settings->hover_card_title_line_height['desktop'] ) { ?>line-height: <?php echo $settings->hover_card_title_line_height['desktop']; ?>;<?php } ?>
 	margin-top: 0;
 	margin-bottom: 10px;
+	transition: all 0.3s ease;
 }
 
 .fl-node-<?php echo $id; ?> .pp-hover-card .pp-hover-card-description .pp-hover-card-description-inner {
@@ -183,7 +191,7 @@ for( $i = 0; $i < count( $settings->card_content ); $i++ ) {
 		text-align: center;
 	}
 	.fl-node-<?php echo $id; ?> .pp-hover-card-wrap {
-		display: inline-block;
+		/*display: inline-block;*/
 	}
     .fl-node-<?php echo $id; ?> .pp-hover-card {
 		<?php if( $settings->hover_card_height['tablet'] >= 0 ) { ?>
@@ -198,6 +206,8 @@ for( $i = 0; $i < count( $settings->card_content ); $i++ ) {
 		<?php if ( isset( $settings->hover_card_max_width ) && $settings->hover_card_max_width['tablet'] > 0 ) { ?>
 		max-width: <?php echo $settings->hover_card_max_width['tablet']; ?>px;
 		<?php } ?>
+		float: none;
+		display: inline-block;
     }
 	.fl-node-<?php echo $id; ?> .pp-hover-card .pp-hover-card-inner {
 		min-height: <?php echo $settings->hover_card_height['tablet']; ?>px;

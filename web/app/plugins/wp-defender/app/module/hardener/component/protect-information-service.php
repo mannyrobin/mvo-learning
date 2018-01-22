@@ -19,8 +19,9 @@ class Protect_Information_Service extends Rule_Service implements IRule_Service 
 	public function check() {
 		$cache = WP_Helper::getArrayCache()->get( 'Protect_Information_Service', null );
 		if ( $cache === null ) {
-			$url    = wp_defender()->getPluginUrl() . 'changelog.txt';
-			$status = wp_remote_head( $url, array( 'user-agent' => $_SERVER['HTTP_USER_AGENT'] ) );
+			$url    	= wp_defender()->getPluginUrl() . 'changelog.txt';
+			$ssl_verify = apply_filters( 'defender_ssl_verify', true ); //most hosts dont really have valid ssl or ssl still pending
+			$status 	= wp_remote_head( $url, array( 'user-agent' => $_SERVER['HTTP_USER_AGENT'], 'sslverify' => $ssl_verify ) );
 			if ( 200 == wp_remote_retrieve_response_code( $status ) ) {
 				WP_Helper::getArrayCache()->set( 'Protect_Information_Service', false );
 				return false;
@@ -102,6 +103,9 @@ class Protect_Information_Service extends Rule_Service implements IRule_Service 
 				'<Files robots.txt>' . PHP_EOL .
 				'Require all granted' . PHP_EOL .
 				'</Files>' . PHP_EOL,
+				'<Files ads.txt>' . PHP_EOL .
+				'Require all granted' . PHP_EOL .
+				'</Files>' . PHP_EOL,
 				'## WP Defender - End ##'
 			);
 		} else {
@@ -112,6 +116,9 @@ class Protect_Information_Service extends Rule_Service implements IRule_Service 
 				'Deny from all' . PHP_EOL .
 				'</FilesMatch>' . PHP_EOL,
 				'<Files robots.txt>' . PHP_EOL .
+				'Allow from all' . PHP_EOL .
+				'</Files>' . PHP_EOL,
+				'<Files ads.txt>' . PHP_EOL .
 				'Allow from all' . PHP_EOL .
 				'</Files>' . PHP_EOL,
 				'## WP Defender - End ##'

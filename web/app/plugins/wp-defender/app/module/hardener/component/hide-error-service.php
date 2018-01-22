@@ -67,7 +67,7 @@ class Hide_Error_Service extends Rule_Service implements IRule_Service {
 				//nowhere, find the hook line, hook after $prefix
 				$hookline = $this->findDefaultHookLine( $config );
 				if ( $hookline === false ) {
-					return new \WP_Error( Error_Code::UNKNOWN_WPCONFIG, __( "Defender can't recognize your wp-config.php, please revert it to original state for further process.", wp_defender()->domain ) );	 	 		  	     		    	
+					return new \WP_Error( Error_Code::UNKNOWN_WPCONFIG, __( "Defender can't recognize your wp-config.php, please revert it to original state for further process.", wp_defender()->domain ) );
 				}
 				$config = Array_Helper::injectLine( $config, $hookline + 1, PHP_EOL . "define( 'WP_DEBUG', false );" . PHP_EOL );
 				file_put_contents( $config_path, implode( null, $config ), LOCK_EX );

@@ -7,7 +7,7 @@
  * @since      1.0.0
  * @license    GPL-2.0+
  * @copyright  Copyright (c) 2016, WPForms LLC
-*/
+ */
 class WPForms_Admin_Editor {
 
 	/**
@@ -22,18 +22,19 @@ class WPForms_Admin_Editor {
 
 	/**
 	 * Allow easy shortcode insertion via a custom media button.
-	 * 
+	 *
 	 * @since 1.0.0
+	 *
 	 * @param string $editor_id
-	 * @return
 	 */
 	function media_button( $editor_id ) {
 
 		// Provide the ability to conditionally disable the button, so it can be
 		// disabled for custom fields or front-end use such as bbPress. We default
 		// to only showing within the admin panel.
-		if ( !apply_filters( 'wpforms_display_media_button', is_admin(), $editor_id ) )
+		if ( ! apply_filters( 'wpforms_display_media_button', is_admin(), $editor_id ) ) {
 			return;
+		}
 
 		// Setup the icon - currently using a dashicon
 		$icon = '<span class="wp-media-buttons-icon wpforms-menu-icon" style="font-size:16px;margin-top:-2px;"></span>';
@@ -65,42 +66,42 @@ class WPForms_Admin_Editor {
 		<div id="wpforms-modal-backdrop" style="display: none"></div>
 		<div id="wpforms-modal-wrap" style="display: none">
 			<form id="wpforms-modal" tabindex="-1">
-			<div id="wpforms-modal-title">
-				<?php _e( 'Insert Form', 'wpforms' ); ?>	
-				<button type="button" id="wpforms-modal-close"><span class="screen-reader-text"><?php _e( 'Close', 'wpforms' ); ?></span></button>
-		 	</div>
-			<div id="wpforms-modal-inner">		
-				<div id="wpforms-modal-options">
-						<?php 
-						$args  = apply_filters( 'wpforms_modal_select', array() );
-						$forms = wpforms()->form->get( '', $args );
-						if ( !empty( $forms ) ) {
-							printf( '<p><label for="wpforms-modal-select-form">%s</label></p>', __( 'Select a form below to insert', 'wpforms' ) );
-							echo '<select id="wpforms-modal-select-form">';
-							foreach ( $forms as $form ) {
-								printf( '<option value="%d">%s</option>', $form->ID, esc_html( $form->post_title ) );
+				<div id="wpforms-modal-title">
+					<?php _e( 'Insert Form', 'wpforms' ); ?>
+					<button type="button" id="wpforms-modal-close"><span class="screen-reader-text"><?php _e( 'Close', 'wpforms' ); ?></span></button>
+				</div>
+				<div id="wpforms-modal-inner">
+					<div id="wpforms-modal-options">
+							<?php
+							$args  = apply_filters( 'wpforms_modal_select', array() );
+							$forms = wpforms()->form->get( '', $args );
+							if ( ! empty( $forms ) ) {
+								printf( '<p><label for="wpforms-modal-select-form">%s</label></p>', __( 'Select a form below to insert', 'wpforms' ) );
+								echo '<select id="wpforms-modal-select-form">';
+								foreach ( $forms as $form ) {
+									printf( '<option value="%d">%s</option>', $form->ID, esc_html( $form->post_title ) );
+								}
+								echo '</select><br>';
+								printf( '<p class="wpforms-modal-inline"><input type="checkbox" id="wpforms-modal-checkbox-title"><label for="wpforms-modal-checkbox-title">%s</label></p>', __( 'Show form name', 'wpforms' ) );
+								printf( '<p class="wpforms-modal-inline"><input type="checkbox" id="wpforms-modal-checkbox-description"><label for="wpforms-modal-checkbox-description">%s</label></p>', __( 'Show form description', 'wpforms' ) );
+							} else {
+								echo '<p>';
+								printf( __( 'Whoops, you haven\'t created a form yet. Want to <a href="%s">give it a go</a>?', 'wpforms' ), admin_url( 'admin.php?page=wpforms-builder' ) );
+								echo '</p>';
 							}
-							echo '</select><br>';
-							printf( '<p class="wpforms-modal-inline"><input type="checkbox" id="wpforms-modal-checkbox-title"><label for="wpforms-modal-checkbox-title">%s</label></p>', __( 'Show form title', 'wpforms' ) );
-							printf( '<p class="wpforms-modal-inline"><input type="checkbox" id="wpforms-modal-checkbox-description"><label for="wpforms-modal-checkbox-description">%s</label></p>', __( 'Show form description', 'wpforms' ) );
-						} else {
-							echo '<p>';
-							printf( __( 'Whoops, you haven\'t created a form yet. Want to <a href="%s">give it a go</a>?', 'wpforms' ), admin_url( 'admin.php?page=wpforms-builder' ) );
-							echo '</p>';
-						}
-						?>
+							?>
+					</div>
 				</div>
-			</div>
-			<div class="submitbox">
-				<div id="wpforms-modal-cancel">
-					<a class="submitdelete deletion" href="#"><?php _e( 'Cancel', 'wpforms' ); ?></a>
+				<div class="submitbox">
+					<div id="wpforms-modal-cancel">
+						<a class="submitdelete deletion" href="#"><?php _e( 'Cancel', 'wpforms' ); ?></a>
+					</div>
+					<?php if ( ! empty( $forms ) ) : ?>
+					<div id="wpforms-modal-update">
+						<button class="button button-primary" id="wpforms-modal-submit"><?php _e( 'Add Form', 'wpforms' ); ?></button>
+					</div>
+					<?php endif; ?>
 				</div>
-				<?php if ( !empty( $forms ) ) : ?>
-				<div id="wpforms-modal-update">
-					<button class="button button-primary" id="wpforms-modal-submit"><?php _e( 'Add Form', 'wpforms' ); ?></button>
-				</div>
-				<?php endif; ?>
-			</div>
 			</form>
 		</div>
 		<style style="text/css">
@@ -277,4 +278,5 @@ class WPForms_Admin_Editor {
 	}
 
 }
+
 new WPForms_Admin_Editor;

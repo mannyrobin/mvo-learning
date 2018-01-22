@@ -23,16 +23,14 @@ class PPLogosGridModule extends FLBuilderModule {
             'editor_export'     => true, // Defaults to true and can be omitted.
             'enabled'           => true, // Defaults to true and can be omitted.
             'partial_refresh'   => true,
+            'icon'				=> 'slides.svg',
         ));
 
-        $this->add_css('settings', $this->url . 'css/settings.css');
         $this->add_css('jquery-bxslider');
 		$this->add_css('font-awesome');
 		$this->add_js('jquery-bxslider');
-		$this->add_js('jquery-imagesloaded');
-
+		$this->add_js( 'jquery-imagesloaded' );
     }
-
 }
 
 /**

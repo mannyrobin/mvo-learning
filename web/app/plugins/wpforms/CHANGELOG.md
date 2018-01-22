@@ -1,6 +1,225 @@
 # Change Log
 All notable changes to this project will be documented in this file, formatted via [this recommendation](http://keepachangelog.com/).
 
+## [1.4.3] - 2017-12-04
+### Added
+- Form entry field values are now stored (additionally) in a new database, `wpforms_entry_fields`, to be used with exciting new features in the near future
+- Upgrade routine for the above mentioned new database
+- Early filter for form data before form output, `wpforms_frontend_form_data`
+- Setting to hide Announcement feed
+- Announcement feed data
+
+### Changed
+- Standardize and tweak modal window button styles
+- Default mail notification settings are now sent "from" the site administrator email; user email is used in Reply-To where applicable (to hopefully improve email deliverability)
+- Removed "Hide form name and description" form setting as it was a common source or confusion
+- Provide base styling for `hr` elements inside HTML fields
+
+### Fixed
+- Site cache being flushed when it shouldn't have been, affecting performance in some scenarios
+- Country, state, months and days not properly exposed to i18n
+- CSV export dates not properly using i18n
+- Incorrect usage of `esc_sql` with `wpdb->prepare`
+- Styling preventing the entries column picker from displaying correctly
+- WPForms custom post types omitting labels
+- Smart Tag value encoding issues with email notifications
+- Infinite recursion issue when using Dynamic Values option
+- PHP notice in form builder
+
+### Changed
+
+## [1.4.2] - 2017-10-25
+### Added
+- Import your old Ninja Forms or Contact Form 7 forms! (WPForms > Tools > Import)
+
+### Changed
+- Date i18n improvements
+- Dropdown/Checkbox/Multiple Choice "Show Values" setting has been hidden by default to avoid confusion, can be re-enabled using the `wpforms_fields_show_options_setting` filter
+- Date Time field inputs break into separate lines on mobile to prevent Date picker from going off screen in some scenarioes
+
+### Fixed
+- reCAPTCHA now showing in the Form Builder preview when enabled
+- Encoded/escaped entities in email notifications
+- German translation issue
+
+## [1.4.1.2] - 2017-10-03
+### Fixed
+- New CSV separator filter introduced 1.4.1 not correctly running
+
+## [1.4.1.1] - 2017-09-29
+### Changed
+- Improved the loading order of javascript files for forms builder
+- Update some strings for Russian translation
+
+### Fixed
+- Entries export functionality was broken
+- Multipage indicators behavior when several multipage forms present on the same page
+
+## [1.4.1] - 2017-09-28
+### Added
+- Ability to rename Form >Settings>Notifications>Single notification panels
+- Define a minimum PHP version support in plugin readme.txt file
+- Display a friendly link to a full page version, when form is previewed on AMP pages
+- Ability to collapse Form>Settings>Notifications>Single notification panels
+- Russian translation
+- Allow more than 1 default selection for checkboxes fields
+- Announcement feed
+
+### Changed
+- Bump minimum WordPress version to 4.6
+- Improved localization support of the plugin
+- Improved texts in various places
+- Code style improvements throughout the plugin
+- Combine WPFORMS_DEBUG and WPFORMS_DEVELOPMENT into one, use `wpforms_debug()` to check
+- All HTTP requests now validate target sites SSL certificates with WP bundled certificates (since 3.7)
+
+### Fixed
+- Payments and providers classes version visibility
+- Postal field (part of Address field) now supports the {query_var} smart tag
+- Form's Entries page unread/read and starred/unstarred counters
+- Incomplete selection of Date dropdown fields causes entries to be recorded as 'Array'
+- Notification email is empty if submitted form has no user values (displaying user friendly message instead)
+- Pressing enter in "Enter a notification name" popup does nothing
+- Removed Screen Options on single entry screen
+- Allow postal code to be hidden/removed, fix Country issues
+- Country names don't have redundant `)` or spaces anymore
+- Do not display 2400 option in TimePicker in Date / Time field for 24h format
+- Deprecate a misspelled `wpforms_csv_export_seperator` filter, introduced a proper name for it
+- Conditional logic comparison issues if rule contained special characters
+
+## [1.4.0.1] - 2017-08-24
+### Added
+- Non-dismissible Dashboard page admin only notice about PHP 5.2
+
+### Changed
+- Updated FontAwesome library
+
+### Fixed
+- Fatal error with PHP 5.2 due to an anonymous function
+- Required Credit Card fields incorrectly passing JS validation if empty
+- CSV exports missing line breaks
+- Entries dropdown menu being cut off under the WordPress menu
+
+## [1.4.0] - 2017-08-21
+### Added
+- Entries table columns can now be customized; personalize what fields you want to see!
+- All entries can be deleted for a form from the Entries page
+- Announcement feed
+
+### Changed
+- Phone number field switched to `tel` input for improved mobile experience
+- Core form templates are now displayed separate in the form builder from other custom templates
+- Refactored CSV exporting for better support
+
+### Fixed
+- Dynamic Choices large items modal render issue
+- Certain characters (such as comma) breaking CSV export format
+- Cursor issues inside the form builder
+- CSS Layout Generator class name typo
+- Dynamic choices with nesting sometimes causing form builder to time out
+- Settings page typos
+- Deleting a form in some cases did not remove entry meta for its entries
+- File Uploads stored in the media library not storing the correct URL when offloaded to other services such as S3
+- Tools page export description text typo
+- Widget state not displayed correctly when adding via Customizer, without forcing user to select a form
+
+## [1.3.9.2] - 2017-08-03
+## Fixed
+- Currency setting for new users saving to an incorrect option key
+
+## [1.3.9.1] - 2017-08-02
+## Changed
+- Template Export excludes array items with empty strings
+
+### Fixed
+- Admin notices displaying on plugin Welcome/activation screen
+- WPForms admin pages displaying blank due to conflicts with a few other plugins
+- License related notices not removed immediately after key is activated
+- Addons page items not displaying with uniform height
+- Addons page installing returned JS object instead of message
+
+## [1.3.9] - 2017-08-01
+### Added
+- Complete redesign and refactor of admin area
+- New Settings API
+- Entry print preview compact mode
+- Entry print preview view entry notes
+- Dynamic field choices nest hierarchical items
+
+### Changed
+- Moved Import/Export and System Info content to new Tools sub-page
+- Shortcode provided in form builder now includes title/description arguments
+- Don't show CSS layout selector helper in Pagebreak fields
+
+### Fixed
+- Form builder URL redirect issue on the Marketing tab with some configurations
+- Password field item mislabeled
+- PHP notices on Entries page if form contained no fields
+- PHP notices when using HTML field with conditional logic
+
+## [1.3.8] - 2017-06-13
+### Added
+- Conditional logic functionality is now in the core plugin - the Conditional Logic addon can be removed
+- New conditional logic rules: empty and not empty
+- Conditional logic can now be applied to fields that are marked as required
+
+### Changed
+- Available conditional logic rules/functionality with Providers have been updated
+- Updated form builder modals (jquery-confirm.js)
+- Many Form Builder performance enhancements
+
+### Fixed
+- Allowing Storing entries form setting to be enabled when form is connected to payments
+- Number field validation message not saving
+- Email/Password confirmation setting not displaying correctly with Small field size
+
+## [1.3.7.3] - 2017-05-12
+## Fixed
+- Required setting checkbox getting out of sync when duplicating fields
+- CSS class name typo in the form builder layout selector
+- Excel mangling non-english characters when opening CSV export files
+- Smart Tag `field_id` stripping line breaks
+- Multiple Items field choices not updating correctly in form builder preview
+- Form JS settings `wpforms_settings` missing due to some caching plugins
+- Empty classes causing `array` string to be printed in some use cases
+
+## Changed
+- Updated credit card, page break, password, and phone fields to improved field class.
+
+## [1.3.7.2] - 2017-04-26
+### Fixed
+- PHP warning when displaying page break indicator at the top of a form
+- Error for some users with PHP 5.4 and below
+
+## [1.3.7.1] - 2017-04-26
+### Fixed
+- Issue sending form notifications using email fields that had confirmation enabled
+
+## [1.3.7] - 2017-04-26
+### Added
+- Google Invisible reCAPTCHA support
+- Custom field validation messages (see WPForms Settings page)
+- Bulk add choices for Checkbox, Multiple Choice, and Dropdown fields
+- Filter to allow email notifications to include empty fields, `wpforms_email_display_empty_fields`
+- Custom form template exporting
+- Field CSS layout selector
+- Total payment fields can now be marked as required, preventing the field from submitting unless it contains a payment
+
+### Changed
+- HTML fields now allow and run WordPress shortcodes
+- Leverage `wp_json_encode` instead of native PHP function
+- Various WordPress coding standard improvements (work in progress)
+- Refactored form front-end code to allow for more customizations
+- Refactored text, textarea, email, number, name, divider, file upload, hidden, html, payment total, and URL fields to allow for more customizations (more coming next release)
+
+### Fixed
+- Welcome page typo
+- Address field options getting off sync inside form builder
+- Bug adding new notifications and element IDs not updating
+- Page indicator (navigation) overflowing in some use cases
+- SmartTag selectors getting off sync inside form builder
+- File upload routine using `pathinfo` which is not reliable with some locales
+
 ## [1.3.6] - 2017-03-09
 ### Added
 - Constant Contact integration

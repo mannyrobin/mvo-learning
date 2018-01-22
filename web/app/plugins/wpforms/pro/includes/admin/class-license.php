@@ -79,7 +79,7 @@ class WPForms_License {
 	 *
 	 * @since 1.0.0
 	 */
-	public function verify_key( $key = '' ) {
+	public function verify_key( $key = '', $ajax = false ) {
 
 		if ( empty( $key ) ) {
 			return false;
@@ -90,25 +90,45 @@ class WPForms_License {
 
 		// If it returns false, send back a generic error message and return.
 		if ( ! $verify ) {
-			$this->errors[] = __( 'There was an error connecting to the remote key API. Please try again later.', 'wpforms' );
-			return;
+			$msg = __( 'There was an error connecting to the remote key API. Please try again later.', 'wpforms' );
+			if ( $ajax ) {
+				wp_send_json_error( $msg );
+			} else {
+				$this->errors[] = $msg;
+				return;
+			}
 		}
 
 		// If an error is returned, set the error and return.
 		if ( ! empty( $verify->error ) ) {
-			$this->errors[] = $verify->error;
-			return;
+			if ( $ajax ) {
+				wp_send_json_error( $verify->error );
+			} else {
+				$this->errors[] = $verify->error;
+				return;
+			}
 		}
 
+		$success = isset( $verify->success ) ? $verify->success : __( 'Congratulations! This site is now receiving automatic updates.', 'wpforms' );
+
 		// Otherwise, our request has been done successfully. Update the option and set the success message.
-		$option                = get_option( 'wpforms_license' );
+		$option                = (array) get_option( 'wpforms_license', array() );
 		$option['key']         = $key;
 		$option['type']        = isset( $verify->type ) ? $verify->type : $option['type'];
 		$option['is_expired']  = false;
 		$option['is_disabled'] = false;
 		$option['is_invalid']  = false;
-		$this->success[]       = isset( $verify->success ) ? $verify->success : __( 'Congratulations! This site is now receiving automatic updates.', 'wpforms' );
+		$this->success[]       = $success;
 		update_option( 'wpforms_license', $option );
+
+		wp_clean_plugins_cache( true );
+
+		if ( $ajax ) {
+			wp_send_json_success( array(
+				'type' => $option['type'],
+				'msg'  => $success,
+			) );
+		}
 	}
 
 	/**
@@ -129,7 +149,7 @@ class WPForms_License {
 		$timestamp = get_option( 'wpforms_license_updates' );
 
 		if ( ! $timestamp ) {
-			$timestamp = strtotime( '+12 hours' );
+			$timestamp = strtotime( '+24 hours' );
 			update_option( 'wpforms_license_updates', $timestamp );
 			$this->validate_key( $key );
 		} else {
@@ -137,7 +157,7 @@ class WPForms_License {
 			if ( $current_timestamp < $timestamp ) {
 				return;
 			} else {
-				update_option( 'wpforms_license_updates', strtotime( '+12 hours' ) );
+				update_option( 'wpforms_license_updates', strtotime( '+24 hours' ) );
 				$this->validate_key( $key );
 			}
 		}
@@ -150,7 +170,7 @@ class WPForms_License {
 	 *
 	 * @param bool $forced Force to set contextual messages (false by default).
 	 */
-	public function validate_key( $key = '', $forced = false ) {
+	public function validate_key( $key = '', $forced = false, $ajax = false ) {
 
 		$validate = $this->perform_remote_request( 'validate-key', array( 'tgm-updater-key' => $key ) );
 
@@ -158,7 +178,12 @@ class WPForms_License {
 		if ( ! $validate ) {
 			// If forced, set contextual success message.
 			if ( $forced ) {
-				$this->errors[] = __( 'There was an error connecting to the remote key API. Please try again later.', 'wpforms' );
+				 $msg = __( 'There was an error connecting to the remote key API. Please try again later.', 'wpforms' );
+				 if ( $ajax ) {
+					 wp_send_json_error( $msg );
+				 } else {
+					 $this->errors[] = $msg;
+				 }
 			}
 
 			return;
@@ -171,6 +196,9 @@ class WPForms_License {
 			$option['is_disabled'] = false;
 			$option['is_invalid']  = true;
 			update_option( 'wpforms_license', $option );
+			if ( $ajax ) {
+				wp_send_json_error( __( 'Your license key for WPForms is invalid. The key no longer exists or the user associated with the key has been deleted. Please use a different key to continue receiving automatic updates.', 'wpforms' ) );
+			}
 			return;
 		}
 
@@ -181,6 +209,9 @@ class WPForms_License {
 			$option['is_disabled'] = false;
 			$option['is_invalid']  = false;
 			update_option( 'wpforms_license', $option );
+			if ( $ajax ) {
+				wp_send_json_error( __( 'Your license key for WPForms has expired. Please renew your license key on WPForms.com to continue receiving automatic updates.', 'wpforms' ) );
+			}
 			return;
 		}
 
@@ -191,12 +222,10 @@ class WPForms_License {
 			$option['is_disabled'] = true;
 			$option['is_invalid']  = false;
 			update_option( 'wpforms_license', $option );
+			if ( $ajax ) {
+				wp_send_json_err( __( 'Your license key for WPForms has been disabled. Please use a different key to continue receiving automatic updates.', 'wpforms' ) );
+			}
 			return;
-		}
-
-		// If forced, set contextual success message.
-		if ( $forced ) {
-			$this->success[] = __( 'Your key has been refreshed successfully.', 'wpforms' );
 		}
 
 		// Otherwise, our check has returned successfully. Set the transient and update our license type and flags.
@@ -206,6 +235,18 @@ class WPForms_License {
 		$option['is_disabled'] = false;
 		$option['is_invalid']  = false;
 		update_option( 'wpforms_license', $option );
+
+		// If forced, set contextual success message.
+		if ( $forced ) {
+			$msg = __( 'Your key has been refreshed successfully.', 'wpforms' );
+			$this->success[] = $msg;
+			if ( $ajax ) {
+				wp_send_json_success( array(
+					'type' => $option['type'],
+					'msg'  => $msg,
+				) );
+			}
+		}
 	}
 
 	/**
@@ -213,7 +254,7 @@ class WPForms_License {
 	 *
 	 * @since 1.0.0
 	 */
-	public function deactivate_key() {
+	public function deactivate_key( $ajax = false ) {
 
 		$key = $this->get();
 
@@ -226,19 +267,33 @@ class WPForms_License {
 
 		// If it returns false, send back a generic error message and return.
 		if ( ! $deactivate ) {
-			$this->errors[] = __( 'There was an error connecting to the remote key API. Please try again later.', 'wpforms' );
-			return;
+			$msg = __( 'There was an error connecting to the remote key API. Please try again later.', 'wpforms' );
+			if ( $ajax ) {
+				wp_send_json_error( $msg );
+			} else {
+				$this->errors[] = $msg;
+				return;
+			}
 		}
 
 		// If an error is returned, set the error and return.
 		if ( ! empty( $deactivate->error ) ) {
-			$this->errors[] = $deactivate->error;
-			return;
+			if ( $ajax ) {
+				wp_send_json_error( $deactivate->error );
+			} else {
+				$this->errors[] = $deactivate->error;
+				return;
+			}
 		}
 
 		// Otherwise, our request has been done successfully. Reset the option and set the success message.
-		$this->success[] = isset( $deactivate->success ) ? $deactivate->success : __( 'You have deactivated the key from this site successfully.', 'wpforms' );
+		$success = isset( $deactivate->success ) ? $deactivate->success : __( 'You have deactivated the key from this site successfully.', 'wpforms' );
+		$this->success[] = $success;
 		update_option( 'wpforms_license', '' );
+
+		if ( $ajax ) {
+			wp_send_json_success( $success );
+		}
 	}
 
 	/**
@@ -268,7 +323,7 @@ class WPForms_License {
 		// If there is no license key, output nag about ensuring key is set for automatic updates.
 		if ( ! $key ) :
 		?>
-		<div class="notice notice-info <?php echo $below_h2; ?>">
+		<div class="notice notice-info <?php echo $below_h2; ?> wpforms-license-notice">
 			<p><?php printf( __( 'Please <a href="%s">enter and activate</a> your license key for WPForms to enable automatic updates.', 'wpforms' ), esc_url( add_query_arg( array( 'page' => 'wpforms-settings' ), admin_url( 'admin.php' ) ) ) ); ?></p>
 		</div>
 		<?php
@@ -277,7 +332,7 @@ class WPForms_License {
 		// If a key has expired, output nag about renewing the key.
 		if ( isset( $option['is_expired'] ) && $option['is_expired'] ) :
 		?>
-		<div class="error <?php echo $below_h2; ?>">
+		<div class="error notice <?php echo $below_h2; ?> wpforms-license-notice">
 			<p><?php printf( __( 'Your license key for WPForms has expired. <a href="%s" target="_blank" rel="noopener">Please click here to renew your license key and continue receiving automatic updates.</a>', 'wpforms' ), 'https://wpforms.com/login/' ); ?></p>
 		</div>
 		<?php
@@ -286,7 +341,7 @@ class WPForms_License {
 		// If a key has been disabled, output nag about using another key.
 		if ( isset( $option['is_disabled'] ) && $option['is_disabled'] ) :
 		?>
-		<div class="error <?php echo $below_h2; ?>">
+		<div class="error notice <?php echo $below_h2; ?> wpforms-license-notice">
 			<p><?php _e( 'Your license key for WPForms has been disabled. Please use a different key to continue receiving automatic updates.', 'wpforms' ); ?></p>
 		</div>
 		<?php
@@ -295,7 +350,7 @@ class WPForms_License {
 		// If a key is invalid, output nag about using another key.
 		if ( isset( $option['is_invalid'] ) && $option['is_invalid'] ) :
 		?>
-		<div class="error <?php echo $below_h2; ?>">
+		<div class="error notice <?php echo $below_h2; ?> wpforms-license-notice">
 			<p><?php _e( 'Your license key for WPForms is invalid. The key no longer exists or the user associated with the key has been deleted. Please use a different key to continue receiving automatic updates.', 'wpforms' ); ?></p>
 		</div>
 		<?php
@@ -304,7 +359,7 @@ class WPForms_License {
 		// If there are any license errors, output them now.
 		if ( ! empty( $this->errors ) ) :
 		?>
-		<div class="error <?php echo $below_h2; ?>">
+		<div class="error notice <?php echo $below_h2; ?> wpforms-license-notice">
 			<p><?php echo implode( '<br>', $this->errors ); ?></p>
 		</div>
 		<?php
@@ -313,7 +368,7 @@ class WPForms_License {
 		// If there are any success messages, output them now.
 		if ( ! empty( $this->success ) ) :
 		?>
-		<div class="updated <?php echo $below_h2; ?>">
+		<div class="updated notice <?php echo $below_h2; ?> wpforms-license-notice">
 			<p><?php echo implode( '<br>', $this->success ); ?></p>
 		</div>
 		<?php
@@ -405,7 +460,6 @@ class WPForms_License {
 		$post = array(
 			'headers'   => $headers,
 			'body'      => $body,
-			'sslverify' => false,
 		);
 
 		// Perform the query and retrieve the response.

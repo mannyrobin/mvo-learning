@@ -1,3 +1,4 @@
+/* global wpforms_settings,grecaptcha,wpforms_validate,wpforms_timepicker */
 ;(function($) {
 
 	var WPForms = {
@@ -60,13 +61,28 @@
 			// Only load if jQuery validation library exists
 			if (typeof $.fn.validate !== 'undefined') {
 
+				// jQuery Validation library will not correctly validate
+				// fields that do not have a name attribute, so we use the
+				// `wpforms-input-temp-name` class to add a temporary name
+				// attribute before validation is initialized, then remove it
+				// before the form submits.
+				$( '.wpforms-input-temp-name' ).each(function( index, el ) {
+					var random = Math.floor( Math.random() * 9999 ) + 1;
+					$( this ).attr( 'name', 'wpf-temp-' + random );
+				});
+
+				$.validator.messages.required = wpforms_settings.val_required;
+				$.validator.messages.url = wpforms_settings.val_url;
+				$.validator.messages.email = wpforms_settings.val_email;
+				$.validator.messages.number = wpforms_settings.val_number;
+
 				// Payments: Validate method for Credit Card Number
 				if(typeof $.fn.payment !== 'undefined') {
 					$.validator.addMethod( "creditcard", function(value, element) {
 						//var type  = $.payment.cardType(value);
 						var valid = $.payment.validateCardNumber(value);
 						return this.optional(element) || valid;
-					}, "Please enter a valid credit card number.");
+					}, wpforms_settings.val_creditcard);
 					// @todo validate CVC and expiration
 				}
 
@@ -74,7 +90,7 @@
 				$.validator.addMethod( "extension", function(value, element, param) {
 					param = typeof param === "string" ? param.replace( /,/g, "|" ) : "png|jpe?g|gif";
 					return this.optional(element) || value.match( new RegExp( "\\.(" + param + ")$", "i" ) );
-				}, $.validator.format("File type is not allowed") );
+				}, wpforms_settings.val_fileextension );
 
 				// Validate method for file size
 				$.validator.addMethod("maxsize", function(value, element, param) {
@@ -95,45 +111,50 @@
 						}
 					}
 					return true;
-				}, $.validator.format("File exceeds max size allowed"));
+				}, wpforms_settings.val_filesize);
 
 				// Validate email addresses
 				$.validator.methods.email = function( value, element ) {
 					return this.optional( element ) || /^[a-z0-9.!#$%&'*+\/=?^_`{|}~-]+@((?=[a-z0-9-]{1,63}\.)(xn--)?[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63}$/i.test( value );
-				}
+				};
 
 				// Validate confirmations
 				$.validator.addMethod("confirm", function(value, element, param) {
 					return $.validator.methods.equalTo.call(this, value, element, param);
-				}, function(params, element) {
-					return $(element).data('rule-confirm-msg');
-				});
+				}, wpforms_settings.val_confirm);
+
+				// Validate required payments
+				$.validator.addMethod( "required-payment", function( value, element ) {
+					return WPForms.amountSanitize( value ) > 0;
+				}, wpforms_settings.val_requiredpayment );
 
 				// Validate 12-hour time
 				$.validator.addMethod( "time12h", function( value, element ) {
 					return this.optional( element ) || /^((0?[1-9]|1[012])(:[0-5]\d){1,2}(\ ?[AP]M))$/i.test( value );
-				}, "Please enter time in 12-hour AM/PM format (eg 8:45 AM)" );
+				}, wpforms_settings.val_time12h );
 
 				// Validate 24-hour time
 				$.validator.addMethod( "time24h", function( value, element ) {
 					return this.optional(element) || /^(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])(\ ?[AP]M)?$/i.test(value);
-				}, "Please enter time in 24-hour format (eg 22:45)" );
+				}, wpforms_settings.val_time24h );
 
 				// Finally load jQuery Validation library for our forms
 				$('.wpforms-validate').each(function() {
 					var form   = $(this),
-						formID = form.data('formid');
+						formID = form.data('formid'),
+						properties;
 
-					if (typeof window['wpforms_'+formID] != "undefined" && window['wpforms_'+formID].hasOwnProperty('validate')) {
+					// TODO: cleanup this BC with wpforms_validate.
+					if (typeof window['wpforms_'+formID] !== 'undefined' && window['wpforms_'+formID].hasOwnProperty('validate')) {
 						properties = window['wpforms_'+formID].validate;
-					} else if ( typeof wpforms_validate != "undefined") {
+					} else if ( typeof wpforms_validate !== 'undefined') {
 						properties = wpforms_validate;
 					} else {
 						properties = {
 							errorClass: 'wpforms-error',
 							validClass: 'wpforms-valid',
 							errorPlacement: function(error, element) {
-								if (element.attr('type') == 'radio' || element.attr('type') == 'checkbox' ) {
+								if (element.attr('type') === 'radio' || element.attr('type') === 'checkbox' ) {
 									element.parent().parent().parent().append(error);
 								} else if (element.is('select') && element.attr('class').match(/date-month|date-day|date-year/)) {
 									if (element.parent().find('label.wpforms-error:visible').length === 0) {
@@ -157,11 +178,21 @@
 									$submit = $form.find('.wpforms-submit'),
 									altText = $submit.data('alt-text');
 
-								if (altText) {
-									$submit.text(altText).prop('disabled', true);
-								}
+								if ( WPForms.empty( $submit.get(0).recaptchaID ) && $submit.get(0).recaptchaID !== 0 ) {
+									// Normal form.
+									if (altText) {
+										$submit.text(altText).prop('disabled', true);
+									}
 
-								form.submit();
+									// Remove name attributes if needed.
+									$( '.wpforms-input-temp-name' ).removeAttr('name');
+
+									form.submit();
+
+								} else {
+									// Form contains invisible reCAPTCHA.
+									grecaptcha.execute( $submit.get(0).recaptchaID );
+								}
 							}
 						}
 					}
@@ -183,13 +214,14 @@
 					var element = $(this),
 						form    = element.closest('.wpforms-form'),
 						formID  = form.data('formid'),
-						fieldID = element.closest('.wpforms-field').data('field-id');
+						fieldID = element.closest('.wpforms-field').data('field-id'),
+						properties;
 
-					if (typeof window['wpforms_'+formID+'_'+fieldID] != 'undefined' && window['wpforms_'+formID+'_'+fieldID].hasOwnProperty('datepicker')) {
+					if (typeof window['wpforms_'+formID+'_'+fieldID] !== 'undefined' && window['wpforms_'+formID+'_'+fieldID].hasOwnProperty('datepicker')) {
 						properties = window['wpforms_'+formID+'_'+fieldID].datepicker;
-					} else if (typeof window['wpforms_'+formID] != 'undefined' && window['wpforms_'+formID].hasOwnProperty('datepicker')) {
+					} else if (typeof window['wpforms_'+formID] !== 'undefined' && window['wpforms_'+formID].hasOwnProperty('datepicker')) {
 						properties = window['wpforms_'+formID].datepicker;
-					} else if (typeof wpforms_datepicker != 'undefined') {
+					} else if (typeof wpforms_datepicker !== 'undefined') {
 						properties = wpforms_datepicker;
 					} else {
 						properties = {
@@ -198,7 +230,7 @@
 					}
 					element.flatpickr(properties)
 				});
-			};
+			}
 		},
 
 		/**
@@ -214,20 +246,28 @@
 					var element = $(this),
 						form    = element.closest('.wpforms-form'),
 						formID  = form.data('formid'),
-						fieldID = element.closest('.wpforms-field').data('field-id');
+						fieldID = element.closest('.wpforms-field').data('field-id'),
+						properties;
 
-					if (typeof window['wpforms_'+formID+'_'+fieldID] != 'undefined' && window['wpforms_'+formID+'_'+fieldID].hasOwnProperty('timepicker')) {
+					if (
+						typeof window['wpforms_'+formID+'_'+fieldID] !== 'undefined' &&
+						window['wpforms_'+formID+'_'+fieldID].hasOwnProperty('timepicker')
+					) {
 						properties = window['wpforms_'+formID+'_'+fieldID].timepicker;
-					} else if (typeof window['wpforms_'+formID] != "undefined" && window['wpforms_'+formID].hasOwnProperty('timepicker') ) {
+					} else if (
+						typeof window['wpforms_'+formID] !== 'undefined' &&
+						window['wpforms_'+formID].hasOwnProperty('timepicker')
+					) {
 						properties = window['wpforms_'+formID].timepicker;
-					} else if ( typeof wpforms_timepicker != "undefined") {
+					} else if ( typeof wpforms_timepicker !== 'undefined') {
 						properties = wpforms_timepicker;
 					} else {
 						properties = {
 							scrollDefault: 'now',
 							forceRoundTime: true
-						}
+						};
 					}
+
 					element.timepicker(properties);
 				});
 			}
@@ -243,7 +283,7 @@
 			// Only load if jQuery input mask library exists
 			if (typeof $.fn.inputmask !== 'undefined') {
 				$('.wpforms-masked-input').inputmask();
-			};
+			}
 		},
 
 		/**
@@ -256,13 +296,13 @@
 			// Update Total field(s) with latest calculation
 			$('.wpforms-payment-total').each(function(index, el) {
 				WPForms.amountTotal(this);
-			})
+			});
 
-			// Credit card valdation
+			// Credit card validation
 			if(typeof $.fn.payment !== 'undefined') {
 				$('.wpforms-field-credit-card-cardnumber').payment('formatCardNumber');
 				$('.wpforms-field-credit-card-cardcvc').payment('formatCardCVC');
-			};
+			}
 		},
 
 		//--------------------------------------------------------------------//
@@ -283,19 +323,19 @@
 			});
 
 			// Payments: Update Total field(s) when latest calculation.
-			$(document).on('change input', '.wpforms-payment-price', function(event) {
-				WPForms.amountTotal(this);
+			$(document).on('change input', '.wpforms-payment-price', function() {
+				WPForms.amountTotal(this, true);
 			});
 
 			// Payments: Restrict user input payment fields
-			$(document).on('input', '.wpforms-payment-user-input', function(event) {
+			$(document).on('input', '.wpforms-payment-user-input', function() {
 				var $this = $(this),
 					amount = $this.val();
 				$this.val(amount.replace(/[^0-9.,]/g, ''));
 			});
 
 			// Payments: Sanitize/format user input amounts
-			$(document).on('focusout', '.wpforms-payment-user-input', function(event) {
+			$(document).on('focusout', '.wpforms-payment-user-input', function() {
 				var $this     = $(this),
 					amount    = $this.val(),
 					sanitized = WPForms.amountSanitize(amount),
@@ -304,8 +344,8 @@
 			});
 
 			// OptinMonster: initialize again after OM is finished.
-			// This is to accomodate moving the form in the DOM.
-			$(document).on('OptinMonsterAfterInject', function(event) {
+			// This is to accommodate moving the form in the DOM.
+			$(document).on('OptinMonsterAfterInject', function() {
 				WPForms.ready();
 			});
 		},
@@ -321,7 +361,7 @@
 				valid      = true,
 				action     = $this.data('action'),
 				page       = $this.data('page'),
-				page2      = page;
+				page2      = page,
 				next       = page+1,
 				prev       = page-1,
 				formID     = $this.data('formid'),
@@ -333,6 +373,7 @@
 				pageScroll = false;
 
 			// Page scroll
+			// TODO: cleanup this BC with wpform_pageScroll.
 			if ( window.wpforms_pageScroll === false ) {
 				pageScroll = false;
 			} else if ( !WPForms.empty( window.wpform_pageScroll ) ) {
@@ -342,7 +383,7 @@
 			}
 
 			// Toggling between pages
-			if ( action == 'next' ){
+			if ( action === 'next' ){
 				// Validate
 				if (typeof $.fn.validate !== 'undefined') {
 					$page.find('input.wpforms-field-required, select.wpforms-field-required, textarea.wpforms-field-required, .wpforms-field-required input').each(function(index, el) {
@@ -380,7 +421,7 @@
 					}
 					$this.trigger('wpformsPageChange', [ page2, $form ] );
 				}
-			} else if ( action == 'prev' ) {
+			} else if ( action === 'prev' ) {
 				// Move to prev page
 				page2 = prev;
 				$page.hide();
@@ -404,14 +445,14 @@
 					$indicator.find('.wpforms-page-indicator-page-'+page2).addClass('active');
 					$indicator.find('.wpforms-page-indicator-page-number').removeAttr('style');
 					$indicator.find('.active .wpforms-page-indicator-page-number').css('background-color', color);
-					if ( 'connector' == theme) {
+					if ( 'connector' === theme) {
 						$indicator.find('.wpforms-page-indicator-page-triangle').removeAttr('style');
 						$indicator.find('.active .wpforms-page-indicator-page-triangle').css('border-top-color', color);
 					}
 				} else if ('progress' === theme) {
 					var $pageTitle = $indicator.find('.wpforms-page-indicator-page-title'),
 						$pageSep   = $indicator.find('.wpforms-page-indicator-page-title-sep'),
-						totalPages = ($('.wpforms-page').length),
+						totalPages = $form.find('.wpforms-page').length,
 						width = (page2/totalPages)*100;
 					$indicator.find('.wpforms-page-indicator-page-progress').css('width', width+'%');
 					$indicator.find('.wpforms-page-indicator-steps-current').text(page2);
@@ -431,26 +472,14 @@
 		//--------------------------------------------------------------------//
 
 		/**
-		 * Google reCAPTCHA callback.
-		 *
-		 * @since 1.3.4
-		 */
-		recaptchaCallback: function( el ) {
-
-			var $this   = $(el),
-				$hidden = $this.parent().find('.wpforms-recaptcha-hidden');
-
-			$hidden.val('1').valid();
-		},
-
-		/**
 		 * Payments: Calculate total.
 		 *
 		 * @since 1.2.3
 		 */
-		amountTotal: function(el) {
+		amountTotal: function(el, validate) {
 
-			var $form                = $(el).closest('.wpforms-form'),
+			var validate             = validate || false,
+				$form                = $(el).closest('.wpforms-form'),
 				total                = 0,
 				totalFormatted       = 0,
 				totalFormattedSymbol = 0,
@@ -476,15 +505,18 @@
 
 			totalFormatted = WPForms.amountFormat(total);
 
-			if ( 'left' == currency.symbol_pos) {
+			if ( 'left' === currency.symbol_pos) {
 				totalFormattedSymbol = currency.symbol+' '+totalFormatted;
 			} else {
 				totalFormattedSymbol = totalFormatted+' '+currency.symbol;
 			}
 
 			$form.find('.wpforms-payment-total').each(function(index, el) {
-				if ($(this).attr('type') == 'hidden') {
+				if ( 'hidden' === $(this).attr('type') || 'text' === $(this).attr('type') ) {
 					$(this).val(totalFormattedSymbol);
+					if ( 'text' === $(this).attr('type') && validate ) {
+						$(this).valid();
+					}
 				} else {
 					$(this).text(totalFormattedSymbol);
 				}
@@ -502,14 +534,14 @@
 
 			amount = amount.toString().replace(/[^0-9.,]/g,'');
 
-			if ( currency.decimal_sep == ',' && ( amount.indexOf(currency.decimal_sep) !== -1 ) ) {
-				if ( currency.thousands_sep == '.' && amount.indexOf(currency.thousands_sep) !== -1 ) {;
+			if ( currency.decimal_sep === ',' && ( amount.indexOf(currency.decimal_sep) !== -1 ) ) {
+				if ( currency.thousands_sep === '.' && amount.indexOf(currency.thousands_sep) !== -1 ) {
 					amount = amount.replace(currency.thousands_sep,'');
-				} else if( currency.thousands_sep == '' && amount.indexOf('.') !== -1 ) {
+				} else if( currency.thousands_sep === '' && amount.indexOf('.') !== -1 ) {
 					amount = amount.replace('.','');
 				}
 				amount = amount.replace(currency.decimal_sep,'.');
-			} else if ( currency.thousands_sep == ',' && ( amount.indexOf(currency.thousands_sep) !== -1 ) ) {
+			} else if ( currency.thousands_sep === ',' && ( amount.indexOf(currency.thousands_sep) !== -1 ) ) {
 				amount = amount.replace(currency.thousands_sep,'');
 			}
 
@@ -528,15 +560,15 @@
 			amount = String(amount);
 
 			// Format the amount
-			if ( currency.decimal_sep == ',' && ( amount.indexOf(currency.decimal_sep) !== -1 ) ) {
-				var sepFound = amount.indexOf(currency.decimal_sep);
-					whole    = amount.substr(0, sepFound);
+			if ( currency.decimal_sep === ',' && ( amount.indexOf(currency.decimal_sep) !== -1 ) ) {
+				var sepFound = amount.indexOf(currency.decimal_sep),
+					whole    = amount.substr(0, sepFound),
 					part     = amount.substr(sepFound+1, amount.strlen-1);
 				amount = whole + '.' + part;
 			}
 
 			// Strip , from the amount (if set as the thousands separator)
-			if ( currency.thousands_sep == ',' && ( amount.indexOf(currency.thousands_sep) !== -1 ) ) {
+			if ( currency.thousands_sep === ',' && ( amount.indexOf(currency.thousands_sep) !== -1 ) ) {
 				amount = amount.replace(',','');
 			}
 
@@ -555,17 +587,28 @@
 		getCurrency: function() {
 
 			var currency = {
+				code: 'USD',
 				thousands_sep: ',',
 				decimal_sep: '.',
 				symbol: '$',
 				symbol_pos: 'left'
-			}
+			};
 
-			if ( 'undefined' !== wpforms_currency) {
-				currency.thousands_sep = wpforms_currency.thousands;
-				currency.decimal_sep   = wpforms_currency.decimal;
-				currency.symbol        = wpforms_currency.symbol;
-				currency.symbol_pos    = wpforms_currency.symbol_pos;
+			// Backwards compatibility.
+			if ( typeof wpforms_settings.currency_code !== 'undefined' ) {
+				currency.code = wpforms_settings.currency_code;
+			}
+			if ( typeof wpforms_settings.currency_thousands !== 'undefined' ) {
+				currency.thousands_sep = wpforms_settings.currency_thousands;
+			}
+			if ( typeof wpforms_settings.currency_decimal !== 'undefined' ) {
+				currency.decimal_sep = wpforms_settings.currency_decimal;
+			}
+			if ( typeof wpforms_settings.currency_symbol !== 'undefined' ) {
+				currency.symbol = wpforms_settings.currency_symbol;
+			}
+			if ( typeof wpforms_settings.currency_symbol_pos !== 'undefined' ) {
+				currency.symbol_pos = wpforms_settings.currency_symbol_pos;
 			}
 
 			return currency;
@@ -579,25 +622,25 @@
 		 */
 		numberFormat: function (number, decimals, decimalSep, thousandsSep) {
 
-			number = (number + '').replace(/[^0-9+\-Ee.]/g, '')
-			var n = !isFinite(+number) ? 0 : +number
-			var prec = !isFinite(+decimals) ? 0 : Math.abs(decimals)
-			var sep = (typeof thousandsSep === 'undefined') ? ',' : thousandsSep
-			var dec = (typeof decimalSep === 'undefined') ? '.' : decimalSep
-			var s = ''
+			number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+			var n = !isFinite(+number) ? 0 : +number;
+			var prec = !isFinite(+decimals) ? 0 : Math.abs(decimals);
+			var sep = (typeof thousandsSep === 'undefined') ? ',' : thousandsSep;
+			var dec = (typeof decimalSep === 'undefined') ? '.' : decimalSep;
+			var s;
 
 			var toFixedFix = function (n, prec) {
-				var k = Math.pow(10, prec)
+				var k = Math.pow(10, prec);
 				return '' + (Math.round(n * k) / k).toFixed(prec)
-			}
+			};
 
 			// @todo: for IE parseFloat(0.55).toFixed(0) = 0;
-			s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.')
+			s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
 			if (s[0].length > 3) {
 				s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep)
 			}
 			if ((s[1] || '').length < prec) {
-				s[1] = s[1] || ''
+				s[1] = s[1] || '';
 				s[1] += new Array(prec - s[1].length + 1).join('0')
 			}
 
@@ -612,11 +655,11 @@
 		 */
 		empty: function(mixedVar) {
 
-			var undef
-			var key
-			var i
-			var len
-			var emptyValues = [undef, null, false, 0, '', '0']
+			var undef;
+			var key;
+			var i;
+			var len;
+			var emptyValues = [undef, null, false, 0, '', '0'];
 
 			for (i = 0, len = emptyValues.length; i < len; i++) {
 				if (mixedVar === emptyValues[i]) {
@@ -627,13 +670,13 @@
 			if (typeof mixedVar === 'object') {
 				for (key in mixedVar) {
 					if (mixedVar.hasOwnProperty(key)) {
-						return false
+						return false;
 					}
 				}
-				return true
+				return true;
 			}
 
-			return false
+			return false;
 		},
 
 		/**
@@ -670,18 +713,20 @@
 		 */
 		createCookie: function(name, value, days) {
 
+			var expires = '';
+
 			// If we have a days value, set it in the expiry of the cookie.
 			if ( days ) {
 				// If -1 is our value, set a session based cookie instead of a persistent cookie.
-				if ( '-1' == days ) {
-					var expires = '';
+				if ( '-1' === days ) {
+					expires = '';
 				} else {
 					var date = new Date();
 					date.setTime(date.getTime() + (days*24*60*60*1000));
-					var expires = '; expires=' + date.toGMTString();
+					expires = '; expires=' + date.toGMTString();
 				}
 			} else {
-				var expires = '; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+				expires = '; expires=Thu, 01 Jan 1970 00:00:01 GMT';
 			}
 
 			// Write the cookie.
@@ -700,7 +745,7 @@
 
 			for ( var i = 0; i < ca.length; i++ ) {
 				var c = ca[i];
-				while ( c.charAt(0) == ' ' ) {
+				while ( c.charAt(0) === ' ' ) {
 					c = c.substring(1, c.length);
 				}
 				if ( c.indexOf(nameEQ) == 0 ) {
@@ -718,7 +763,7 @@
 
 			WPForms.createCookie(name, '',-1);
 		}
-	}
+	};
 
 	WPForms.init();
 

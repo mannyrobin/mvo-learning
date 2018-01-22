@@ -1,8 +1,24 @@
 Plugin Name: WP Defender
 Author: Hoang Ngo, Aaron Edwards
-Tested up to: 4.7.4
+Tested up to: 4.9.1
 
 Change Log:
+
+1.7.4.2 - 2018-10-01
+----------------------------------------------------------------------
+- Fix: Remove debug data
+- Fix: Issue with Hub
+
+1.7.4.1 - 2017-4-12
+----------------------------------------------------------------------
+- Added: Endpoint API so HUB can work with Defender natively through WPMU DEV Dashboard plugin
+
+1.7.4 - 2017-20-11
+----------------------------------------------------------------------
+- Fix: Conflict with Jetpack where Defender 2FA module would not detect if Jetpack 2FA was disabled.
+- Fix: Visitor would get a 404 lockout if landing on a page with many dead links.
+- Improvement: When an user is deleted, audit logging now display the user's login instead of only UID.
+- Other minor enhancements/fixes
 
 1.7.3 - 2017-14-10
 ----------------------------------------------------------------------
@@ -210,4 +226,4 @@ Fixed: Scanning was sometimes slow or getting stuck
 - First release
 
 
-331494-1510934238-ai
+331494-1516394985-au

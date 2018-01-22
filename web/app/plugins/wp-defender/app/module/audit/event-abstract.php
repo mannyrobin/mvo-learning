@@ -176,10 +176,6 @@ abstract class Event_Abstract extends \Hammer\WP\Component {
 			if ( $map[ $comparison ] ) {
 				$matched[] = $t;
 			}
-			/*var_dump( $compare );
-			var_dump( $value );
-
-			var_dump( $params );*/
 		}
 
 		return array_shift( $matched );
@@ -290,6 +286,7 @@ abstract class Event_Abstract extends \Hammer\WP\Component {
 			if ( empty( $text ) ) {
 				return false;
 			}
+
 			foreach ( $params as $key => $val ) {
 				$replacer = $val;
 				if ( is_array( $replacer ) || is_object( $replacer ) ) {

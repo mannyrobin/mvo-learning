@@ -196,7 +196,7 @@ final class FLBuilder {
 
 		wp_editor( '{FL_EDITOR_CONTENT}', 'flbuildereditor', array(
 			'media_buttons' => true,
-			'wpautop' 		=> true,
+			'wpautop'       => false,
 			'textarea_rows' => 16,
 		) );
 
@@ -375,7 +375,7 @@ final class FLBuilder {
 		// Register additional JS
 		wp_register_script( 'fl-slideshow',          $js_url . 'fl-slideshow' . $min . '.js', array( 'yui3' ), $ver, true );
 		wp_register_script( 'fl-gallery-grid',       $js_url . 'fl-gallery-grid.js', array( 'jquery' ), $ver, true );
-		wp_register_script( 'jquery-bxslider',       $js_url . 'jquery.bxslider.min.js', array( 'jquery-easing', 'jquery-fitvids' ), $ver, true );
+		wp_register_script( 'jquery-bxslider',       $js_url . 'jquery.bxslider.js', array( 'jquery-easing', 'jquery-fitvids' ), $ver, true );
 		wp_register_script( 'jquery-easing',         $js_url . 'jquery.easing.min.js', array( 'jquery' ), '1.4', true );
 		wp_register_script( 'jquery-fitvids',        $js_url . 'jquery.fitvids.min.js', array( 'jquery' ), '1.2', true );
 		wp_register_script( 'jquery-imagesloaded',   $js_url . 'jquery.imagesloaded.min.js', array( 'jquery' ), $ver, true );
@@ -690,6 +690,7 @@ final class FLBuilder {
 				}
 			}
 		}// End if().
+		wp_add_inline_style( 'admin-bar', '#wp-admin-bar-fl-builder-frontend-edit-link .ab-icon:before { content: "\f116" !important; top: 2px; margin-right: 3px; }' );
 	}
 
 	/**
@@ -750,6 +751,12 @@ final class FLBuilder {
 			if ( FLBuilderModel::layout_has_drafted_changes() ) {
 				$classes[] = 'fl-builder--layout-has-drafted-changes';
 			}
+
+			if ( is_rtl() ) {
+				$classes[] = 'fl-builder-direction-rtl';
+			} else {
+				$classes[] = 'fl-builder-direction-ltr';
+			}
 		}
 
 		return $classes;
@@ -772,7 +779,7 @@ final class FLBuilder {
 
 			$wp_admin_bar->add_node( array(
 				'id'    => 'fl-builder-frontend-edit-link',
-				'title' => '<style> #wp-admin-bar-fl-builder-frontend-edit-link .ab-icon:before { content: "\f116" !important; top: 2px; margin-right: 3px; } </style><span class="ab-icon"></span>' . FLBuilderModel::get_branding() . $dot,
+				'title' => '<span class="ab-icon"></span>' . FLBuilderModel::get_branding() . $dot,
 				'href'  => FLBuilderModel::get_edit_url( $wp_the_query->post->ID ),
 			));
 		}
@@ -1138,16 +1145,6 @@ final class FLBuilder {
 			'publishAndRemain' => array(
 				'label' => _x( 'Publish changes without leaving builder', 'Keyboard action to publish any pending changes', 'fl-builder' ),
 				'keyCode' => 'mod+p',
-				'isGlobal' => true,
-			),
-			'goToNextTab' => array(
-				'label' => _x( 'Next Settings Tab', 'Keyboard action to move to the next panel tab', 'fl-builder' ),
-				'keyCode' => 'mod+right',
-				'isGlobal' => true,
-			),
-			'goToPrevTab' => array(
-				'label' => _x( 'Previous Settings Tab', 'Keyboard action to move to the previous panel tab', 'fl-builder' ),
-				'keyCode' => 'mod+left',
 				'isGlobal' => true,
 			),
 			'cancelTask' => array(
@@ -1645,7 +1642,7 @@ final class FLBuilder {
 		// Remove empty lines.
 		$content = preg_replace( '/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/', "\n", $content );
 
-		return $content;
+		return apply_filters( 'fl_builder_editor_content', $content );
 	}
 
 	/**

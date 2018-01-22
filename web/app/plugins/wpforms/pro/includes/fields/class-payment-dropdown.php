@@ -205,7 +205,7 @@ class WPForms_Field_Payment_Select extends WPForms_Field {
 		// Basic required check - If field is marked as required, check for entry data
 		if ( !empty( $form_data['fields'][$field_id]['required'] ) && empty( $field_submit ) ) {
 
-			wpforms()->process->errors[$form_data['id']][$field_id] = apply_filters( 'wpforms_required_label', __( 'This field is required', 'wpforms' ) );
+			wpforms()->process->errors[$form_data['id']][$field_id] = apply_filters( 'wpforms_required_label', __( 'This field is required.', 'wpforms' ) );
 		}
 
 		// Validate that the option selected is real

@@ -22,6 +22,7 @@ class PPFormidableFormModule extends FLBuilderModule {
             'url'           => BB_POWERPACK_URL . 'modules/pp-formidable-form/',
             'editor_export' => true, // Defaults to true and can be omitted.
             'enabled'       => true, // Defaults to true and can be omitted.
+            'icon'				=> 'editor-table.svg',
         ));
     }
 
@@ -444,7 +445,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'show_reset'    => true,
                         'preview'       => array(
                             'type'      => 'css',
-                            'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm-show-form  .frm_section_heading h3',
+                            'selector'  => '.pp-ff-content .frm_forms .frm-show-form  .frm_section_heading h3',
                             'property'  => 'background-color'
                         )
                     ),
@@ -454,7 +455,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'default'               => '444444',
                         'preview'               => array(
                             'type'              => 'css',
-                            'selector'          => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm-show-form  .frm_section_heading h3, .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_icon_font',
+                            'selector'          => '.pp-ff-content .frm_forms .frm-show-form  .frm_section_heading h3, .pp-ff-content .frm_forms .frm_icon_font',
                             'property'          => 'color'
                         )
                     ),
@@ -470,7 +471,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         ),
                         'preview'       => array(
                             'type'      => 'css',
-                            'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm-show-form  .frm_section_heading h3',
+                            'selector'  => '.pp-ff-content .frm_forms .frm-show-form  .frm_section_heading h3',
                             'property'  => 'border-style'
                         ),
                         'toggle'    => array(
@@ -493,7 +494,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'default'       => 2,
                         'preview'       => array(
                             'type'      => 'css',
-                            'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm-show-form  .frm_section_heading h3',
+                            'selector'  => '.pp-ff-content .frm_forms .frm-show-form  .frm_section_heading h3',
                             'property'  => 'border-width',
                             'unit'      => 'px'
                         )
@@ -505,7 +506,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'show_reset'    => true,
                         'preview'       => array(
                             'type'      => 'css',
-                            'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm-show-form  .frm_section_heading h3',
+                            'selector'  => '.pp-ff-content .frm_forms .frm-show-form  .frm_section_heading h3',
                             'property'  => 'border-color'
                         )
                     ),
@@ -520,12 +521,6 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         	'border-left'		  => __('Left', 'bb-powerpack'),
                         	'border-right'		  => __('Right', 'bb-powerpack'),
                         ),
-                        'preview'                 => array(
-                            'type'                => 'css',
-                            'selector'            => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm-show-form  .frm_section_heading h3',
-                            'property'            => 'border',
-                            'unit'                => 'px'
-                        )
                     ),
                     'section_field_margin' 	=> array(
                         'type' 			=> 'pp-multitext',
@@ -542,7 +537,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Top',
                                 'icon'		=> 'fa-long-arrow-up',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm-show-form  .frm_section_heading h3',
+                                    'selector'  => '.pp-ff-content .frm_forms .frm-show-form  .frm_section_heading h3',
                                     'property'  => 'margin-top',
                                     'unit'      => 'px'
                                 )
@@ -553,7 +548,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Bottom',
                                 'icon'		=> 'fa-long-arrow-down',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm-show-form  .frm_section_heading h3',
+                                    'selector'  => '.pp-ff-content .frm_forms .frm-show-form  .frm_section_heading h3',
                                     'property'  => 'margin-bottom',
                                     'unit'      => 'px'
                                 )
@@ -577,7 +572,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Top',
                                 'icon'		=> 'fa-long-arrow-up',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm-show-form  .frm_section_heading h3',
+                                    'selector'  => '.pp-ff-content .frm_forms .frm-show-form  .frm_section_heading h3',
                                     'property'  => 'padding-top',
                                     'unit'      => 'px'
                                 )
@@ -588,7 +583,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Bottom',
                                 'icon'		=> 'fa-long-arrow-down',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm-show-form  .frm_section_heading h3',
+                                    'selector'  => '.pp-ff-content .frm_forms .frm-show-form  .frm_section_heading h3',
                                     'property'  => 'padding-bottom',
                                     'unit'      => 'px'
                                 )
@@ -599,7 +594,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Left',
                                 'icon'		=> 'fa-long-arrow-left',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm-show-form  .frm_section_heading h3',
+                                    'selector'  => '.pp-ff-content .frm_forms .frm-show-form  .frm_section_heading h3',
                                     'property'  => 'padding-left',
                                     'unit'      => 'px'
                                 )
@@ -610,7 +605,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Right',
                                 'icon'		=> 'fa-long-arrow-right',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm-show-form  .frm_section_heading h3',
+                                    'selector'  => '.pp-ff-content .frm_forms .frm-show-form  .frm_section_heading h3',
                                     'property'  => 'padding-right',
                                     'unit'      => 'px'
                                 )
@@ -633,7 +628,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         ),
                         'preview'       => array(
                             'type'      => 'css',
-                            'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style h3.frm_form_title, .pp-ff-content .pp-form-title',
+                            'selector'  => '.pp-ff-content .frm_forms h3.frm_form_title, .pp-ff-content .pp-form-title',
                             'property'  => 'text-align'
                         )
                     ),
@@ -652,7 +647,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Top',
                                 'icon'		=> 'fa-long-arrow-up',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style h3.frm_form_title, .pp-ff-content .pp-form-title',
+                                    'selector'  => '.pp-ff-content .frm_forms h3.frm_form_title, .pp-ff-content .pp-form-title',
                                     'property'  => 'margin-top',
                                     'unit'      => 'px'
                                 )
@@ -663,7 +658,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Bottom',
                                 'icon'		=> 'fa-long-arrow-down',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style h3.frm_form_title, .pp-ff-content .pp-form-title',
+                                    'selector'  => '.pp-ff-content .frm_forms h3.frm_form_title, .pp-ff-content .pp-form-title',
                                     'property'  => 'margin-bottom',
                                     'unit'      => 'px'
                                 )
@@ -686,7 +681,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         ),
                         'preview'       => array(
                             'type'      => 'css',
-                            'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description',
+                            'selector'  => '.pp-ff-content .frm_forms .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description',
                             'property'  => 'text-align'
                         )
                     ),
@@ -705,7 +700,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Top',
                                 'icon'		=> 'fa-long-arrow-up',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description',
+                                    'selector'  => '.pp-ff-content .frm_forms .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description',
                                     'property'  => 'margin-top',
                                     'unit'      => 'px'
                                 )
@@ -716,7 +711,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Bottom',
                                 'icon'		=> 'fa-long-arrow-down',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description',
+                                    'selector'  => '.pp-ff-content .frm_forms .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description',
                                     'property'  => 'margin-bottom',
                                     'unit'      => 'px'
                                 )
@@ -739,7 +734,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'default'               => '333333',
                         'preview'               => array(
                             'type'                  => 'css',
-                            'selector'              => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                            'selector'              => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                             'property'              => 'color'
                         )
                     ),
@@ -750,7 +745,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'show_reset'            => true,
                         'preview'               => array(
                             'type'              => 'css',
-                            'selector'          => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea, .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_dropzone',
+                            'selector'          => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea, .pp-ff-content .frm_forms .frm_dropzone',
                             'property'          => 'background-color'
                         )
                     ),
@@ -762,7 +757,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'default'              => '100',
                         'preview'              => array(
                             'type'             => 'css',
-                            'selector'         => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                            'selector'         => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                             'property'         => 'opacity',
                         )
                     ),
@@ -778,7 +773,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'show_reset'            => true,
                         'preview'               => array(
                             'type'              => 'css',
-                            'selector'          => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                            'selector'          => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                             'property'          => 'border-color'
                         )
                     ),
@@ -792,27 +787,27 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                             'type'                => 'css',
                             'rules'                 => array(
                                 array(
-                                    'selector'            => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                                    'selector'            => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                                     'property'            => 'border-width',
                                     'unit'                => 'px',
                                 ),
                                 array(
-                                    'selector'            => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                                    'selector'            => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                                     'property'            => 'border-top-width',
                                     'unit'                => 'px',
                                 ),
                                 array(
-                                    'selector'            => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                                    'selector'            => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                                     'property'            => 'border-bottom-width',
                                     'unit'                => 'px',
                                 ),
                                 array(
-                                    'selector'            => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                                    'selector'            => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                                     'property'            => 'border-left-width',
                                     'unit'                => 'px',
                                 ),
                                 array(
-                                    'selector'            => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                                    'selector'            => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                                     'property'            => 'border-right-width',
                                     'unit'                => 'px',
                                 )
@@ -832,7 +827,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         ),
                         'preview'                 => array(
                             'type'                => 'css',
-                            'selector'            => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                            'selector'            => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                             'property'            => 'border',
                             'unit'                => 'px'
                         )
@@ -844,7 +839,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'show_reset'            => true,
                         'preview'               => array(
                             'type'              => 'css',
-                            'selector'          => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]):focus, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select:focus, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea:focus',
+                            'selector'          => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]):focus, .pp-ff-content .frm_forms .form-field select:focus, .pp-ff-content .frm_forms .form-field textarea:focus',
                             'property'          => 'border-color'
                         )
                     ),
@@ -870,7 +865,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'class'                   => 'bb-ff-input input-small',
                         'preview'                 => array(
                             'type'                => 'css',
-                            'selector'            => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select',
+                            'selector'            => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select',
                             'property'            => 'height',
                             'unit'                => 'px',
                         )
@@ -883,7 +878,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'class'                   => 'bb-ff-input input-small',
                         'preview'                 => array(
                             'type'                => 'css',
-                            'selector'            => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                            'selector'            => '.pp-ff-content .frm_forms .form-field textarea',
                             'property'            => 'height',
                             'unit'                => 'px',
                         )
@@ -911,7 +906,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'class'                    => 'bb-ff-input input-small',
                         'preview'                  => array(
                             'type'                 => 'css',
-                            'selector'             => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                            'selector'             => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                             'property'             => 'border-radius',
                             'unit'                 => 'px'
                         )
@@ -936,7 +931,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'show_reset'    => true,
                         'preview'       => array(
                             'type'      => 'css',
-                            'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                            'selector'  => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                             'property'  => 'box-shadow'
                         ),
                     ),
@@ -966,7 +961,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Top',
                                 'icon'		=> 'fa-long-arrow-up',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                                    'selector'  => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                                     'property'  => 'padding-top',
                                     'unit'      => 'px'
                                 )
@@ -977,7 +972,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Bottom',
                                 'icon'		=> 'fa-long-arrow-down',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                                    'selector'  => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                                     'property'  => 'padding-bottom',
                                     'unit'      => 'px'
                                 )
@@ -988,7 +983,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Left',
                                 'icon'		=> 'fa-long-arrow-left',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                                    'selector'  => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                                     'property'  => 'padding-left',
                                     'unit'      => 'px'
                                 )
@@ -999,7 +994,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Right',
                                 'icon'		=> 'fa-long-arrow-right',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                                    'selector'  => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                                     'property'  => 'padding-right',
                                     'unit'      => 'px'
                                 )
@@ -1014,7 +1009,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'default'           => '10',
                         'preview'           => array(
                             'type'          => 'css',
-                            'selector'      => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field',
+                            'selector'      => '.pp-ff-content .frm_forms .form-field',
                             'property'      => 'margin-bottom',
                             'unit'          => 'px'
                         )
@@ -1045,7 +1040,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'show_reset'            => true,
                         'preview'               => array(
                             'type'              => 'css',
-                            'selector'          => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input::-webkit-input-placeholder, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select::-webkit-input-placeholder, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea::-webkit-input-placeholder',
+                            'selector'          => '.pp-ff-content .frm_forms .form-field input::-webkit-input-placeholder, .pp-ff-content .frm_forms .form-field select::-webkit-input-placeholder, .pp-ff-content .frm_forms .form-field textarea::-webkit-input-placeholder',
                             'property'          => 'color'
                         )
                     ),
@@ -1093,7 +1088,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'default'              => '100',
                         'preview'              => array(
                             'type'             => 'css',
-                            'selector'         => '.pp-ff-content .frm_style_formidable-style.with_frm_style input[type=submit], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=button], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=reset], .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_submit button',
+                            'selector'         => '.pp-ff-content .frm_forms input[type=submit], .pp-ff-content .frm_forms input[type=button], .pp-ff-content .frm_forms input[type=reset], .pp-ff-content .frm_forms .frm_submit button',
                             'property'         => 'opacity',
                         )
                     ),
@@ -1110,7 +1105,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'default'            => '1',
                         'preview'            => array(
                             'type'           => 'css',
-                            'selector'       => '.pp-ff-content .frm_style_formidable-style.with_frm_style input[type=submit], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=button], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=reset], .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_submit button',
+                            'selector'       => '.pp-ff-content .frm_forms input[type=submit], .pp-ff-content .frm_forms input[type=button], .pp-ff-content .frm_forms input[type=reset], .pp-ff-content .frm_forms .frm_submit button',
                             'property'       => 'border-width',
                             'unit'           => 'px'
                         )
@@ -1122,7 +1117,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'show_reset'         => true,
                         'preview'            => array(
                             'type'           => 'css',
-                            'selector'       => '.pp-ff-content .frm_style_formidable-style.with_frm_style input[type=submit], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=button], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=reset], .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_submit button',
+                            'selector'       => '.pp-ff-content .frm_forms input[type=submit], .pp-ff-content .frm_forms input[type=button], .pp-ff-content .frm_forms input[type=reset], .pp-ff-content .frm_forms .frm_submit button',
                             'property'       => 'border-color'
                         )
                     ),
@@ -1168,7 +1163,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'default'             => '2',
                         'preview'             => array(
                             'type'            => 'css',
-                            'selector'        => '.pp-ff-content .frm_style_formidable-style.with_frm_style input[type=submit], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=button], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=reset], .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_submit button',
+                            'selector'        => '.pp-ff-content .frm_forms input[type=submit], .pp-ff-content .frm_forms input[type=button], .pp-ff-content .frm_forms input[type=reset], .pp-ff-content .frm_forms .frm_submit button',
                             'property'        => 'border-radius',
                             'unit'            => 'px'
                         )
@@ -1190,7 +1185,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Top',
                                 'icon'		=> 'fa-long-arrow-up',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style input[type=submit], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=button], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=reset], .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_submit button',
+                                    'selector'  => '.pp-ff-content .frm_forms input[type=submit], .pp-ff-content .frm_forms input[type=button], .pp-ff-content .frm_forms input[type=reset], .pp-ff-content .frm_forms .frm_submit button',
                                     'property'  => 'padding-top',
                                     'unit'      => 'px'
                                 )
@@ -1201,7 +1196,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Bottom',
                                 'icon'		=> 'fa-long-arrow-down',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style input[type=submit], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=button], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=reset], .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_submit button',
+                                    'selector'  => '.pp-ff-content .frm_forms input[type=submit], .pp-ff-content .frm_forms input[type=button], .pp-ff-content .frm_forms input[type=reset], .pp-ff-content .frm_forms .frm_submit button',
                                     'property'  => 'padding-bottom',
                                     'unit'      => 'px'
                                 )
@@ -1212,7 +1207,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Left',
                                 'icon'		=> 'fa-long-arrow-left',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style input[type=submit], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=button], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=reset], .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_submit button',
+                                    'selector'  => '.pp-ff-content .frm_forms input[type=submit], .pp-ff-content .frm_forms input[type=button], .pp-ff-content .frm_forms input[type=reset], .pp-ff-content .frm_forms .frm_submit button',
                                     'property'  => 'padding-left',
                                     'unit'      => 'px'
                                 )
@@ -1223,7 +1218,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'tooltip'       => 'Right',
                                 'icon'		=> 'fa-long-arrow-right',
                                 'preview'       => array(
-                                    'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style input[type=submit], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=button], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=reset], .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_submit button',
+                                    'selector'  => '.pp-ff-content .frm_forms input[type=submit], .pp-ff-content .frm_forms input[type=button], .pp-ff-content .frm_forms input[type=reset], .pp-ff-content .frm_forms .frm_submit button',
                                     'property'  => 'padding-right',
                                     'unit'      => 'px'
                                 )
@@ -1262,7 +1257,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'show_reset'                   => true,
                         'preview'                      => array(
                             'type'                     => 'css',
-                            'selector'                 => '.frm_style_formidable-style.with_frm_style .frm_error_style',
+                            'selector'                 => '.frm_forms .frm_error_style',
                             'property'                 => 'background-color'
                         )
                     ),
@@ -1272,7 +1267,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'default'               => 'b94a4b',
                         'preview'               => array(
                             'type'              => 'css',
-                            'selector'          => '.frm_style_formidable-style.with_frm_style .frm_error_style',
+                            'selector'          => '.frm_forms .frm_error_style',
                             'property'          => 'color'
                         )
                     ),
@@ -1283,7 +1278,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'show_reset'                   => true,
                         'preview'                      => array(
                             'type'                     => 'css',
-                            'selector'                 => '.frm_style_formidable-style.with_frm_style .frm_error_style',
+                            'selector'                 => '.frm_forms .frm_error_style',
                             'property'                 => 'border-color'
                         )
                     ),
@@ -1308,7 +1303,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'default'                 => '790000',
                         'preview'                 => array(
                             'type'                => 'css',
-                            'selector'            => '.frm_style_formidable-style.with_frm_style .frm_error',
+                            'selector'            => '.frm_forms .frm_error',
                             'property'            => 'color'
                         )
                     ),
@@ -1324,7 +1319,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'show_reset'                   => true,
                         'preview'                      => array(
                             'type'                     => 'css',
-                            'selector'                 => '.frm_style_formidable-style.with_frm_style .frm_message',
+                            'selector'                 => '.frm_forms .frm_message',
                             'property'                 => 'background-color'
                         )
                     ),
@@ -1334,7 +1329,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'default'                      => '468847',
                         'preview'                      => array(
                             'type'                     => 'css',
-                            'selector'                 => '.frm_style_formidable-style.with_frm_style .frm_message',
+                            'selector'                 => '.frm_forms .frm_message',
                             'property'                 => 'color'
                         )
                     ),
@@ -1345,7 +1340,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'show_reset'                   => true,
                         'preview'                      => array(
                             'type'                     => 'css',
-                            'selector'                 => '.frm_style_formidable-style.with_frm_style .frm_message',
+                            'selector'                 => '.frm_forms .frm_message',
                             'property'                 => 'border-color'
                         )
                     ),
@@ -1368,7 +1363,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'label'         => __('Font', 'bb-powerpack'),
                         'preview'         => array(
                             'type'            => 'font',
-                            'selector'        => '.pp-ff-content .frm_style_formidable-style.with_frm_style h3.frm_form_title, .pp-ff-content .pp-form-title'
+                            'selector'        => '.pp-ff-content .frm_forms h3.frm_form_title, .pp-ff-content .pp-form-title'
                         )
                     ),
                     'title_text_transform'    => array(
@@ -1410,7 +1405,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'maxlength'     => 3,
                                 'tooltip'       => __('Desktop', 'bb-powerpack'),
                                 'preview'           => array(
-                                    'selector'      => '.pp-ff-content .frm_style_formidable-style.with_frm_style h3.frm_form_title, .pp-ff-content .pp-form-title',
+                                    'selector'      => '.pp-ff-content .frm_forms h3.frm_form_title, .pp-ff-content .pp-form-title',
                                     'property'      => 'font-size',
                                     'unit'          => 'px'
                                 ),
@@ -1444,7 +1439,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'maxlength'     => 3,
                                 'tooltip'       => __('Desktop', 'bb-powerpack'),
                                 'preview'           => array(
-                                    'selector'      => '.pp-ff-content .frm_style_formidable-style.with_frm_style h3.frm_form_title, .pp-ff-content .pp-form-title',
+                                    'selector'      => '.pp-ff-content .frm_forms h3.frm_form_title, .pp-ff-content .pp-form-title',
                                     'property'      => 'line-height',
                                 ),
                             ),
@@ -1469,7 +1464,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'show_reset'    => true,
                         'preview'       => array(
                             'type'      => 'css',
-                            'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style h3.frm_form_title, .pp-ff-content .pp-form-title',
+                            'selector'  => '.pp-ff-content .frm_forms h3.frm_form_title, .pp-ff-content .pp-form-title',
                             'property'  => 'color'
                         )
                     ),
@@ -1487,7 +1482,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'label'         => __('Font', 'bb-powerpack'),
                         'preview'         => array(
                             'type'            => 'font',
-                            'selector'        => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description'
+                            'selector'        => '.pp-ff-content .frm_forms .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description'
                         )
                     ),
                     'description_text_transform'    => array(
@@ -1501,7 +1496,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         ),
                         'preview'         => array(
                             'type'            => 'css',
-                            'selector'        => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description',
+                            'selector'        => '.pp-ff-content .frm_forms .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description',
                             'property'          => 'text-transform'
                         )
                     ),
@@ -1534,7 +1529,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'maxlength'     => 3,
                                 'tooltip'       => __('Desktop', 'bb-powerpack'),
                                 'preview'           => array(
-                                    'selector'      => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description',
+                                    'selector'      => '.pp-ff-content .frm_forms .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description',
                                     'property'      => 'font-size',
                                     'unit'          => 'px'
                                 ),
@@ -1568,7 +1563,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'maxlength'     => 3,
                                 'tooltip'       => __('Desktop', 'bb-powerpack'),
                                 'preview'           => array(
-                                    'selector'      => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description',
+                                    'selector'      => '.pp-ff-content .frm_forms .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description',
                                     'property'      => 'line-height',
                                 ),
                             ),
@@ -1593,7 +1588,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'show_reset'    => true,
                         'preview'       => array(
                             'type'      => 'css',
-                            'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description',
+                            'selector'  => '.pp-ff-content .frm_forms .frm_form_title + div.frm_description p, .pp-ff-content .pp-form-description',
                             'property'  => 'color'
                         )
                     ),
@@ -1611,7 +1606,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'label'         => __('Font', 'bb-powerpack'),
                         'preview'         => array(
                             'type'            => 'font',
-                            'selector'        => '.pp-ff-content .frm_style_formidable-style.with_frm_style label.frm_primary_label, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field.frm_third div.frm_description, .pp-ff-content .frm_style_formidable-style.with_frm_style label, .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_form_field.frm_html_container'
+                            'selector'        => '.pp-ff-content .frm_forms label.frm_primary_label, .pp-ff-content .frm_forms .form-field.frm_third div.frm_description, .pp-ff-content .frm_forms label, .pp-ff-content .frm_forms .frm_form_field.frm_html_container'
                         )
                     ),
                     'label_text_transform'    => array(
@@ -1653,7 +1648,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'maxlength'     => 3,
                                 'tooltip'       => __('Desktop', 'bb-powerpack'),
                                 'preview'           => array(
-                                    'selector'      => '.pp-ff-content .frm_style_formidable-style.with_frm_style label.frm_primary_label',
+                                    'selector'      => '.pp-ff-content .frm_forms label.frm_primary_label',
                                     'property'      => 'font-size',
                                     'unit'          => 'px'
                                 ),
@@ -1679,7 +1674,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'show_reset'    => true,
                         'preview'       => array(
                             'type'      => 'css',
-                            'selector'  => '.pp-ff-content .frm_style_formidable-style.with_frm_style label.frm_primary_label, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field.frm_third div.frm_description, .pp-ff-content .frm_style_formidable-style.with_frm_style label, .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_form_field.frm_html_container',
+                            'selector'  => '.pp-ff-content .frm_forms label.frm_primary_label, .pp-ff-content .frm_forms .form-field.frm_third div.frm_description, .pp-ff-content .frm_forms label, .pp-ff-content .frm_forms .frm_form_field.frm_html_container',
                             'property'  => 'color'
                         )
                     ),
@@ -1697,7 +1692,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'label'         => __('Font', 'bb-powerpack'),
                         'preview'         => array(
                             'type'            => 'font',
-                            'selector'        => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                            'selector'        => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                         )
                     ),
                     'input_text_transform'    => array(
@@ -1739,7 +1734,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'maxlength'     => 3,
                                 'tooltip'       => __('Desktop', 'bb-powerpack'),
                                 'preview'           => array(
-                                    'selector'      => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field select, .pp-ff-content .frm_style_formidable-style.with_frm_style .form-field textarea',
+                                    'selector'      => '.pp-ff-content .frm_forms .form-field input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .pp-ff-content .frm_forms .form-field select, .pp-ff-content .frm_forms .form-field textarea',
                                     'property'      => 'font-size',
                                     'unit'          => 'px'
                                 ),
@@ -1787,7 +1782,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'maxlength'     => 3,
                                 'tooltip'       => __('Desktop', 'bb-powerpack'),
                                 'preview'           => array(
-                                    'selector'      => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input + .frm_description',
+                                    'selector'      => '.pp-ff-content .frm_forms .form-field input + .frm_description',
                                     'property'      => 'font-size',
                                     'unit'          => 'px'
                                 ),
@@ -1821,7 +1816,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'maxlength'     => 3,
                                 'tooltip'       => __('Desktop', 'bb-powerpack'),
                                 'preview'           => array(
-                                    'selector'      => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input + .frm_description',
+                                    'selector'      => '.pp-ff-content .frm_forms .form-field input + .frm_description',
                                     'property'      => 'line-height',
                                 ),
                             ),
@@ -1845,7 +1840,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'default'               => '000000',
                         'preview'               => array(
                             'type'              => 'css',
-                            'selector'          => '.pp-ff-content .frm_style_formidable-style.with_frm_style .form-field input + .frm_description',
+                            'selector'          => '.pp-ff-content .frm_forms .form-field input + .frm_description',
                             'property'          => 'color'
                         )
                     ),
@@ -1863,7 +1858,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'label'         => __('Font', 'bb-powerpack'),
                         'preview'         => array(
                             'type'            => 'font',
-                            'selector'        => '.pp-ff-content .frm_style_formidable-style.with_frm_style input[type=submit], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=button], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=reset], .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_submit button'
+                            'selector'        => '.pp-ff-content .frm_forms input[type=submit], .pp-ff-content .frm_forms input[type=button], .pp-ff-content .frm_forms input[type=reset], .pp-ff-content .frm_forms .frm_submit button'
                         )
                     ),
                     'button_text_transform'    => array(
@@ -1905,7 +1900,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'maxlength'     => 3,
                                 'tooltip'       => __('Desktop', 'bb-powerpack'),
                                 'preview'           => array(
-                                    'selector'      => '.pp-ff-content .frm_style_formidable-style.with_frm_style input[type=submit], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=button], .pp-ff-content .frm_style_formidable-style.with_frm_style input[type=reset], .pp-ff-content .frm_style_formidable-style.with_frm_style .frm_submit button',
+                                    'selector'      => '.pp-ff-content .frm_forms input[type=submit], .pp-ff-content .frm_forms input[type=button], .pp-ff-content .frm_forms input[type=reset], .pp-ff-content .frm_forms .frm_submit button',
                                     'property'      => 'font-size',
                                     'unit'          => 'px'
                                 ),
@@ -1938,7 +1933,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                         'label'         => __('Font', 'bb-powerpack'),
                         'preview'         => array(
                             'type'            => 'font',
-                            'selector'        => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm-show-form  .frm_section_heading h3'
+                            'selector'        => '.pp-ff-content .frm_forms .frm-show-form  .frm_section_heading h3'
                         )
                     ),
                     'section_field_size'    => array(
@@ -1970,7 +1965,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'maxlength'     => 3,
                                 'tooltip'       => __('Desktop', 'bb-powerpack'),
                                 'preview'           => array(
-                                    'selector'      => '.pp-ff-content .frm_style_formidable-style.with_frm_style .frm-show-form  .frm_section_heading h3',
+                                    'selector'      => '.pp-ff-content .frm_forms .frm-show-form  .frm_section_heading h3',
                                     'property'      => 'font-size',
                                     'unit'          => 'px'
                                 ),
@@ -2023,7 +2018,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'maxlength'     => 3,
                                 'tooltip'       => __('Desktop', 'bb-powerpack'),
                                 'preview'           => array(
-                                    'selector'      => '.frm_style_formidable-style.with_frm_style .frm_error_style',
+                                    'selector'      => '.frm_forms .frm_error_style',
                                     'property'      => 'font-size',
                                     'unit'          => 'px'
                                 ),
@@ -2076,7 +2071,7 @@ FLBuilder::register_module('PPFormidableFormModule', array(
                                 'maxlength'     => 3,
                                 'tooltip'       => __('Desktop', 'bb-powerpack'),
                                 'preview'           => array(
-                                    'selector'      => '.frm_style_formidable-style.with_frm_style .frm_message',
+                                    'selector'      => '.frm_forms .frm_message',
                                     'property'      => 'font-size',
                                     'unit'          => 'px'
                                 ),

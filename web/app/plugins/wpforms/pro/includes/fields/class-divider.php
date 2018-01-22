@@ -7,7 +7,7 @@
  * @since      1.0.0
  * @license    GPL-2.0+
  * @copyright  Copyright (c) 2016, WPForms LLC
-*/
+ */
 class WPForms_Field_Divider extends WPForms_Field {
 
 	/**
@@ -33,23 +33,54 @@ class WPForms_Field_Divider extends WPForms_Field {
 	 */
 	public function field_options( $field ) {
 
-		//--------------------------------------------------------------------//
-		// Basic field options
-		//--------------------------------------------------------------------//
-		
-		$this->field_option( 'basic-options', $field, array( 'markup' => 'open' ) );
-		$this->field_option( 'label',         $field );
-		$this->field_option( 'description',   $field );
-		$this->field_element( 'text',  $field, array( 'type' => 'hidden', 'slug' => 'label_disable', 'value' => '1' ) );
-		$this->field_option( 'basic-options', $field, array( 'markup' => 'close' ) );
+		// -------------------------------------------------------------------//
+		// Basic field options.
+		// -------------------------------------------------------------------//
 
-		//--------------------------------------------------------------------//
-		// Advanced field options
-		//--------------------------------------------------------------------//
-	
-		$this->field_option( 'advanced-options', $field, array( 'markup' => 'open' ) );
-		$this->field_option( 'css',              $field );
-		$this->field_option( 'advanced-options', $field, array( 'markup' => 'close' ) );
+		// Options open markup.
+		$args = array(
+			'markup' => 'open',
+		);
+		$this->field_option( 'basic-options', $field, $args );
+
+		// Label.
+		$this->field_option( 'label', $field );
+
+		// Description.
+		$this->field_option( 'description', $field );
+
+		// Set label to disabled.
+		$args = array(
+			'type'  => 'hidden',
+			'slug'  => 'label_disable',
+			'value' => '1',
+		);
+		$this->field_element( 'text',  $field, $args );
+
+		// Options close markup.
+		$args = array(
+			'markup' => 'close',
+		);
+		$this->field_option( 'basic-options', $field, $args );
+
+		// -------------------------------------------------------------------//
+		// Advanced field options.
+		// -------------------------------------------------------------------//
+
+		// Options open markup.
+		$args = array(
+			'markup' => 'open',
+		);
+		$this->field_option( 'advanced-options', $field, $args );
+
+		// Custom CSS classes.
+		$this->field_option( 'css', $field );
+
+		// Options close markup.
+		$args = array(
+			'markup' => 'close',
+		);
+		$this->field_option( 'advanced-options', $field, $args );
 	}
 
 	/**
@@ -60,7 +91,10 @@ class WPForms_Field_Divider extends WPForms_Field {
 	 */
 	public function field_preview( $field ) {
 
+		// Label.
 		$this->field_preview_option( 'label', $field );
+
+		// Description.
 		$this->field_preview_option( 'description', $field );
 	}
 
@@ -69,18 +103,22 @@ class WPForms_Field_Divider extends WPForms_Field {
 	 *
 	 * @since 1.0.0
 	 * @param array $field
+	 * @param array $deprecated
 	 * @param array $form_data
 	 */
-	public function field_display( $field, $field_atts, $form_data ) {
+	public function field_display( $field, $deprecated, $form_data ) {
 
-		// Setup and sanitize the necessary data
-		$field             = apply_filters( 'wpforms_divider_field_display', $field, $field_atts, $form_data );
-		$field_class       = implode( ' ', array_map( 'sanitize_html_class', $field_atts['input_class'] ) );
-		$field_id          = implode( ' ', array_map( 'sanitize_html_class', $field_atts['input_id'] ) );
-	
-		// Primary divider field
-		if ( !empty( $field['label'] ) ) {
-			printf( '<h3 id="%s" class="%s">%s</h3>', $field_id, $field_id, esc_html( $field['label'] ) );
+		// Define data.
+		$primary = $field['properties']['inputs']['primary'];
+		$label   = $field['properties']['label'];
+
+		// Primary field.
+		if ( ! empty( $label['value'] ) ) {
+			printf(
+				'<h3 %s>%s</h3>',
+				wpforms_html_attributes( $primary['id'], $primary['class'], $primary['data'], $primary['attr'] ),
+				esc_html( $field['label'] )
+			);
 		}
 	}
 
@@ -93,8 +131,6 @@ class WPForms_Field_Divider extends WPForms_Field {
 	 * @param array $form_data
 	 */
 	public function format( $field_id, $field_submit, $form_data ) {
-
-		return;
 	}
 }
 new WPForms_Field_Divider;
