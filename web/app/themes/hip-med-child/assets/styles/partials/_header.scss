@@ -62,6 +62,10 @@ header{
                             line-height: 1;
                             background: none;
                             color: inherit;
+                            padding: 0 2px;
+                            &:hover{
+                                opacity: 0.5;
+                            }
                         }
                     }
                 }
