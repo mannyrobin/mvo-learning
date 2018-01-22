@@ -1,0 +1,176 @@
+header{
+    .call-now-btn{
+        a{
+            color: #ffffff;
+        }
+    }
+    .top-header{
+        ul.menu{
+            li{
+                a{
+                    font-weight: 700;
+                }
+                &.top-menu-btn{
+                    &+.top-menu-btn{
+                        margin-left: 2px;
+                    }
+                }
+            }
+        }
+        &.style-1{
+            .header-phone{
+                svg{
+                    margin-right: 5px;
+                    fill:#fff;
+                }
+                a{
+                    color: #fff;
+                    font-weight: 700;
+                }
+            }
+            ul.menu{
+                display: block;
+                li{
+                    display: inline-block;
+                    vertical-align: middle;
+                    float: none;
+                    &+li{
+                        a{
+                            border-left: 1px solid #fff;
+                        }
+                    }
+                    &.top-menu-btn{
+                        a{
+                            border: 0;
+                            padding: 10px 12px;
+                            font-size: 14px;
+                            font-weight: normal;
+                            line-height: 1.45;
+                        }
+
+                    }
+                }
+            }
+        }
+        &.style-2{
+            .hip-businessinfo-social_icons{
+                .social-icons{
+                    li{
+                        a{
+                            width: auto;
+                            height: auto;
+                            line-height: 1;
+                            background: none;
+                            color: inherit;
+                            padding: 0 2px;
+                            &:hover{
+                                opacity: 0.5;
+                            }
+                        }
+                    }
+                }
+                @media(min-width: $tablet_min) and (max-width: $desktop_max){
+                   padding-left: 10px;
+                }
+            }
+            .header-phone{
+                svg{
+                    -webkit-transform: rotate(-15deg);
+                    transform: rotate(-15deg);
+                    margin-right: 5px;
+                }
+                a{
+                    color: inherit;
+                    font-size: 1em;
+
+                }
+            }
+            ul.menu{
+                li{
+                    display: inline-block;
+                    vertical-align: baseline;
+                    float: none;
+                    a{
+                        color: inherit;
+                    }
+                    &.top-menu-btn{
+                        a{
+                            color: #fff;
+                            padding-top: 25px;
+                            padding-bottom: 9px;
+                        }
+                    }
+                }
+            }
+            .fl-col-group{
+                .fl-col{
+                    &:first-child{
+                        @media(min-width: $tablet_min) and (max-width: $desktop_max){
+                            width: 15%;
+                        }
+                    }
+                    &:last-child{
+                        width: 55%;
+                    }
+                }
+            }
+        }
+    }
+
+    .main-header{
+        &.style-1{
+            .fl-row-content-wrap{
+                border-bottom: 2px solid;
+                ul{
+                    li{
+                        a{
+                            @media(min-width: $tablet_min){
+                                height: 85px;
+                                line-height: 3.5;
+                                border-radius: 0 !important;
+                                &:hover{
+                                    background-color: #f9f9f9;
+                                }
+                            }
+                        }
+                        ul.sub-menu{
+                            min-width: 230px;
+                            li{
+                                a{
+                                    @media(min-width: $tablet_min){
+                                        height: auto;
+                                        line-height: 1.5;
+                                        color: #fff;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+            }
+
+        }
+        &.style-2{
+            .fl-row-content-wrap{
+                ul{
+                    li{
+                        a{
+                            line-height: 1.4;
+                        }
+                        ul.sub-menu{
+                            padding-top: 20px;
+                            li{
+                                a{
+                                    padding: 10px 20px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
