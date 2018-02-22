@@ -1,0 +1,14 @@
+{
+  "name": "hip-bb-theme",
+  "version": "2.0.0",
+  "author": "Hip Creative, Inc",
+  "private": true,
+  "devDependencies": {
+    "gulp-clean-css": "^3.4",
+    "gulp-concat": "^2.6.0",
+    "gulp-util": "^3.0",
+    "gulp": "^3.9",
+    "gulp-sass": "^3.1",
+    "gulp-uglify": "^3.0"
+  }
+}

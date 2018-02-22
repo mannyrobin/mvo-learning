@@ -1,0 +1,102 @@
+@import "partials/mixins";
+.nopad{
+    padding: 0 !important;
+}
+table.form-table{
+    tr{
+        td,th{
+            vertical-align: top;
+        }
+        &.font-select{
+            td{
+                text-align: left;
+                &.inline-field{
+                    width: 250px;
+                    padding-top: 25px;
+                    padding-bottom: 25px;
+                    border-bottom: 1px solid #e2e0e0;
+                    h4{
+                        margin: 0;
+                        display: inline-block;
+                        margin-right: 8px;
+                        vertical-align: middle;
+                    }
+                    select{
+                        display: inline-block;
+                        min-width: 100px;
+                        vertical-align: middle;
+                    }
+                    input{
+                        display: inline-block;
+                        vertical-align: middle;
+                        @include placeholder(){
+                            font-size: 0.8em;
+                            opacity: 0.8;
+                        }
+                    }
+                }
+            }
+            &:last-child{
+                td{
+                    &.inline-field{
+                        border-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+.hip-settings{
+
+    #feedback{
+        display: block;
+        position: fixed;
+        top: 50px;
+        width: 100%;
+        max-width: 50%;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        p{
+            font-size: 1.3em;
+            display: block;
+            text-align: center;
+            letter-spacing: 1px;
+            padding: .75rem 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            border-radius: .25rem;
+            &.success{
+                color: #155724;
+                background-color: #d4edda;
+                border-color: #c3e6cb;
+            }
+            &.failure{
+                color: #721c24;
+                background-color: #f8d7da;
+                border-color: #f5c6cb;
+            }
+        }
+    }
+    .description{
+        &.small{
+            font-size: smaller;
+            margin: 0;
+            padding-left: 80px;
+            font-weight: normal;
+        }
+    }
+    .img_logo, .alt_img_logo{
+        display: none;
+
+        .site_logo{
+            max-width: 120px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        #upload_logo{
+            width: 120px;
+        }
+    }
+
+}

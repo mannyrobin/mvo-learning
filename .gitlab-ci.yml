@@ -1,16 +1,29 @@
-image: ubuntu:17.10
-publish:
+image: composer
+
+variables:
+  TERMINUS_SITE: drhackel
+
+stages:
+  - deploy
+
+before_script:
+  - eval $(ssh-agent -s) && ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - mkdir -p $HOME/.ssh && echo "StrictHostKeyChecking no" >> "$HOME/.ssh/config"
+  - git config --global user.email "$GITLAB_USER_EMAIL"
+  - git config --global user.name "Gitlab CI"
+  - /usr/bin/env COMPOSER_BIN_DIR=$HOME/bin composer --working-dir=$HOME require pantheon-systems/terminus "^1"
+  - export PATH=$HOME/bin:$HOME/terminus/bin:$PATH
+  - mkdir -p ~/.terminus/plugins
+  - composer create-project -d ~/.terminus/plugins pantheon-systems/terminus-build-tools-plugin:~1
+  - terminus auth:login --machine-token="$TERMINUS_TOKEN"
+
+deploy_to_test:
   stage: deploy
-  only:
-    refs:
-      - master
   environment:
-    name: production
-  before_script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "$SSH_PRIVATE_KEY")
-    - mkdir -p ~/.ssh 
-    - '[[ -f /.dockerenv ]] && echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts'
+    name: dev
+  only:
+    - master
   script:
-    - ssh yodeler@107.170.246.26 ./deploy bbtheme production
+    - composer build-assets
+    - terminus build-env:push-code $TERMINUS_SITE.dev -n -y
+    - terminus env:deploy $TERMINUS_SITE.test --cc --sync-content -n -y
