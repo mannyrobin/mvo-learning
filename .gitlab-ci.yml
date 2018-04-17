@@ -1,7 +1,7 @@
 image: composer
 
 variables:
-  TERMINUS_SITE: hip-demo
+  TERMINUS_SITE: hip-base-site
 
 stages:
   - deploy
