@@ -1,8 +1,0 @@
-{
-  "name": "hipdevteam/hip-bb-theme",
-  "type": "wordpress-theme",
-  "description": "Beaver Builder enabled WordPress theme used for Hip client sites.",
-  "require": {
-		"composer/installers": ">=1.0.12"
-  }
-}

@@ -1,1 +1,0 @@
-!function(t){"use strict";t(document).ready(function(){t(".fl-post-feed-post").each(function(){var e=t(this).find(".post-featured-image"),c=e.html();e.html(""),e.css({"background-image":"url("+c+")",opacity:"1"})})})}(jQuery);

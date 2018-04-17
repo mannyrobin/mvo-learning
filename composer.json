@@ -21,17 +21,12 @@
       }
     },
     {
-      "type": "package",
-      "package": {
-        "name": "ydlr/redirection",
-        "version": "2.10",
-        "type": "wordpress-plugin",
-        "source": {
-          "url": "https://github.com/ydlr/redirection.git",
-          "type": "git",
-          "reference": "404notify"
-        }
-      }
+      "type": "composer",
+      "url": "https://composer.deliciousbrains.com/7EF044F879F5B9A2EBAE334D29EFA943"
+    },
+    {
+      "type": "composer",
+      "url": "https://composer.deliciousbrains.com/7EF044F879F5B9A2EBAE334D29EFA943"
     }
   ],
   "require": {
@@ -53,7 +48,7 @@
     "wpackagist-plugin/smtp-mailer": "*",
     "wpackagist-plugin/post-types-order": "*",
     "wpackagist-plugin/post-type-archive-descriptions": "*",
-    "ydlr/redirection": "*",
+    "wpackagist-plugin/redirection": "*",
     "ydlr/wpforms-ga": "^0.1",
     "warfare-plugins/social-warfare-pro": "2.3.4",
     "hipdevteam/bb-related-posts": "*",
@@ -66,9 +61,11 @@
     "hipdevteam/landing-pages": "*",
     "wpackagist-plugin/pantheon-advanced-page-cache": "^0.3.0",
     "wpackagist-plugin/wp-native-php-sessions": "^0.6.5",
-    "hipdevteam/hip-bb-theme": "^4.4",
+    "wpackagist-plugin/the-seo-framework-extension-manager": "*",
+    "hipdevteam/hip-bb-theme": "*",
     "wpackagist-plugin/wp-security-audit-log": "^3.0",
-    "wpackagist-plugin/mergebot": "^1.1"
+    "wpackagist-plugin/mergebot": "^1.1",
+    "pucklabs/autopop-menus": "*"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "3.*",
