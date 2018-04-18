@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a406417987a6c08473861bacccf2cf71",
+    "content-hash": "5e37de9d6cb3efabc2203c78378de66d",
     "packages": [
         {
             "name": "composer/installers",
@@ -664,6 +664,34 @@
             "type": "wordpress-plugin",
             "notification-url": "https://packagist.org/downloads/",
             "time": "2018-04-05T15:07:38+00:00"
+        },
+        {
+            "name": "hipdevteam/services",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/hipdevteam/services.git",
+                "reference": "9bbe131606e82c2f342dd3f7eac20abc243bdaaf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fservices/repository/archive.zip?sha=9bbe131606e82c2f342dd3f7eac20abc243bdaaf",
+                "reference": "9bbe131606e82c2f342dd3f7eac20abc243bdaaf",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": ">=1.0",
+                "pimple/pimple": "~3.0"
+            },
+            "type": "wordpress-plugin",
+            "autoload": {
+                "psr-4": {
+                    "Hip\\Services\\": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Add Services post type, related post meta and Beaver Builder module to WordPress site.",
+            "time": "2018-03-27T15:13:54+00:00"
         },
         {
             "name": "hipdevteam/staff",

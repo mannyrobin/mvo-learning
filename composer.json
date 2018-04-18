@@ -59,6 +59,7 @@
     "hipdevteam/staff": "*",
     "hipdevteam/conditions": "*",
     "hipdevteam/landing-pages": "*",
+    "hipdevteam/services": "*",
     "wpackagist-plugin/pantheon-advanced-page-cache": "^0.3.0",
     "wpackagist-plugin/wp-native-php-sessions": "^0.6.5",
     "wpackagist-plugin/the-seo-framework-extension-manager": "*",
