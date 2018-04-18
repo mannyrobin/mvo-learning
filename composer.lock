@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e37de9d6cb3efabc2203c78378de66d",
+    "content-hash": "9ec1fef252e61287e86c1bbac6ae30a6",
     "packages": [
         {
             "name": "composer/installers",
@@ -724,6 +724,30 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Everything needed to manage staff members for Hip client sites.",
             "time": "2018-03-28T07:15:12+00:00"
+        },
+        {
+            "name": "hipdevteam/video-collection",
+            "version": "1.4.9",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/hipdevteam/video-collection.git",
+                "reference": "ea344e5ea7f6503456b919628fa3cfeaa6e8f09f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fvideo-collection/repository/archive.zip?sha=ea344e5ea7f6503456b919628fa3cfeaa6e8f09f",
+                "reference": "ea344e5ea7f6503456b919628fa3cfeaa6e8f09f",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": ">=1.0"
+            },
+            "require-dev": {
+                "squizlabs/php_codesniffer": "^3.2"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "time": "2018-04-17T07:01:08+00:00"
         },
         {
             "name": "hipdevteam/video-lightbox",
@@ -1853,6 +1877,26 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/regenerate-thumbnails/"
+        },
+        {
+            "name": "wpackagist-plugin/safe-svg",
+            "version": "1.6.1",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/safe-svg/",
+                "reference": "tags/1.6.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/safe-svg.1.6.1.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/safe-svg/"
         },
         {
             "name": "wpackagist-plugin/schema-app-structured-data-for-schemaorg",

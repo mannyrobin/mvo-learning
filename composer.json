@@ -68,7 +68,9 @@
     "wpackagist-plugin/mergebot": "^1.1",
     "pucklabs/autopop-menus": "*",
     "deliciousbrains-plugin/wp-migrate-db-pro": "^1.8",
-    "deliciousbrains-plugin/wp-migrate-db-pro-media-files": "^1.4"
+    "deliciousbrains-plugin/wp-migrate-db-pro-media-files": "^1.4",
+    "wpackagist-plugin/safe-svg": "*",
+    "hipdevteam/video-collection": "*"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "3.*",
