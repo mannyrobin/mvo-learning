@@ -1,0 +1,31 @@
+version: "3.1" 
+services:
+  web:
+    image: webdevops/php-apache-dev:7.1 
+    restart: always
+    volumes:
+      - ./:/var/www
+    networks:
+      wpnet:
+        ipv4_address: 192.168.110.10
+    links:
+      - db
+    environment:
+      WEB_DOCUMENT_ROOT: /var/www/web
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
+    networks:
+      wpnet:
+        ipv4_address: 192.168.110.20
+networks:
+  wpnet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        -
+          subnet: 192.168.110.0/24
