@@ -2,6 +2,8 @@
   "name": "hipdevteam/hip-med-site",
   "type": "project",
   "description": "WordPress boilerplate for a Hip Creative client site, specifically geared toward medical practices.",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "repositories": [
     {
       "type": "composer",
@@ -19,6 +21,10 @@
           "reference": "2.3.4"
         }
       }
+    },
+    {
+      "type": "composer",
+      "url": "https://premium.wpmudev.org/"
     },
     {
       "type": "composer",
@@ -63,14 +69,16 @@
     "wpackagist-plugin/pantheon-advanced-page-cache": "^0.3.0",
     "wpackagist-plugin/wp-native-php-sessions": "^0.6.5",
     "wpackagist-plugin/the-seo-framework-extension-manager": "*",
-    "hipdevteam/hip-bb-theme": "*",
+    "hipdevteam/hip-bb-theme": "dev-custom_archive",
     "wpackagist-plugin/wp-security-audit-log": "^3.0",
     "wpackagist-plugin/mergebot": "^1.1",
     "pucklabs/autopop-menus": "*",
     "deliciousbrains-plugin/wp-migrate-db-pro": "^1.8",
     "deliciousbrains-plugin/wp-migrate-db-pro-media-files": "^1.4",
     "wpackagist-plugin/safe-svg": "^1.6",
-    "hipdevteam/video-collection": "*"
+    "hipdevteam/video-collection": "*",
+    "wpmudev/wp-defender": "*",
+    "wpmudev/wp-smush-pro": "*"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "3.*",

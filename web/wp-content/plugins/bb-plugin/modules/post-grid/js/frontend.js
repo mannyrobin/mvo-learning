@@ -76,7 +76,8 @@
 				gutter              : parseInt(this.settings.postSpacing),
 				isFitWidth          : true,
 				itemSelector        : this.postClass,
-				transitionDuration  : 0
+				transitionDuration  : 0,
+				isRTL               : this.settings.isRTL
 			});
 
 			wrap.imagesLoaded( $.proxy( function() {
@@ -107,7 +108,8 @@
 		{
 			this.gallery = new FLBuilderGalleryGrid({
 				'wrapSelector' : this.wrapperClass,
-				'itemSelector' : '.fl-post-gallery-post'
+				'itemSelector' : '.fl-post-gallery-post',
+				'isRTL'        : this.settings.isRTL
 			});
 		},
 
@@ -117,7 +119,8 @@
 				pages	 = $( this.nodeClass + ' .fl-builder-pagination' ).find( 'li .page-numbers:not(.next)' );
 
 			if( pages.length > 1) {
-				this.totalPages = parseInt( pages.last().text() );
+				total = pages.last().text().replace( /\D/g, '' )
+				this.totalPages = parseInt( total );
 			}
 
 			if( isScroll && this.totalPages > 1 && 'undefined' === typeof FLBuilder ) {

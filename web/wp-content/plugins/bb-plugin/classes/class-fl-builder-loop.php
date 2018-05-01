@@ -140,12 +140,17 @@ final class FLBuilderLoop {
 	 * @return object A WP_Query instance.
 	 */
 	static public function custom_query( $settings ) {
+		global $post;
 		$posts_per_page	 = empty( $settings->posts_per_page ) ? 10 : $settings->posts_per_page;
-		$post_type		 = empty( $settings->post_type ) ? 'post' : $settings->post_type;
-		$order_by		 = empty( $settings->order_by ) ? 'date' : $settings->order_by;
-		$order			 = empty( $settings->order ) ? 'DESC' : $settings->order;
-		$users			 = empty( $settings->users ) ? '' : $settings->users;
-		$fields			 = empty( $settings->fields ) ? '' : $settings->fields;
+		$post_type		   = empty( $settings->post_type ) ? 'post' : $settings->post_type;
+		$order_by		     = empty( $settings->order_by ) ? 'date' : $settings->order_by;
+		$order			     = empty( $settings->order ) ? 'DESC' : $settings->order;
+		$users			     = empty( $settings->users ) ? '' : $settings->users;
+		$fields			     = empty( $settings->fields ) ? '' : $settings->fields;
+		$exclude_self    = '';
+		if ( isset( $settings->exclude_self ) && 'yes' == $settings->exclude_self ) {
+			$exclude_self = $post->ID;
+		}
 
 		$paged = self::get_paged();
 
@@ -184,6 +189,14 @@ final class FLBuilderLoop {
 		// Order by meta value arg.
 		if ( strstr( $order_by, 'meta_value' ) ) {
 			$args['meta_key'] = $settings->order_by_meta_key;
+		}
+
+		// Order by author
+		if ( 'author' == $order_by ) {
+			$args['orderby'] = array(
+				'author' => $order,
+				'date' => $order,
+			);
 		}
 
 		// Build the author query.
@@ -263,7 +276,7 @@ final class FLBuilderLoop {
 						$term_ids = $related;
 					}
 				}
-			}// End if().
+			}
 
 			if ( ! empty( $term_ids ) ) {
 
@@ -274,7 +287,7 @@ final class FLBuilderLoop {
 					'operator'  => $operator,
 				);
 			}
-		}// End foreach().
+		}
 
 		// Post in/not in query.
 		if ( isset( $settings->{'posts_' . $post_type} ) ) {
@@ -293,6 +306,10 @@ final class FLBuilderLoop {
 			if ( ! empty( $ids ) ) {
 				$args[ $arg ] = explode( ',', $settings->{'posts_' . $post_type} );
 			}
+		}
+
+		if ( $exclude_self ) {
+			$args['post__not_in'][] = $exclude_self;
 		}
 
 		$args = apply_filters( 'fl_builder_loop_query_args', $args );
@@ -687,7 +704,7 @@ final class FLBuilderLoop {
 		$total_pages = $query->max_num_pages;
 		$permalink_structure = get_option( 'permalink_structure' );
 		$paged = self::get_paged();
-		$base = untrailingslashit( html_entity_decode( get_pagenum_link() ) );
+		$base = html_entity_decode( get_pagenum_link() );
 
 		if ( $total_pages > 1 ) {
 
@@ -765,8 +782,12 @@ final class FLBuilderLoop {
 				$base = strtok( $base, '?' );
 			}
 
-			$base = untrailingslashit( $base );
-
+			// Add trailing slash when necessary.
+			if ( '/' == substr( $permalink_structure, -1 ) ) {
+				$base = trailingslashit( $base );
+			} else {
+				$base = untrailingslashit( $base );
+			}
 		} else {
 			$url_params = wp_parse_url( $base, PHP_URL_QUERY );
 
@@ -794,7 +815,8 @@ final class FLBuilderLoop {
 		}
 
 		if ( ! empty( $permalink_structure ) ) {
-			$format = ! empty( $page_prefix ) ? '/' . $page_prefix . '/' : '/';
+			$format = substr( $base, -1 ) != '/' ? '/' : '';
+			$format .= $page_prefix . '/';
 			$format .= '%#%';
 			$format .= substr( $permalink_structure, -1 ) == '/' ? '/' : '';
 		} elseif ( empty( $permalink_structure ) || is_search() ) {

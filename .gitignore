@@ -8,9 +8,6 @@ web/wp-content/themes/hip-bb-theme
 !web/wp-content/plugins/wpforms-zapier
 !web/wp-content/plugins/bb-ultimate-addon
 !web/wp-content/plugins/bbpowerpack
-!web/wp-content/plugins/wpmudev-updates
-!web/wp-content/plugins/wp-defender
-!web/wp-content/plugins/wp-smush-pro
 web/wp-content/mu-plugins/*/
 web/wp-content/upgrade
 web/wp-content/uploads/*

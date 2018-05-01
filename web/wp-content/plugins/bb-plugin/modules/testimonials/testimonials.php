@@ -18,7 +18,7 @@ class FLTestimonialsModule extends FLBuilderModule {
 		));
 
 		$this->add_css( 'jquery-bxslider' );
-		$this->add_css( 'font-awesome' );
+		$this->add_css( 'font-awesome-5' );
 		$this->add_js( 'jquery-bxslider' );
 	}
 }
@@ -111,7 +111,7 @@ FLBuilder::register_module('FLTestimonialsModule', array(
 						'default'       => '0.5',
 						'maxlength'     => '4',
 						'size'          => '5',
-						'sanitize'		=> 'absint',
+						'sanitize'		=> 'floatval',
 						'description'   => _x( 'seconds', 'Value unit for form field of time in seconds. Such as: "5 seconds"', 'fl-builder' ),
 					),
 					'direction'   => array(

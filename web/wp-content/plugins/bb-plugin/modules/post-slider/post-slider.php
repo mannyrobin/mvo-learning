@@ -343,7 +343,7 @@ class FLPostSliderModule extends FLBuilderModule {
 			$bg .= 'background: -moz-linear-gradient(' . $direction . ', ' . $color_start . ' 0%, ' . $color_end . ' 100%);';
 			$bg .= 'background: -o-linear-gradient(' . $direction . ', ' . $color_start . ' 0%, ' . $color_end . ' 100%);';
 			$bg .= 'background: -webkit-gradient(linear, ' . $wk_direction . ', color-stop(0, ' . $color_start . '), color-stop(1, ' . $color_end . '));';
-			$bg .= 'background: -webkit-linear-gradient(' . $direction . ', ' . $color_start . ' 0%, ' . $color . ' 100%);';
+			$bg .= 'background: -webkit-linear-gradient(' . $direction . ', ' . $color_start . ' 0%, ' . $color_end . ' 100%);';
 			$bg .= 'background: linear-gradient(' . $ie_direction . ', ' . $color_start . ' 0%, ' . $color_end . ' 100%);';
 
 		} else {
@@ -351,7 +351,7 @@ class FLPostSliderModule extends FLBuilderModule {
 			// if gradient isn't selected, set the background with default values
 			$bg = 'background-color: #' . $this->settings->text_bg_color . ';';
 			$bg .= 'background-color: ' . $color_start . ';';
-		}// End if().
+		}
 
 		echo $bg;
 	}

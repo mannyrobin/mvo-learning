@@ -201,3 +201,32 @@ FLPageDataSite::add_user_settings_fields( 'user_meta', array(
 		'label' => __( 'Key', 'fl-theme-builder' ),
 	),
 ) );
+
+/**
+ * Is current user logged in
+ * @since 1.1
+ */
+FLPageData::add_site_property( 'logged_in', array(
+	'label'       => __( 'User Logged In', 'fl-theme-builder' ),
+	'group'       => 'user',
+	'type'        => 'string',
+	'getter'      => 'is_user_logged_in',
+) );
+
+/**
+ * Site year
+ * @since 1.1
+ */
+FLPageData::add_site_property( 'year', array(
+	'label'   => __( 'Current Year', 'fl-theme-builder' ),
+	'group'   => 'site',
+	'type'    => 'string',
+	'getter'  => 'FLPageDataSite::get_year',
+) );
+FLPageData::add_site_property_settings_fields( 'year', array(
+	'format' => array(
+		'type'  => 'text',
+		'label' => __( 'Format', 'fl-theme-builder' ),
+		'default' => 'Y',
+	),
+) );

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b6c43190eb5a4c7d83ba8dbc12669de3",
+    "content-hash": "ff50f3ee9ccc19fde37436b850cf8b41",
     "packages": [
         {
             "name": "composer/installers",
@@ -241,16 +241,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.56",
+            "version": "v0.57",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "94ae125bd4ac33eec676142f7776c0b137cf7bc7"
+                "reference": "fc1821419f0e9d060d83a2864e2a40874b91430d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/94ae125bd4ac33eec676142f7776c0b137cf7bc7",
-                "reference": "94ae125bd4ac33eec676142f7776c0b137cf7bc7",
+                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/fc1821419f0e9d060d83a2864e2a40874b91430d",
+                "reference": "fc1821419f0e9d060d83a2864e2a40874b91430d",
                 "shasum": ""
             },
             "require": {
@@ -274,7 +274,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2018-04-21T00:23:45+00:00"
+            "time": "2018-04-28T00:23:39+00:00"
         },
         {
             "name": "google/auth",
@@ -506,16 +506,16 @@
         },
         {
             "name": "hipdevteam/bb-related-posts",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/bb-related-posts.git",
-                "reference": "daa348c099ec5693b0fde126b2d4643f5d7b85f5"
+                "reference": "ed99301c265f3f1c3af5c8980081b7ddb289eea6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fbb-related-posts/repository/archive.zip?sha=daa348c099ec5693b0fde126b2d4643f5d7b85f5",
-                "reference": "daa348c099ec5693b0fde126b2d4643f5d7b85f5",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fbb-related-posts/repository/archive.zip?sha=ed99301c265f3f1c3af5c8980081b7ddb289eea6",
+                "reference": "ed99301c265f3f1c3af5c8980081b7ddb289eea6",
                 "shasum": ""
             },
             "type": "wordpress-plugin",
@@ -527,7 +527,7 @@
                 }
             ],
             "description": "Beaver Builder Module to display related posts with default styles for body or sidebar placement.",
-            "time": "2018-02-26T18:32:17+00:00"
+            "time": "2018-04-28T23:11:25+00:00"
         },
         {
             "name": "hipdevteam/conditions",
@@ -563,16 +563,16 @@
         },
         {
             "name": "hipdevteam/hip-bb-theme",
-            "version": "4.5.3",
+            "version": "dev-custom_archive",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/hip-bb-theme.git",
-                "reference": "e51a2d598d7cb95d3ef85fde6284de01cfecde4b"
+                "reference": "4562b555cd3b6a2b8ef139675f9edfcdfac34ba7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=e51a2d598d7cb95d3ef85fde6284de01cfecde4b",
-                "reference": "e51a2d598d7cb95d3ef85fde6284de01cfecde4b",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=4562b555cd3b6a2b8ef139675f9edfcdfac34ba7",
+                "reference": "4562b555cd3b6a2b8ef139675f9edfcdfac34ba7",
                 "shasum": ""
             },
             "require": {
@@ -581,20 +581,20 @@
             "type": "wordpress-theme",
             "notification-url": "https://packagist.org/downloads/",
             "description": "Beaver Builder enabled WordPress theme used for Hip client sites.",
-            "time": "2018-04-25T21:48:54+00:00"
+            "time": "2018-05-01T20:51:45+00:00"
         },
         {
             "name": "hipdevteam/hip-cta",
-            "version": "0.3.5",
+            "version": "0.3.6",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/hip-cta.git",
-                "reference": "f3c261d4f4761f11fb0389bd98711d0c9feff881"
+                "reference": "2dd7ebd6a8bde5eb611a35f2782f84ba27905e1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-cta/repository/archive.zip?sha=f3c261d4f4761f11fb0389bd98711d0c9feff881",
-                "reference": "f3c261d4f4761f11fb0389bd98711d0c9feff881",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-cta/repository/archive.zip?sha=2dd7ebd6a8bde5eb611a35f2782f84ba27905e1b",
+                "reference": "2dd7ebd6a8bde5eb611a35f2782f84ba27905e1b",
                 "shasum": ""
             },
             "require": {
@@ -610,7 +610,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Simple, flexible calls-to-action for WordPress-based marketing sites.",
-            "time": "2017-11-05T18:54:30+00:00"
+            "time": "2018-04-29T00:16:33+00:00"
         },
         {
             "name": "hipdevteam/landing-pages",
@@ -2020,15 +2020,15 @@
         },
         {
             "name": "wpackagist-plugin/wp-security-audit-log",
-            "version": "3.1.6",
+            "version": "3.1.7",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wp-security-audit-log/",
-                "reference": "tags/3.1.6"
+                "reference": "tags/3.1.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wp-security-audit-log.3.1.6.zip",
+                "url": "https://downloads.wordpress.org/plugin/wp-security-audit-log.3.1.7.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -2037,6 +2037,44 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/wp-security-audit-log/"
+        },
+        {
+            "name": "wpmudev/wp-defender",
+            "version": "1.8",
+            "dist": {
+                "type": "zip",
+                "url": "https://premium.wpmudev.org/download/383043940_wp-defender-1.8.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "1.*"
+            },
+            "type": "wordpress-plugin",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "Defender",
+            "homepage": "https://premium.wpmudev.org/project/wp-defender/"
+        },
+        {
+            "name": "wpmudev/wp-smush-pro",
+            "version": "2.7.8",
+            "dist": {
+                "type": "zip",
+                "url": "https://premium.wpmudev.org/download/1332182412_wp-smush-pro-2.7.8.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "1.*"
+            },
+            "type": "wordpress-plugin",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "WP Smush Pro",
+            "homepage": "https://premium.wpmudev.org/project/wp-smush-pro/"
         },
         {
             "name": "ydlr/wpforms-ga",
@@ -2773,7 +2811,7 @@
         },
         {
             "name": "symfony/config",
-            "version": "v3.4.8",
+            "version": "v3.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
@@ -2836,16 +2874,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.4.8",
+            "version": "v3.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "d4bb70fa24d540c309d88a9d6e43fb2d339b1fbf"
+                "reference": "5b1fdfa8eb93464bcc36c34da39cedffef822cdf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/d4bb70fa24d540c309d88a9d6e43fb2d339b1fbf",
-                "reference": "d4bb70fa24d540c309d88a9d6e43fb2d339b1fbf",
+                "url": "https://api.github.com/repos/symfony/console/zipball/5b1fdfa8eb93464bcc36c34da39cedffef822cdf",
+                "reference": "5b1fdfa8eb93464bcc36c34da39cedffef822cdf",
                 "shasum": ""
             },
             "require": {
@@ -2866,7 +2904,7 @@
                 "symfony/process": "~3.3|~4.0"
             },
             "suggest": {
-                "psr/log": "For using the console logger",
+                "psr/log-implementation": "For using the console logger",
                 "symfony/event-dispatcher": "",
                 "symfony/lock": "",
                 "symfony/process": ""
@@ -2901,20 +2939,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-04-03T05:22:50+00:00"
+            "time": "2018-04-30T01:22:56+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.8",
+            "version": "v3.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "9cf7c2271cfb89ef9727db1b740ca77be57bf9d7"
+                "reference": "1b95888cfd996484527cb41e8952d9a5eaf7454f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/9cf7c2271cfb89ef9727db1b740ca77be57bf9d7",
-                "reference": "9cf7c2271cfb89ef9727db1b740ca77be57bf9d7",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/1b95888cfd996484527cb41e8952d9a5eaf7454f",
+                "reference": "1b95888cfd996484527cb41e8952d9a5eaf7454f",
                 "shasum": ""
             },
             "require": {
@@ -2957,20 +2995,20 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2018-04-03T05:22:50+00:00"
+            "time": "2018-04-30T16:53:52+00:00"
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v3.4.8",
+            "version": "v3.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "24a68710c6ddc1e3d159a110cef94cedfcf3c611"
+                "reference": "54ff9d78b56429f9a1ac12e60bfb6d169c0468e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/24a68710c6ddc1e3d159a110cef94cedfcf3c611",
-                "reference": "24a68710c6ddc1e3d159a110cef94cedfcf3c611",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/54ff9d78b56429f9a1ac12e60bfb6d169c0468e3",
+                "reference": "54ff9d78b56429f9a1ac12e60bfb6d169c0468e3",
                 "shasum": ""
             },
             "require": {
@@ -3028,11 +3066,11 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2018-03-29T11:25:31+00:00"
+            "time": "2018-04-29T14:04:08+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v3.4.8",
+            "version": "v3.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
@@ -3095,7 +3133,7 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v3.4.8",
+            "version": "v3.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
@@ -3144,7 +3182,7 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v3.4.8",
+            "version": "v3.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -3193,16 +3231,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.7.0",
+            "version": "v1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "78be803ce01e55d3491c1397cf1c64beb9c1b63b"
+                "reference": "3296adf6a6454a050679cde90f95350ad604b171"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/78be803ce01e55d3491c1397cf1c64beb9c1b63b",
-                "reference": "78be803ce01e55d3491c1397cf1c64beb9c1b63b",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/3296adf6a6454a050679cde90f95350ad604b171",
+                "reference": "3296adf6a6454a050679cde90f95350ad604b171",
                 "shasum": ""
             },
             "require": {
@@ -3214,7 +3252,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.7-dev"
+                    "dev-master": "1.8-dev"
                 }
             },
             "autoload": {
@@ -3248,11 +3286,11 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-01-30T19:27:44+00:00"
+            "time": "2018-04-26T10:06:28+00:00"
         },
         {
             "name": "symfony/process",
-            "version": "v3.4.8",
+            "version": "v3.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
@@ -3301,16 +3339,16 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v3.4.8",
+            "version": "v3.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "80e19eaf12cbb546ac40384e5c55c36306823e57"
+                "reference": "d4af50f46cd8171fd5c1cdebdb9a8bbcd8078c6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/80e19eaf12cbb546ac40384e5c55c36306823e57",
-                "reference": "80e19eaf12cbb546ac40384e5c55c36306823e57",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/d4af50f46cd8171fd5c1cdebdb9a8bbcd8078c6c",
+                "reference": "d4af50f46cd8171fd5c1cdebdb9a8bbcd8078c6c",
                 "shasum": ""
             },
             "require": {
@@ -3331,7 +3369,7 @@
                 "symfony/yaml": "~3.4|~4.0"
             },
             "suggest": {
-                "psr/log": "To use logging capability in translator",
+                "psr/log-implementation": "To use logging capability in translator",
                 "symfony/config": "",
                 "symfony/yaml": ""
             },
@@ -3365,20 +3403,20 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "https://symfony.com",
-            "time": "2018-02-22T06:28:18+00:00"
+            "time": "2018-04-30T01:22:56+00:00"
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.4.8",
+            "version": "v3.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "a42f9da85c7c38d59f5e53f076fe81a091f894d0"
+                "reference": "033cfa61ef06ee0847e056e530201842b6e926c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/a42f9da85c7c38d59f5e53f076fe81a091f894d0",
-                "reference": "a42f9da85c7c38d59f5e53f076fe81a091f894d0",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/033cfa61ef06ee0847e056e530201842b6e926c3",
+                "reference": "033cfa61ef06ee0847e056e530201842b6e926c3",
                 "shasum": ""
             },
             "require": {
@@ -3423,7 +3461,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2018-04-03T05:14:20+00:00"
+            "time": "2018-04-08T08:21:29+00:00"
         },
         {
             "name": "wp-cli/autoload-splitter",
@@ -5195,9 +5233,11 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": [],
-    "prefer-stable": false,
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "hipdevteam/hip-bb-theme": 20
+    },
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.6"

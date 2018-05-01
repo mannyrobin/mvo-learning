@@ -162,7 +162,7 @@ if ( $global_settings->responsive_enabled ) : ?>
 		@media ( max-width: <?php echo $module->get_media_breakpoint() ?>px ) {
 	<?php endif; ?>
 
-		<?php if ( (isset( $settings->mobile_full_width ) && in_array( $settings->mobile_full_width, array( 'yes', 'below' ) ) ) && (isset( $settings->mobile_toggle ) && in_array( $settings->mobile_toggle, array( 'hamburger', 'hamburger-label' ) ) ) ) : ?>
+		<?php if ( (isset( $settings->mobile_full_width ) && in_array( $settings->mobile_full_width, array( 'yes', 'below' ) ) ) && (isset( $settings->mobile_toggle ) && 'expanded' != $settings->mobile_toggle ) ) : ?>
 
 			<?php if ( 'yes' == $settings->mobile_full_width ) : ?>
 				.fl-node-<?php echo $id; ?> .fl-menu .menu {
@@ -198,7 +198,7 @@ if ( $global_settings->responsive_enabled ) : ?>
 			text-align: left;
 		}
 
-		.fl-module[data-node] .fl-menu .sub-menu {
+		.fl-node-<?php echo $id; ?> .fl-menu .sub-menu {
 			background-color: transparent;
 			-webkit-box-shadow: none;
 			-ms-box-shadow: none;
@@ -281,7 +281,6 @@ if ( $global_settings->responsive_enabled ) : ?>
 			}
 
 			.fl-node-<?php echo $id; ?> .menu .fl-has-submenu.fl-menu-submenu-right .sub-menu{
-				top: 100%;
 				left: inherit;
 				right: 0;
 			}

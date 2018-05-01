@@ -128,6 +128,11 @@ final class FLUpdater {
 					$transient->response[ $plugin ]->url 			= $response->homepage;
 					$transient->response[ $plugin ]->package 		= $response->package;
 					$transient->response[ $plugin ]->tested 		= $response->tested;
+					$transient->response[ $plugin ]->icons = apply_filters( 'fl_updater_icon', array(
+						'1x' => FL_BUILDER_URL . 'img/beaver-128.png',
+						'2x' => FL_BUILDER_URL . 'img/beaver-256.png',
+						'default' => FL_BUILDER_URL . 'img/beaver-256.png',
+					), $response, $this->settings );
 
 					if ( empty( $response->package ) ) {
 						$transient->response[ $plugin ]->upgrade_notice = FLUpdater::get_update_error_message();
@@ -145,7 +150,7 @@ final class FLUpdater {
 					);
 				}
 			}
-		}// End if().
+		}
 
 		return $transient;
 	}
@@ -279,11 +284,7 @@ final class FLUpdater {
 		if ( isset( $subscription->error ) || ! $subscription->active || ! $subscription->domain->active || ! isset( $subscription->downloads ) ) {
 			return;
 		}
-
-		$default  = __( 'Page Builder', 'fl-builder' );
-		$branding = FLBuilderModel::get_branding();
-
-		if ( $default == $branding ) {
+		if ( ! FLBuilderModel::is_white_labeled() ) {
 			include FL_UPDATER_DIR . 'includes/subscriptions.php';
 		}
 	}
@@ -305,17 +306,17 @@ final class FLUpdater {
 	 *
 	 * @since 1.0
 	 * @param string $license The new license key.
-	 * @return void
+	 * @return $response mixed
 	 */
 	static public function save_subscription_license( $license ) {
-		FLUpdater::api_request(self::$_updates_api_url, array(
+		$response = FLUpdater::api_request(self::$_updates_api_url, array(
 			'fl-api-method' => 'activate_domain',
 			'license'       => $license,
 			'domain'        => network_home_url(),
 			'products'		=> json_encode( self::$_products ),
 		));
-
 		update_site_option( 'fl_themes_subscription_email', $license );
+		return $response;
 	}
 
 	/**
@@ -341,20 +342,36 @@ final class FLUpdater {
 	 * @return string
 	 */
 	static private function get_update_error_message( $plugin_data = null ) {
-		$message  = '';
-		$message .= '<p style="padding:10px 20px; margin-top: 10px; background: #d54e21; color: #fff;">';
-		$message .= __( '<strong>UPDATE UNAVAILABLE!</strong>', 'fl-builder' );
-		$message .= '&nbsp;&nbsp;&nbsp;';
-		$message .= __( 'Please subscribe to enable automatic updates for this plugin.', 'fl-builder' );
 
-		if ( $plugin_data && isset( $plugin_data['PluginURI'] ) ) {
-			$message .= ' <a href="' . $plugin_data['PluginURI'] . '" target="_blank" style="color: #fff; text-decoration: underline;">';
-			$message .= __( 'Subscribe Now', 'fl-builder' );
-			$message .= ' &raquo;</a>';
+		$subscription = FLUpdater::get_subscription_info();
+		$license      = get_site_option( 'fl_themes_subscription_email' );
+		$message      = '';
+
+		// updates-core.php
+		if ( ! $plugin_data ) {
+
+			if ( ! $license ) {
+				$message = __( 'Please enter a valid license key to enable automatic updates.', 'fl-builder' );
+
+			} else {
+				$message = __( 'Please subscribe to enable automatic updates for this plugin.', 'fl-builder' );
+			}
+		} else { // plugins.php
+
+			if ( ! $license ) {
+				$link = sprintf( '<a href="%s" target="_blank" style="color: #fff; text-decoration: underline;">%s &raquo;</a>', admin_url( '/options-general.php?page=fl-builder-settings#license' ), __( 'Enter License Key', 'fl-builder' ) );
+				$text = sprintf( __( 'Please enter a valid license key to enable automatic updates. %s', 'fl-builder' ), $link );
+			} else {
+				$link = sprintf( '<a href="%s" target="_blank" style="color: #fff; text-decoration: underline;">%s &raquo;</a>', $plugin_data['PluginURI'], __( 'Subscribe Now', 'fl-builder' ) );
+				$text = sprintf( __( 'Please subscribe to enable automatic updates for this plugin. %s', 'fl-builder' ), $link );
+			}
+
+			$message .= '<span style="display:block;padding:10px 20px;margin:10px 0; background: #d54e21; color: #fff;">';
+			$message .= __( '<strong>UPDATE UNAVAILABLE!</strong>', 'fl-builder' );
+			$message .= '&nbsp;&nbsp;&nbsp;';
+			$message .= $text;
+			$message .= '</span>';
 		}
-
-		$message .= '</p>';
-
 		return $message;
 	}
 

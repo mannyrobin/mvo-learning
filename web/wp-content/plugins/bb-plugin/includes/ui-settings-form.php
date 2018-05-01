@@ -18,8 +18,8 @@
 			<div class="fl-lightbox-header">
 				<h1>
 					{{{data.title}}}
-					<# for ( var badge in data.badges ) { #>
-					<span class="fl-builder-badge fl-builder-badge-{{badge}}">{{data.badges[ badge ]}}</span>
+					<# for ( var i = 0; i < data.badges.length; i++ ) { #>
+					<span class="fl-builder-badge fl-builder-badge-{{data.badges[ i ]}}">{{data.badges[ i ]}}</span>
 					<# } #>
 				</h1>
 				<div class="fl-lightbox-controls">
@@ -111,6 +111,6 @@
 			</div>
 		</div>
 		<# var settings = FLBuilder._getSettingsJSONForHTML( data.settings ); #>
-		<input class="fl-builder-settings-json" type="hidden" value='{{{settings}}}' />
+		<input class="fl-builder-settings-json" type="hidden" value='{{settings}}' />
 	</form>
 </script>

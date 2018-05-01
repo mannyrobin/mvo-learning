@@ -508,6 +508,7 @@
             $('html').removeClass('fl-builder-edit').addClass('fl-builder-show-admin-bar');
             $('body').removeClass('fl-builder-edit');
             $('#wpadminbar a').attr('tabindex', null );
+			$( FLBuilder._contentClass ).removeClass( 'fl-builder-content-editing' );
             this.hideMainToolbar();
             FLBuilder.ContentPanel.hide();
             FLBuilderLayout.init();
@@ -526,6 +527,7 @@
             $('html').addClass('fl-builder-edit').removeClass('fl-builder-show-admin-bar');
             $('body').addClass('fl-builder-edit');
             $('#wpadminbar a').attr('tabindex', '-1');
+			$( FLBuilder._contentClass ).addClass( 'fl-builder-content-editing' );
             this.showMainToolbar();
 
             e.preventDefault();
@@ -601,6 +603,7 @@
             FLBuilder._removeEmptyColHighlights();
             FLBuilder._removeColHighlightGuides();
             FLBuilder.triggerHook('didBeginPreview');
+			FLBuilderResponsivePreview.enter();
         },
 
         /**
@@ -611,6 +614,7 @@
             this.isPreviewing = false;
             this.show();
             FLBuilder._highlightEmptyCols();
+			FLBuilderResponsivePreview.exit();
             $('html').removeClass('fl-builder-preview');
             $('html, body').addClass('fl-builder-edit');
         },
@@ -652,7 +656,7 @@
         */
         onDeviceIconClick: function(e) {
             var mode = $(e.target).data('mode');
-            FLBuilderResponsiveEditing._switchTo(mode);
+            FLBuilderResponsivePreview.switchTo(mode);
         },
 
         /**
@@ -673,7 +677,10 @@
         },
     };
 
-    var BrowserState = {
+	/**
+    * Browser history logic.
+    */
+	var BrowserState = {
 
         isEditing: true,
 
@@ -687,8 +694,6 @@
             if ( history.pushState ) {
                 FLBuilder.addHook('endEditingSession', this.onLeaveBuilder.bind(this) );
                 FLBuilder.addHook('restartEditingSession', this.onEnterBuilder.bind(this) );
-                history.pushState( {}, document.title, FLBuilderConfig.editUrl );
-                window.onpopstate = this.onPopHistoryState.bind(this);
             }
         },
 
@@ -711,22 +716,7 @@
             history.replaceState( {}, document.title, FLBuilderConfig.url );
             this.isEditing = false;
         },
-
-        /**
-         * Handle change browser history state.
-         *
-         * @var {Event} e
-         * @return void
-         */
-        onPopHistoryState: function(e) {
-            if ( ! this.isEditing && window.location.search.indexOf( 'fl_builder' ) > -1 ) {
-                FLBuilder.triggerHook('restartEditingSession');
-            } else if ( this.isEditing ) {
-                FLBuilder.triggerHook('endEditingSession');
-            }
-        },
     };
-
 
     /**
     * Content Library Search
@@ -1117,8 +1107,9 @@
             this.$el.find('.fl-builder-buy-button').on('click', FLBuilder._upgradeClicked);
 			this.$el.find('.fl-builder-upgrade-button').on('click', FLBuilder._upgradeClicked);
 
-            // Old search controller
-            //SearchUI.init();
+            this.$el.find('#fl-builder-toggle-notifications').on('click', this.onNotificationsButtonClicked.bind(this) );
+
+            FLBuilder.addHook('notificationsLoaded', this.onNotificationsLoaded.bind(this));
         },
 
         /**
@@ -1153,6 +1144,20 @@
 				defaultPosition: 'bottom',
 				edgeOffset: 6
 			});
+        },
+
+        onNotificationsButtonClicked: function() {
+            FLBuilder.triggerHook('toggleNotifications');
+        },
+
+        onNotificationsLoaded: function() {
+            $('body').removeClass('fl-builder-has-new-notifications');
+
+            var data = {
+	                action: 'fl_builder_notifications',
+	                read: true,
+	            }
+            FLBuilder.ajax(data);
         }
     };
 

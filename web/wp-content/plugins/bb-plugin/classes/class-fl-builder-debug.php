@@ -9,7 +9,18 @@ final class FL_Debug {
 			self::prepare_tests();
 			self::display_tests();
 		}
+
+		if ( get_option( 'fl_debug_mode', false ) ) {
+			self::enable_logging();
+		}
 	}
+
+	public static function enable_logging() {
+		@ini_set( 'display_errors', 1 ); // @codingStandardsIgnoreLine
+		@ini_set( 'display_startup_errors', 1 ); // @codingStandardsIgnoreLine
+		@error_reporting( E_ALL ); // @codingStandardsIgnoreLine
+	}
+
 	private static function display_tests() {
 
 		header( 'Content-Type:text/plain' );
@@ -48,7 +59,11 @@ final class FL_Debug {
 		$plugins_data = get_plugins();
 
 		foreach ( $plugins_data as $plugin_path => $plugin ) {
-			$plugins[] = sprintf( '%s - version %s by %s. [%s]', $plugin['Name'], $plugin['Version'], $plugin['Author'], ( is_plugin_active( $plugin_path ) ? __( 'Enabled' ) : __( 'Disabled' ) ) );
+			if ( is_plugin_active( $plugin_path ) ) {
+				$plugins['active'][] = sprintf( '%s - version %s by %s.', $plugin['Name'], $plugin['Version'], $plugin['Author'] );
+			} else {
+				$plugins['deactive'][] = sprintf( '%s - version %s by %s.', $plugin['Name'], $plugin['Version'], $plugin['Author'] );
+			}
 		}
 		return $plugins;
 	}
@@ -129,6 +144,18 @@ final class FL_Debug {
 		);
 		self::register( 'is_multi', $args );
 
+		$args = array(
+			'name' => 'WordPress memory limit',
+			'data' => WP_MAX_MEMORY_LIMIT,
+		);
+		self::register( 'wp_max_mem', $args );
+
+		$args = array(
+			'name' => 'Themes',
+			'data' => self::divider(),
+		);
+		self::register( 'themes', $args );
+
 		$theme = wp_get_theme();
 		$args = array(
 			'name' => 'Active Theme',
@@ -140,10 +167,10 @@ final class FL_Debug {
 		self::register( 'active_theme', $args );
 
 		$args = array(
-			'name' => 'WordPress memory limit',
-			'data' => WP_MAX_MEMORY_LIMIT,
+			'name' => 'Plugins',
+			'data' => self::divider(),
 		);
-		self::register( 'wp_max_mem', $args );
+		self::register( 'plugins', $args );
 
 		$args = array(
 			'name' => 'Plugins',
@@ -151,17 +178,24 @@ final class FL_Debug {
 		);
 		self::register( 'wp_plugins', $args );
 
+		$plugins = self::get_plugins();
+		$args = array(
+			'name' => 'Active Plugins',
+			'data' => $plugins['active'],
+		);
+		self::register( 'wp_plugins', $args );
+
+		$args = array(
+			'name' => 'Unactive Plugins',
+			'data' => $plugins['deactive'],
+		);
+		self::register( 'wp_plugins_deactive', $args );
+
 		$args = array(
 			'name' => 'Must-Use Plugins',
 			'data' => self::get_mu_plugins(),
 		);
 		self::register( 'mu_plugins', $args );
-
-		$args = array(
-			'name' => 'Plugins',
-			'data' => self::get_plugins(),
-		);
-		self::register( 'wp_plugins', $args );
 
 		$args = array(
 			'name' => 'PHP',
@@ -291,29 +325,29 @@ final class FL_Debug {
 		}
 
 		$args = array(
-			'name' => 'Licence',
+			'name' => 'License',
 			'data' => self::divider(),
 		);
-		self::register( 'licence', $args );
+		self::register( 'license', $args );
 
 		if ( true === FL_BUILDER_LITE ) {
 			$args = array(
-				'name' => 'Beaver Builder Licence',
+				'name' => 'Beaver Builder License',
 				'data' => 'Lite version detected',
 			);
 			self::register( 'bb_sub_lite', $args );
 
-		} else {
+		} elseif ( class_exists( 'FLUpdater' ) ) {
 			$subscription = FLUpdater::get_subscription_info();
 			$args = array(
-				'name' => 'Beaver Builder Licence',
+				'name' => 'Beaver Builder License',
 				'data' => ( $subscription->active ) ? 'Active' : 'Not Active',
 			);
 			self::register( 'bb_sub', $args );
 
 			if ( isset( $subscription->error ) ) {
 				$args = array(
-					'name' => 'Licence Error',
+					'name' => 'License Error',
 					'data' => $subscription->error,
 				);
 				self::register( 'bb_sub_err', $args );
@@ -345,6 +379,38 @@ final class FL_Debug {
 			'data' => $_SERVER['SERVER_SOFTWARE'],
 		);
 		self::register( 'server', $args );
+
+		$args = array(
+			'name' => 'htaccess files',
+			'data' => self::divider(),
+		);
+		self::register( 'up_htaccess', $args );
+
+		// detect uploads folder .htaccess file and display it if found.
+		$uploads = wp_upload_dir();
+		$uploads_htaccess = trailingslashit( $uploads['basedir'] ) . '.htaccess';
+		$root_htaccess    = trailingslashit( ABSPATH ) . '.htaccess';
+
+		if ( file_exists( $root_htaccess ) ) {
+			ob_start();
+			readfile( $root_htaccess );
+			$htaccess = ob_get_clean();
+			$args = array(
+				'name' => $root_htaccess . "\n",
+				'data' => $htaccess,
+			);
+			self::register( 'up_htaccess_root', $args );
+		}
+		if ( file_exists( $uploads_htaccess ) ) {
+			ob_start();
+			readfile( $uploads_htaccess );
+			$htaccess = ob_get_clean();
+			$args = array(
+				'name' => $uploads_htaccess . "\n",
+				'data' => $htaccess,
+			);
+			self::register( 'up_htaccess_uploads', $args );
+		}
 	}
 }
-add_action( 'init', array( 'FL_Debug', 'init' ) );
+add_action( 'plugins_loaded', array( 'FL_Debug', 'init' ) );
