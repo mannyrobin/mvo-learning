@@ -69,7 +69,7 @@
     "wpackagist-plugin/pantheon-advanced-page-cache": "^0.3.0",
     "wpackagist-plugin/wp-native-php-sessions": "^0.6.5",
     "wpackagist-plugin/the-seo-framework-extension-manager": "*",
-    "hipdevteam/hip-bb-theme": "dev-custom_archive",
+    "hipdevteam/hip-bb-theme": "*",
     "wpackagist-plugin/wp-security-audit-log": "^3.0",
     "wpackagist-plugin/mergebot": "^1.1",
     "pucklabs/autopop-menus": "*",

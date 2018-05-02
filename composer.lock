@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff50f3ee9ccc19fde37436b850cf8b41",
+    "content-hash": "9641529759be8aa8e8a97a9242390162",
     "packages": [
         {
             "name": "composer/installers",
@@ -563,16 +563,16 @@
         },
         {
             "name": "hipdevteam/hip-bb-theme",
-            "version": "dev-custom_archive",
+            "version": "4.6.0",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/hip-bb-theme.git",
-                "reference": "4562b555cd3b6a2b8ef139675f9edfcdfac34ba7"
+                "reference": "ba758f78b03daf5028638737dc46d37c44cf51a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=4562b555cd3b6a2b8ef139675f9edfcdfac34ba7",
-                "reference": "4562b555cd3b6a2b8ef139675f9edfcdfac34ba7",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=ba758f78b03daf5028638737dc46d37c44cf51a4",
+                "reference": "ba758f78b03daf5028638737dc46d37c44cf51a4",
                 "shasum": ""
             },
             "require": {
@@ -581,7 +581,7 @@
             "type": "wordpress-theme",
             "notification-url": "https://packagist.org/downloads/",
             "description": "Beaver Builder enabled WordPress theme used for Hip client sites.",
-            "time": "2018-05-01T20:51:45+00:00"
+            "time": "2018-05-01T21:21:50+00:00"
         },
         {
             "name": "hipdevteam/hip-cta",
@@ -5234,9 +5234,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "hipdevteam/hip-bb-theme": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
