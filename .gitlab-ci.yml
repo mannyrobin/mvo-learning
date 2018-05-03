@@ -1,7 +1,7 @@
 image: composer
 
 variables:
-  TERMINUS_SITE: hip-base-site
+  TERMINUS_SITE: mvo-learning 
 
 stages:
   - deploy
