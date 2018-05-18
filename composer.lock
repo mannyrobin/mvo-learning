@@ -241,16 +241,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.57",
+            "version": "v0.59",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "fc1821419f0e9d060d83a2864e2a40874b91430d"
+                "reference": "1dbfb1e7ff596c9fe17f4ba8e6a74bb073adbe0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/fc1821419f0e9d060d83a2864e2a40874b91430d",
-                "reference": "fc1821419f0e9d060d83a2864e2a40874b91430d",
+                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/1dbfb1e7ff596c9fe17f4ba8e6a74bb073adbe0f",
+                "reference": "1dbfb1e7ff596c9fe17f4ba8e6a74bb073adbe0f",
                 "shasum": ""
             },
             "require": {
@@ -274,7 +274,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2018-04-28T00:23:39+00:00"
+            "time": "2018-05-14T00:23:02+00:00"
         },
         {
             "name": "google/auth",
@@ -531,16 +531,16 @@
         },
         {
             "name": "hipdevteam/conditions",
-            "version": "1.0.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/conditions.git",
-                "reference": "f5dbab5d0de9953ed7d907ed5bccc2abdc826694"
+                "reference": "dbdabf5f8dc1d8fd4ab9581920cdca1b27c95c71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fconditions/repository/archive.zip?sha=f5dbab5d0de9953ed7d907ed5bccc2abdc826694",
-                "reference": "f5dbab5d0de9953ed7d907ed5bccc2abdc826694",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fconditions/repository/archive.zip?sha=dbdabf5f8dc1d8fd4ab9581920cdca1b27c95c71",
+                "reference": "dbdabf5f8dc1d8fd4ab9581920cdca1b27c95c71",
                 "shasum": ""
             },
             "require": {
@@ -549,7 +549,8 @@
             },
             "require-dev": {
                 "lucatume/wp-browser": "^1.21",
-                "site5/phantoman": "^2.0"
+                "site5/phantoman": "^2.0",
+                "squizlabs/php_codesniffer": "*"
             },
             "type": "wordpress-plugin",
             "autoload": {
@@ -559,20 +560,20 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Everything needed to manage conditions for Hip client sites.",
-            "time": "2018-03-28T07:14:11+00:00"
+            "time": "2018-05-07T19:45:07+00:00"
         },
         {
             "name": "hipdevteam/hip-bb-theme",
-            "version": "4.6.0",
+            "version": "4.6.2",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/hip-bb-theme.git",
-                "reference": "ba758f78b03daf5028638737dc46d37c44cf51a4"
+                "reference": "2e0e30eecb9423001eef62494481b3a48e691adb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=ba758f78b03daf5028638737dc46d37c44cf51a4",
-                "reference": "ba758f78b03daf5028638737dc46d37c44cf51a4",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=2e0e30eecb9423001eef62494481b3a48e691adb",
+                "reference": "2e0e30eecb9423001eef62494481b3a48e691adb",
                 "shasum": ""
             },
             "require": {
@@ -581,7 +582,7 @@
             "type": "wordpress-theme",
             "notification-url": "https://packagist.org/downloads/",
             "description": "Beaver Builder enabled WordPress theme used for Hip client sites.",
-            "time": "2018-05-01T21:21:50+00:00"
+            "time": "2018-05-11T15:53:44+00:00"
         },
         {
             "name": "hipdevteam/hip-cta",
@@ -727,16 +728,16 @@
         },
         {
             "name": "hipdevteam/video-collection",
-            "version": "1.5.1",
+            "version": "1.5.3",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/video-collection.git",
-                "reference": "1a551f3e53473906546cfb74289cdcc8a3ba3393"
+                "reference": "9bb3e23b2f852fa3c498f4474157d7e5799ed012"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fvideo-collection/repository/archive.zip?sha=1a551f3e53473906546cfb74289cdcc8a3ba3393",
-                "reference": "1a551f3e53473906546cfb74289cdcc8a3ba3393",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fvideo-collection/repository/archive.zip?sha=9bb3e23b2f852fa3c498f4474157d7e5799ed012",
+                "reference": "9bb3e23b2f852fa3c498f4474157d7e5799ed012",
                 "shasum": ""
             },
             "require": {
@@ -747,7 +748,7 @@
             },
             "type": "wordpress-plugin",
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2018-04-25T21:34:34+00:00"
+            "time": "2018-05-13T07:01:25+00:00"
         },
         {
             "name": "hipdevteam/video-lightbox",
@@ -814,20 +815,20 @@
         },
         {
             "name": "johnpbloch/wordpress",
-            "version": "4.9.5",
+            "version": "4.9.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnpbloch/wordpress.git",
-                "reference": "c0d69bde6fc373270766a00db333c64f35496d67"
+                "reference": "ecca35c283591e3f40732522334415521f5aa4b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnpbloch/wordpress/zipball/c0d69bde6fc373270766a00db333c64f35496d67",
-                "reference": "c0d69bde6fc373270766a00db333c64f35496d67",
+                "url": "https://api.github.com/repos/johnpbloch/wordpress/zipball/ecca35c283591e3f40732522334415521f5aa4b7",
+                "reference": "ecca35c283591e3f40732522334415521f5aa4b7",
                 "shasum": ""
             },
             "require": {
-                "johnpbloch/wordpress-core": "4.9.5",
+                "johnpbloch/wordpress-core": "4.9.6",
                 "johnpbloch/wordpress-core-installer": "^1.0",
                 "php": ">=5.3.2"
             },
@@ -849,27 +850,27 @@
                 "cms",
                 "wordpress"
             ],
-            "time": "2018-04-03T22:47:48+00:00"
+            "time": "2018-05-17T20:03:03+00:00"
         },
         {
             "name": "johnpbloch/wordpress-core",
-            "version": "4.9.5",
+            "version": "4.9.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnpbloch/wordpress-core.git",
-                "reference": "442ae6c761e3b20cc6a000bee8fefcde5dbab3fa"
+                "reference": "6ff81eb3d93d326b78a8bc0f120e72c161ec58c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnpbloch/wordpress-core/zipball/442ae6c761e3b20cc6a000bee8fefcde5dbab3fa",
-                "reference": "442ae6c761e3b20cc6a000bee8fefcde5dbab3fa",
+                "url": "https://api.github.com/repos/johnpbloch/wordpress-core/zipball/6ff81eb3d93d326b78a8bc0f120e72c161ec58c8",
+                "reference": "6ff81eb3d93d326b78a8bc0f120e72c161ec58c8",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
             },
             "provide": {
-                "wordpress/core-implementation": "4.9.5"
+                "wordpress/core-implementation": "4.9.6"
             },
             "type": "wordpress-core",
             "notification-url": "https://packagist.org/downloads/",
@@ -889,7 +890,7 @@
                 "cms",
                 "wordpress"
             ],
-            "time": "2018-04-03T22:47:40+00:00"
+            "time": "2018-05-17T20:02:55+00:00"
         },
         {
             "name": "johnpbloch/wordpress-core-installer",
@@ -1660,15 +1661,15 @@
         },
         {
             "name": "wpackagist-plugin/autodescription",
-            "version": "3.0.5",
+            "version": "3.0.6",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/autodescription/",
-                "reference": "tags/3.0.5"
+                "reference": "trunk"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/autodescription.3.0.5.zip",
+                "url": "https://downloads.wordpress.org/plugin/autodescription.zip?timestamp=1525625897",
                 "reference": null,
                 "shasum": null
             },
@@ -1700,15 +1701,15 @@
         },
         {
             "name": "wpackagist-plugin/duracelltomi-google-tag-manager",
-            "version": "1.7.2",
+            "version": "1.8",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/duracelltomi-google-tag-manager/",
-                "reference": "tags/1.7.2"
+                "reference": "tags/1.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/duracelltomi-google-tag-manager.1.7.2.zip",
+                "url": "https://downloads.wordpress.org/plugin/duracelltomi-google-tag-manager.1.8.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -1960,7 +1961,7 @@
         },
         {
             "name": "wpackagist-plugin/the-seo-framework-extension-manager",
-            "version": "1.5.0",
+            "version": "1.5.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/the-seo-framework-extension-manager/",
@@ -1968,7 +1969,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/the-seo-framework-extension-manager.zip?timestamp=1522502181",
+                "url": "https://downloads.wordpress.org/plugin/the-seo-framework-extension-manager.zip?timestamp=1526660847",
                 "reference": null,
                 "shasum": null
             },
@@ -2000,15 +2001,15 @@
         },
         {
             "name": "wpackagist-plugin/wp-native-php-sessions",
-            "version": "0.6.7",
+            "version": "0.6.9",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wp-native-php-sessions/",
-                "reference": "tags/0.6.7"
+                "reference": "tags/0.6.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wp-native-php-sessions.0.6.7.zip",
+                "url": "https://downloads.wordpress.org/plugin/wp-native-php-sessions.0.6.9.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -2172,16 +2173,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "1.6.4",
+            "version": "1.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "86ad51e8a3c64c9782446aae740a61fc6faa2522"
+                "reference": "b184a92419cc9a9c4c6a09db555a94d441cb11c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/86ad51e8a3c64c9782446aae740a61fc6faa2522",
-                "reference": "86ad51e8a3c64c9782446aae740a61fc6faa2522",
+                "url": "https://api.github.com/repos/composer/composer/zipball/b184a92419cc9a9c4c6a09db555a94d441cb11c9",
+                "reference": "b184a92419cc9a9c4c6a09db555a94d441cb11c9",
                 "shasum": ""
             },
             "require": {
@@ -2198,6 +2199,9 @@
                 "symfony/filesystem": "^2.7 || ^3.0 || ^4.0",
                 "symfony/finder": "^2.7 || ^3.0 || ^4.0",
                 "symfony/process": "^2.7 || ^3.0 || ^4.0"
+            },
+            "conflict": {
+                "symfony/console": "2.8.38"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.8.35 || ^5.7",
@@ -2245,7 +2249,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2018-04-13T10:04:24+00:00"
+            "time": "2018-05-04T09:44:59+00:00"
         },
         {
             "name": "composer/semver",
@@ -2311,16 +2315,16 @@
         },
         {
             "name": "composer/spdx-licenses",
-            "version": "1.3.0",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/spdx-licenses.git",
-                "reference": "7e111c50db92fa2ced140f5ba23b4e261bc77a30"
+                "reference": "cb17687e9f936acd7e7245ad3890f953770dec1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/7e111c50db92fa2ced140f5ba23b4e261bc77a30",
-                "reference": "7e111c50db92fa2ced140f5ba23b4e261bc77a30",
+                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/cb17687e9f936acd7e7245ad3890f953770dec1b",
+                "reference": "cb17687e9f936acd7e7245ad3890f953770dec1b",
                 "shasum": ""
             },
             "require": {
@@ -2368,7 +2372,7 @@
                 "spdx",
                 "validator"
             ],
-            "time": "2018-01-31T13:17:27+00:00"
+            "time": "2018-04-30T10:33:04+00:00"
         },
         {
             "name": "justinrainbow/json-schema",

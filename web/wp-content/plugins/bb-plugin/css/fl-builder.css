@@ -666,8 +666,8 @@ body .fl-theme-builder-preview-select-item-child:hover {
 	color: #fff !important;
 	text-decoration: none;
 }
-.fl-builder-buy-button i.fa-external-link-square,
-.fl-builder-upgrade-button i.fa-external-link-square {
+.fl-builder-buy-button i.fa-external-link-alt,
+.fl-builder-upgrade-button i.fa-external-link-alt {
 	color: #FFC733;
 	margin: 0 0 0 6px;
 }
@@ -712,6 +712,9 @@ body .fl-theme-builder-preview-select-item-child:hover {
 		border-right: transparent !important;
 		border-bottom: transparent !important;
 		max-height: calc(100% - 44px) !important;
+	}
+	.fl-builder--panel-arrow {
+		display:none;
 	}
 	.fl-builder-bar-title {
 		flex: 0 0 100px !important;
@@ -4056,7 +4059,7 @@ span.select2-container.select2-container--open {
 .fl-help-tooltip-icon {
 	color: #999 !important;
 	cursor: pointer;
-	font-family: Font Awesome\ 5 Free;
+	/* font-family: Font Awesome\ 5 Free; */
 	font-size: 15px !important;
 	padding: 5px;
 	vertical-align: middle;

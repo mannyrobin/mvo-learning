@@ -7,7 +7,7 @@ services:
       - ./:/var/www
     networks:
       wpnet:
-        ipv4_address: 192.168.110.10
+        ipv4_address: 192.168.140.10
     links:
       - db
     environment:
@@ -20,7 +20,7 @@ services:
       MYSQL_DATABASE: wordpress
     networks:
       wpnet:
-        ipv4_address: 192.168.110.20
+        ipv4_address: 192.168.140.20
 networks:
   wpnet:
     driver: bridge
@@ -28,4 +28,4 @@ networks:
       driver: default
       config:
         -
-          subnet: 192.168.110.0/24
+          subnet: 192.168.140.0/24
