@@ -3,6 +3,7 @@ web/wp-content/plugins/*
 web/wp-content/themes/hip-bb-theme
 !web/wp-content/plugins/.gitkeep
 !web/wp-content/plugins/bb-plugin
+!web/wp-content/plugins/wpforms-surveys-polls
 !web/wp-content/plugins/bb-theme-builder
 !web/wp-content/plugins/wpforms
 !web/wp-content/plugins/wpforms-zapier
