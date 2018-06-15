@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "677fb57751993fd2b5887abe5fbd914c",
+    "content-hash": "3be35e29c26e13624ec2295f04e0484f",
     "packages": [
         {
             "name": "composer/installers",
@@ -241,16 +241,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.62",
+            "version": "v0.63",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "a3c342e711aaf61f83b1ef9de7a6685446a409e7"
+                "reference": "a009a33246e90bf1f60f745f8e47039ac5a87fdf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/a3c342e711aaf61f83b1ef9de7a6685446a409e7",
-                "reference": "a3c342e711aaf61f83b1ef9de7a6685446a409e7",
+                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/a009a33246e90bf1f60f745f8e47039ac5a87fdf",
+                "reference": "a009a33246e90bf1f60f745f8e47039ac5a87fdf",
                 "shasum": ""
             },
             "require": {
@@ -274,7 +274,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2018-05-31T00:23:15+00:00"
+            "time": "2018-06-07T00:22:54+00:00"
         },
         {
             "name": "google/auth",
@@ -505,6 +505,31 @@
             "time": "2017-03-20T17:10:46+00:00"
         },
         {
+            "name": "hipdevteam/bb-post-categories",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/hipdevteam/bb-post-categories.git",
+                "reference": "38060b305bea41c1d584c8938f0f5da446d45687"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fbb-post-categories/repository/archive.zip?sha=38060b305bea41c1d584c8938f0f5da446d45687",
+                "reference": "38060b305bea41c1d584c8938f0f5da446d45687",
+                "shasum": ""
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Hip Creative",
+                    "email": "zach@hipcreativeinc.com"
+                }
+            ],
+            "description": "Beaver Builder Module to display Post Categories list. Allows explicitly including/excluding certain categories.",
+            "time": "2018-06-11T17:18:47+00:00"
+        },
+        {
             "name": "hipdevteam/bb-related-posts",
             "version": "1.0.4",
             "source": {
@@ -564,16 +589,16 @@
         },
         {
             "name": "hipdevteam/hip-bb-theme",
-            "version": "4.7.1",
+            "version": "4.7.4",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/hip-bb-theme.git",
-                "reference": "f14afb2a03242e730a597d2895fc4f3b65e55d46"
+                "reference": "f7d51d27e6925b4dd793abc8bc0700a1c83cffbb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=f14afb2a03242e730a597d2895fc4f3b65e55d46",
-                "reference": "f14afb2a03242e730a597d2895fc4f3b65e55d46",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=f7d51d27e6925b4dd793abc8bc0700a1c83cffbb",
+                "reference": "f7d51d27e6925b4dd793abc8bc0700a1c83cffbb",
                 "shasum": ""
             },
             "require": {
@@ -582,7 +607,7 @@
             "type": "wordpress-theme",
             "notification-url": "https://packagist.org/downloads/",
             "description": "Beaver Builder enabled WordPress theme used for Hip client sites.",
-            "time": "2018-06-06T15:04:28+00:00"
+            "time": "2018-06-11T20:51:34+00:00"
         },
         {
             "name": "hipdevteam/hip-cta",
@@ -1761,15 +1786,15 @@
         },
         {
             "name": "wpackagist-plugin/optinmonster",
-            "version": "1.3.5",
+            "version": "1.4.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/optinmonster/",
-                "reference": "trunk"
+                "reference": "tags/1.4.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/optinmonster.zip?timestamp=1522421924",
+                "url": "https://downloads.wordpress.org/plugin/optinmonster.1.4.2.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -2058,6 +2083,26 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/wp-security-audit-log/"
+        },
+        {
+            "name": "wpackagist-plugin/zero-spam",
+            "version": "3.0.6",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/zero-spam/",
+                "reference": "tags/3.0.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/zero-spam.3.0.6.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/zero-spam/"
         },
         {
             "name": "wpmudev/wp-defender",
