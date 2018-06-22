@@ -182,16 +182,16 @@
         },
         {
             "name": "google/apiclient",
-            "version": "v2.2.1",
+            "version": "v2.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client.git",
-                "reference": "b69b8ac4bf6501793c389d4e013a79d09c85c5f2"
+                "reference": "4e0fd83510e579043e10e565528b323b7c2b3c81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/b69b8ac4bf6501793c389d4e013a79d09c85c5f2",
-                "reference": "b69b8ac4bf6501793c389d4e013a79d09c85c5f2",
+                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/4e0fd83510e579043e10e565528b323b7c2b3c81",
+                "reference": "4e0fd83510e579043e10e565528b323b7c2b3c81",
                 "shasum": ""
             },
             "require": {
@@ -206,7 +206,7 @@
             },
             "require-dev": {
                 "cache/filesystem-adapter": "^0.3.2",
-                "phpunit/phpunit": "~4",
+                "phpunit/phpunit": "~4.8.36",
                 "squizlabs/php_codesniffer": "~2.3",
                 "symfony/css-selector": "~2.1",
                 "symfony/dom-crawler": "~2.1"
@@ -237,7 +237,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2017-11-03T01:19:53+00:00"
+            "time": "2018-06-20T15:52:20+00:00"
         },
         {
             "name": "google/apiclient-services",
@@ -589,16 +589,16 @@
         },
         {
             "name": "hipdevteam/hip-bb-theme",
-            "version": "4.7.4",
+            "version": "4.7.5",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/hip-bb-theme.git",
-                "reference": "f7d51d27e6925b4dd793abc8bc0700a1c83cffbb"
+                "reference": "ff78d16c1fc033ca92a70453c43c53f1e0c62e60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=f7d51d27e6925b4dd793abc8bc0700a1c83cffbb",
-                "reference": "f7d51d27e6925b4dd793abc8bc0700a1c83cffbb",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=ff78d16c1fc033ca92a70453c43c53f1e0c62e60",
+                "reference": "ff78d16c1fc033ca92a70453c43c53f1e0c62e60",
                 "shasum": ""
             },
             "require": {
@@ -607,7 +607,7 @@
             "type": "wordpress-theme",
             "notification-url": "https://packagist.org/downloads/",
             "description": "Beaver Builder enabled WordPress theme used for Hip client sites.",
-            "time": "2018-06-11T20:51:34+00:00"
+            "time": "2018-06-19T17:11:36+00:00"
         },
         {
             "name": "hipdevteam/hip-cta",
@@ -806,16 +806,16 @@
         },
         {
             "name": "hipdevteam/wpforms-gsheets",
-            "version": "0.2.0",
+            "version": "0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/wpfgs.git",
-                "reference": "995c437ffc8ffa4fcb372cd8979ce614c430e7c6"
+                "reference": "71de65ea604d9f95ccee13b8b14763a20ef7502b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fwpfgs/repository/archive.zip?sha=995c437ffc8ffa4fcb372cd8979ce614c430e7c6",
-                "reference": "995c437ffc8ffa4fcb372cd8979ce614c430e7c6",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fwpfgs/repository/archive.zip?sha=71de65ea604d9f95ccee13b8b14763a20ef7502b",
+                "reference": "71de65ea604d9f95ccee13b8b14763a20ef7502b",
                 "shasum": ""
             },
             "require": {
@@ -836,7 +836,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Add form submissions to a Google Sheets spreadsheet",
-            "time": "2017-10-25T19:49:42+00:00"
+            "time": "2018-06-15T23:38:28+00:00"
         },
         {
             "name": "johnpbloch/wordpress",
@@ -2125,10 +2125,10 @@
         },
         {
             "name": "wpmudev/wp-smush-pro",
-            "version": "2.7.9.1",
+            "version": "2.7.9.2",
             "dist": {
                 "type": "zip",
-                "url": "https://premium.wpmudev.org/download/1282195992_wp-smush-pro-2.7.9.1.zip",
+                "url": "https://premium.wpmudev.org/download/528945408_wp-smush-pro-2.7.9.2.zip",
                 "reference": null,
                 "shasum": null
             },
