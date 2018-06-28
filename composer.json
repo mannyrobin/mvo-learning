@@ -80,7 +80,6 @@
     "wpmudev/wp-defender": "*",
     "wpmudev/wp-smush-pro": "*",
     "wpackagist-plugin/google-apps-login": "^3.2",
-    "wpackagist-plugin/zero-spam": "^3.0",
     "hipdevteam/bb-post-categories": "^1.0"
   },
   "require-dev": {
