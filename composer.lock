@@ -625,16 +625,16 @@
         },
         {
             "name": "hipdevteam/hip-bb-theme",
-            "version": "4.7.7",
+            "version": "4.7.8",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/hip-bb-theme.git",
-                "reference": "48990fad6b9d203db9326a43b58d233edf453d0c"
+                "reference": "8697e8476f93eced2867ca4a3d1c01a8c6f54dda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=48990fad6b9d203db9326a43b58d233edf453d0c",
-                "reference": "48990fad6b9d203db9326a43b58d233edf453d0c",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=8697e8476f93eced2867ca4a3d1c01a8c6f54dda",
+                "reference": "8697e8476f93eced2867ca4a3d1c01a8c6f54dda",
                 "shasum": ""
             },
             "require": {
@@ -643,7 +643,7 @@
             "type": "wordpress-theme",
             "notification-url": "https://packagist.org/downloads/",
             "description": "Beaver Builder enabled WordPress theme used for Hip client sites.",
-            "time": "2018-06-28T20:01:46+00:00"
+            "time": "2018-07-09T06:25:18+00:00"
         },
         {
             "name": "hipdevteam/hip-cta",
@@ -789,16 +789,16 @@
         },
         {
             "name": "hipdevteam/video-collection",
-            "version": "1.6.0",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/video-collection.git",
-                "reference": "c5281b0fd5f01f86cb8fb2d2421c5a74ac405caa"
+                "reference": "d9cf654e99637d6c62b934679bd86903b5a896ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fvideo-collection/repository/archive.zip?sha=c5281b0fd5f01f86cb8fb2d2421c5a74ac405caa",
-                "reference": "c5281b0fd5f01f86cb8fb2d2421c5a74ac405caa",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fvideo-collection/repository/archive.zip?sha=d9cf654e99637d6c62b934679bd86903b5a896ae",
+                "reference": "d9cf654e99637d6c62b934679bd86903b5a896ae",
                 "shasum": ""
             },
             "require": {
@@ -810,7 +810,7 @@
             },
             "type": "wordpress-plugin",
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2018-07-06T06:52:22+00:00"
+            "time": "2018-07-06T22:06:39+00:00"
         },
         {
             "name": "hipdevteam/video-lightbox",
@@ -1556,6 +1556,61 @@
             "time": "2016-03-01T16:27:06+00:00"
         },
         {
+            "name": "symfony/polyfill-ctype",
+            "version": "v1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-ctype.git",
+                "reference": "7cc359f1b7b80fc25ed7796be7d96adc9b354bae"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/7cc359f1b7b80fc25ed7796be7d96adc9b354bae",
+                "reference": "7cc359f1b7b80fc25ed7796be7d96adc9b354bae",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Polyfill\\Ctype\\": ""
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                },
+                {
+                    "name": "Gert de Pagter",
+                    "email": "BackEndTea@gmail.com"
+                }
+            ],
+            "description": "Symfony polyfill for ctype functions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "ctype",
+                "polyfill",
+                "portable"
+            ],
+            "time": "2018-04-30T19:57:29+00:00"
+        },
+        {
             "name": "theiconic/php-ga-measurement-protocol",
             "version": "v2.7.1",
             "source": {
@@ -1598,20 +1653,21 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.35.3",
+            "version": "v1.35.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "b48680b6eb7d16b5025b9bfc4108d86f6b8af86f"
+                "reference": "7e081e98378a1e78c29cc9eba4aefa5d78a05d2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/b48680b6eb7d16b5025b9bfc4108d86f6b8af86f",
-                "reference": "b48680b6eb7d16b5025b9bfc4108d86f6b8af86f",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/7e081e98378a1e78c29cc9eba4aefa5d78a05d2a",
+                "reference": "7e081e98378a1e78c29cc9eba4aefa5d78a05d2a",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.3",
+                "symfony/polyfill-ctype": "^1.8"
             },
             "require-dev": {
                 "psr/container": "^1.0",
@@ -1650,16 +1706,16 @@
                 },
                 {
                     "name": "Twig Team",
-                    "homepage": "http://twig.sensiolabs.org/contributors",
+                    "homepage": "https://twig.symfony.com/contributors",
                     "role": "Contributors"
                 }
             ],
             "description": "Twig, the flexible, fast, and secure template language for PHP",
-            "homepage": "http://twig.sensiolabs.org",
+            "homepage": "https://twig.symfony.com",
             "keywords": [
                 "templating"
             ],
-            "time": "2018-03-20T04:25:58+00:00"
+            "time": "2018-07-13T07:12:17+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -1883,15 +1939,15 @@
         },
         {
             "name": "wpackagist-plugin/post-types-order",
-            "version": "1.9.3.6",
+            "version": "1.9.3.9",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/post-types-order/",
-                "reference": "tags/1.9.3.6"
+                "reference": "tags/1.9.3.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/post-types-order.1.9.3.6.zip",
+                "url": "https://downloads.wordpress.org/plugin/post-types-order.1.9.3.9.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -2123,10 +2179,10 @@
         },
         {
             "name": "wpmudev/wp-defender",
-            "version": "1.9",
+            "version": "1.9.1",
             "dist": {
                 "type": "zip",
-                "url": "https://premium.wpmudev.org/download/385206695_wp-defender-1.9.zip",
+                "url": "https://premium.wpmudev.org/download/53301251_wp-defender-1.9.1.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -3316,61 +3372,6 @@
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
             "time": "2018-06-19T20:52:10+00:00"
-        },
-        {
-            "name": "symfony/polyfill-ctype",
-            "version": "v1.8.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "7cc359f1b7b80fc25ed7796be7d96adc9b354bae"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/7cc359f1b7b80fc25ed7796be7d96adc9b354bae",
-                "reference": "7cc359f1b7b80fc25ed7796be7d96adc9b354bae",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.8-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Ctype\\": ""
-                },
-                "files": [
-                    "bootstrap.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                },
-                {
-                    "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
-                }
-            ],
-            "description": "Symfony polyfill for ctype functions",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "compatibility",
-                "ctype",
-                "polyfill",
-                "portable"
-            ],
-            "time": "2018-04-30T19:57:29+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
