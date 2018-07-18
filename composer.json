@@ -89,18 +89,17 @@
   "scripts": {
     "build-assets": [
       "@prepare-for-pantheon",
-      "composer install --no-dev --no-ansi --no-interaction --optimize-autoloader --no-progress"
+      "composer install --no-dev --no-ansi --no-interaction --optimize-autoloader --no-progress",
+      "@cleanup"
     ],
     "prepare-for-pantheon": "WordPressProject\\composer\\ScriptHandler::prepareForPantheon",
     "cleanup": [
       "./scripts/composer/cleanup-composer"
     ],
     "post-install-cmd": [
-      "@cleanup",
       "WordPressProject\\composer\\ScriptHandler::createRequiredFiles"
     ],
     "post-update-cmd": [
-      "@cleanup",
       "WordPressProject\\composer\\ScriptHandler::createRequiredFiles"
     ],
     "post-create-project-cmd": [

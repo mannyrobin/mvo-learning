@@ -729,21 +729,26 @@
         },
         {
             "name": "hipdevteam/services",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/services.git",
-                "reference": "9bbe131606e82c2f342dd3f7eac20abc243bdaaf"
+                "reference": "8eff9db7456a41708a529ba80460332df1b78c67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fservices/repository/archive.zip?sha=9bbe131606e82c2f342dd3f7eac20abc243bdaaf",
-                "reference": "9bbe131606e82c2f342dd3f7eac20abc243bdaaf",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fservices/repository/archive.zip?sha=8eff9db7456a41708a529ba80460332df1b78c67",
+                "reference": "8eff9db7456a41708a529ba80460332df1b78c67",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": ">=1.0",
                 "pimple/pimple": "~3.0"
+            },
+            "require-dev": {
+                "lucatume/wp-browser": "^1.21",
+                "site5/phantoman": "^2.0",
+                "squizlabs/php_codesniffer": "*"
             },
             "type": "wordpress-plugin",
             "autoload": {
@@ -753,7 +758,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Add Services post type, related post meta and Beaver Builder module to WordPress site.",
-            "time": "2018-03-27T15:13:54+00:00"
+            "time": "2018-07-16T22:28:06+00:00"
         },
         {
             "name": "hipdevteam/staff",
@@ -1959,15 +1964,15 @@
         },
         {
             "name": "wpackagist-plugin/query-monitor",
-            "version": "3.0.1",
+            "version": "3.1.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/query-monitor/",
-                "reference": "tags/3.0.1"
+                "reference": "tags/3.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/query-monitor.3.0.1.zip",
+                "url": "https://downloads.wordpress.org/plugin/query-monitor.3.1.0.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -1979,15 +1984,15 @@
         },
         {
             "name": "wpackagist-plugin/redirection",
-            "version": "3.3.1",
+            "version": "3.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/redirection/",
-                "reference": "tags/3.3.1"
+                "reference": "tags/3.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/redirection.3.3.1.zip",
+                "url": "https://downloads.wordpress.org/plugin/redirection.3.4.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -2067,7 +2072,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/smtp-mailer.zip?timestamp=1513498762",
+                "url": "https://downloads.wordpress.org/plugin/smtp-mailer.zip?timestamp=1519627206",
                 "reference": null,
                 "shasum": null
             },
@@ -2159,15 +2164,15 @@
         },
         {
             "name": "wpackagist-plugin/wp-security-audit-log",
-            "version": "3.2.1",
+            "version": "3.2.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wp-security-audit-log/",
-                "reference": "tags/3.2.1"
+                "reference": "tags/3.2.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wp-security-audit-log.3.2.1.zip",
+                "url": "https://downloads.wordpress.org/plugin/wp-security-audit-log.3.2.2.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -5334,7 +5339,7 @@
                 "cli",
                 "wordpress"
             ],
-            "time": "2018-04-14T14:35:48+00:00"
+            "time": "2018-05-31T11:04:05+00:00"
         },
         {
             "name": "wp-cli/wp-config-transformer",

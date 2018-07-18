@@ -6,9 +6,9 @@ define('SCRIPT_DEBUG', false);
 /** Disable all file modifications including updates and update notifications */
 define('DISALLOW_FILE_MODS', true);
 
-if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
+if (!empty(env('PANTHEON_ENVIRONMENT')) && php_sapi_name() != 'cli') {
   // Redirect to https://$primary_domain in the Live environment
-  if ($_ENV['PANTHEON_ENVIRONMENT'] === 'live') {
+  if (env('PANTHEON_ENVIRONMENT') === 'live') {
     /** Replace www.example.com with your registered domain name */
     $primary_domain = 'live-mvo-learning.pantheonsite.io';
   }
