@@ -77,7 +77,6 @@
     "deliciousbrains-plugin/wp-migrate-db-pro-media-files": "^1.4",
     "wpackagist-plugin/safe-svg": "^1.6",
     "hipdevteam/video-collection": "*",
-    "wpmudev/wp-defender": "*",
     "wpmudev/wp-smush-pro": "*",
     "wpackagist-plugin/google-apps-login": "^3.2",
     "hipdevteam/bb-post-categories": "^1.0"
