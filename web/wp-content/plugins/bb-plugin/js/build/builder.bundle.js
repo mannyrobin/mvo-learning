@@ -19757,6 +19757,9 @@ var InlineEditor = function (_Component) {
 			var overlay = jQuery('<div id="' + editorId + '" class="fl-inline-editor"></div>');
 			var form = jQuery('.fl-builder-settings[data-node=' + nodeId + ']');
 			var settings = FLBuilderSettingsConfig.nodes[nodeId];
+			if (typeof settings === 'undefined') {
+				return false;
+			}
 			var connections = settings.connections;
 
 
