@@ -62,7 +62,7 @@
     "hipdevteam/wpforms-gsheets": "*",
     "hipdevteam/video-lightbox": "*",
     "hipdevteam/hip-cta": "*",
-    "hipdevteam/staff": "*",
+    "hipdevteam/staff": ">=1.1.0",
     "hipdevteam/conditions": "*",
     "hipdevteam/landing-pages": "*",
     "hipdevteam/services": "*",
