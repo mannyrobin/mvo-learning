@@ -4917,6 +4917,16 @@ final class FLBuilderModel {
 	}
 
 	/**
+	 * Checks if a node has visibility rules or not.
+	 *
+	 * @param object $node
+	 * @return bool
+	 */
+	static public function node_has_visibility_rules( $node ) {
+		return isset( $node->settings->visibility_display ) && ( '' !== $node->settings->visibility_display );
+	}
+
+	/**
 	 * Checks to see if a node is the root node of a global template.
 	 *
 	 * @since 1.6.3
@@ -5994,6 +6004,24 @@ final class FLBuilderModel {
 	 */
 	static public function is_codechecking_enabled() {
 		return apply_filters( 'fl_code_checking_enabled', true );
+	}
+
+	/**
+	 * Returns Ace Editor defaults as an array.
+	 *
+	 * @since 2.1
+	 * @return array
+	 */
+	static public function ace_editor_settings() {
+
+		$defaults = array(
+			'enableBasicAutocompletion' => true,
+			'enableLiveAutocompletion'  => true,
+			'enableSnippets'            => false,
+			'showLineNumbers'           => false,
+			'showFoldWidgets'           => false,
+		);
+		return apply_filters( 'fl_ace_editor_settings', $defaults );
 	}
 
 	/**

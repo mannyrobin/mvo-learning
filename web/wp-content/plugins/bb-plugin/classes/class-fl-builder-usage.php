@@ -403,6 +403,9 @@ final class FLBuilderUsage {
 		$data['users'] = $users['total_users'];
 		$data['php']   = phpversion();
 		$data['wp']    = $wp_version;
+		$data['fl-builder'] = FL_BUILDER_VERSION;
+		$data['fl-theme']   = ( defined( 'FL_THEME_VERSION' ) ) ? FL_THEME_VERSION : false;
+		$data['fl-themer']  = ( defined( 'FL_THEME_BUILDER_VERSION' ) ) ? FL_THEME_BUILDER_VERSION : false;
 
 		$settings_orig = FLBuilderModel::get_global_settings();
 
