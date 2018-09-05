@@ -71,7 +71,7 @@ function show_hidden_meta_boxes($hidden, $screen)
 
 function child_theme_settings_styles()
 {
-	$general_settings = General\Settings::getSettings();
+	$general_settings = Hip\Theme\Settings\General\Settings::getSettings();
 	ob_start();
 	?>
 	<style type="text/css">
@@ -79,7 +79,7 @@ function child_theme_settings_styles()
 			background-color: <?php echo $general_settings['secondary_color'];?>;
 		}
 		header .top-header.style-1 ul.menu li.top-menu-btn a:hover{
-			background-color: #<?php echo (new Helpers\PHPColors\Color($general_settings['secondary_color']))->darken(5);?>;
+			background-color: #<?php echo (new Mexitek\PHPColors\Color($general_settings['secondary_color']))->darken(5);?>;
 		}
 		header .main-header.style-1 ul.menu li.menu-item-has-children .fl-menu-toggle:before,header .main-header.style-1 .fl-row-content-wrap{
 			border-color: <?php echo $general_settings['primary_color'];?>;
@@ -88,7 +88,7 @@ function child_theme_settings_styles()
 			background-color: <?php echo $general_settings['primary_color'];?>;
 		}
 		header .main-header.style-1 .fl-row-content-wrap ul li ul.sub-menu li a:hover{
-			background-color: #<?php echo (new Helpers\PHPColors\Color($general_settings['primary_color']))->darken(5);?>;
+			background-color: #<?php echo (new Mexitek\PHPColors\Color($general_settings['primary_color']))->darken(5);?>;
 		}
 		header .top-header.style-2 .header-phone svg{
 			fill: <?php echo $general_settings['body_font_color'];?>
