@@ -13,6 +13,7 @@ web/wp-content/mu-plugins/*/
 web/wp-content/upgrade
 web/wp-content/uploads/*
 !web/wp-content/uploads/.gitkeep
+!web/wp-content/plugins/social-warfare-pro
 
 # WordPress
 web/wp

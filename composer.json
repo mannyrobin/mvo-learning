@@ -10,19 +10,6 @@
       "url": "https://wpackagist.org"
     },
     {
-      "type": "package",
-      "package": {
-        "name": "warfare-plugins/social-warfare-pro",
-        "version": "3.1.1",
-        "type": "wordpress-plugin",
-        "source": {
-          "url": "https://github.com/warfare-plugins/social-warfare-pro.git",
-          "type": "git",
-          "reference": "master"
-        }
-      }
-    },
-    {
       "type": "composer",
       "url": "https://premium.wpmudev.org/"
     },
@@ -42,7 +29,7 @@
     "roots/wp-password-bcrypt": "1.0.0",
     "vlucas/phpdotenv": "^2.0.1",
     "oscarotero/env": "^1.0",
-    "wpackagist-plugin/social-warfare": "3.1.1",
+    "wpackagist-plugin/social-warfare": "*",
     "wpackagist-plugin/query-monitor": "*",
     "wpackagist-plugin/duplicate-post": "*",
     "wpackagist-plugin/duracelltomi-google-tag-manager": "*",
@@ -56,7 +43,6 @@
     "wpackagist-plugin/post-type-archive-descriptions": "*",
     "wpackagist-plugin/redirection": "*",
     "ydlr/wpforms-ga": "^0.1",
-    "warfare-plugins/social-warfare-pro": "3.1.1",
     "hipdevteam/bb-related-posts": "*",
     "hipdevteam/reviews-bb-module": "*",
     "hipdevteam/wpforms-gsheets": "*",
@@ -80,7 +66,8 @@
     "wpmudev/wp-smush-pro": "*",
     "wpackagist-plugin/google-apps-login": "^3.2",
     "hipdevteam/bb-post-categories": "^1.0",
-	"wpackagist-plugin/addfunc-head-footer-code": "^1.5"
+	"wpackagist-plugin/addfunc-head-footer-code": "^1.5",
+	"wpackagist-plugin/fatal-error-notify":"^1.3"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "3.*",
