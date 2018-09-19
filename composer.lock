@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f07d299a6347d3ea3ccf3ff1503cde72",
+    "content-hash": "ea5f2a88d926d5a80aa05b168e7cbf08",
     "packages": [
         {
             "name": "a5hleyrich/wp-background-processing",
@@ -144,10 +144,10 @@
         },
         {
             "name": "deliciousbrains-plugin/wp-migrate-db-pro",
-            "version": "1.8.1",
+            "version": "1.8.4",
             "dist": {
                 "type": "zip",
-                "url": "https://api.deliciousbrains.com/?wc-api=delicious-brains&request=composer_download&package=wp-migrate-db-pro&version=1.8.1&composer_key=7EF044F879F5B9A2EBAE334D29EFA943",
+                "url": "https://api.deliciousbrains.com/?wc-api=delicious-brains&request=composer_download&package=wp-migrate-db-pro&version=1.8.4&composer_key=7EF044F879F5B9A2EBAE334D29EFA943",
                 "reference": null,
                 "shasum": null
             },
@@ -158,10 +158,10 @@
         },
         {
             "name": "deliciousbrains-plugin/wp-migrate-db-pro-media-files",
-            "version": "1.4.9",
+            "version": "1.4.10",
             "dist": {
                 "type": "zip",
-                "url": "https://api.deliciousbrains.com/?wc-api=delicious-brains&request=composer_download&package=wp-migrate-db-pro-media-files&version=1.4.9&composer_key=7EF044F879F5B9A2EBAE334D29EFA943",
+                "url": "https://api.deliciousbrains.com/?wc-api=delicious-brains&request=composer_download&package=wp-migrate-db-pro-media-files&version=1.4.10&composer_key=7EF044F879F5B9A2EBAE334D29EFA943",
                 "reference": null,
                 "shasum": null
             },
@@ -221,12 +221,12 @@
             "version": "v2.2.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/google-api-php-client.git",
+                "url": "https://github.com/googleapis/google-api-php-client.git",
                 "reference": "4e0fd83510e579043e10e565528b323b7c2b3c81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/4e0fd83510e579043e10e565528b323b7c2b3c81",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client/zipball/4e0fd83510e579043e10e565528b323b7c2b3c81",
                 "reference": "4e0fd83510e579043e10e565528b323b7c2b3c81",
                 "shasum": ""
             },
@@ -277,16 +277,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.68",
+            "version": "v0.70",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "f218f5697aa753fa031a09a14ed56a5a438070e4"
+                "url": "https://github.com/googleapis/google-api-php-client-services.git",
+                "reference": "759a1a246409eae1c723abc72d817205a1d5549f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/f218f5697aa753fa031a09a14ed56a5a438070e4",
-                "reference": "f218f5697aa753fa031a09a14ed56a5a438070e4",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/759a1a246409eae1c723abc72d817205a1d5549f",
+                "reference": "759a1a246409eae1c723abc72d817205a1d5549f",
                 "shasum": ""
             },
             "require": {
@@ -310,20 +310,20 @@
             "keywords": [
                 "google"
             ],
-            "time": "2018-09-03T00:22:49+00:00"
+            "time": "2018-09-16T00:22:55+00:00"
         },
         {
             "name": "google/auth",
-            "version": "v1.3.3",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/google-auth-library-php.git",
-                "reference": "af72b3f50420c801dc35cc07b1fa429ae027b847"
+                "url": "https://github.com/googleapis/google-auth-library-php.git",
+                "reference": "196237248e636a3554a7d9e4dfddeb97f450ab5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-auth-library-php/zipball/af72b3f50420c801dc35cc07b1fa429ae027b847",
-                "reference": "af72b3f50420c801dc35cc07b1fa429ae027b847",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/196237248e636a3554a7d9e4dfddeb97f450ab5c",
+                "reference": "196237248e636a3554a7d9e4dfddeb97f450ab5c",
                 "shasum": ""
             },
             "require": {
@@ -357,7 +357,7 @@
                 "google",
                 "oauth2"
             ],
-            "time": "2018-08-27T19:47:35+00:00"
+            "time": "2018-09-17T20:29:21+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -541,6 +541,43 @@
             "time": "2017-03-20T17:10:46+00:00"
         },
         {
+            "name": "hipdevteam/autopop-menus",
+            "version": "0.1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/hipdevteam/autopop-menus.git",
+                "reference": "0a78acce6b9502e1a5c1b277772bf553b92c0b72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fautopop-menus/repository/archive.zip?sha=0a78acce6b9502e1a5c1b277772bf553b92c0b72",
+                "reference": "0a78acce6b9502e1a5c1b277772bf553b92c0b72",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": ">=1.0",
+                "pimple/pimple": "~3.0"
+            },
+            "type": "wordpress-plugin",
+            "autoload": {
+                "psr-4": {
+                    "PuckLabs\\AutopopMenus\\": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "ydlr",
+                    "email": "ydlr@ydlr.io"
+                }
+            ],
+            "description": "Autopopulate submenus based on taxonomy, post type, or post hierarchy.",
+            "time": "2018-09-17T17:09:07+00:00"
+        },
+        {
             "name": "hipdevteam/bb-post-categories",
             "version": "1.0.0",
             "source": {
@@ -625,16 +662,16 @@
         },
         {
             "name": "hipdevteam/hip-bb-theme",
-            "version": "5.0.2",
+            "version": "5.0.4",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/hip-bb-theme.git",
-                "reference": "8a47b999a8f91b977d1c468996c0478b713d4b6f"
+                "reference": "cc84aceb842871fad1410dab76b857b35cc29c06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=8a47b999a8f91b977d1c468996c0478b713d4b6f",
-                "reference": "8a47b999a8f91b977d1c468996c0478b713d4b6f",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=cc84aceb842871fad1410dab76b857b35cc29c06",
+                "reference": "cc84aceb842871fad1410dab76b857b35cc29c06",
                 "shasum": ""
             },
             "require": {
@@ -649,7 +686,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Beaver Builder enabled WordPress theme used for Hip client sites.",
-            "time": "2018-08-28T07:31:42+00:00"
+            "time": "2018-09-11T06:15:52+00:00"
         },
         {
             "name": "hipdevteam/hip-cta",
@@ -681,17 +718,17 @@
             "time": "2018-08-10T21:04:31+00:00"
         },
         {
-            "name": "hipdevteam/landing-pages",
-            "version": "1.0.1",
+            "name": "hipdevteam/hip-landing-pages",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/landing-pages.git",
-                "reference": "cafdffa53c8ae950f2af128fd3821b5388bd4a48"
+                "reference": "99baaa3cae2ce5b3eb0cf9fddd6f18ccf9296298"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Flanding-pages/repository/archive.zip?sha=cafdffa53c8ae950f2af128fd3821b5388bd4a48",
-                "reference": "cafdffa53c8ae950f2af128fd3821b5388bd4a48",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Flanding-pages/repository/archive.zip?sha=99baaa3cae2ce5b3eb0cf9fddd6f18ccf9296298",
+                "reference": "99baaa3cae2ce5b3eb0cf9fddd6f18ccf9296298",
                 "shasum": ""
             },
             "require": {
@@ -710,7 +747,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Everything needed to manage landing pages for Hip client sites.",
-            "time": "2018-03-28T07:03:08+00:00"
+            "time": "2018-09-05T13:54:38+00:00"
         },
         {
             "name": "hipdevteam/reviews-bb-module",
@@ -852,6 +889,46 @@
             ],
             "description": "A video lightbox module for Beaver Builder.",
             "time": "2017-10-27T15:13:12+00:00"
+        },
+        {
+            "name": "hipdevteam/wpforms-ga",
+            "version": "0.1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/hipdevteam/wpforms-ga.git",
+                "reference": "547ed6234a7f7985e815e5e79454900c3827b8ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fwpforms-ga/repository/archive.zip?sha=547ed6234a7f7985e815e5e79454900c3827b8ed",
+                "reference": "547ed6234a7f7985e815e5e79454900c3827b8ed",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": ">=1.0",
+                "theiconic/php-ga-measurement-protocol": "^2.6"
+            },
+            "require-dev": {
+                "squizlabs/php_codesniffer": "^3.2"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "ydlr",
+                    "email": "ydlr@ydlr.io"
+                }
+            ],
+            "description": "Google Analytics for WPForms",
+            "keywords": [
+                "analytics",
+                "wordpress",
+                "wpforms"
+            ],
+            "time": "2018-09-17T15:27:06+00:00"
         },
         {
             "name": "hipdevteam/wpforms-gsheets",
@@ -1515,43 +1592,6 @@
             "time": "2016-10-10T12:19:37+00:00"
         },
         {
-            "name": "pucklabs/autopop-menus",
-            "version": "0.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ydlr/autopop-menus.git",
-                "reference": "a8bb0929eb950be306dec666df1b4b5314e1661e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ydlr/autopop-menus/zipball/a8bb0929eb950be306dec666df1b4b5314e1661e",
-                "reference": "a8bb0929eb950be306dec666df1b4b5314e1661e",
-                "shasum": ""
-            },
-            "require": {
-                "composer/installers": ">=1.0",
-                "pimple/pimple": "~3.0"
-            },
-            "type": "wordpress-plugin",
-            "autoload": {
-                "psr-4": {
-                    "PuckLabs\\AutopopMenus\\": "lib"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "ydlr",
-                    "email": "ydlr@ydlr.io"
-                }
-            ],
-            "description": "Autopopulate submenus based on taxonomy, post type, or post hierarchy.",
-            "time": "2018-09-05T01:35:59+00:00"
-        },
-        {
             "name": "roots/wp-password-bcrypt",
             "version": "1.0.0",
             "source": {
@@ -1845,7 +1885,7 @@
         },
         {
             "name": "wpackagist-plugin/autodescription",
-            "version": "3.0.6",
+            "version": "3.1.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/autodescription/",
@@ -1853,7 +1893,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/autodescription.zip?timestamp=1525625897",
+                "url": "https://downloads.wordpress.org/plugin/autodescription.zip?timestamp=1537015468",
                 "reference": null,
                 "shasum": null
             },
@@ -1985,15 +2025,15 @@
         },
         {
             "name": "wpackagist-plugin/optinmonster",
-            "version": "1.5.0",
+            "version": "1.5.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/optinmonster/",
-                "reference": "trunk"
+                "reference": "tags/1.5.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/optinmonster.zip?timestamp=1533573529",
+                "url": "https://downloads.wordpress.org/plugin/optinmonster.1.5.1.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -2065,15 +2105,15 @@
         },
         {
             "name": "wpackagist-plugin/query-monitor",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/query-monitor/",
-                "reference": "tags/3.1.0"
+                "reference": "tags/3.1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/query-monitor.3.1.0.zip",
+                "url": "https://downloads.wordpress.org/plugin/query-monitor.3.1.1.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -2085,15 +2125,15 @@
         },
         {
             "name": "wpackagist-plugin/redirection",
-            "version": "3.4",
+            "version": "3.4.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/redirection/",
-                "reference": "tags/3.4"
+                "reference": "tags/3.4.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/redirection.3.4.zip",
+                "url": "https://downloads.wordpress.org/plugin/redirection.3.4.1.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -2185,15 +2225,15 @@
         },
         {
             "name": "wpackagist-plugin/social-warfare",
-            "version": "3.2.2",
+            "version": "3.3.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/social-warfare/",
-                "reference": "tags/3.2.2"
+                "reference": "tags/3.3.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/social-warfare.3.2.2.zip",
+                "url": "https://downloads.wordpress.org/plugin/social-warfare.3.3.2.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -2265,15 +2305,15 @@
         },
         {
             "name": "wpackagist-plugin/wp-security-audit-log",
-            "version": "3.2.3.2",
+            "version": "3.2.3.3",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wp-security-audit-log/",
-                "reference": "tags/3.2.3.2"
+                "reference": "tags/3.2.3.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wp-security-audit-log.3.2.3.2.zip",
+                "url": "https://downloads.wordpress.org/plugin/wp-security-audit-log.3.2.3.3.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -2301,46 +2341,6 @@
             ],
             "description": "WP Smush Pro",
             "homepage": "https://premium.wpmudev.org/project/wp-smush-pro/"
-        },
-        {
-            "name": "ydlr/wpforms-ga",
-            "version": "0.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ydlr/wpforms-ga.git",
-                "reference": "59f4cf9a6acb378b1bdce975f6108975de217ff5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ydlr/wpforms-ga/zipball/59f4cf9a6acb378b1bdce975f6108975de217ff5",
-                "reference": "59f4cf9a6acb378b1bdce975f6108975de217ff5",
-                "shasum": ""
-            },
-            "require": {
-                "composer/installers": ">=1.0",
-                "theiconic/php-ga-measurement-protocol": "^2.6"
-            },
-            "require-dev": {
-                "squizlabs/php_codesniffer": "^3.2"
-            },
-            "type": "wordpress-plugin",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "ydlr",
-                    "email": "ydlr@ydlr.io"
-                }
-            ],
-            "description": "Google Analytics for WPForms",
-            "keywords": [
-                "analytics",
-                "wordpress",
-                "wpforms"
-            ],
-            "time": "2018-08-28T01:21:09+00:00"
         }
     ],
     "packages-dev": [
