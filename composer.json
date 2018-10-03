@@ -66,7 +66,7 @@
     "wpmudev/wp-smush-pro": "*",
     "wpackagist-plugin/google-apps-login": "^3.2",
     "hipdevteam/bb-post-categories": "^1.0",
-	"wpackagist-plugin/addfunc-head-footer-code": "^1.5",
+	"wpackagist-plugin/addfunc-head-footer-code": ">=1.5",
 	"wpackagist-plugin/fatal-error-notify":"^1.3"
   },
   "require-dev": {
