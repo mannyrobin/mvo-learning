@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ea5f2a88d926d5a80aa05b168e7cbf08",
+    "content-hash": "e4b7efbf0eded0b1f016e15552d1ffb3",
     "packages": [
         {
             "name": "a5hleyrich/wp-background-processing",
@@ -1865,15 +1865,15 @@
         },
         {
             "name": "wpackagist-plugin/addfunc-head-footer-code",
-            "version": "1.5",
+            "version": 2,
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/addfunc-head-footer-code/",
-                "reference": "tags/1.5"
+                "reference": "tags/2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/addfunc-head-footer-code.1.5.zip",
+                "url": "https://downloads.wordpress.org/plugin/addfunc-head-footer-code.2.zip",
                 "reference": null,
                 "shasum": null
             },
