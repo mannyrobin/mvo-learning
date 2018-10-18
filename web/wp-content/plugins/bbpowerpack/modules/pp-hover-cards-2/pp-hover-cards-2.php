@@ -256,6 +256,21 @@ FLBuilder::register_module('PPHoverCardsModuleNew', array(
             'hover_card_title_typography'  => array(
                 'title' => __('Title', 'bb-powerpack'),
                 'fields'    => array(
+					'hover_card_title_tag'	=> array(
+						'type'		=> 'select',
+						'label'		=> __('HTML Tag', 'bb-powerpack'),
+						'default'	=> 'h2',
+						'options'	=> array(
+							'h1'		=> 'h1',
+							'h2'		=> 'h2',
+							'h3'		=> 'h3',
+							'h4'		=> 'h4',
+							'h5'		=> 'h5',
+							'h6'		=> 'h6',
+							'div'		=> 'div',
+							'p'			=> 'p'
+						)
+					),
                     'hover_card_title_font'    => array(
                         'type'      => 'font',
                         'default'		=> array(
@@ -272,7 +287,7 @@ FLBuilder::register_module('PPHoverCardsModuleNew', array(
                     	'type' 			=> 'pp-multitext',
                     	'label' 		=> __('Font Size', 'bb-powerpack'),
                         'default'       => array(
-                            'desktop'       => 24,
+                            'desktop'       => '',
                             'tablet'        => '',
                             'mobile'        => ''
                         ),
@@ -307,7 +322,7 @@ FLBuilder::register_module('PPHoverCardsModuleNew', array(
                     	'type' 			=> 'pp-multitext',
                     	'label' 		=> __('Line Height', 'bb-powerpack'),
                         'default'       => array(
-                            'desktop'       => 1.2,
+                            'desktop'       => '',
                             'tablet'        => '',
                             'mobile'        => ''
                         ),
@@ -358,7 +373,7 @@ FLBuilder::register_module('PPHoverCardsModuleNew', array(
                     	'type' 			=> 'pp-multitext',
                     	'label' 		=> __('Font Size', 'bb-powerpack'),
                         'default'       => array(
-                            'desktop' => 14,
+                            'desktop' => '',
                             'tablet' => '',
                             'mobile' => ''
                         ),
@@ -392,7 +407,7 @@ FLBuilder::register_module('PPHoverCardsModuleNew', array(
                     	'type' 			=> 'pp-multitext',
                     	'label' 		=> __('Line Height', 'bb-powerpack'),
                         'default'       => array(
-                            'desktop' => 1.4,
+                            'desktop' => '',
                             'tablet' => '',
                             'mobile' => ''
                         ),
@@ -516,7 +531,7 @@ FLBuilder::register_settings_form('pp_hover_card_2_form', array(
                             'connections'   => array( 'url' ),
                         ),
                         'link_target'   => array(
-                            'type'      => 'pp-switch',
+                            'type'      => 'select',
                             'label'     => __('Link Target', 'bb-powerpack'),
                             'default'   => '_self',
                             'options'   => array(
@@ -544,7 +559,7 @@ FLBuilder::register_settings_form('pp_hover_card_2_form', array(
                             ),
                             'toggle'    => array(
                                 'color' => array(
-                                    'fields'    => array('hover_card_bg_color'),
+                                    'fields'    => array('hover_card_bg_color', 'hover_card_bg_hover'),
                                 ),
                                 'image' => array(
                                     'fields'    => array('hover_card_box_image'),
@@ -563,9 +578,19 @@ FLBuilder::register_settings_form('pp_hover_card_2_form', array(
                                 'property'  => 'background'
                             ),
                         ),
+                        'hover_card_bg_hover'    => array(
+                            'type'      => 'color',
+                            'label'     => __('Background Hover Color', 'bb-powerpack'),
+                            'default'   => '',
+                            'show_reset'    => true,
+                            'preview'   => array(
+                                'type'  => 'none',
+                            ),
+                        ),
                         'hover_card_box_image'     => array(
-                            'type'      => 'photo',
-                            'label'     => __('Background Image', 'bb-powerpack'),
+                            'type'      	=> 'photo',
+							'label'     	=> __('Background Image', 'bb-powerpack'),
+							'connections'   => array( 'photo' ),
                         ),
                         'hover_card_box_border'    => array(
                             'type'      => 'pp-switch',
@@ -688,7 +713,8 @@ FLBuilder::register_settings_form('pp_hover_card_2_form', array(
                         'hover_card_icon_color'   => array(
                             'type'      => 'color',
                             'label'     => __('Color', 'bb-powerpack'),
-                            'default'   => '000000',
+							'default'   => '000000',
+							'show_reset'	=> true
                         ),
                     )
                 ),
@@ -698,12 +724,14 @@ FLBuilder::register_settings_form('pp_hover_card_2_form', array(
                         'hover_card_title_color'       => array(
                             'type'          => 'color',
                             'label'         => __('Color', 'bb-powerpack'),
-                            'default'       => '000000',
+							'default'       => '000000',
+							'show_reset'	=> true
                         ),
                         'hover_card_title_color_h'       => array(
                             'type'          => 'color',
                             'label'         => __('Color Hover', 'bb-powerpack'),
-                            'default'       => '000000',
+							'default'       => '000000',
+							'show_reset'	=> true
                         ),
                     ),
                 ),
@@ -713,12 +741,14 @@ FLBuilder::register_settings_form('pp_hover_card_2_form', array(
                         'hover_card_description_color'       => array(
                             'type'          => 'color',
                             'label'         => __('Color', 'bb-powerpack'),
-                            'default'       => '000000',
+							'default'       => '000000',
+							'show_reset'	=> true
                         ),
                         'hover_card_description_color_h'       => array(
                             'type'          => 'color',
                             'label'         => __('Color Hover', 'bb-powerpack'),
-                            'default'       => '000000',
+							'default'       => '000000',
+							'show_reset'	=> true
                         ),
                     ),
                 ),

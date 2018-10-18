@@ -31,13 +31,11 @@ class PPImageCarouselModule extends FLBuilderModule {
 		$this->add_js('jquery-magnificpopup');
 		$this->add_css('jquery-magnificpopup');
 
-		$this->add_css( 'swiper-style', $this->url . 'css/swiper.min.css' );
-	
-		$this->add_js( 'swiper-script', $this->url . 'js/swiper.jquery.min.js', array('jquery'), BB_POWERPACK_VER );
+		$this->add_css( 'jquery-swiper' );
+		$this->add_js( 'jquery-swiper' );
 
-		$this->add_css('font-awesome');
+		$this->add_css( BB_POWERPACK()->fa_css );
     }
-
 
 	/**
 	 * @method update
@@ -86,6 +84,7 @@ class PPImageCarouselModule extends FLBuilderModule {
 		$ids        = $this->settings->carousel_photos;
 		$medium_w   = get_option('medium_size_w');
 		$large_w    = get_option('large_size_w');
+		$thumb_size = isset( $this->settings->thumb_size ) ? $this->settings->thumb_size : 'thumbnail';
 
 		/* Template Cache */
 		$image_from_template = false;
@@ -139,13 +138,17 @@ class PPImageCarouselModule extends FLBuilderModule {
 				$data->description = $photo->description;
 				$data->title = $photo->title;
 
+				$image_size = $this->settings->image_size;
 
 				// Grid photo src
-				if($this->settings->image_size == 'thumbnail' && isset($photo->sizes->thumbnail)) {
+				if($image_size == 'thumbnail' && isset($photo->sizes->thumbnail)) {
 					$data->src = $photo->sizes->thumbnail->url;
 				}
-				elseif($this->settings->image_size == 'medium' && isset($photo->sizes->medium)) {
+				elseif($image_size == 'medium' && isset($photo->sizes->medium)) {
 					$data->src = $photo->sizes->medium->url;
+				}
+				elseif( isset( $photo->sizes->{$image_size} ) ) {
+					$data->src = $photo->sizes->{$image_size}->url;
 				}
 				else {
 					$data->src = $photo->sizes->full->url;
@@ -157,6 +160,17 @@ class PPImageCarouselModule extends FLBuilderModule {
 				}
 				else {
 					$data->link = $photo->sizes->full->url;
+				}
+
+				if ( isset( $this->settings->lightbox_image_size ) && $this->settings->lightbox_image_size == 'full' ) {
+					$data->link = $photo->sizes->full->url;
+				}
+
+				// Set thumbnail link
+				if ( isset( $photo->sizes->{$thumb_size} ) ) {
+					$data->thumb_link = $photo->sizes->{$thumb_size}->url;
+				} else {
+					$data->thumb_link = $photo->sizes->full->url;
 				}
 
 				/* Add Custom field attachment data to object */
@@ -201,19 +215,29 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 						),
 						'toggle'	=> array(
 							'carousel'	=> array(
-								'fields'	=> array('columns', 'pagination_type')
+								'fields'	=> array('pagination_type')
 							),
 							'slideshow'	=> array(
 								'sections'	=> array('thumbnails_columns')
 							),
 							'coverflow'	=> array(
-								'fields'	=> array('columns', 'pagination_type')
+								'fields'	=> array('pagination_type')
 							)
 						)
 					),
+					'effect'   => array(
+						'type'          => 'select',
+						'label'         => __( 'Effect', 'bb-powerpack' ),
+						'default'       => 'slide',
+						'options'       => array(
+							'slide'       	=> __( 'Slide', 'bb-powerpack' ),
+							'fade'			=> __( 'Fade', 'bb-powerpack' ),
+							'cube'			=> __( 'Cube', 'bb-powerpack' ),
+						),
+					),
 					'columns'    => array(
 						'type' 			=> 'unit',
-						'label' 		=> __('Slider Per View', 'bb-powerpack'),
+						'label' 		=> __('Slides Per View', 'bb-powerpack'),
 						'size'          => '5',
 						'default'		=> 3,
 						'responsive' => array(
@@ -223,6 +247,20 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 								'responsive' => '1',
 							),
 						),
+					),
+					'slides_to_scroll'    => array(
+						'type' 			=> 'unit',
+						'label' 		=> __('Slides to Scroll', 'bb-powerpack'),
+						'size'          => '5',
+						'default'		=> 1,
+						'responsive' 	=> array(
+							'placeholder' 	=> array(
+								'default' 		=> '1',
+								'medium' 		=> '1',
+								'responsive' 	=> '1',
+							),
+						),
+						'help'	=> __('Set numbers of slides to move at a time.', 'bb-powerpack')
 					),
 					'spacing' => array(
 						'type' 			=> 'unit',
@@ -345,7 +383,17 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 							'169'			=> __('16:9', 'bb-powerpack'),
 							'219'			=> __('21:9', 'bb-powerpack'),
 						),
-					),	
+					),
+					'thumb_size'	=> array(
+						'type'			=> 'select',
+						'label'			=> __('Size / Quality', 'bb-powerpack'),
+						'default'		=> 'thumbnail',
+						'options'		=> array(
+							'thumbnail'		=> __('Small', 'bb-powerpack'),
+							'medium'		=> __('Medium', 'bb-powerpack'),
+							'large'			=> __('Large', 'bb-powerpack'),
+						)
+					)
 				)
 			)
         )
@@ -395,9 +443,30 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 						'toggle'	=> array(
 							'custom-link'	=> array(
 								'fields'	=> array('custom_link_target')
+							),
+							'lightbox'	=> array(
+								'fields'	=> array( 'lightbox_image_size', 'lightbox_caption' )
 							)
 						),
 						'help'	=> __('Custom Link: You can set link to images directly in media modal where you upload them.', 'bb-powerpack')
+					),
+					'lightbox_image_size'	=> array(
+						'type'		=> 'pp-switch',
+						'label'		=> __('Lightbox Image Size', 'bb-powerpack'),
+						'default'	=> 'large',
+						'options'	=> array(
+							'large'		=> __('Large', 'bb-powerpack'),
+							'full'		=> __('Full', 'bb-powerpack')
+						)
+					),
+					'lightbox_caption'	=> array(
+						'type'		=> 'pp-switch',
+						'label'		=> __('Show Caption in Lightbox', 'bb-powerpack'),
+						'default'	=> 'yes',
+						'options'	=> array(
+							'yes'		=> __('Yes', 'bb-powerpack'),
+							'no'		=> __('No', 'bb-powerpack')
+						)
 					),
 					'custom_link_target' => array(
 						'type'		=> 'select',
@@ -416,16 +485,6 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 			'slide_settings'    => array(
 				'title'         => __('Slide Settings', 'bb-powerpack'),
 				'fields'        => array(
-					'effect'   => array(
-						'type'          => 'select',
-						'label'         => __( 'Effect', 'bb-powerpack' ),
-						'default'       => 'slide',
-						'options'       => array(
-							'slide'       	=> __( 'Slide', 'bb-powerpack' ),
-							'fade'			=> __( 'Fade', 'bb-powerpack' ),
-							'cube'			=> __( 'Cube', 'bb-powerpack' ),
-						),
-					),
 					'transition_speed' => array(
 						'type'          => 'text',
 						'label'         => __( 'Transition Speed', 'bb-powerpack' ),
@@ -574,7 +633,7 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 						'default'       => 0,
 						'preview'         => array(
 							'type'            => 'css',
-							'selector'        => '.pp-image-carousel-item, .pp-image-carousel .pp-image-carousel-content .pp-carousel-img',
+							'selector'        => '.pp-image-carousel-item, .pp-image-overlay, .pp-carousel-image-container',
 							'property'        => 'border-radius',
 							'unit'            => 'px'
 						)
@@ -598,20 +657,6 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 							'unit' 		=> 'px'
 						),
                     ),
-					'image_border_radius'	=> array(
-						'type'          => 'text',
-						'label'         => __( 'Round Corners', 'bb-powerpack' ),
-						'description'   => 'px',
-						'size'      	=> 5,
-						'maxlength' 	=> 3,
-						'default'       => '0',
-						'preview'         => array(
-							'type'            => 'css',
-							'selector'        => '.pp-image-carousel-item',
-							'property'        => 'border-radius',
-							'unit'            => 'px'
-						)
-					),
 				)
 			),
 			'overlay_style'	=> array(
@@ -775,15 +820,17 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 						)
 					),
                     'arrow_bg_color'       => array(
-						'type'      => 'color',
-                        'label'     => __( 'Background Color', 'bb-powerpack' ),
-						'show_reset' => true,
-                        'default'   => 'eaeaea',
+						'type'      	=> 'color',
+                        'label'     	=> __( 'Background Color', 'bb-powerpack' ),
+						'show_reset' 	=> true,
+						'show_alpha'	=> true,
+                        'default'   	=> 'eaeaea',
 					),
                     'arrow_bg_hover'       => array(
 						'type'      => 'color',
                         'label'     => __( 'Background Hover Color', 'bb-powerpack' ),
 						'show_reset' => true,
+						'show_alpha'	=> true,
                         'default'   => '4c4c4c'
 					),
 					'arrow_color'       => array(

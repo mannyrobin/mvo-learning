@@ -1,7 +1,7 @@
 <?php
 
 FLBuilderModel::default_settings($settings, array(
-	'data_source'		=> 'custom_query',
+	'data_source'		=> is_post_type_archive() ? 'main_query' : 'custom_query',
 	'post_type' 		=> 'post',
 	'order_by'  		=> 'date',
 	'order'     		=> 'DESC',
@@ -25,7 +25,8 @@ FLBuilderModel::default_settings($settings, array(
 	'product_rating'	=> 'yes',
 	'product_price'		=> 'yes',
 	'product_button'	=> 'yes',
-	'product_button_text'	=> __('Add to Cart', 'bb-powerpack')
+	'product_button_text'	=> __('Add to Cart', 'bb-powerpack'),
+	'fallback_image'	=> 'default'
 ));
 
 $settings = apply_filters( 'pp_cg_loop_settings', $settings );
@@ -41,7 +42,6 @@ do_action( 'pp_cg_loop_settings_before_form', $settings ); // e.g Add custom FLB
 	FLBuilder::render_settings_field('data_source', array(
 		'type'          => 'select',
 		'label'         => __('Source', 'bb-powerpack'),
-		'default'		=> 'custom_query',
 		'options'       => array(
 			'custom_query'  => __('Custom Query', 'bb-powerpack'),
 			'main_query'    => __('Main Query', 'bb-powerpack'),
@@ -50,12 +50,40 @@ do_action( 'pp_cg_loop_settings_before_form', $settings ); // e.g Add custom FLB
 			'custom_query'  => array(
 				'sections'		=> array( 'general', 'filter' ),
 				'fields'        => array( 'posts_per_page' )
+			),
+			'acf_relationship'	=> array(
+				'sections'			=> array('acf_relationship'),
+				'fields'        	=> array( 'posts_per_page' )
 			)
 		)
 	), $settings);
 	?>
 	</table>
 </div>
+
+<div class="fl-loop-data-source-acf fl-loop-data-source" data-source="acf_relationship">
+	<div id="fl-builder-settings-section-acf_relationship" class="fl-builder-settings-section">
+		<table class="fl-form-table">
+		<?php
+		FLBuilder::render_settings_field('data_source_acf_relational_type', array(
+			'type'		=> 'select',
+			'label'		=> __( 'Type', 'bb-powerpack' ),
+			'default'       => 'relationship',
+			'options'       => array(
+				'relationship'  => __( 'Relationship', 'bb-powerpack' ),
+				'user'          => __( 'User', 'bb-powerpack' ),
+			),
+		), $settings);
+
+		FLBuilder::render_settings_field('data_source_acf_relational_key', array(
+			'type'          => 'text',
+			'label'         => __( 'Key', 'bb-powerpack' ),
+		), $settings);
+		?>
+		</table>
+	</div>
+</div>
+
 <div class="fl-custom-query fl-loop-data-source" data-source="custom_query">
 	<div id="fl-builder-settings-section-general" class="fl-builder-settings-section">
 		<h3 class="fl-builder-settings-title"><?php _e('Custom Query', 'bb-powerpack'); ?></h3>
@@ -186,6 +214,21 @@ do_action( 'pp_cg_loop_settings_before_form', $settings ); // e.g Add custom FLB
 	<h3 class="fl-builder-settings-title"><?php esc_html_e('Content Settings', 'bb-powerpack'); ?></h3>
 	<table class="fl-form-table">
 		<?php
+		FLBuilder::render_settings_field('show_title', array(
+			'type'          => 'pp-switch',
+			'label'         => __('Show Title', 'bb-powerpack'),
+			'default'       => 'yes',
+			'options'       => array(
+				'yes'          	=> __('Yes', 'bb-powerpack'),
+				'no'         	=> __('No', 'bb-powerpack'),
+			),
+			'toggle'	=> array(
+				'yes'		=> array(
+					'sections'	=> array('title_typography')
+				)
+			)
+		), $settings);
+
 		FLBuilder::render_settings_field('show_content', array(
 			'type'          => 'pp-switch',
 			'label'         => __('Show Content', 'bb-powerpack'),
@@ -239,12 +282,6 @@ do_action( 'pp_cg_loop_settings_before_form', $settings ); // e.g Add custom FLB
 				'button'        => __( 'Button', 'bb-powerpack' ),
 				'box'         	=> __( 'Box', 'bb-powerpack' ),
 			),
-			'toggle'		=> array(
-				'button' 	=> array(
-					'sections'	=> array('button_colors', 'button_typography'),
-					'fields'	=> array('more_link_text')
-				)
-			)
 		),$settings);
 
 		FLBuilder::render_settings_field('more_link_text', array(
@@ -362,6 +399,61 @@ do_action( 'pp_cg_loop_settings_before_form', $settings ); // e.g Add custom FLB
 </div>
 <?php endif; ?>
 
+<?php if ( class_exists( 'Tribe__Events__Main' ) && class_exists( 'FLThemeBuilderLoader' ) ) : ?>
+<div id="fl-builder-settings-section-events-calendar-settings" class="fl-builder-settings-section">
+	<h3 class="fl-builder-settings-title"><?php esc_html_e('The Events Calendar', 'bb-powerpack'); ?></h3>
+	<table class="fl-form-table">
+		<?php
+		FLBuilder::render_settings_field( 'event_enable', array(
+			'type'		=> 'pp-switch',
+			'label'		=> __('Enable Events Calendar', 'bb-powerpack'),
+			'default'	=> 'no',
+			'options'	=> array(
+				'yes'		=> __('Yes', 'bb-powerpack'),
+				'no'		=> __('No', 'bb-powerpack'),
+			),
+			'toggle'	=> array(
+				'yes'		=> array(
+					'sections'	=> array( 'events_calendar_style' ),
+					'fields'	=> array( 'event_date', 'event_venue', 'event_cost' )
+				)
+			)
+		), $settings );
+
+		FLBuilder::render_settings_field( 'event_date', array(
+			'type'		=> 'pp-switch',
+			'label'		=> __('Show Event Date', 'bb-powerpack'),
+			'default'	=> 'no',
+			'options'	=> array(
+				'yes'		=> __('Yes', 'bb-powerpack'),
+				'no'		=> __('No', 'bb-powerpack'),
+			)
+		), $settings );
+
+		FLBuilder::render_settings_field( 'event_venue', array(
+			'type'		=> 'pp-switch',
+			'label'		=> __('Show Event Venue', 'bb-powerpack'),
+			'default'	=> 'no',
+			'options'	=> array(
+				'yes'		=> __('Yes', 'bb-powerpack'),
+				'no'		=> __('No', 'bb-powerpack'),
+			)
+		), $settings );
+
+		FLBuilder::render_settings_field( 'event_cost', array(
+			'type'		=> 'pp-switch',
+			'label'		=> __('Show Event Cost', 'bb-powerpack'),
+			'default'	=> 'no',
+			'options'	=> array(
+				'yes'		=> __('Yes', 'bb-powerpack'),
+				'no'		=> __('No', 'bb-powerpack'),
+			)
+		), $settings );
+		?>
+	</table>
+</div>
+<?php endif; ?>
+
 <div id="fl-builder-settings-section-image-settings" class="fl-builder-settings-section">
 	<h3 class="fl-builder-settings-title"><?php esc_html_e('Featured Image', 'bb-powerpack'); ?></h3>
 	<table class="fl-form-table">
@@ -376,7 +468,7 @@ do_action( 'pp_cg_loop_settings_before_form', $settings ); // e.g Add custom FLB
 			),
 			'toggle'	=> array(
 				'yes'	=> array(
-					'fields'	=> array('image_thumb_size', 'image_thumb_crop')
+					'fields'	=> array('image_thumb_size', 'image_thumb_crop', 'fallback_image')
 				)
 			)
 		),$settings);
@@ -400,6 +492,28 @@ do_action( 'pp_cg_loop_settings_before_form', $settings ); // e.g Add custom FLB
 				'circle'        => __( 'Circle', 'bb-powerpack' )
 			)
 		),$settings);
+
+		FLBuilder::render_settings_field('fallback_image', array(
+			'type'		=> 'select',
+			'label'		=> __('Fallback Image', 'bb-powerpack'),
+			'default'	=> 'default',
+			'options'	=> array(
+				'none'		=> __('None', 'bb-powerpack'),
+				'default'	=> __('Default', 'bb-powerpack'),
+				'custom'	=> __('Custom', 'bb-powerpack')
+			),
+			'help'		=> __('If a feature image is not available in post, it will display the first image from the post or default image placeholder or a custom image. You can choose None to do not display fallback image.', 'bb-powerpack'),
+			'toggle'	=> array(
+				'custom'	=> array(
+					'fields'	=> array('fallback_image_custom')
+				)
+			)
+		), $settings);
+
+		FLBuilder::render_settings_field('fallback_image_custom', array(
+			'type'		=> 'photo',
+			'label'		=> __('Custom Fallback Image', 'bb-powerpack'),
+		), $settings);
 		?>
 	</table>
 </div>
@@ -447,7 +561,7 @@ do_action( 'pp_cg_loop_settings_before_form', $settings ); // e.g Add custom FLB
 		FLBuilder::render_settings_field('post_taxonomies', array(
 			'type'		=> 'select',
 			'label'		=> __('Select Taxonomy', 'bb-powerpack'),
-			'default'	=> '',
+			'default'	=> 'none',
 			'options'   => array()
 		), $settings);
 
@@ -468,7 +582,65 @@ do_action( 'pp_cg_loop_settings_after_form', $settings ); // e.g Add custom FLBu
 
 <script type="text/javascript">
 	;(function($) {
+		<?php if ( 'fl-theme-layout' == get_post_type() ) {
+			$post_type = '';
+			$taxonomy = '';
+			$location = FLThemeBuilderRulesLocation::get_preview_location( get_the_ID() );
+			$location_frags = explode( ':', $location );
+
+			if ( $location_frags[0] == 'post' ) {
+				$post_type = $location_frags[1];
+			}
+			if ( $location_frags[0] == 'archive' ) {
+				$post_type = $location_frags[1];
+			}
+			if ( $location_frags[0] == 'taxonomy' ) {
+				$taxonomy = $location_frags[1];
+
+				global $wp_taxonomies;
+				$post_type_array = isset( $wp_taxonomies[ $taxonomy ] ) ? $wp_taxonomies[ $taxonomy ]->object_type : array();
+				if ( ! empty( $post_type_array ) ) {
+					$post_type = $post_type_array[0];
+				}
+			}
+		?>
+		function pp_update_taxonomies() {
+			if ( 'main_query' !== $( '.fl-builder-pp-content-grid-settings select[name="data_source"]' ).val() ) {
+				return;
+			}
+			var post_grid_filters = $('.fl-builder-pp-content-grid-settings select[name="post_grid_filters"]');
+			var post_taxonomies = $('.fl-builder-pp-content-grid-settings select[name="post_taxonomies"]');
+			var selected_filter = '<?php echo $settings->post_grid_filters; ?>';
+			var selected_taxonomy = '<?php echo $settings->post_taxonomies; ?>';
+			var post_type = '<?php echo $post_type; ?>';
+			$('.fl-builder-pp-content-grid-settings select[name="post_type"] option').removeAttr('selected');
+			$('.fl-builder-pp-content-grid-settings select[name="post_type"] option[value="'+post_type+'"]').attr('selected', 'selected');
+			$('.fl-builder-pp-content-grid-settings select[name="post_type"]').trigger('change');
+			if ( '' !== post_type ) {
+				$.ajax({
+					type: 'post',
+					data: { action: 'get_post_tax', post_type_slug: post_type },
+					url: ajaxurl,
+					success: function(res) {
+						if ( res !== 'undefined' || res !== '' ) {
+							post_grid_filters.html(res);
+							post_grid_filters.find('option[value="'+selected_filter+'"]').attr('selected', 'selected');
+							post_taxonomies.html(res);
+							post_taxonomies.find('option[value="'+selected_taxonomy+'"]').attr('selected', 'selected');
+						}
+					}
+				});
+			}
+		}
+		pp_update_taxonomies();
+
+		$( '.fl-builder-pp-content-grid-settings select[name="data_source"]' ).on( 'change', pp_update_taxonomies );
+		<?php } ?>
+
 		$('.fl-builder-pp-content-grid-settings select[name="post_type"]').on('change', function() {
+			if ( $( '.fl-builder-pp-content-grid-settings select[name="data_source"]' ).val() !== 'custom_query' ) {
+				return;
+			}
 			var post_type_slug = $(this).val();
 			var post_grid_filters = $('.fl-builder-pp-content-grid-settings select[name="post_grid_filters"]');
 			var post_taxonomies = $('.fl-builder-pp-content-grid-settings select[name="post_taxonomies"]');
@@ -476,7 +648,10 @@ do_action( 'pp_cg_loop_settings_after_form', $settings ); // e.g Add custom FLBu
 			var selected_taxonomy = '<?php echo $settings->post_taxonomies; ?>';
 			$.ajax({
 				type: 'post',
-				data: {action: 'get_post_tax', post_type_slug: post_type_slug},
+				data: {
+					action: 'pp_get_taxonomies',
+					post_type: post_type_slug
+				},
 				url: ajaxurl,
 				success: function(res) {
 					if ( res !== 'undefined' || res !== '' ) {

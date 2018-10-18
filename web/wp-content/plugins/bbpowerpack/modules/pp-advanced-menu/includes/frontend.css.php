@@ -30,7 +30,7 @@ $toggle_height 	= 28;
 	<?php if( $settings->link_bottom_spacing ) { ?>margin-bottom: <?php echo $settings->link_bottom_spacing; ?>px;<?php } ?>
 }
 
-.pp-advanced-menu .pp-has-submenu-container a > span {
+.fl-node-<?php echo $id; ?> .pp-advanced-menu .pp-has-submenu-container a > span {
 	<?php if( $settings->submenu_hover_toggle != 'none' ) { ?>
 		padding-right: 38px;
 	<?php } else { ?>
@@ -276,9 +276,6 @@ if( $global_settings->responsive_enabled ) { ?>
 					<?php } ?>
 
 					<?php if( $settings->submenu_hover_toggle == 'none' ) { ?>
-						.fl-node-<?php echo $id; ?> .pp-advanced-menu .pp-has-submenu-container a {
-							padding-right: <?php echo $toggle_spacing ?>px;
-						}
 						.fl-node-<?php echo $id; ?> .pp-advanced-menu .pp-menu-toggle {
 							display: none;
 						}
@@ -365,9 +362,6 @@ if( $global_settings->responsive_enabled ) { ?>
 		}
 
 		<?php if( $settings->submenu_hover_toggle == 'none' ) { ?>
-			.fl-node-<?php echo $id; ?> .pp-advanced-menu .pp-has-submenu-container a {
-				padding-right: <?php echo $toggle_spacing ?>px;
-			}
 			.pp-advanced-menu .pp-menu-toggle {
 				display: none;
 			}
@@ -519,7 +513,7 @@ if( !empty( $settings->background_hover_color ) || $settings->link_hover_color )
 
 /**
  * Sub Menu
-**/
+ **/
 .fl-node-<?php echo $id; ?> .sub-menu {
 	<?php if ( 'yes' == $settings->submenu_box_shadow_display ) { ?>
 	-webkit-box-shadow: <?php echo $settings->submenu_box_shadow['horizontal']; ?>px <?php echo $settings->submenu_box_shadow['vertical']; ?>px <?php echo $settings->submenu_box_shadow['blur']; ?>px <?php echo $settings->submenu_box_shadow['spread']; ?>px <?php echo pp_hex2rgba( '#'.$settings->submenu_box_shadow_color, $settings->submenu_box_shadow_opacity / 100 ); ?>;
@@ -535,6 +529,11 @@ if( !empty( $settings->background_hover_color ) || $settings->link_hover_color )
 	<?php if( $settings->submenu_box_border_color ) { ?>border-color: #<?php echo $settings->submenu_box_border_color; ?>;<?php } ?>
 	<?php if ( ! empty( $settings->submenu_container_bg_color ) ) { ?>
 	background-color: #<?php echo $settings->submenu_container_bg_color; ?>;
+	<?php } ?>
+	<?php if ( $settings->submenu_width ) { ?>
+		width: <?php echo $settings->submenu_width; ?>px;
+		margin-left: auto;
+		margin-right: auto;
 	<?php } ?>
 }
 
@@ -554,9 +553,8 @@ if( !empty( $settings->background_hover_color ) || $settings->link_hover_color )
 	border-style: <?php echo $settings->submenu_border_style; ?>;
 	border-bottom-width: <?php echo ( $settings->submenu_border_size != '' && $settings->submenu_border_color ) ? $settings->submenu_border_size : ''; ?>px;
 	border-color: <?php echo '#' . $settings->submenu_border_color; ?>;
-	background-color: <?php echo '#' . $settings->submenu_background_color; ?>;
+	background-color: <?php echo ( false === strpos( $settings->submenu_background_color, 'rgb' ) ) ? '#' . $settings->submenu_background_color : $settings->submenu_background_color; ?>;
 	color: #<?php echo empty($settings->submenu_link_color) ? $settings->link_color : $settings->submenu_link_color; ?>;
-
 }
 
 .fl-node-<?php echo $id; ?> .sub-menu > li:last-child > a,
@@ -570,7 +568,7 @@ if( !empty( $settings->background_hover_color ) || $settings->link_hover_color )
 .fl-node-<?php echo $id; ?> .sub-menu > li > .pp-has-submenu-container > a:focus,
 .fl-node-<?php echo $id; ?> .sub-menu > li.current-menu-item > a,
 .fl-node-<?php echo $id; ?> .sub-menu > li.current-menu-item > .pp-has-submenu-container > a {
-	background-color: <?php echo '#' . $settings->submenu_background_hover_color; ?>;
+	background-color: <?php echo ( false === strpos( $settings->submenu_background_hover_color, 'rgb' ) ) ? '#' . $settings->submenu_background_hover_color : $settings->submenu_background_hover_color; ?>;
 	color: #<?php echo empty($settings->submenu_link_hover_color) ? $settings->link_hover_color : $settings->submenu_link_hover_color; ?>;
 }
 
@@ -696,7 +694,39 @@ if( isset( $settings->mobile_toggle ) && $settings->mobile_toggle != 'expanded' 
 	   <?php } ?>
 		<?php if( $settings->mobile_toggle_font_size == 'custom' && $settings->mobile_toggle_font_size_custom ) { ?>font-size: <?php echo $settings->mobile_toggle_font_size_custom; ?>px;<?php } ?>
 		text-align: <?php echo $settings->alignment; ?>;
+		<?php
+			$toggle_alignment_desktop = 'center';
+			if ( 'left' == $settings->alignment ) {
+				$toggle_alignment_desktop = 'flex-start';
+			} elseif ( 'right' == $settings->alignment ) {
+				$toggle_alignment_desktop = 'flex-end';
+			}
+		?>
+		-webkit-justify-content: <?php echo $toggle_alignment_desktop; ?>;
+		-ms-flex-pack: <?php echo $toggle_alignment_desktop; ?>;
+		justify-content: <?php echo $toggle_alignment_desktop; ?>;
 	}
+
+	.fl-node-<?php echo $id; ?> .pp-advanced-menu-mobile-toggle .pp-hamburger .pp-hamburger-box,
+	.fl-node-<?php echo $id; ?> .pp-advanced-menu-mobile-toggle .pp-hamburger .pp-hamburger-box .pp-hamburger-inner,
+	.fl-node-<?php echo $id; ?> .pp-advanced-menu-mobile-toggle .pp-hamburger .pp-hamburger-box .pp-hamburger-inner:before,
+	.fl-node-<?php echo $id; ?> .pp-advanced-menu-mobile-toggle .pp-hamburger .pp-hamburger-box .pp-hamburger-inner:after {
+		<?php if ( $settings->mobile_toggle_size !== '' ) { ?>
+			width: <?php echo $settings->mobile_toggle_size; ?>px;
+		<?php } ?>
+	}
+
+	.fl-node-<?php echo $id; ?> .pp-advanced-menu-mobile-toggle .pp-hamburger .pp-hamburger-box .pp-hamburger-inner,
+	.fl-node-<?php echo $id; ?> .pp-advanced-menu-mobile-toggle .pp-hamburger .pp-hamburger-box .pp-hamburger-inner:before,
+	.fl-node-<?php echo $id; ?> .pp-advanced-menu-mobile-toggle .pp-hamburger .pp-hamburger-box .pp-hamburger-inner:after {
+		<?php if( !empty( $settings->mobile_toggle_color ) ) {
+			echo 'background-color: #'. $settings->mobile_toggle_color .';';
+		} ?>
+		<?php if ( $settings->mobile_toggle_thickness !== '' ) { ?>
+			height: <?php echo $settings->mobile_toggle_thickness; ?>px;
+		<?php } ?>
+	}
+
 	.fl-node-<?php echo $id; ?> .pp-advanced-menu-mobile-toggle rect {
 		<?php
 			if( !empty( $settings->link_color ) ) {
@@ -806,6 +836,13 @@ if( isset( $settings->mobile_toggle ) && $settings->mobile_toggle != 'expanded' 
 
 	.fl-node-<?php echo $id; ?> .pp-advanced-menu-mobile-toggle {
 		<?php if( $settings->mobile_toggle_font_size == 'custom' && $settings->mobile_toggle_font_size_custom_responsive ) { ?>font-size: <?php echo $settings->mobile_toggle_font_size_custom_responsive; ?>px;<?php } ?>
+		<?php if ( isset( $settings->responsive_toggle_alignment ) && 'default' != $settings->responsive_toggle_alignment ) { ?>
+		text-align: <?php echo $settings->responsive_toggle_alignment; ?>
+		<?php $toggle_alignment = ( 'left' == $settings->responsive_toggle_alignment ) ? 'flex-start' : ( 'right' == $settings->responsive_toggle_alignment ) ? 'flex-end' : 'center'; ?>
+		-webkit-justify-content: <?php echo $toggle_alignment; ?>;
+		-ms-flex-pack: <?php echo $toggle_alignment; ?>;
+		justify-content: <?php echo $toggle_alignment; ?>;
+		<?php } ?>
 	}
 }
 

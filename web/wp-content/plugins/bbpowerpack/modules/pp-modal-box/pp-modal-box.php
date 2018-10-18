@@ -29,7 +29,7 @@ class PPModalBoxModule extends FLBuilderModule {
             $this->add_css( 'modal-settings-style', $this->url . 'css/settings.css' );
             $this->add_js( 'modal-settings-script', $this->url . 'js/settings.js', array(), '', true );
         }
-        $this->add_js( 'jquery-cookie', $this->url . 'js/jquery.cookie.min.js', array('jquery') );
+        $this->add_js( 'jquery-cookie' );
     }
 
     public static function get_saved_templates()
@@ -282,8 +282,9 @@ FLBuilder::register_module('PPModalBoxModule', array(
         )
     ),
     'settings'       => array( // Tab
-        'title'         => __('Settings', 'bb-powerpack'), // Tab title
-        'sections'      => array( // Tab Sections
+		'title'         => __('Settings', 'bb-powerpack'), // Tab title
+		'description'	=> sprintf( __( 'Your unique modal box ID is %s. If you are using any form in the modal box, you can use the following JS to hide the modal box after submission: %s', 'bb-powerpack' ), '<span class="pp-modal-node-id"></span>', '<input type="text" class="pp-modal-hide-js" onclick="this.select()" readonly />' ),
+		'sections'      => array( // Tab Sections
             'modal_load'    => array(
                 'title'         => __('Trigger', 'bb-powerpack'),
                 'fields'        => array(
@@ -325,7 +326,7 @@ FLBuilder::register_module('PPModalBoxModule', array(
                         'help'              => __('Other - modal can be triggered through any other element(s) on this page by providing modal CSS class to that element.', 'bb-powerpack')
                     ),
                     'modal_css_class'       => array(
-                        'type'                  => 'text',
+                        'type'                  => 'pp-css-class',
                         'label'                 => __('CSS Class', 'bb-powerpack'),
                         'default'               => '',
                         'disabled'              => 'disabled',

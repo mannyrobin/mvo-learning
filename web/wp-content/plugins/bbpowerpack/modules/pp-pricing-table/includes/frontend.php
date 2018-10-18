@@ -10,6 +10,15 @@
 
 <div class="pp-pricing-table pp-pricing-table-spacing-<?php echo $settings->box_spacing; ?>">
 
+	<?php if ( 'yes' == $settings->dual_pricing ) { ?>
+	<div class="pp-pricing-table-switch">
+		<div class="pp-pricing-table-buttons">
+			<a href="javascript:void(0)" class="pp-pricing-table-button pp-pricing-button-1 pp-pricing-button-active" data-activate-price="primary"><?php echo $settings->dp_button_1_text; ?></a>
+			<a href="javascript:void(0)" class="pp-pricing-table-button pp-pricing-button-2" data-activate-price="secondary"><?php echo $settings->dp_button_2_text; ?></a>
+		</div>
+	</div>
+	<?php } ?>
+
 	<?php if( $settings->pricing_table_style == 'matrix' ) { ?>
 		<div class="pp-pricing-table-col pp-pricing-table-col-<?php echo $columns; ?> pp-pricing-table-matrix">
 			<div class="pp-pricing-table-column">
@@ -18,9 +27,11 @@
 					&nbsp;
 				</div>
 				<ul class="pp-pricing-table-features">
-					<?php if (!empty($settings->matrix_items)) foreach ($settings->matrix_items as $item) : ?>
-					<li><?php echo trim($item); ?></li>
-					<?php endforeach; ?>
+					<?php if ( ! empty( $settings->matrix_items ) ) : $item_count = 0; ?>
+						<?php foreach ($settings->matrix_items as $item) : $item_count++; ?>
+						<li class="pp-pricing-table-item-<?php echo $item_count; ?>"><?php echo trim( $item ); ?></li>
+						<?php endforeach; ?>
+					<?php endif; ?>
 				</ul>
 			</div>
 		</div>
@@ -62,16 +73,28 @@
 				<?php if( $settings->title_position == 'above' ) { ?>
 					<<?php echo $settings->title_tag; ?> class="pp-pricing-table-title"><?php echo $pricingColumn->title; ?></<?php echo $settings->title_tag; ?>>
 				<?php } ?>
-				<div class="pp-pricing-table-price">
+				<div class="pp-pricing-table-price pp-price-primary">
 					<?php echo $pricingColumn->price; ?> <span class="pp-pricing-table-duration"><?php echo $pricingColumn->duration; ?></span>
 				</div>
+				<?php if ( 'yes' == $settings->dual_pricing ) { ?>
+					<div class="pp-pricing-table-price pp-price-secondary">
+					<?php echo $pricingColumn->price_2; ?> <span class="pp-pricing-table-duration"><?php echo $pricingColumn->duration_2; ?></span>
+				</div>
+				<?php } ?>
 				<?php if( $settings->title_position == 'below' ) { ?>
 					<<?php echo $settings->title_tag; ?> class="pp-pricing-table-title"><?php echo $pricingColumn->title; ?></<?php echo $settings->title_tag; ?>>
 				<?php } ?>
 				<ul class="pp-pricing-table-features">
-					<?php if (!empty($pricingColumn->features)) foreach ($pricingColumn->features as $feature) : ?>
-					<li><?php echo trim($feature); ?></li>
-					<?php endforeach; ?>
+					<?php if ( ! empty( $pricingColumn->features ) ) : $item_count = 0; ?>
+						<?php foreach ( $pricingColumn->features as $feature ) : $item_count++; ?>
+						<li class="pp-pricing-table-item-<?php echo $item_count; ?>">
+							<?php if ( ! empty( $settings->matrix_items ) && isset( $settings->matrix_items[ $item_count - 1 ] ) ) { ?>
+							<span class="pp-pricing-table-item-label"><?php echo trim( $settings->matrix_items[ $item_count - 1 ] ); ?></span>
+							<?php } ?>
+							<?php echo trim( $feature ); ?>
+						</li>
+						<?php endforeach; ?>
+					<?php endif; ?>
 				</ul>
 
 				<?php $module->render_button($i); ?>

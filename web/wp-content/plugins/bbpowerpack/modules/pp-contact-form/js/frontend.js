@@ -66,6 +66,7 @@
 				phone			= $(this.nodeClass + ' .pp-phone input'),
 				subject	  		= $(this.nodeClass + ' .pp-subject input'),
 				message	  		= $(this.nodeClass + ' .pp-message textarea'),
+				checkbox		= $(this.nodeClass + ' .pp-checkbox input'),
 				reCaptchaField 	= $(this.nodeClass + ' .fl-grecaptcha'),
 				reCaptchaValue 	= reCaptchaField.data('fl-grecaptcha-response'),
 				ajaxData		= null,
@@ -137,8 +138,19 @@
 				message.parent().removeClass('pp-error');
 			}
 
+			// validate the checkbox
+			if (checkbox.length > 0) {
+				if (!checkbox.is(':checked')) {
+					isValid = false;
+					checkbox.parent().addClass('pp-error');
+				}
+				else if (checkbox.parent().hasClass('pp-error')) {
+					checkbox.parent().removeClass('pp-error');
+				}
+			}
+
 			// validate if reCAPTCHA is enabled and checked
-			if (reCaptchaField.length > 0) { console.log('test');
+			if (reCaptchaField.length > 0) {
 				if ('undefined' === typeof reCaptchaValue || reCaptchaValue === false) {
 					isValid = false;
 					if ('normal' == reCaptchaField.data('validate')) {
