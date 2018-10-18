@@ -12,7 +12,12 @@
 
     <?php settings_fields( 'bb_powerpack_license' ); ?>
 
-    <p><?php echo sprintf(__('Enter your <a href="%s" target="_blank">license key</a> to enable remote updates and support.', 'bb-powerpack'), 'https://wpbeaveraddons.com/checkout/purchase-history/?utm_medium=powerpack&utm_source=license-settings-page&utm_campaign=license-key-link'); ?>
+	<h3><?php _e('License', 'bb-powerpack'); ?></h3>
+	<?php if ( ! self::get_option( 'ppwl_remove_license_key_link' ) ) { ?>
+    	<p><?php echo sprintf(__('Enter your <a href="%s" target="_blank">license key</a> to enable remote updates and support.', 'bb-powerpack'), 'https://wpbeaveraddons.com/checkout/purchase-history/?utm_medium=powerpack&utm_source=license-settings-page&utm_campaign=license-key-link'); ?></p>
+	<?php } else { ?>
+		<p><?php _e('Enter your license key to enable remote updates and support.', 'bb-powerpack'); ?></p>
+	<?php } ?>
     <table class="form-table">
         <tbody>
             <tr valign="top">
@@ -46,6 +51,7 @@
             <?php } ?>
         </tbody>
     </table>
+
     <?php submit_button(); ?>
 
 <?php } ?>

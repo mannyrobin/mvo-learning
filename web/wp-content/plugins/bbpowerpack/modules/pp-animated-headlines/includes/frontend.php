@@ -9,6 +9,8 @@ if ( 'rotate' == $settings->headline_style ) {
 	}
 }
 
+$class .= ' pp-headline-' . $settings->alignment;
+
 ?>
 <div class="pp-animated-headlines pp-headline--style-<?php echo $settings->headline_style; ?><?php echo $loop; ?>">
 	<<?php echo $settings->headline_tag; ?> class="<?php echo $class; ?>">
@@ -16,7 +18,11 @@ if ( 'rotate' == $settings->headline_style ) {
 			<span class="pp-headline-plain-text pp-headline-text-wrapper"><?php echo $settings->before_text; ?></span>
 		<?php endif; ?>
 
-		<?php if ( ! empty( $settings->rotating_text ) ) : ?>
+		<?php if ( 'rotate' == $settings->headline_style && ! empty( $settings->rotating_text ) ) : ?>
+			<span class="pp-headline-dynamic-wrapper pp-headline-text-wrapper"></span>
+		<?php endif; ?>
+		
+		<?php if ( 'highlight' == $settings->headline_style && ! empty( $settings->highlighted_text ) ) : ?>
 			<span class="pp-headline-dynamic-wrapper pp-headline-text-wrapper"></span>
 		<?php endif; ?>
 

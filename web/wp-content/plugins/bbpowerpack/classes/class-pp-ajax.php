@@ -10,17 +10,33 @@ class BB_PowerPack_Ajax {
      */
     static public function init()
     {
-        add_action( 'wp_ajax_pp_grid_get_posts', __CLASS__ . '::get_ajax_posts' );
-        add_action( 'wp_ajax_nopriv_pp_grid_get_posts', __CLASS__ . '::get_ajax_posts' );
+        add_action( 'wp', __CLASS__ . '::get_ajax_posts' );
         add_action( 'wp_ajax_pp_get_taxonomies', __CLASS__ . '::get_post_taxonomies' );
-        add_action( 'wp_ajax_nopriv_pp_get_taxonomies', __CLASS__ . '::get_post_taxonomies' );
+		add_action( 'wp_ajax_nopriv_pp_get_taxonomies', __CLASS__ . '::get_post_taxonomies' );
+		add_action( 'wp_ajax_pp_get_saved_templates', __CLASS__ . '::get_saved_templates' );
+        add_action( 'wp_ajax_nopriv_pp_get_saved_templates', __CLASS__ . '::get_saved_templates' );
     }
 
     static public function get_ajax_posts()
     {
+		$is_error = false;
+
+		if ( ! isset( $_POST['pp_action'] ) || 'get_ajax_posts' != $_POST['pp_action'] ) {
+			return;
+		}
+
+		if ( ! isset( $_POST['settings'] ) || empty( $_POST['settings'] ) ) {
+			return;
+		}
+
+		// Tell WordPress this is an AJAX request.
+		if ( ! defined( 'DOING_AJAX' ) ) {
+			define( 'DOING_AJAX', true );
+		}
+
         $settings = (object)$_POST['settings'];
-        $module_dir = BB_POWERPACK_DIR . 'modules/pp-content-grid/';
-        $module_url = BB_POWERPACK_URL . 'modules/pp-content-grid/';
+        $module_dir = pp_get_module_dir('pp-content-grid');
+        $module_url = pp_get_module_url('pp-content-grid');
 
         $response = array(
             'data'  => '',
@@ -34,7 +50,7 @@ class BB_PowerPack_Ajax {
         $args = array(
             'post_type'             => $post_type,
             'post_status'           => 'publish',
-            'ignore_sticky_posts'   => true,
+			'ignore_sticky_posts'   => true,
             'pp_content_grid'       => true,
         );
 
@@ -89,44 +105,132 @@ class BB_PowerPack_Ajax {
             );
         } else if ( isset( $settings->offset ) ) {
             //$args['offset'] = $settings->offset;
-        }
+		}
+		
+		$taxonomies = FLBuilderLoop::taxonomies( $post_type );
 
-        if ( 'yes' == get_option( 'woocommerce_hide_out_of_stock_items' ) ) {
+		foreach ( $taxonomies as $tax_slug => $tax ) {
+
+			$tax_value = '';
+			$term_ids  = array();
+			$operator  = 'IN';
+
+			// Get the value of the suggest field.
+			if ( isset( $settings->{'tax_' . $post_type . '_' . $tax_slug} ) ) {
+				// New style slug.
+				$tax_value = $settings->{'tax_' . $post_type . '_' . $tax_slug};
+			} elseif ( isset( $settings->{'tax_' . $tax_slug} ) ) {
+				// Old style slug for backwards compat.
+				$tax_value = $settings->{'tax_' . $tax_slug};
+			}
+
+			// Get the term IDs array.
+			if ( ! empty( $tax_value ) ) {
+				$term_ids = explode( ',', $tax_value );
+			}
+
+			// Handle matching settings.
+			if ( isset( $settings->{'tax_' . $post_type . '_' . $tax_slug . '_matching'} ) ) {
+
+				$tax_matching = $settings->{'tax_' . $post_type . '_' . $tax_slug . '_matching'};
+
+				if ( ! $tax_matching ) {
+					// Do not match these terms.
+					$operator = 'NOT IN';
+				} elseif ( 'related' === $tax_matching ) {
+					// Match posts by related terms from the global post.
+					global $post;
+					$terms 	 = wp_get_post_terms( $post->ID, $tax_slug );
+					$related = array();
+
+					foreach ( $terms as $term ) {
+						if ( ! in_array( $term->term_id, $term_ids ) ) {
+							$related[] = $term->term_id;
+						}
+					}
+
+					if ( empty( $related ) ) {
+						// If no related terms, match all except those in the suggest field.
+						$operator = 'NOT IN';
+					} else {
+
+						// Don't include posts with terms selected in the suggest field.
+						$args['tax_query'][] = array(
+							'taxonomy'	=> $tax_slug,
+							'field'		=> 'id',
+							'terms'		=> $term_ids,
+							'operator'  => 'NOT IN',
+						);
+
+						// Set the term IDs to the related terms.
+						$term_ids = $related;
+					}
+				}
+			}// End if().
+
+			if ( ! empty( $term_ids ) ) {
+
+				$args['tax_query'][] = array(
+					'taxonomy'	=> $tax_slug,
+					'field'		=> 'id',
+					'terms'		=> $term_ids,
+					'operator'  => $operator,
+				);
+			}
+		}// End foreach().
+
+        if ( 'yes' == get_option( 'woocommerce_hide_out_of_stock_items' ) && 'product' == $post_type ) {
             $args['meta_query'][] = array(
                 'key'       => '_stock_status',
                 'value'     => 'instock',
                 'compare'   => '='
             );
-        }
-
-        if ( isset( $settings->order ) ) {
-            $args['order'] = $settings->order;
-        }
-
-        if ( isset( $settings->order_by ) ) {
-            $args['orderby'] = $settings->order_by;
-        }
-
-        if ( isset( $_POST['page'] ) ) {
+		}
+		
+		if ( isset( $_POST['page'] ) ) {
             $args['paged'] = absint( $_POST['page'] );
         }
+		
+		// Order by author
+		if ( 'author' == $settings->order_by ) {
+			$args['orderby'] = array(
+				'author' => $settings->order,
+				'date' => $settings->order,
+			);
+		} else {
+			$args['orderby'] = $settings->order_by;
 
-        if ( isset( $_POST['orderby'] ) ) {
-            $orderby = esc_attr( $_POST['orderby'] );
-            
-            $args = self::get_conditional_args( $orderby, $args );
-        }
+			// Order by meta value arg.
+			if ( strstr( $settings->order_by, 'meta_value' ) ) {
+				$args['meta_key'] = $settings->order_by_meta_key;
+			}
+
+			if ( isset( $_POST['orderby'] ) ) {
+				$orderby = esc_attr( $_POST['orderby'] );
+				
+				$args = self::get_conditional_args( $orderby, $args );
+			}
+			
+			if ( isset( $settings->order ) ) {
+				$args['order'] = $settings->order;
+			}
+		}
 
         $query = new WP_Query( $args );
 
         if ( $query->have_posts() ) :
 
             // create pagination.
-            if ( $query->max_num_pages > 1 ) {
+            if ( $query->max_num_pages > 1 && 'none' != $settings->pagination ) {
+				$style = ( 'scroll' == $settings->pagination ) ? ' style="display: none;"' : '';
                 ob_start();
                
-                echo '<div class="pp-content-grid-pagination pp-ajax-pagination fl-builder-pagination">';
-                BB_PowerPack_Post_Helper::ajax_pagination( $query, $_POST['current_page'], $_POST['page'] );
+				echo '<div class="pp-content-grid-pagination pp-ajax-pagination fl-builder-pagination"' . $style . '>';
+				if ( 'scroll' == $settings->pagination && isset( $_POST['term'] ) ) {
+					BB_PowerPack_Post_Helper::ajax_pagination( $query, $settings, $_POST['current_page'], $_POST['page'], $_POST['term'], $_POST['node_id'] );
+				} else {
+					BB_PowerPack_Post_Helper::ajax_pagination( $query, $settings, $_POST['current_page'], $_POST['page'] );
+				}
                 echo '</div>';
 
                 $response['pagination'] = ob_get_clean();
@@ -137,11 +241,17 @@ class BB_PowerPack_Ajax {
 
                 $query->the_post();
 
-                $terms_list = wp_get_post_terms( get_the_id(), $settings->post_taxonomies );
+				$terms_list = wp_get_post_terms( get_the_id(), $settings->post_taxonomies );
+				$post_id = get_the_ID();
+				$permalink = get_permalink();
                 
                 ob_start();
 
-                include apply_filters( 'pp_cg_module_layout_path', $module_dir . 'includes/post-grid.php', $settings->layout, $settings );
+				if ( 'custom' == $settings->post_grid_style_select ) {
+					include BB_POWERPACK_DIR . 'includes/post-module-layout.php';
+				} else {
+					include apply_filters( 'pp_cg_module_layout_path', $module_dir . 'includes/post-grid.php', $settings->layout, $settings );	
+				}
 
                 $response['data'] .= do_shortcode( ob_get_clean() );
             }
@@ -190,6 +300,10 @@ class BB_PowerPack_Ajax {
      */
     static public function get_post_taxonomies( $post_type = 'post' )
 	{
+		if ( isset( $_POST['post_type'] ) && ! empty( $_POST['post_type'] ) ) {
+			$post_type = sanitize_text_field( $_POST['post_type'] );	
+		}
+		
 		$taxonomies = FLBuilderLoop::taxonomies( $post_type );
 		$html = '';
 
@@ -198,6 +312,58 @@ class BB_PowerPack_Ajax {
 		}
 
         echo $html; die();
+	}
+
+	/**
+	 * Get saved templates.
+	 *
+	 * @since 1.4
+	 */
+	static public function get_saved_templates()
+    {
+		$response = array(
+			'success' => false,
+			'data'	=> array()
+		);
+
+		$args = array(
+			'post_type' 		=> 'fl-builder-template',
+			'orderby' 			=> 'title',
+			'order' 			=> 'ASC',
+			'posts_per_page' 	=> '-1',
+		);
+
+		if ( isset( $_POST['type'] ) && ! empty( $_POST['type'] ) ) {
+			$args['tax_query'] = array(
+				array(
+					'taxonomy'		=> 'fl-builder-template-type',
+					'field'			=> 'slug',
+					'terms'			=> $_POST['type']
+				)
+			);
+		}
+
+        $posts = get_posts( $args );
+
+		$options = '';
+
+        if ( count( $posts ) ) {
+            foreach ( $posts as $post ) {
+				$options .= '<option value="' . $post->ID . '">' . $post->post_title . '</option>';
+			}
+			
+			$response = array(
+				'success' => true,
+				'data' => $options
+			);
+        } else {
+			$response = array(
+				'success' => true,
+				'data' => '<option value="" disabled>' . __('No templates found!') . '</option>'
+			);
+		}
+
+		echo json_encode($response); die;
     }
 }
 

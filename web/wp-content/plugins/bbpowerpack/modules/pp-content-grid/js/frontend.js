@@ -15,7 +15,6 @@
 
 		if(this._hasPosts()) {
 			this._initLayout();
-			this._initInfiniteScroll();
 		}
 	};
 
@@ -25,12 +24,17 @@
 		nodeClass       : '',
 		wrapperClass    : '',
 		postClass       : '',
-		gallery         : null,
 		perPage			: '',
 		filters			: false,
 		filterTax		: '',
 		filterType		: '',
+		filterData		: {},
+		isFiltering		: false,
+		activeFilter	: '',
+		totalPages		: 1,
+		currentPage		: 1,
 		cacheData		: {},
+		infscr 			: '',
 
 		_hasPosts: function()
 		{
@@ -42,12 +46,14 @@
 			switch(this.settings.layout) {
 
 				case 'grid':
-				this._gridLayout();
-				break;
+					this._gridLayout();
+					this._initPagination();
+					this._reLayout();
+					break;
 
 				case 'carousel':
-				this._carouselLayout();
-				break;
+					this._carouselLayout();
+					break;
 
 			}
 
@@ -61,7 +67,7 @@
 			var postFilterData = {
 				itemSelector: '.pp-content-post',
 				percentPosition: true,
-				transitionDuration: '0.4s',
+				transitionDuration: '0.3s',
 			};
 
 			if ( !this.masonry ) {
@@ -83,81 +89,90 @@
 				} );
 			}
 
+			// set filter data globally to use later for ajax scroll pagination.
+			this.filterData = postFilterData;
+
 			wrap.imagesLoaded( $.proxy( function() {
 
 				var node = $(this.nodeClass);
-                var base = this;
-
+				var base = this;
+				var postFilters = $(this.nodeClass).find('.pp-content-post-grid').isotope(postFilterData);
 
                 if ( this.settings.filters || this.masonry ) {
 
-					var postFilters = $(this.nodeClass).find('.pp-content-post-grid').isotope(postFilterData);
 					var filterWrap = $(this.nodeClass).find('.pp-post-filters');
 					var filterToggle = $(this.nodeClass).find('.pp-post-filters-toggle');
 
 					filterToggle.on('click', function () {
 						filterWrap.slideToggle(function () {
 							if ($(this).is(':visible')) {
-								$(this).addClass('pp-post-filters-open');
+								filterToggle.addClass('pp-post-filters-open');
 							}
 							if (!$(this).is(':visible')) {
-								$(this).removeClass('pp-post-filters-open');
+								filterToggle.removeClass('pp-post-filters-open');
 							}
 						});
 					});
 
 					filterWrap.on('click', '.pp-post-filter', function() {
+						// set active filter globally to use later for ajax scroll pagination.
+						base.activeFilter = $(this).data('term');
+						base.isFiltering = true;
+
 						if ('static' === base.filterType) {
 							var filterVal = $(this).attr('data-filter');
 							postFilters.isotope({ filter: filterVal });
 						} else {
 							var term = $(this).data('term');
+							$(base.wrapperClass).addClass('pp-is-filtering');
 							base._getPosts(term, postFilterData);
 						}
 
 						filterWrap.find('.pp-post-filter').removeClass('pp-filter-active');
 						$(this).addClass('pp-filter-active');
 
-						// if (!base.masonry) {
-						// 	if (filterVal !== '*' && 'static' === base.filterType) {
-						// 		base._gridLayoutMatchHeightSimple();
-						// 	} else {
-						// 		base._gridLayoutMatchHeight();
-						// 	}
-						// 	node.find('.pp-content-post-grid').isotope('layout');
-						// }
-						
 						filterToggle.find('span.toggle-text').html($(this).text());
-						if (filterWrap.hasClass('pp-post-filters-open')) {
+						if (filterToggle.hasClass('pp-post-filters-open')) {
 							filterWrap.slideUp();
+							filterToggle.removeClass('pp-post-filters-open');
 						}
+
+						$(base.nodeClass).trigger('grid.filter.change');
 					});
 					
 					if ('dynamic' === base.filterType) {
 						$(base.nodeClass).find('.fl-builder-pagination a').off('click').on('click', function (e) {
 							e.preventDefault();
-							var pageNumber = $(this).attr('href').split('#page-')[1];
+							var pageNumber = base._getPageNumber( this );
+							base.currentPage = pageNumber;
 							base._getPosts('', postFilterData, pageNumber);
 						});
 					}
+
+					// Trigger filter by hash parameter in URL.
+					if ( '' !== location.hash ) {
+						var filterHash = location.hash.split('#')[1];
+
+						filterWrap.find('li[data-term="' + filterHash + '"]').trigger('click');
+					}
+
+					// Trigger filter on hash change in URL.
+					$(window).on('hashchange', function() {
+						if ( '' !== location.hash ) {
+							var filterHash = location.hash.split('#')[1];
+	
+							filterWrap.find('li[data-term="' + filterHash + '"]').trigger('click');
+						}
+					});
                 }
 
-                if( !this.masonry ) {
+                if( ! this.masonry ) {
                     setTimeout( function() {
-                        base._gridLayoutMatchHeight();
-                    }, 1000 );
-                }
-
-                if ( this.settings.filters || this.masonry ) {
-                    setTimeout( function() {
-						if ('static' === base.filterType) {
+						if ( base.settings.filters && 'static' === base.filterType ) {
 							node.find('.pp-filter-active').trigger('click');
 						}
-						if ( !base.masonry ) {
-							base._gridLayoutMatchHeight();
-						}
-						node.find('.pp-content-post-grid').isotope('layout');
-
+						base._gridLayoutMatchHeight();
+						wrap.isotope('layout');
                     }, 1000 );
                 }
 
@@ -169,11 +184,11 @@
 			var wrap = $(this.nodeClass + ' .pp-content-post-carousel .pp-content-posts-inner');
 			wrap.imagesLoaded( $.proxy( function() {
 				var owlOptions = {
-					afterUpdate: $.proxy(this._gridLayoutMatchHeightSimple, this),
-					afterInit: $.proxy(this._gridLayoutMatchHeightSimple, this),
-					afterLazyLoad: $.proxy(this._gridLayoutMatchHeightSimple, this),
+					onInitialized: $.proxy(this._gridLayoutMatchHeightSimple, this),
+					onResized: $.proxy(this._gridLayoutMatchHeightSimple, this),
+					onRefreshed: $.proxy(this._gridLayoutMatchHeightSimple, this),
+					onLoadedLazy: $.proxy(this._gridLayoutMatchHeightSimple, this),
 				};
-				//console.log($.extend({}, this.settings.carousel, owlOptions));
 				wrap.owlCarousel( $.extend({}, this.settings.carousel, owlOptions) );
 			}, this));
 
@@ -184,7 +199,7 @@
 				filter 		= term,
 				paged 		= (!paged || 'undefined' === typeof paged) ? 1 : paged;
 
-			if ('undefined' === typeof term || '' === filter) {
+			if ('undefined' === typeof term || '' === term) {
 				filter = 'all';
 			}
 
@@ -197,6 +212,7 @@
 				if ('undefined' === typeof cachedResponse) {
 					processAjax = true;
 				} else {
+					$(this.nodeClass).trigger('grid.beforeRender');
 					this._renderPosts(cachedResponse, {
 						term: term,
 						isotopeData: isotopeData,
@@ -221,7 +237,7 @@
 			var currentPage = this.settings.current_page.split('?')[0];
 
 			var data = {
-				action: 'pp_grid_get_posts',
+				pp_action: 'get_ajax_posts',
 				node_id: this.settings.id,
 				page: !paged ? this.settings.page : paged,
 				current_page: currentPage,
@@ -235,15 +251,13 @@
 				data['orderby'] = self.settings.orderby;
 			}
 
-			gridWrap.addClass('pp-is-filtering');
-
 			$.ajax({
 				type: 'post',
-				url: self.settings.ajaxUrl,
+				url: window.location.href.split( '#' ).shift(),
 				data: data,
 				success: function (response) {
-					gridWrap.removeClass('pp-is-filtering');
 					self._setCacheData(term, response, paged);
+					$(self.nodeClass).trigger('grid.beforeRender');
 					self._renderPosts(response, {
 						term: term,
 						isotopeData: isotopeData,
@@ -255,13 +269,20 @@
 
 		_renderPosts: function (response, args) {
 			var self = this,
-				wrap = $(this.wrapperClass);
+				wrap = $(this.wrapperClass),
+				posts = $(response.data);
 
-			wrap.isotope('remove', $(this.postClass));
+			if ( ( 'load_more' !== self.settings.pagination && 'scroll' !== self.settings.pagination ) || self.isFiltering ) {
+				wrap.isotope('remove', $(this.postClass));
+			}
 
 			if (!this.masonry) {
 				wrap.isotope('insert', $(response.data), $.proxy(this._gridLayoutMatchHeight, this));
-				this._gridLayoutMatchHeight();
+				wrap.imagesLoaded($.proxy(function () {
+					setTimeout(function () {
+						self._gridLayoutMatchHeight();
+					}, 150);
+				}, this));
 			} else {
 				wrap.isotope('insert', $(response.data));
 			}
@@ -271,26 +292,60 @@
 
 			wrap.imagesLoaded($.proxy(function () {
 				setTimeout(function () {
+					if (!this.masonry) {
+						self._gridLayoutMatchHeight();
+					}
 					wrap.isotope('layout');
-				}, 200);
+				}, 500);
 			}, this));
 
 			if (response.pagination) {
+				var $pagination = $(response.pagination);
+
+				if ( 'load_more' === self.settings.pagination || 'scroll' === self.settings.pagination ) {
+					$pagination.hide();
+				}
+
 				$(self.nodeClass).find('.fl-builder-pagination').remove();
-				$(self.nodeClass).find('.fl-module-content').append(response.pagination);
+				$(self.nodeClass).find('.fl-module-content').append($pagination);
 				$(self.nodeClass).find('.pp-ajax-pagination a').off('click').on('click', function (e) {
 					e.preventDefault();
-					var pageNumber = $(this).attr('href').split('#page-')[1];
+					var pageNumber = self._getPageNumber( this );
+					self.currentPage = pageNumber;
 					self._getPosts(args.term, args.isotopeData, pageNumber);
 				});
 			} else {
 				$(self.nodeClass).find('.fl-builder-pagination').remove();
 			}
 
-			var offsetTop = wrap.offset().top - 200;
-			$('html, body').stop().animate({
-				scrollTop: offsetTop
-			}, 300);
+			if ( ('load_more' !== self.settings.pagination && 'scroll' !== self.settings.pagination) || self.isFiltering ) {
+				var offsetTop = wrap.offset().top - 200;
+				$('html, body').stop().animate({
+					scrollTop: offsetTop
+				}, 300);
+			}
+
+			if ( self.isFiltering ) {
+				self.isFiltering = false;
+				$(self.nodeClass).trigger( 'grid.filter.complete' );
+			}
+			wrap.removeClass('pp-is-filtering');
+
+			$(self.nodeClass).trigger('grid.rendered');
+		},
+
+		_getPageNumber: function( pageElement )
+		{
+			var pageNumber = parseInt( $(pageElement).text() ); //$(pageElement).attr('href').split('#page-')[1];
+
+			if ( $(pageElement).hasClass('next') ) {
+				pageNumber = parseInt( $(pageElement).parents('.pp-content-grid-pagination').find('.current').text() ) + 1;
+			}
+			if ( $(pageElement).hasClass('previous') ) {
+				pageNumber = parseInt( $(pageElement).parents('.pp-content-grid-pagination').find('.current').text() ) - 1;
+			}
+
+			return pageNumber;
 		},
 
 		_setCacheData: function (filter, response, paged) {
@@ -320,7 +375,6 @@
 			if ('undefined' === typeof cacheData.ajaxCache) {
 				cacheData.ajaxCache = {};
 			}
-			//console.log(cacheData);
 
 			return cacheData.ajaxCache[filter];
 		},
@@ -330,21 +384,28 @@
 			var highestBox = 0;
 			var contentHeight = 0;
 			var postElements = $(this.postClass + ':visible');
+			var columns = this.settings.postColumns.desktop;
 
-			if (0 === this.matchHeight) {
+			if (! this.matchHeight || 1 === columns) {
 				return;
 			}
 
 			postElements.css('height', 'auto');
 
 			if ( this.settings.layout === 'grid' ) {
-				var columns = this.settings.postColumns.desktop;
+				if ( this.masonry ) {
+					return;
+				}
 
-				if (window.innerWidth <= 768) {
+				if (window.innerWidth <= 980) {
 					columns = this.settings.postColumns.tablet;
 				}
-				if (window.innerWidth <= 600) {
+				if (window.innerWidth <= 767) {
 					columns = this.settings.postColumns.mobile;
+				}
+
+				if ( 1 === columns ) {
+					return;
 				}
 
 				var rows = Math.round(postElements.length / columns);
@@ -394,11 +455,24 @@
 		},
 
 		_gridLayoutMatchHeightSimple: function () {
+			if (! this.matchHeight) {
+				return;
+			}
+
 			var highestBox = 0;
 			var contentHeight = 0;
 			var postElements = $(this.postClass);
 
-			if (0 === this.matchHeight) {
+			var columns = this.settings.postColumns.desktop;
+
+			if (window.innerWidth <= 980) {
+				columns = this.settings.postColumns.tablet;
+			}
+			if (window.innerWidth <= 767) {
+				columns = this.settings.postColumns.mobile;
+			}
+
+			if ( 1 === columns && this.settings.layout === 'grid' ) {
 				return;
 			}
 
@@ -413,70 +487,170 @@
 			postElements.height(highestBox);
 		},
 
-		_initInfiniteScroll: function()
+		_initPagination: function()
 		{
-			if(this.settings.pagination == 'scroll' && typeof FLBuilder === 'undefined') {
-				this._infiniteScroll();
+			this._getTotalPages();
+
+			if ( this.settings.pagination === 'load_more' ) {
+				this._initLoadMore();
+			}
+			if ( this.settings.pagination === 'scroll' && typeof FLBuilder === 'undefined' ) {
+				this._initScroll();
 			}
 		},
 
-		_infiniteScroll: function(settings)
+		_getTotalPages: function()
 		{
-			var path 		= $(this.nodeClass + ' .pp-content-grid-pagination a.next').attr('href'),
-				pagePattern = /(.*?(\/|\&|\?)paged-[0-9]{1,}(\/|=))([0-9]{1,})+(.*)/,
-				pageMatched = null,
-				scrollData	= {
-					navSelector     : this.nodeClass + ' .pp-content-grid-pagination',
-					nextSelector    : this.nodeClass + ' .pp-content-grid-pagination a.next',
-					itemSelector    : this.postClass,
-					prefill         : true,
-					bufferPx        : 200,
-					loading         : {
-						msgText         : 'Loading',
-						finishedMsg     : '',
-						img             : FLBuilderLayoutConfig.paths.pluginUrl + 'img/ajax-loader-grey.gif',
-						speed           : 1
-					}
-				};
+			var pages = $( this.nodeClass + ' .pp-content-grid-pagination' ).find( 'li .page-numbers:not(.next)' );
 
-			// Define path since Infinitescroll incremented our custom pagination '/paged-2/2/' to '/paged-3/2/'.
-			if ( pagePattern.test( path ) ) {
-				scrollData.path = function( currPage ){
-					pageMatched = path.match( pagePattern );
-					path = pageMatched[1] + currPage + pageMatched[5];
-					return path;
+			if ( pages.length > 1) {
+				var total = pages.last().text().replace( /\D/g, '' )
+				this.totalPages = parseInt( total );
+			} else {
+				this.totalPages = 1;
+			}
+
+			return this.totalPages;
+		},
+
+		_initLoadMore: function()
+		{
+			var self 		= this,
+				$button 	= $(this.nodeClass).find('.pp-grid-load-more-button'),
+				currentPage = self.currentPage,
+				isAjaxPagination = 'dynamic' === self.filterType;
+
+			$button.on('click', function(e) {
+				e.preventDefault();
+
+				$(this).addClass('disabled loading');
+				self.isFiltering = false;
+
+				currentPage = parseInt( currentPage ) + 1;
+
+				self._getPosts(self.activeFilter, self.filterData, currentPage);
+				self.currentPage = currentPage;
+			});
+
+			$(self.nodeClass).on('grid.rendered', function() {
+				$button.removeClass( 'disabled loading' );
+
+				if ( currentPage >= self.totalPages ) {
+					$button.parent().hide();
 				}
-			}
+			});
 
-			$(this.wrapperClass).infinitescroll( scrollData, $.proxy(this._infiniteScrollComplete, this) );
-
-			setTimeout(function(){
-				$(window).trigger('resize');
-			}, 100);
+			// Reset pagination index on filter.
+			$(self.nodeClass).on('grid.filter.complete', function() {
+				if ( $(self.nodeClass).find( '.pp-content-grid-pagination' ).length > 0 ) {
+					self._getTotalPages();
+					self.currentPage = currentPage = 1;
+					$button.parent().show();
+				} else {
+					$button.parent().hide();
+				}
+			});
 		},
 
-		_infiniteScrollComplete: function(elements)
+		_initScroll: function()
 		{
-			var wrap = $(this.wrapperClass);
+			var	self			= this,
+				gridOffset 		= $(this.wrapperClass).offset(),
+				gridHeight		= $(this.wrapperClass).height(),
+				winHeight		= $(window).height(),
+				currentPage 	= this.currentPage,
+				activeFilter	= self.activeFilter,
+				rendered		= false,
+				loaded			= false;
 
-			elements = $(elements);
+			if ( ! self.filters || 'dynamic' !== self.filterType ) {
+				activeFilter = '';
+			}
 
-			if(this.settings.layout == 'grid') {
-				wrap.imagesLoaded( $.proxy( function() {
-					if( !this.masonry ) {
-						this._gridLayoutMatchHeight();
-						if( this.settings.filters ) {
-							wrap.isotope('insert', elements, $.proxy(this._gridLayoutMatchHeight, this));
-						}
+			$(window).on('scroll', $.proxy( function() {
+				if ( loaded ) {
+					return;
+				}
+				var scrollPos = $(window).scrollTop();
+
+				if ( scrollPos >= gridOffset.top - ( winHeight - gridHeight ) ) {
+					self.isFiltering = false;
+					currentPage = parseInt( currentPage ) + 1;
+
+					$(self.nodeClass).find('.pp-content-grid-loader').show();
+
+					if ( currentPage <= self.totalPages ) {
+						loaded = true;
+						self._getPosts(activeFilter, self.filterData, currentPage);
 					} else {
-						wrap.isotope('insert', elements);
+						loaded = true;
+						$(self.nodeClass).find('.pp-content-grid-loader').hide();
 					}
 
-					elements.css('visibility', 'visible');
-					wrap.find('.pp-grid-space').remove();
-					wrap.append('<div class="pp-grid-space"></div>');
-				}, this ) );
-			}
+					self.currentPage = currentPage;
+				}
+			}, this ) );
+
+			$(self.nodeClass).on('grid.filter.change', function() {
+				// re-assign active filter.
+				if ( self.filters && 'dynamic' === self.filterType ) {
+					activeFilter = self.activeFilter
+				}
+				
+				// get container height.
+				gridHeight = $(self.wrapperClass).height();
+				self._gridLayoutMatchHeightSimple();
+
+				$(self.wrapperClass).isotope('layout');
+
+				if ( 'dynamic' === self.filterType ) {
+					self._getTotalPages();
+					self.currentPage = currentPage = 1;
+					loaded = false;
+				}
+			});
+
+			$(self.nodeClass).on('grid.rendered', function() {
+				// get gridHeight again after render.
+				gridHeight = $(self.wrapperClass).height();
+
+				if ( ! rendered ) {
+					self._getTotalPages();
+				}
+				
+				$(self.nodeClass).find('.pp-content-grid-loader').hide();
+
+				setTimeout(function() {
+					self._gridLayoutMatchHeightSimple();
+					$(self.wrapperClass).isotope('layout');
+				}, 500);
+
+				// set loaded flag.
+				if ( currentPage >= self.totalPages ) {
+					loaded = true;
+				} else {
+					loaded = false;
+				}
+
+				rendered = true;
+			});
+
+			// Reset pagination index on filter.
+			$(self.nodeClass).on('grid.filter.complete', function() {
+				if ( $(self.nodeClass).find( '.pp-content-grid-pagination' ).length > 0 ) {
+					self._getTotalPages();
+					self.currentPage = currentPage = 1;
+				}
+			});
+		},
+
+		_reLayout: function()
+		{
+			var self = this;
+
+			$(document).on('sf:ajaxfinish', '.searchandfilter', function(){
+				self._gridLayout();
+			});
 		}
 	};
 

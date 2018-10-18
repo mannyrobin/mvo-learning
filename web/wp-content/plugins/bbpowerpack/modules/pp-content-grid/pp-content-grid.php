@@ -21,10 +21,7 @@ class PPContentGridModule extends FLBuilderModule {
 			'icon'				=> 'schedule.svg',
 		));
 
-		// add_action( 'wp_head', array( $this, 'post_ajax_filters' ) );
-		add_action( 'wp_ajax_get_post_tax', array( $this, 'pp_get_post_taxonomies' ) );
-		add_action( 'wp_ajax_nopriv_get_post_tax', array( $this, 'pp_get_post_taxonomies' ) );
-
+		add_filter( 'fl_builder_loop_query_args', array( $this, 'exclude_current_post' ), 10, 1 );
 	}
 
 	/**
@@ -32,20 +29,17 @@ class PPContentGridModule extends FLBuilderModule {
 	 */
 	public function enqueue_scripts()
 	{
-		$this->add_js( 'jquery-imagesloaded' );
+		$this->add_js( 'imagesloaded' );
 
 		if(FLBuilderModel::is_builder_active() || $this->settings->layout == 'grid') {
-			$this->add_js( 'isotope', $this->url . 'js/isotope.pkgd.min.js', array('jquery'), '', true );
+			$this->add_js( 'jquery-isotope' );
 		}
 
-		if(FLBuilderModel::is_builder_active() || $this->settings->pagination == 'scroll') {
-			$this->add_js('jquery-infinitescroll');
-		}
 		if(FLBuilderModel::is_builder_active() || $this->settings->layout == 'carousel') {
-			$this->add_css('font-awesome');
-			$this->add_css( 'owl-style', $this->url . 'css/owl.carousel.css' );
-			$this->add_css( 'owl-theme', $this->url . 'css/owl.theme.css' );
-			$this->add_js( 'owl-jquery', $this->url . 'js/owl.carousel.min.js', array(), '', true );
+			$this->add_css( BB_POWERPACK()->fa_css );
+			$this->add_css( 'owl-carousel' );
+			$this->add_css( 'owl-carousel-theme' );
+			$this->add_js( 'owl-carousel' );
 		}
 
 		// Jetpack sharing has settings to enable sharing on posts, post types and pages.
@@ -69,93 +63,54 @@ class PPContentGridModule extends FLBuilderModule {
 	 * Renders the schema structured data for the current
 	 * post in the loop.
 	 *
-	 * @since 1.7.4
 	 * @return void
 	 */
 	static public function schema_meta()
 	{
-		// General Schema Meta
-		echo '<meta itemscope itemprop="mainEntityOfPage" itemid="' . get_permalink() . '" />';
-		echo '<meta itemprop="datePublished" content="' . get_the_time('Y-m-d') . '" />';
-		echo '<meta itemprop="dateModified" content="' . get_the_modified_date('Y-m-d') . '" />';
-
-		// Publisher Schema Meta
-		echo '<div itemprop="publisher" itemscope itemtype="https://schema.org/Organization">';
-		echo '<meta itemprop="name" content="' . get_bloginfo( 'name' ) . '">';
-
-		if ( class_exists( 'FLTheme' ) && 'image' == FLTheme::get_setting( 'fl-logo-type' ) ) {
-			echo '<div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">';
-			echo '<meta itemprop="url" content="' . FLTheme::get_setting( 'fl-logo-image' ) . '">';
-			echo '</div>';
-		}
-
-		echo '</div>';
-
-		// Author Schema Meta
-		echo '<div itemscope itemprop="author" itemtype="http://schema.org/Person">';
-		echo '<meta itemprop="url" content="' . get_author_posts_url( get_the_author_meta( 'ID' ) ) . '" />';
-		echo '<meta itemprop="name" content="' . get_the_author_meta( 'display_name', get_the_author_meta( 'ID' ) ) . '" />';
-		echo '</div>';
-
-		// Image Schema Meta
-		if(has_post_thumbnail()) {
-
-			$image = wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), 'full');
-
-			if ( is_array( $image ) ) {
-				echo '<div itemscope itemprop="image" itemtype="http://schema.org/ImageObject">';
-				echo '<meta itemprop="url" content="' . $image[0] . '" />';
-				echo '<meta itemprop="width" content="' . $image[1] . '" />';
-				echo '<meta itemprop="height" content="' . $image[2] . '" />';
-				echo '</div>';
-			}
-		}
-
-		// Comment Schema Meta
-		echo '<div itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">';
-		echo '<meta itemprop="interactionType" content="http://schema.org/CommentAction" />';
-		echo '<meta itemprop="userInteractionCount" content="' . wp_count_comments(get_the_ID())->approved . '" />';
-		echo '</div>';
+		BB_PowerPack_Post_Helper::schema_meta();
 	}
 
 	/**
 	 * Renders the schema itemtype for the current
 	 * post in the loop.
 	 *
-	 * @since 1.7.4
 	 * @return void
 	 */
 	static public function schema_itemtype()
 	{
-		global $post;
-
-		if ( ! is_object( $post ) || ! isset( $post->post_type ) || 'post' != $post->post_type ) {
-			echo 'http://schema.org/CreativeWork';
-		}
-		else {
-			echo 'http://schema.org/BlogPosting';
-		}
+		BB_PowerPack_Post_Helper::schema_itemtype();
 	}
 
 	public function pp_get_settings() {
 		return $this->settings;
 	}
 
-	/**
-     * Get ajax taxonomies
-     */
-    public function pp_get_post_taxonomies() {
-        $options = array( 'none' => __('None', 'bb-powerpack') );
-		$slug = isset( $_POST['post_type_slug'] ) ? $_POST['post_type_slug'] : '';
-		$taxonomies = FLBuilderLoop::taxonomies($slug);
-		$html = '';
-		$html .= '<option value="none">'. __('None', 'bb-powerpack') .'</option>';
-		foreach($taxonomies as $tax_slug => $tax) {
-			$html .= '<option value="'.$tax_slug.'">'.$tax->label.'</option>';
-			$options[$tax_slug] = $tax->label;
+	public function exclude_current_post( $args ) {
+		if ( ! isset( $args['settings'] ) ) {
+			return $args;
 		}
 
-        echo $html; die();
+		$settings = $args['settings'];
+
+		if ( ! isset( $settings->pp_content_grid ) || ! $settings->pp_content_grid ) {
+			return $args;
+		}
+
+		if ( ! isset( $settings->exclude_current_post ) || 'no' == $settings->exclude_current_post ) {
+			return $args;
+		}
+
+		if ( ! isset( $settings->pp_post_id ) ) {
+			return $args;
+		}
+		
+		if ( ! isset( $args['post__not_in'] ) || ! is_array( $args['post__not_in'] ) ) {
+			$args['post__not_in'] = array();
+		}
+
+		$args['post__not_in'][] = $settings->pp_post_id;
+
+		return $args;
 	}
 }
 
@@ -179,7 +134,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						),
 						'toggle'		=> array(
 							'grid'			=> array(
-								'fields'		=> array( 'match_height',
+								'fields'		=> array(
 															'post_background',
 															'post_text_color',
 															'pagination',
@@ -195,7 +150,8 @@ FLBuilder::register_module('PPContentGridModule', array(
 								'tabs'			=> array('filters_style', 'pagination')
 							),
 							'carousel'			=> array(
-								'fields'		=> array( 'post_background',
+								'fields'		=> array(
+														'post_background',
 															'post_text_color',
 															'slide_width',
 															'post_carousel_minimum',
@@ -231,6 +187,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 							'style-6'  => __('Style 6', 'bb-powerpack'),
 							'style-7'  => __('Style 7', 'bb-powerpack'),
 							'style-8'  => __('Style 8', 'bb-powerpack'),
+							'style-9'  => __('Style 9', 'bb-powerpack'),
                         ),
 						'toggle'	=> array(
 							'default'	=> array(
@@ -261,6 +218,9 @@ FLBuilder::register_module('PPContentGridModule', array(
 							),
 							'style-7'	=> array(
 								'fields'	=> array('post_content_alignment', 'show_categories')
+							),
+							'style-9'	=> array(
+								'fields'	=> array('custom_height', 'post_meta_bg_color')
 							)
 						),
                     ),
@@ -272,6 +232,13 @@ FLBuilder::register_module('PPContentGridModule', array(
 							'yes'          => __('Yes', 'bb-powerpack'),
 							'no'         => __('No', 'bb-powerpack'),
 						),
+					),
+					'custom_height'	=> array(
+						'type'			=> 'unit',
+						'label'			=> __('Custom Height', 'bb-powerpack'),
+						'default'		=> '275',
+						'description'	=> 'px',
+						'responsive'	=> true			
 					),
 					'total_post'  => array(
 						'type'          => 'pp-switch',
@@ -300,22 +267,15 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'size'          => '4',
 						'help'			=> __('Number of posts to be displayed at once. Should be less than or equal to total post count.', 'bb-powerpack')
 					),
-					'pagination'     => array(
-						'type'          => 'select',
-						'label'         => __('Pagination', 'bb-powerpack'),
-						'default'       => 'numbers',
-						'options'       => array(
-							'none'          => _x( 'None', 'Pagination style.', 'bb-powerpack' ),
-							'numbers'       => __('Numbers', 'bb-powerpack'),
-							'scroll'       	=> __('Scroll', 'bb-powerpack'),
-						),
-						'toggle'	=> array(
-							'numbers'	=> array(
-								'sections'	=> array('pagination_style', 'pagination_typography'),
-								'tabs'	=> array('pagination')
-							)
+					'exclude_current_post'	=> array(
+						'type'					=> 'pp-switch',
+						'label'					=> __('Exclude Current Post', 'bb-powerpack'),
+						'default'				=> 'no',
+						'options'				=> array(
+							'yes'					=> __('Yes', 'bb-powerpack'),
+							'no'					=> __('No', 'bb-powerpack')
 						)
-					),
+					)
 				)
 			),
 			'grid'          => array(
@@ -389,11 +349,11 @@ FLBuilder::register_module('PPContentGridModule', array(
 				'fields'        => array(
 					'auto_play'     => array(
 						'type'          => 'pp-switch',
-						'label'         => __('Auto Play', 'bb-powerpack'),
+						'label'         => __('Autoplay', 'bb-powerpack'),
 						'default'       => 'yes',
 						'options'       => array(
-							'yes'          => __('Yes', 'bb-powerpack'),
-							'no'         => __('No', 'bb-powerpack'),
+							'yes'          	=> __('Yes', 'bb-powerpack'),
+							'no'         	=> __('No', 'bb-powerpack'),
 						)
 					),
 					'stop_on_hover'     => array(
@@ -416,8 +376,15 @@ FLBuilder::register_module('PPContentGridModule', array(
 					),
 					'transition_speed' => array(
 						'type'          => 'text',
-						'label'         => __('Transition Speed', 'bb-powerpack'),
+						'label'         => __('Autoplay Timeout', 'bb-powerpack'),
 						'default'       => '2',
+						'size'          => '5',
+						'description'   => _x( 'seconds', 'Value unit for form field of time in seconds. Such as: "5 seconds"', 'bb-powerpack' )
+					),
+					'slides_speed' => array(
+						'type'          => 'text',
+						'label'         => __('Slides Speed', 'bb-powerpack'),
+						'default'       => '',
 						'size'          => '5',
 						'description'   => _x( 'seconds', 'Value unit for form field of time in seconds. Such as: "5 seconds"', 'bb-powerpack' )
 					),
@@ -457,7 +424,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 				)
 			),
 			'post_carousel_arrow_style'   => array( // Section
-                'title' => 'Carousel Navigation Arrow', // Section Title
+                'title' => __('Carousel Navigation Arrow', 'bb-powerpack'), // Section Title
                 'fields' => array( // Section Fields
 					'post_slider_arrow_font_size'   => array(
 						'type'          => 'text',
@@ -468,7 +435,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'       => '30',
 						'preview'         => array(
 							'type'            => 'css',
-							'selector'        => '.pp-content-post-carousel .owl-theme .owl-controls .owl-buttons div',
+							'selector'        => '.pp-content-post-carousel .owl-theme .owl-nav button svg',
 							'property'        => 'font-size',
 							'unit'            => 'px'
 						)
@@ -533,7 +500,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'default'       => '1',
                         'preview'         => array(
                             'type'            => 'css',
-                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-controls .owl-buttons div',
+                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-nav button svg',
                             'property'        => 'border-width',
                             'unit'            => 'px'
                         )
@@ -569,7 +536,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                     			'icon'		=> 'fa-long-arrow-up',
 								'preview'         => array(
 		                            'type'            => 'css',
-		                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-controls .owl-buttons div',
+		                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-nav button svg',
 		                            'property'        => 'padding-top',
 		                            'unit'            => 'px'
 		                        )
@@ -581,7 +548,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                     			'icon'		=> 'fa-long-arrow-down',
 								'preview'         => array(
 		                            'type'            => 'css',
-		                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-controls .owl-buttons div',
+		                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-nav button svg',
 		                            'property'        => 'padding-bottom',
 		                            'unit'            => 'px'
 		                        )
@@ -593,7 +560,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                     			'icon'		=> 'fa-long-arrow-left',
 								'preview'         => array(
 		                            'type'            => 'css',
-		                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-controls .owl-buttons div',
+		                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-nav button svg',
 		                            'property'        => 'padding-left',
 		                            'unit'            => 'px'
 		                        )
@@ -605,7 +572,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                     			'icon'		=> 'fa-long-arrow-right',
 								'preview'         => array(
 		                            'type'            => 'css',
-		                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-controls .owl-buttons div',
+		                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-nav button svg',
 		                            'property'        => 'padding-right',
 		                            'unit'            => 'px'
 		                        )
@@ -621,7 +588,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'       => '0',
 						'preview'         => array(
 							'type'            => 'css',
-							'selector'        => '.pp-content-post-carousel .owl-theme .owl-controls .owl-buttons div',
+							'selector'        => '.pp-content-post-carousel .owl-theme .owl-nav button svg',
 							'property'        => 'border-radius',
 							'unit'            => 'px'
 						)
@@ -629,7 +596,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                 )
             ),
             'post_carousel_dot_style'   => array( // Section
-                'title' => 'Carousel Navigation Dots', // Section Title
+                'title' => __('Carousel Navigation Dots', 'bb-powerpack'), // Section Title
                 'fields' => array( // Section Fields
                     'post_slider_dot_bg_color'  => array(
 						'type'          => 'color',
@@ -638,7 +605,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'show_reset'    => true,
 						'preview'       => array(
 							'type'          => 'css',
-                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-controls .owl-page span',
+                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-dots .owl-dot span',
                             'property'        => 'background',
 						)
 					),
@@ -649,7 +616,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'show_reset'    => true,
 						'preview'       => array(
                             'type'          => 'css',
-                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-controls .owl-page.active span',
+                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-dots .owl-dot.active span',
                             'property'        => 'background',
 						)
 					),
@@ -664,12 +631,12 @@ FLBuilder::register_module('PPContentGridModule', array(
                             'type'            => 'css',
                             'rules'           => array(
                                array(
-                                   'selector'        => '.pp-content-post-carousel .owl-theme .owl-controls .owl-page span',
+                                   'selector'        => '.pp-content-post-carousel .owl-theme .owl-dots .owl-dot span',
                                    'property'        => 'width',
                                    'unit'            => 'px'
                                ),
                                array(
-                                   'selector'        => '.pp-content-post-carousel .owl-theme .owl-controls .owl-page span',
+                                   'selector'        => '.pp-content-post-carousel .owl-theme .owl-dots .owl-dot span',
                                    'property'        => 'height',
                                    'unit'            => 'px'
                                ),
@@ -685,7 +652,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'default'       => '100',
                         'preview'         => array(
                             'type'            => 'css',
-                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-controls .owl-page span',
+                            'selector'        => '.pp-content-post-carousel .owl-theme .owl-dots .owl-dot span',
                             'property'        => 'border-radius',
                             'unit'            => 'px'
                         )
@@ -729,13 +696,13 @@ FLBuilder::register_module('PPContentGridModule', array(
                         ),
                         'toggle'    => array(
                             'dashed'   => array(
-                                'fields'    => array('post_border_width', 'post_border_color')
+                                'fields'    => array('post_border_width', 'post_border_color', 'post_border_position')
                             ),
                             'dotted'   => array(
-                                'fields'    => array('post_border_width', 'post_border_color')
+                                'fields'    => array('post_border_width', 'post_border_color', 'post_border_position')
                             ),
                             'solid'   => array(
-                                'fields'    => array('post_border_width', 'post_border_color')
+                                'fields'    => array('post_border_width', 'post_border_color', 'post_border_position')
                             ),
                         ),
                     ),
@@ -779,7 +746,19 @@ FLBuilder::register_module('PPContentGridModule', array(
 								)
 							)
 						)
-                    ),
+					),
+					'post_border_position'    => array(
+                        'type'      => 'select',
+                        'label'     => __('Border Position', 'bb-powerpack'),
+                        'default'   => '',
+                        'options'   => array(
+                            ''  		=> __('All', 'bb-powerpack'),
+                            'top'  		=> __('Top', 'bb-powerpack'),
+                            'bottom'  	=> __('Bottom', 'bb-powerpack'),
+                            'left'  	=> __('Left', 'bb-powerpack'),
+                            'right'  	=> __('Right', 'bb-powerpack'),
+						),
+					),
 					'post_content_alignment'    => array(
                         'type'      => 'pp-switch',
                         'label'     => __('Text Alignment', 'bb-powerpack'),
@@ -1444,12 +1423,89 @@ FLBuilder::register_module('PPContentGridModule', array(
 	'pagination'	=> array(
 		'title'			=> __('Pagination', 'bb-powerpack'),
 		'sections'		=> array(
+			'pagination'   => array(
+				'title'         => __('Pagination', 'bb-powerpack'),
+				'fields'        => array(
+					'pagination'     => array(
+						'type'          => 'select',
+						'label'         => __('Pagination Type', 'bb-powerpack'),
+						'default'       => 'numbers',
+						'options'       => array(
+							'numbers'       => __('Numbers', 'bb-powerpack'),
+							'scroll'        => __('Scroll', 'bb-powerpack'),
+							'load_more'     => __('Load More Button', 'bb-powerpack'),
+							'none'          => _x( 'None', 'Pagination style.', 'bb-powerpack' ),
+						),
+						'toggle'	=> array(
+							'numbers'	=> array(
+								'sections'	=> array('pagination_style', 'pagination_colors', 'pagination_border', 'pagination_typography'),
+							),
+							'load_more'	=> array(
+								'fields'	=> array('load_more_text'),
+								'sections'	=> array('pagination_style', 'pagination_colors', 'pagination_border', 'pagination_typography'),
+							)
+						)
+					),
+					'load_more_text'	=> array(
+						'type'				=> 'text',
+						'label'				=> __('Load More Text', 'bb-powerpack'),
+						'default'			=> __('Load More', 'bb-powerpack'),
+					),
+					'no_results_message' => array(
+						'type' 				=> 'text',
+						'label'				=> __('No Results Message', 'bb-powerpack'),
+						'default'			=> __('Sorry, we couldn\'t find any posts. Please try a different search.', 'bb-powerpack')
+					),
+					'show_search'    => array(
+						'type'          => 'pp-switch',
+						'label'         => __('Show Search', 'bb-powerpack'),
+						'default'       => 'yes',
+						'options'       => array(
+							'yes'          	=> __('Yes', 'bb-powerpack'),
+							'no'          	=> __('No', 'bb-powerpack')
+						),
+						'help'          => __( 'Shows the search form if no posts are found.', 'bb-powerpack' )
+					),
+					'pagination_nofollow'	=> array(
+						'type'					=> 'pp-switch',
+						'label'					=> __('Pagination nofollow', 'bb-powerpack'),
+						'default'				=> 'no',
+						'options'				=> array(
+							'yes'					=> __('Yes', 'bb-powerpack'),
+							'no'					=> __('No', 'bb-powerpack'),
+						)
+					)
+				)
+			),
 			'pagination_style'    => array(
 				'title'         => __('General', 'bb-powerpack'),
 				'fields'        => array(
+					'pagination_align'	=> array(
+						'type'				=> 'pp-switch',
+						'label'				=> __('Alignment', 'bb-powerpack'),
+						'default'			=> 'center',
+						'options'			=> array(
+							'left'				=> __('Left', 'bb-powerpack'),
+							'center'			=> __('Center', 'bb-powerpack'),
+							'right'				=> __('Right', 'bb-powerpack'),
+						),
+						'preview'			=> array(
+							'type'				=> 'css',
+							'rules'				=> array(
+								array(
+									'selector'			=> '.pp-content-grid-load-more',
+									'property'			=> 'text-align'
+								),
+								array(
+									'selector'			=> '.pp-content-grid-pagination',
+									'property'			=> 'text-align'
+								)
+							)
+						)
+					),
 					'pagination_spacing_v'   => array(
                         'type'      => 'text',
-                        'label'     => __('Spacing Top/Bottom', 'bb-powerpack'),
+                        'label'     => __('Spacing Vertical', 'bb-powerpack'),
                         'size'      => 5,
                         'maxlength' => 3,
                         'default'   => 15,
@@ -1466,13 +1522,18 @@ FLBuilder::register_module('PPContentGridModule', array(
 									'selector'	=>'.pp-content-grid-pagination.fl-builder-pagination',
 									'property'	=> 'padding-bottom',
 									'unit'		=> 'px'
+								),
+								array(
+									'selector'	=> '.pp-content-grid-load-more',
+									'property'	=> 'margin-top',
+									'unit'		=> 'px'
 								)
 							)
                         ),
                     ),
 					'pagination_spacing'   => array(
                         'type'      => 'text',
-                        'label'     => __('Spacing Left/Right', 'bb-powerpack'),
+                        'label'     => __('Spacing Horizontal', 'bb-powerpack'),
                         'size'      => 5,
                         'maxlength' => 3,
                         'default'   => 5,
@@ -1482,7 +1543,8 @@ FLBuilder::register_module('PPContentGridModule', array(
 							'selector'	=>'.pp-content-grid-pagination li .page-numbers',
 							'property'	=> 'margin-right',
 							'unit'		=> 'px'
-                        ),
+						),
+						'help'		=> __('It will only work for Numbers pagination.', 'bb-powerpack')
                     ),
 					'pagination_padding'   => array(
                         'type'      => 'pp-multitext',
@@ -1548,7 +1610,8 @@ FLBuilder::register_module('PPContentGridModule', array(
 				'fields'			=> array(
 					'pagination_background_color'    => array(
 						'type'      => 'pp-color',
-                        'label'     => __('Background Color', 'bb-powerpack'),
+						'label'     => __('Background Color', 'bb-powerpack'),
+						'show_reset'   => true,
                         'default'   => array(
 							'primary'	=> 'ffffff',
 							'secondary'	=> 'eeeeee'
@@ -1567,13 +1630,18 @@ FLBuilder::register_module('PPContentGridModule', array(
 								array(
 									'selector'	=> '.pp-content-carousel-post .pp-post-date',
 									'property'	=> 'border-style',
+								),
+								array(
+									'selector'	=> '.pp-content-grid-load-more a',
+									'property'	=> 'border-style',
 								)
 							)
 						)
 					),
 					'pagination_text_color' => array(
 						'type'      => 'pp-color',
-                        'label'     => __('Text Color', 'bb-powerpack'),
+						'label'     => __('Text Color', 'bb-powerpack'),
+						'show_reset'   => true,
                         'default'   => array(
 							'primary'	=> '000000',
 							'secondary'	=> '000000'
@@ -1629,6 +1697,11 @@ FLBuilder::register_module('PPContentGridModule', array(
 									'selector'	=>'.pp-content-grid-pagination li span.page-numbers',
 									'property'	=> 'border-width',
 									'unit'		=> 'px'
+								),
+								array(
+									'selector'	=> '.pp-content-grid-load-more a',
+									'property'	=> 'border-width',
+									'unit'		=> 'px'
 								)
 							)
                         ),
@@ -1648,6 +1721,10 @@ FLBuilder::register_module('PPContentGridModule', array(
 								array(
 									'selector'	=>'.pp-content-grid-pagination li span.page-numbers',
 									'property'	=> 'border-color',
+								),
+								array(
+									'selector'	=> '.pp-content-grid-load-more a',
+									'property'	=> 'border-color',
 								)
 							)
                         ),
@@ -1657,13 +1734,22 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'label'     => __('Round Corners', 'bb-powerpack'),
                         'size'      => 5,
                         'maxlength' => 3,
-                        'default'   => 100,
+                        'default'   => '0',
                         'description'   => 'px',
                         'preview'       => array(
-                            'type'      => 'css',
-							'selector'	=>'.pp-content-grid-pagination li a.page-numbers, .pp-content-grid-pagination li span.page-numbers',
-							'property'	=> 'border-radius',
-							'unit'		=> 'px'
+							'type'      	=> 'css',
+							'rules'			=> array(
+								array(
+									'selector'	=>'.pp-content-grid-pagination li a.page-numbers, .pp-content-grid-pagination li span.page-numbers',
+									'property'	=> 'border-radius',
+									'unit'		=> 'px'
+								),
+								array(
+									'selector'	=> '.pp-content-grid-load-more a',
+									'property'	=> 'border-radius',
+									'unit'		=> 'px'
+								)
+							)
                         ),
                     ),
 				)
@@ -1673,18 +1759,48 @@ FLBuilder::register_module('PPContentGridModule', array(
 	'filters_style'         => array( // Tab
 		'title'         => __('Filter', 'bb-powerpack'), // Tab title
 		'sections'      => array( // Tab Sections
-			'filter_settings'	=> array(
-				'title'				=> '',
-				'fields'			=> array(
+			'filter_general_setting'	=> array(
+				'title'	=> __('General', 'bb-powerpack'),
+				'fields'	=> array(
 					'responsive_filter'	=> array(
-						'type'				=> 'pp-switch',
-						'label'				=> __('Filter Dropdown on Responsive', 'bb-powerpack'),
+						'type'				=> 'select',
+						'label'				=> __('Filter Toggle Breakpoint', 'bb-powerpack'),
 						'default'			=> 'no',
 						'options'			=> array(
-							'yes'				=> __('Yes', 'bb-powerpack'),
-							'no'				=> __('No', 'bb-powerpack'),
-						)
-					)
+							'no'				=> __('None', 'bb-powerpack'),
+							'all'				=> __('All devices', 'bb-powerpack'),
+							'large'				=> __('Large devices', 'bb-powerpack'),
+							'large_medium'		=> __('Large & Medium devices', 'bb-powerpack'),
+							'medium'			=> __('Medium devices', 'bb-powerpack'),
+							'medium_small'		=> __('Medium & Small devices', 'bb-powerpack'),
+							'yes'				=> __('Small devices', 'bb-powerpack')
+						),
+						'help'				=> __('By eneabling this option will convert filters into a toggle. If you want to display the filters as they are appearing on desktop, keep it disabled.', 'bb-powerpack')
+					),
+					'filter_alignment'    => array(
+                        'type'      => 'pp-switch',
+                        'label'     => __('Alignment', 'bb-powerpack'),
+                        'default'   => 'left',
+                        'options'   => array(
+                            'left'  => __('Left', 'bb-powerpack'),
+                            'center'  => __('Center', 'bb-powerpack'),
+                            'Right'  => __('Right', 'bb-powerpack'),
+                        ),
+					),
+					'filter_margin' 	=> array(
+						'type'      => 'text',
+                        'label'     => __('Spacing', 'bb-powerpack'),
+                        'size'      => 5,
+                        'maxlength' => 3,
+                        'default'   => 10,
+                        'description'   => 'px',
+                        'preview'       => array(
+							'type'            => 'css',
+							'selector'        => '.pp-post-filters li',
+							'property'        => 'margin-right',
+							'unit'            => 'px'
+                        ),
+                    ),
 				)
 			),
 			'filter_colors'	=> array(
@@ -1896,35 +2012,71 @@ FLBuilder::register_module('PPContentGridModule', array(
                     ),
 				)
 			),
-			'filter_general_setting'	=> array(
-				'title'	=> __('General', 'bb-powerpack'),
-				'fields'	=> array(
-					'filter_margin' 	=> array(
-						'type'      => 'text',
-                        'label'     => __('Spacing', 'bb-powerpack'),
-                        'size'      => 5,
-                        'maxlength' => 3,
-                        'default'   => 10,
-                        'description'   => 'px',
-                        'preview'       => array(
-							'type'            => 'css',
-							'selector'        => '.pp-post-filters li',
-							'property'        => 'margin-right',
-							'unit'            => 'px'
-                        ),
-                    ),
-					'filter_alignment'    => array(
-                        'type'      => 'pp-switch',
-                        'label'     => __('Alignment', 'bb-powerpack'),
-                        'default'   => 'left',
-                        'options'   => array(
-                            'left'  => __('Left', 'bb-powerpack'),
-                            'center'  => __('Center', 'bb-powerpack'),
-                            'Right'  => __('Right', 'bb-powerpack'),
-                        ),
-                    ),
+			'filter_toggle'	=> array(
+				'title'			=> __('Toggle', 'bb-powerpack'),
+				'fields'		=> array(
+					'filter_toggle_bg'	=> array(
+						'type'				=> 'color',
+						'label'				=> __('Background Color', 'bb-powerpack'),
+						'default'			=> 'ffffff',
+						'show_reset'		=> true,
+						'show_alpha'		=> true,
+						'preview'			=> array(
+							'type'				=> 'css',
+							'selector'			=> '.pp-post-filters-toggle',
+							'property'			=> 'background'
+						)
+					),
+					'filter_toggle_color'	=> array(
+						'type'				=> 'color',
+						'label'				=> __('Text Color', 'bb-powerpack'),
+						'default'			=> '444444',
+						'show_reset'		=> true,
+						'preview'			=> array(
+							'type'				=> 'css',
+							'selector'			=> '.pp-post-filters-toggle',
+							'property'			=> 'color'
+						)
+					),
+					'filter_toggle_border'	=> array(
+						'type'					=> 'text',
+						'label'					=> __('Border Width', 'bb-powerpack'),
+						'default'				=> '0',
+						'description'			=> 'px',
+						'size'					=> '5',
+						'preview'				=> array(
+							'type'					=> 'css',
+							'selector'				=> '.pp-post-filters-toggle',
+							'property'				=> 'border-width',
+							'unit'					=> 'px'
+						)
+					),
+					'filter_toggle_border_color'	=> array(
+						'type'				=> 'color',
+						'label'				=> __('Border Color', 'bb-powerpack'),
+						'show_reset'		=> true,
+						'show_alpha'		=> true,
+						'preview'			=> array(
+							'type'				=> 'css',
+							'selector'			=> '.pp-post-filters-toggle',
+							'property'			=> 'border-color'
+						)
+					),
+					'filter_toggle_radius'	=> array(
+						'type'					=> 'text',
+						'label'					=> __('Round Corners', 'bb-powerpack'),
+						'default'				=> '0',
+						'description'			=> 'px',
+						'size'					=> '5',
+						'preview'				=> array(
+							'type'					=> 'css',
+							'selector'				=> '.pp-post-filters-toggle',
+							'property'				=> 'border-radius',
+							'unit'					=> 'px'
+						)
+					)
 				)
-			),
+			)
 		)
 	),
 	'typography'	=> array( // Tab
@@ -1943,6 +2095,9 @@ FLBuilder::register_module('PPContentGridModule', array(
 							'h4'	=> 'H4',
 							'h5'	=> 'H5',
 							'h6'	=> 'H6',
+							'p'		=> 'p',
+							'span'	=> 'span',
+							'div'	=> 'div'
 						),
 						'default'	=> 'h3',
 						'help' 		=> __('Set the HTML tag for title output', 'bb-powerpack'),
@@ -2334,6 +2489,18 @@ FLBuilder::register_module('PPContentGridModule', array(
 							)
 						),
 					),
+					'post_meta_bg_color'	=> array(
+						'type'			=> 'color',
+						'label'			=> __('Background Color', 'bb-powerpack'),
+						'default'		=> '333',
+						'show_reset' 	=> true,
+						'show_alpha' 	=> true,
+						'preview'		=> array(
+							'type'			=> 'css',
+							'selector'		=> '.pp-content-post .pp-post-meta span',
+							'property'		=> 'background-color'
+						)
+					),
 					'post_meta_text_transform' => array(
 						'type'		=> 'select',
 						'label'		=> __('Text Transform', 'bb-powerpack'),
@@ -2343,6 +2510,65 @@ FLBuilder::register_module('PPContentGridModule', array(
 							'lowercase'         => __('lowercase', 'bb-powerpack'),
 							'uppercase'         => __('UPPERCASE', 'bb-powerpack'),
 						),
+					),
+				)
+			),
+			'events_calendar_style'	=> array(
+				'title'		=> __('The Events Calendar', 'bb-powerpack'),
+				'fields'	=> array(
+					'event_date_color'	=> array(
+						'type'				=> 'color',
+						'label'				=> __('Date Color', 'bb-powerpack'),
+						'default'			=> '',
+						'show_reset'		=> true,
+						'preview'			=> array(
+							'type'				=> 'css',
+							'selector'			=> '.pp-post-event-calendar-date, .pp-post-event-calendar-date span',
+							'property'			=> 'color'
+						)
+					),
+					'event_date_case'	=> array(
+						'type'				=> 'select',
+						'label'				=> __('Text Transform', 'bb-powerpack'),
+						'default'			=> 'default',
+						'options'			=> array(
+							'default'			=> __('Default', 'bb-powerpack'),
+							'lowercase'			=> __('lowercase', 'bb-powerpack'),
+							'uppercase'			=> __('UPPERCASE', 'bb-powerpack'),
+						),
+						'preview'			=> array(
+							'type'				=> 'css',
+							'selector'			=> '.pp-post-event-calendar-date, .pp-post-event-calendar-date span',
+							'property'			=> 'text-transform'
+						)
+					),
+					'field_separator_e1'	=> array(
+						'type'		=> 'pp-separator'
+					),
+					'event_venue_color'	=> array(
+						'type'				=> 'color',
+						'label'				=> __('Venue Color', 'bb-powerpack'),
+						'default'			=> '',
+						'show_reset'		=> true,
+						'preview'			=> array(
+							'type'				=> 'css',
+							'selector'			=> '.pp-post-event-calendar-venue, .pp-post-event-calendar-venue span.tribe-address',
+							'property'			=> 'color'
+						)
+					),
+					'field_separator_e2'	=> array(
+						'type'		=> 'pp-separator'
+					),
+					'event_cost_color'	=> array(
+						'type'				=> 'color',
+						'label'				=> __('Cost Color', 'bb-powerpack'),
+						'default'			=> '',
+						'show_reset'		=> true,
+						'preview'			=> array(
+							'type'				=> 'css',
+							'selector'			=> '.pp-post-event-calendar-cost, .pp-post-event-calendar-cost span.ticket-cost',
+							'property'			=> 'color'
+						)
 					),
 				)
 			),

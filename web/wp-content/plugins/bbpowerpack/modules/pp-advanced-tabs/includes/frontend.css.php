@@ -98,12 +98,9 @@
 }
 
 .fl-node-<?php echo $id; ?> .pp-tabs .pp-tabs-label.pp-tab-active,
-.fl-node-<?php echo $id; ?> .pp-tabs .pp-tabs-label.pp-tab-active:hover {
-	background-color: #<?php echo $settings->label_background_active_color; ?>;
-	color: #<?php echo $settings->label_active_text_color; ?>;
-}
-
+.fl-node-<?php echo $id; ?> .pp-tabs .pp-tabs-label.pp-tab-active:hover,
 .fl-node-<?php echo $id; ?> .pp-tabs .pp-tabs-label:hover {
+	background-color: #<?php echo $settings->label_background_active_color; ?>;
 	color: #<?php echo $settings->label_active_text_color; ?>;
 }
 
@@ -118,7 +115,11 @@
 	color: #<?php echo $settings->label_active_text_color; ?>;
 }
 
-
+.fl-node-<?php echo $id; ?> .pp-tabs-horizontal.pp-tabs-default .pp-tabs-label.pp-tab-active {
+	<?php if ( ! empty( $settings->label_background_active_color ) ) { ?>
+	top: 0;
+	<?php } ?>
+}
 
 /*  Style 1
 ------------------------------------ */
@@ -144,10 +145,6 @@
 	background: <?php echo pp_hex2rgba('#'.$settings->border_color, '0.7'); ?>;
 }
 
-.fl-node-<?php echo $id; ?> .pp-tabs-style-2 .pp-tabs-label:hover {
-	color: #<?php echo $settings->label_text_color; ?>;
-}
-
 /*  Style 3
 ------------------------------------ */
 
@@ -157,6 +154,7 @@
 
 .fl-node-<?php echo $id; ?> .pp-tabs-style-3 .pp-tabs-label:hover {
 	color: #<?php echo $settings->label_text_color; ?>;
+	background-color: #<?php echo $settings->label_background_color; ?>;
 }
 
 
@@ -165,6 +163,11 @@
 
 .fl-node-<?php echo $id; ?> .pp-tabs-style-4 .pp-tabs-label:before {
 	background-color: #<?php echo $settings->label_active_text_color; ?>;
+}
+
+.fl-node-<?php echo $id; ?> .pp-tabs-style-4 .pp-tabs-label:hover {
+	color: #<?php echo $settings->label_text_color; ?>;
+	background-color: #<?php echo $settings->label_background_color; ?>;
 }
 
 /*  Style 5
@@ -206,7 +209,8 @@
 .fl-node-<?php echo $id; ?> .pp-tabs-style-6 .pp-tabs-label.pp-tab-active,
 .fl-node-<?php echo $id; ?> .pp-tabs-style-6 .pp-tabs-label.pp-tab-active:hover,
 .fl-node-<?php echo $id; ?> .pp-tabs .pp-tabs-style-6 .pp-tabs-label:hover {
-	background-color: transparent;
+	background-color: transparent !important;
+	color: #<?php echo $settings->label_text_color; ?> !important;
 }
 
 .fl-node-<?php echo $id; ?> .pp-tabs-style-6 .pp-tabs-label:last-child:before {
@@ -273,7 +277,8 @@
 
 
 @media only screen and (max-width: 768px) {
-	.fl-node-<?php echo $id; ?> .pp-tabs-labels .pp-tabs-label .pp-tab-title {
+	.fl-node-<?php echo $id; ?> .pp-tabs-labels .pp-tabs-label .pp-tab-title,
+	.fl-node-<?php echo $id; ?> .pp-tabs-panels .pp-tabs-label .pp-tab-title {
 		<?php if( $settings->tab_label_font_size['tablet'] && $settings->tab_title_size == 'custom' ) { ?>
 		font-size: <?php echo $settings->tab_label_font_size['tablet']; ?>px;
 		<?php } ?>
@@ -295,10 +300,14 @@
 	.fl-node-<?php echo $id; ?> .pp-tabs-style-8 .pp-tabs-label.pp-tab-active {
 		background-color: #<?php echo $settings->label_background_active_color; ?> !important;
 	}
+	.fl-node-<?php echo $id; ?> .pp-tabs-panels {
+		visibility: hidden;
+	}
 }
 
 @media only screen and (max-width: 480px) {
-	.fl-node-<?php echo $id; ?> .pp-tabs-labels .pp-tabs-label .pp-tab-title {
+	.fl-node-<?php echo $id; ?> .pp-tabs-labels .pp-tabs-label .pp-tab-title,
+	.fl-node-<?php echo $id; ?> .pp-tabs-panels .pp-tabs-label .pp-tab-title {
 		<?php if( $settings->tab_label_font_size['mobile'] && $settings->tab_title_size == 'custom' ) { ?>
 		font-size: <?php echo $settings->tab_label_font_size['mobile']; ?>px;
 		<?php } ?>

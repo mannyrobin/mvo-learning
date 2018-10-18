@@ -18,7 +18,7 @@ if ( ! class_exists( 'PP_Module_Fields' ) ) {
          *
          * @var object
          */
-        public static $instance;
+		public static $instance;
 
         /**
          * Primary class constructor.
@@ -39,19 +39,21 @@ if ( ! class_exists( 'PP_Module_Fields' ) ) {
             add_action( 'fl_builder_control_pp-css-class', array( $this, '_css_class' ), 1, 4 );
             add_action( 'fl_builder_control_pp-datepicker', array( $this, '_datepicker' ), 1, 4 );
             add_action( 'fl_builder_control_pp-hidden', array( $this, '_hidden' ), 1, 4 );
-            add_action( 'fl_builder_control_pp-hidden-textarea', array( $this, '_hidden_textarea' ), 1, 4 );
+			add_action( 'fl_builder_control_pp-hidden-textarea', array( $this, '_hidden_textarea' ), 1, 4 );
+			add_action('fl_builder_control_pp-normal-date', array( $this, '_normal_date' ), 1, 4);
+        	add_action('fl_builder_control_pp-evergreen-date', array( $this, '_evergreen_date' ), 1, 4);
 
             add_action( 'fl_builder_before_render_module', array( $this, 'fallback_settings' ), 10, 1 );
-            add_action( 'fl_builder_custom_fields', array( $this, 'ui_fields' ), 10, 1 );
-        }
+			add_action( 'fl_builder_custom_fields', array( $this, 'ui_fields' ), 10, 1 );
+		}
 
-        public function field_assets()
-        {
-            if ( class_exists( 'FLBuilderModel' ) && FLBuilderModel::is_builder_active() ) {
-                wp_enqueue_script( 'jquery-ui-core' );
-      		    wp_enqueue_script( 'jquery-ui-datepicker' );
-            }
-        }
+		public function field_assets()
+		{
+			if ( class_exists( 'FLBuilderModel' ) && FLBuilderModel::is_builder_active() ) {
+				wp_enqueue_script( 'jquery-ui-core' );
+				wp_enqueue_script( 'jquery-ui-datepicker' );
+			}
+		}
 
         public function fallback_settings( $module )
         {
@@ -339,6 +341,208 @@ if ( ! class_exists( 'PP_Module_Fields' ) ) {
             echo '<input type="text" class="pp-field-datepicker" name="' . $name . '" value="' . $value . '" data-format="' . $format . '"/>';
         }
 
+		function _normal_date($name, $value, $field, $settings) {
+
+			$custom_class = isset( $field['class'] ) ? $field['class'] : '';
+
+			$preview = isset( $field['preview'] ) ? json_encode( $field['preview'] ) : json_encode( array( 'type' => 'refresh' ) );
+
+			echo '<div class="pp-date-wrap fl-field" data-type="select" data-preview=\'' . $preview . '\'><div class="pp-countdown-custom-fields pp-countdown-field-days"><select class="text text-full" name="' . $name . '_days" ><option value="0">' . __( 'Days', 'bb-powerpack' ) . '</option>';
+
+			for ( $i=1; $i <= 31; $i++ ) {
+			    $selected = "";
+			    if ( isset( $settings->fixed_date_days ) ) {
+			          if ( $i == $settings->fixed_date_days ) {
+			              $selected = "selected";
+			          } else{
+			              $selected = "";
+			          }
+			    } else if( $i == 29 ) {
+			          $selected = "selected";
+			    }
+
+			    if( $i <= 9 ) {
+			          echo '<option value="' . $i . '" ' . $selected . '>0' . $i . '</option>';
+			    } else {
+			          echo '<option value="' . $i . '" ' . $selected . '>' . $i . '</option>';
+			    }
+
+			}
+
+			$selected_month = ( isset( $settings->fixed_date_month ) && ! empty( $settings->fixed_date_month ) ) ? $settings->fixed_date_month : "01";
+
+			echo '</select></br><label>' . __( 'Days', 'bb-powerpack' ) . '</label></div>';
+
+			// Month
+			echo '<div class="pp-countdown-custom-fields pp-countdown-field-months"><select class="text text-full" name="' . $name . '_month" >';
+			echo '<option value="0">' . __( 'Months', 'bb-powerpack' ) . '</option>';
+			echo '<option value="01" ' . ( ( $selected_month == "01" ) ? 'selected' : '' ) . ' >Jan</option>';
+			echo '<option value="02" ' . ( ( $selected_month == "02" ) ? 'selected' : '' ) . ' >Feb</option>';
+			echo '<option value="03" ' . ( ( $selected_month == "03" ) ? 'selected' : '' ) . ' >Mar</option>';
+			echo '<option value="04" ' . ( ( $selected_month == "04" ) ? 'selected' : '' ) . ' >Apr</option>';
+			echo '<option value="05" ' . ( ( $selected_month == "05" ) ? 'selected' : '' ) . ' >May</option>';
+			echo '<option value="06" ' . ( ( $selected_month == "06" ) ? 'selected' : '' ) . ' >Jun</option>';
+			echo '<option value="07" ' . ( ( $selected_month == "07" ) ? 'selected' : '' ) . ' >Jul</option>';
+			echo '<option value="08" ' . ( ( $selected_month == "08" ) ? 'selected' : '' ) . ' >Aug</option>';
+			echo '<option value="09" ' . ( ( $selected_month == "09" ) ? 'selected' : '' ) . ' >Sep</option>';
+			echo '<option value="10" ' . ( ( $selected_month == "10" ) ? 'selected' : '' ) . ' >Oct</option>';
+			echo '<option value="11" ' . ( ( $selected_month == "11" ) ? 'selected' : '' ) . ' >Nov</option>';
+			echo '<option value="12" ' . ( ( $selected_month == "12" ) ? 'selected' : '' ) . ' >Dec</option>';
+			echo '</select></br><label>' . __( 'Months', 'bb-powerpack' ) . '</label></div>';
+
+			// Year
+			echo '<div class="pp-countdown-custom-fields pp-countdown-field-years"><select class="text text-full" name="'.$name.'_year" >';
+			echo '<option value="0">' . __( 'Years', 'bb-powerpack' ) . '</option>';
+			for ( $i = date('Y'); $i < date('Y') + 6; $i++ ) {
+			    $selected = "";
+			    if ( isset( $settings->fixed_date_year ) ) {
+			        if ( $i == $settings->fixed_date_year ) {
+			            $selected = "selected";
+			        } else {
+			            $selected = "";
+			        }
+			    } else if ( $i == date('Y') + 5 ) {
+			        $selected = "selected";
+			    }
+			    echo '<option value="'.$i.'" '. $selected .'>'.$i.'</option>';
+			}
+			echo '</select></br><label>' . __( 'Years', 'bb-powerpack' ) . '</label></div>';
+
+			// Hour
+			echo '<div class="pp-countdown-custom-fields pp-countdown-field-hours"><select class="text text-full" name="'.$name.'_hours" >';
+			echo '<option value="0">' . __( 'Hours', 'bb-powerpack' ) . '</option>';
+			for ( $i = 0; $i < 24; $i++ ) {
+			$selected = "";
+			if ( isset( $settings->fixed_date_hours ) ) {
+			  if ( $i == $settings->fixed_date_hours ) {
+			      $selected = "selected";
+			  } else {
+			      $selected = "";
+			  }
+			} else if( $i == 23 ) {
+			  $selected = "selected";
+			}
+
+			if( $i <= 9 ){
+			  echo '<option value="'.$i.'" '.$selected.'>0'.$i.'</option>';
+			} else {
+			  echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
+			}
+			}
+			echo '</select></br><label>' . __( 'Hours', 'bb-powerpack' ) . '</label></div>';
+
+			// Minute
+			echo '<div class="pp-countdown-custom-fields pp-countdown-field-minutes"><select class="text text-full" name="'.$name.'_minutes" >';
+			echo '<option value="0">' . __( 'Minutes', 'bb-powerpack' ) . '</option>';
+			for ( $i = 0; $i < 60; $i++ ) {
+			    $selected = "";
+			    if ( isset( $settings->fixed_date_minutes ) ) {
+			        if ( $i == $settings->fixed_date_minutes ) {
+			            $selected = "selected";
+			        } else {
+			            $selected = "";
+			        }
+			    } else if( $i == 59 ) {
+			        $selected = "selected";
+			    }
+
+			    if( $i <= 9 ) {
+			        echo '<option value="'.$i.'" '.$selected.'>0'.$i.'</option>';
+			    } else {
+			        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
+			    }
+			}
+			echo '</select></br><label>' . __( 'Minutes', 'bb-powerpack' ) . '</label></div>';
+		}
+
+		function _evergreen_date($name, $value, $field, $settings) {
+
+			$custom_class = isset( $field['class'] ) ? $field['class'] : '';
+			$selected = '';
+			$preview = isset( $field['preview'] ) ? json_encode( $field['preview'] ) : json_encode( array( 'type' => 'refresh' ) );
+
+
+			echo '<div class="fl-field pp-evergreen-wrap" data-type="select" data-preview=\'' . $preview . '\'><div class="pp-countdown-custom-fields pp-countdown-field-days"><select class="text text-full" name="' . $name . '_days" >';
+			echo '<option value="0">' . __( 'Days', 'bb-powerpack' ) . '</option>';
+			for ( $i=0; $i <= 31; $i++ ) {
+			    if ( isset( $settings->evergreen_date_days ) ) {
+			          if ( $i == $settings->evergreen_date_days ) {
+			              $selected = "selected";
+			          } else {
+			              $selected = "";
+			          }
+			    } else if( $i == 30 ) {
+			          $selected = "selected";
+			    }
+			    if( $i <= 9 ) {
+			          echo '<option value="'.$i.'" '.$selected.'>0'.$i.'</option>';
+			    } else {
+			          echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
+			    }
+			}
+			echo '</select></br><label>' . __( 'Days', 'bb-powerpack' ) . '</label></div>';
+
+
+
+			echo '<div class="pp-countdown-custom-fields pp-countdown-field-hours"><select class="text text-full" name="' . $name . '_hours" >';
+			echo '<option value="0">' . __( 'Hours', 'bb-powerpack' ) . '</option>';
+			for ( $i = 0; $i < 24; $i++ ) {
+			    if ( isset( $settings->evergreen_date_hours ) ) {
+			        if ( $i == $settings->evergreen_date_hours ) {
+			            $selected = "selected";
+			        } else {
+			            $selected = "";
+			        }
+			    } else if( $i == 23 ) {
+			        $selected = "selected";
+			    }
+			    if( $i <= 9 ) {
+			        echo '<option value="'.$i.'" '.$selected.'>0'.$i.'</option>';
+			    } else {
+			        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
+					}
+			}
+		echo '</select></br><label>' . __( 'Hours', 'bb-powerpack' ) . '</label></div>';
+		echo '<div class="pp-countdown-custom-fields pp-countdown-field-minutes"><select class="text text-full" name="' . $name . '_minutes" >';
+		echo '<option value="0">' . __( 'Minutes', 'bb-powerpack' ) . '</option>';
+		for ( $i = 0; $i < 60; $i++ ) {
+		    if ( isset( $settings->evergreen_date_minutes ) ) {
+		        if ( $i == $settings->evergreen_date_minutes ) {
+		            $selected = "selected";
+		        } else {
+		            $selected = "";
+		        }
+		    } else if( $i == 59 ) {
+		        $selected = "selected";
+		    }
+
+		    if( $i <= 9 ) {
+		        echo '<option value="'.$i.'" '.$selected.'>0'.$i.'</option>';
+		    } else {
+		        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
+		    }
+		}
+		echo '</select></br><label>' . __( 'Minutes', 'bb-powerpack' ) . '</label></div>';
+		echo '<div class="pp-countdown-custom-fields pp-countdown-field-seconds"><select class="text text-full" name="' . $name . '_seconds" >';
+		echo '<option value="0">' . __( 'Seconds', 'bb-powerpack' ) . '</option>';
+		for ( $i = 0; $i < 60; $i++ ) {
+		    if ( isset( $settings->evergreen_date_seconds ) ) {
+		        if ( $i == $settings->evergreen_date_seconds ) {
+		            $selected = "selected";
+		        } else {
+		            $selected = "";
+		        }
+		    } else if ( $i == 59 ) {
+		        $selected = "selected";
+		    }
+		    if( $i <= 9 ){
+		        echo '<option value="'.$i.'" '.$selected.'>0'.$i.'</option>';
+		    } else {
+		        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
+		    }
+		}
+		echo '</select></br><label>' . __( 'Seconds', 'bb-powerpack' ) . '</label></div></div>';
+	}
         /**
          * Hidden
          */
@@ -377,7 +581,149 @@ if ( ! class_exists( 'PP_Module_Fields' ) ) {
             $fields['pp-css-class']     = BB_POWERPACK_DIR . 'includes/ui-field-pp-css-class.php';
 
             return $fields;
-        }
+		}
+		
+		public static function get_field( $type, $label = '', $args = array() )
+		{
+			$field 		= array();
+			$default 	= ( isset( $args['default'] ) ) ? $args['default'] : '';
+			$desc 		= ( isset( $args['desc'] ) ) ? $args['desc'] : '';
+			$help 		= ( isset( $args['help'] ) ) ? $args['help'] : '';
+			$responsive = ( isset( $args['responsive'] ) ) ? $args['responsive'] : true;
+			$preview	= ( isset( $args['preview'] ) ) ? $args['preview'] : array(
+				'type'	=> 'refresh'
+			);
+
+			switch ( $type ) {
+				case 'color':
+					$field = array(
+						'type'			=> 'color',
+						'show_alpha'	=> ( isset( $args['alpha'] ) && ! $args['alpha'] ) ? false : true,
+						'show_reset'	=> ( isset( $args['reset'] ) && ! $args['reset'] ) ? false : true,
+					);
+					break;
+				case 'border-style':
+					$field = array(
+						'type'		=> 'pp-switch',
+						'default'	=> 'none',
+						'options'	=> array(
+							'none'		=> __('None', 'bb-powerpack'),
+							'dashed'	=> __('Dashed', 'bb-powerpack'),
+							'dotted'	=> __('Dotted', 'bb-powerpack'),
+							'solid'		=> __('Solid', 'bb-powerpack'),
+						)
+					);
+					break;
+				case 'unit':
+					$field = array(
+						'type'		=> 'unit',
+						'slider'	=> true,
+						'responsive'	=> $responsive
+					);
+					break;
+				case 'dimension':
+					$field = array(
+						'type'		=> 'dimension',
+						'slider'	=> true,
+						'responsive'	=> $responsive
+					);
+					break;
+				case 'align':
+					$field = array(
+						'type'		=> 'pp-switch',
+						'options'	=> array(
+							'left'		=> __('Left', 'bb-powerpack'),
+							'center'	=> __('Center', 'bb-powerpack'),
+							'right'		=> __('Right', 'bb-powerpack'),
+						),
+						'default'	=> 'left'
+					);
+					break;
+				default:
+					break;
+			}
+
+			$field['label'] = $label;
+
+			if ( ! empty( $desc ) ) {
+				$field['description'] = $desc;
+			}
+
+			if ( ! empty( $default ) ) {
+				$field['default'] = $default;
+			}
+
+			if ( ! empty( $help ) ) {
+				$field['help'] = $help;
+			}
+
+			if ( isset( $args['toggle'] ) ) {
+				$field['toggle'] 	= $args['toggle'];
+			}
+
+			$field['preview'] = $preview;
+
+			return $field;
+		}
+
+		public static function get_button_style_fields( $prefix = '', $fields_data = array() )
+		{
+			$fields = array(
+				'bg_color'			=> self::get_field( 'color', __('Background Color', 'bb-powerpack') ),
+				'bg_hover_color'	=> self::get_field( 'color', __('Background Hover Color', 'bb-powerpack'), array( 'preview'	=> array( 'type' => 'none' ) ) ),
+				'text_color'		=> self::get_field( 'color', __('Text Color', 'bb-powerpack') ),
+				'text_hover_color'	=> self::get_field( 'color', __('Text Hover Color', 'bb-powerpack'), array( 'preview'	=> array( 'type' => 'none' ) ) ),
+				'border_style'		=> self::get_field( 'border-style', __('Border Style', 'bb-powerpack') ),
+				'border_width'		=> self::get_field( 'unit', __('Border Width', 'bb-powerpack'), array( 'desc' => 'px', 'responsive' => false ) ),
+				'border_color'		=> self::get_field( 'color', __('Border Color', 'bb-powerpack') ),
+				'border_hover_color' => self::get_field( 'color', __('Border Hover Color', 'bb-powerpack'), array( 'preview'	=> array( 'type' => 'none' ) ) ),
+				'border_radius'		=> self::get_field( 'unit', __('Round Corners', 'bb-powerpack'), array( 'desc' => 'px', 'responsive' => false ) ),
+				'margin_top'		=> self::get_field( 'unit', __('Margin Top', 'bb-powerpack'), array( 'desc' => 'px' ) ),
+				'padding'			=> self::get_field( 'dimension', __('Padding', 'bb-powerpack') ),
+				'alignment'			=> self::get_field( 'align', __('Alignment', 'bb-powerpack') ),
+			);
+
+			$final_fields = $fields;
+
+			if ( ! empty( $fields_data ) ) {
+
+				foreach ( $fields_data as $key => $field ) {
+					if ( isset( $final_fields[ $key ] ) ) {
+						if ( isset( $field['include'] ) && ! $field['include'] ) {
+							unset( $final_fields[ $key ] );
+						}
+						if ( isset( $field['label'] ) ) {
+							$final_fields[ $key ]['label'] = $field['label'];
+						}
+						if ( isset( $field['description'] ) ) {
+							$final_fields[ $key ]['description'] = $field['description'];
+						}
+						if ( isset( $field['default'] ) ) {
+							$final_fields[ $key ]['default'] = $field['default'];
+						}
+						if ( isset( $field['help'] ) ) {
+							$final_fields[ $key ]['help'] = $field['help'];
+						}
+						if ( isset( $field['preview'] ) ) {
+							$final_fields[ $key ]['preview'] = $field['preview'];
+						}
+						if ( isset( $field['toggle'] ) ) {
+							$final_fields[ $key ]['toggle'] = $field['toggle'];
+						}
+					}
+				}
+			}
+
+			$fields_with_prefix = array();
+
+			foreach ( $final_fields as $key => $field ) {
+				$field_name = $prefix . '_' . $key;
+
+				$fields_with_prefix[ $field_name ] = $field;
+			}
+
+			return $fields_with_prefix;
+		}
 
         /**
          * Returns the singleton instance of the class.
@@ -390,12 +736,10 @@ if ( ! class_exists( 'PP_Module_Fields' ) ) {
         {
             if ( ! isset( self::$instance ) && ! ( self::$instance instanceof PP_Module_Fields ) ) {
                 self::$instance = new PP_Module_Fields();
-            }
-
-            return self::$instance;
-        }
-
-    }
+			}
+			return self::$instance;
+		}
+	}
 
     $pp_fields = PP_Module_Fields::get_instance();
 }

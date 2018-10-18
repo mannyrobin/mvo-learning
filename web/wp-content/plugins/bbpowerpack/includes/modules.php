@@ -46,8 +46,18 @@ $modules = array(
     'modules/pp-advanced-menu/pp-advanced-menu.php',
     'modules/pp-gallery/pp-gallery.php',
     'modules/pp-animated-headlines/pp-animated-headlines.php',
+    'modules/pp-instagram-feed/pp-instagram-feed.php',
     'modules/pp-image-carousel/pp-image-carousel.php',
     'modules/pp-post-timeline/pp-post-timeline.php',
+    'modules/pp-facebook-page/pp-facebook-page.php',
+    'modules/pp-facebook-button/pp-facebook-button.php',
+    'modules/pp-facebook-embed/pp-facebook-embed.php',
+    'modules/pp-facebook-comments/pp-facebook-comments.php',
+    'modules/pp-twitter-tweet/pp-twitter-tweet.php',
+    'modules/pp-twitter-grid/pp-twitter-grid.php',
+    'modules/pp-twitter-timeline/pp-twitter-timeline.php',
+    'modules/pp-twitter-buttons/pp-twitter-buttons.php',
+    'modules/pp-countdown/pp-countdown.php',
 );
 
 /* Custom Grid */

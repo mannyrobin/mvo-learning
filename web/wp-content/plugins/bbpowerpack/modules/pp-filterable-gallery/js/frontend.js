@@ -3,12 +3,11 @@
 	{
 		this.settings       = settings;
 		this.nodeClass      = '.fl-node-' + settings.id;
-		this.wrapperClass   = this.nodeClass + ' .pp-gallery-' + this.settings.layout;
-		this.postClass      = this.wrapperClass + ' .pp-gallery-' + this.settings.layout + '-item';
-		this.matchHeight	= settings.matchHeight == 'yes' ? true : false;
-		this.masonry		= settings.masonry == 'yes' ? true : false;
+		this.wrapperClass   = this.nodeClass + ' .pp-photo-gallery';
+		this.itemClass      = this.wrapperClass + ' .pp-gallery-item';
+		this.masonry		= this.settings.layout === 'masonry' ? true : false;
 
-		if(this._hasPosts()) {
+		if(this._hasItems()) {
 			this._initLayout();
 		}
 	};
@@ -18,57 +17,76 @@
 		settings        : {},
 		nodeClass       : '',
 		wrapperClass    : '',
+		itemClass       : '',
+		filterData		: {},
 		postClass       : '',
 		gallery         : null,
+		matchHeight		: false,
+		masonry			: false,
 
-		_hasPosts: function()
+		_hasItems: function()
 		{
-			return $(this.postClass).length > 0;
+			return $(this.itemClass).length > 0;
 		},
 
 		_initLayout: function()
 		{
-			switch(this.settings.layout) {
+			this._initFilterData();
+			this._gridLayout();
 
-				case 'grid':
-				this._gridLayout();
-				break;
+			$(window).on('load', $.proxy( this._hashChange, this));
 
-				case 'masonry':
-				this._masonryLayout();
-				break;
+			$(window).on('hashchange', $.proxy( this._hashChange, this ));
+		},
 
+		_hashChange: function()
+		{
+			if( location.hash && $(location.hash).length > 0 ) {
+				if ( $(location.hash).parent().hasClass('pp-gallery-filters') ) {
+					$(location.hash).trigger('click');
+				}
+			}
+		},
+
+		_initFilterData: function()
+		{
+			var filterData = {
+				itemSelector: '.pp-gallery-item',
+				percentPosition: true,
+				transitionDuration: '0.6s',
+			};
+
+			if ( ! this.masonry ) {
+				filterData = $.extend( {}, filterData, {
+					layoutMode: 'fitRows',
+					fitRows: {
+						gutter: '.pp-photo-space'
+					  },
+				} );
+			} else {
+				filterData = $.extend( {}, filterData, {
+					masonry: {
+						columnWidth: '.pp-gallery-item',
+						gutter: '.pp-photo-space'
+					},
+				} );
 			}
 
-			$(this.postClass).css('visibility', 'visible');
+			this.filterData = filterData;
 		},
 
 		_gridLayout: function()
 		{
-			var wrap = $(this.wrapperClass);
-
-			var postFilterData = {
-				itemSelector: '.pp-gallery-item',
-				percentPosition: true,
-				transitionDuration: '0.6s',
-			};
-
-			postFilterData = $.extend( {}, postFilterData, {
-				layoutMode: 'fitRows',
-				fitRows: {
-					gutter: '.pp-photo-space'
-			  	},
-			} );
-
+			var node 			= $(this.nodeClass);
+			var wrap 			= $(this.wrapperClass);
+			var items 			= $(this.itemClass);
+			var filterData 		= this.filterData;
+			var filters 		= wrap.isotope(filterData);
+			var filtersWrap 	= node.find('.pp-gallery-filters');
+			var filterToggle 	= node.find('.pp-gallery-filters-toggle');
+			var isMasonry		= this.masonry;
+			
 			wrap.imagesLoaded( $.proxy( function() {
-
-				var node = $(this.nodeClass);
-                var base = this;
-
-
-				var postFilters = $(this.nodeClass).find('.pp-photo-gallery').isotope(postFilterData);
-				var filtersWrap = node.find('.pp-gallery-filters');
-				var filterToggle = node.find('.pp-gallery-filters-toggle');
 
 				filterToggle.on('click', function () {
 					filtersWrap.slideToggle(function () {
@@ -83,7 +101,7 @@
 
 				filtersWrap.on('click', '.pp-gallery-filter-label', function() {
                     var filterVal = $(this).attr('data-filter');
-                    postFilters.isotope({ filter: filterVal });
+                    filters.isotope({ filter: filterVal });
 
 					filtersWrap.find('.pp-gallery-filter-label').removeClass('pp-filter-active');
 					$(this).addClass('pp-filter-active');
@@ -95,100 +113,16 @@
                 });
 
                 setTimeout( function() {
-
-                        node.find('.pp-filter-active').trigger('click');
-
-                }, 1000 );
-
-
-			}, this ) );
-		},
-
-
-		_masonryLayout: function()
-		{
-			var wrap = $(this.wrapperClass);
-
-			var postFilterData = {
-				itemSelector: '.pp-gallery-item',
-				percentPosition: true,
-				transitionDuration: '0.6s',
-			};
-
-			postFilterData = $.extend( {}, postFilterData, {
-				masonry: {
-					columnWidth: '.pp-gallery-item',
-					gutter: '.pp-photo-space'
-				},
-			} );
-
-			wrap.imagesLoaded( $.proxy( function() {
-
-				var node = $(this.nodeClass);
-                var base = this;
-
-				var postFilters = node.find('.pp-masonry-content').isotope(postFilterData);
-				var filtersWrap = node.find('.pp-gallery-filters');
-				var filterToggle = node.find('.pp-gallery-filters-toggle');
-
-				filterToggle.on('click', function () {
-					filtersWrap.slideToggle(function () {
-						if ($(this).is(':visible')) {
-							$(this).addClass('pp-gallery-filters-open');
-						}
-						if (!$(this).is(':visible')) {
-							$(this).removeClass('pp-gallery-filters-open');
-						}
-					});
-				});
-
-				filtersWrap.on('click', '.pp-gallery-filter-label', function() {
-                    var filterVal = $(this).attr('data-filter');
-                    postFilters.isotope({ filter: filterVal });
-
-					filtersWrap.find('.pp-gallery-filter-label').removeClass('pp-filter-active');
-					$(this).addClass('pp-filter-active');
-					
-					filterToggle.find('span.toggle-text').html($(this).text());
-					if (filtersWrap.hasClass('pp-gallery-filters-open')) {
-						filtersWrap.slideUp();
+					node.find('.pp-filter-active').trigger('click');
+					if ( isMasonry ) {
+						wrap.isotope('layout');
 					}
-                });
 
-                setTimeout( function() {
-
-                        node.find('.pp-filter-active').trigger('click');
-
-                        node.find('.pp-masonry-content').isotope('layout');
-
+					items.css('visibility', 'visible');
                 }, 1000 );
 
 			}, this ) );
-
 		},
-
-
-		_gridLayoutMatchHeight: function()
-		{
-			var highestBox = 0;
-			var contentHeight = 0;
-
-			if ( 0 === this.matchHeight ) {
-				return;
-			}
-
-            $(this.postClass).css('height', '').each(function(){
-
-                if($(this).height() > highestBox) {
-                	highestBox = $(this).height();
-                	contentHeight = $(this).find('.pp-photo-gallery').outerHeight();
-                }
-            });
-
-            $(this.postClass).height(highestBox);
-            //$(this.postClass).find('.pp-content-post-data').css('min-height', contentHeight + 'px').addClass('pp-content-relative');
-		},
-
 	};
 
 })(jQuery);
