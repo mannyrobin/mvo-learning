@@ -606,3 +606,14 @@ function fl_fix_woo_short_description_footer() {
 		echo implode( "\n", $fl_woo_description_fix );
 	}
 }
+
+/**
+ * Fix fatal error on adding Themer layouts and Templates with seopress.
+ * @since 2.1.8
+ */
+add_action( 'save_post', 'fl_fix_seopress', 9 );
+function fl_fix_seopress() {
+	if ( isset( $_POST['fl-template'] ) ) {
+		remove_action( 'save_post', 'seopress_bulk_quick_edit_save_post' );
+	}
+}
