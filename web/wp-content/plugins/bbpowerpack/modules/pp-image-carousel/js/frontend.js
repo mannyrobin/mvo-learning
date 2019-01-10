@@ -103,37 +103,49 @@
         },
 
         _getSlidesPerView: function () {
-            var slidesPerView = this.slidesPerView.desktop;
+			if ( 'slide' === this._getEffect() ) {
+				var slidesPerView = this.slidesPerView.desktop;
 
-            return Math.min(this._getSlidesCount(), +slidesPerView);
+            	return Math.min(this._getSlidesCount(), +slidesPerView);
+			}
+
+			return 1;
         },
 
         _getSlidesPerViewTablet: function () {
-            var slidesPerView = this.slidesPerView.tablet;
+			if ( 'slide' === this._getEffect() ) {
+				var slidesPerView = this.slidesPerView.tablet;
 
-            if (slidesPerView === '' || slidesPerView === 0) {
-                slidesPerView = this.slidesPerView.desktop
-            }
+				if (slidesPerView === '' || slidesPerView === 0) {
+					slidesPerView = this.slidesPerView.desktop
+				}
 
-            if (!slidesPerView && 'coverflow' === this.settings.type) {
-                return Math.min(this._getSlidesCount(), 3);
-            }
+				if (!slidesPerView && 'coverflow' === this.settings.type) {
+					return Math.min(this._getSlidesCount(), 3);
+				}
 
-            return Math.min(this._getSlidesCount(), +slidesPerView);
+				return Math.min(this._getSlidesCount(), +slidesPerView);
+			}
+
+			return 1;
         },
 
         _getSlidesPerViewMobile: function () {
-            var slidesPerView = this.slidesPerView.mobile;
+			if ( 'slide' === this._getEffect() ) {
+				var slidesPerView = this.slidesPerView.mobile;
 
-            if (slidesPerView === '' || slidesPerView === 0) {
-                slidesPerView = this._getSlidesPerViewTablet();
-            }
+				if (slidesPerView === '' || slidesPerView === 0) {
+					slidesPerView = this._getSlidesPerViewTablet();
+				}
 
-            if (!slidesPerView && 'coverflow' === this.settings.type) {
-                return Math.min(this._getSlidesCount(), 3);
-            }
+				if (!slidesPerView && 'coverflow' === this.settings.type) {
+					return Math.min(this._getSlidesCount(), 3);
+				}
 
-            return Math.min(this._getSlidesCount(), +slidesPerView);
+				return Math.min(this._getSlidesCount(), +slidesPerView);
+			}
+
+			return 1;
 		},
 		
 		_getSlidesToScroll: function(device) {
@@ -190,17 +202,19 @@
 					disableOnInteraction: this.settings.pause_on_interaction
 				};
 			}
-
-            options.breakpoints[medium_breakpoint] = {
-				slidesPerView: this._getSlidesPerViewTablet(),
-				slidesPerGroup: this._getSlidesToScrollTablet(),
-                spaceBetween: this._getSpaceBetweenTablet()
-            };
-            options.breakpoints[responsive_breakpoint] = {
-				slidesPerView: this._getSlidesPerViewMobile(),
-				slidesPerGroup: this._getSlidesToScrollMobile(),
-                spaceBetween: this._getSpaceBetweenMobile()
-            };
+			
+			if ('cube' !== this._getEffect()) {
+				options.breakpoints[medium_breakpoint] = {
+					slidesPerView: this._getSlidesPerViewTablet(),
+					slidesPerGroup: this._getSlidesToScrollTablet(),
+					spaceBetween: this._getSpaceBetweenTablet()
+				};
+				options.breakpoints[responsive_breakpoint] = {
+					slidesPerView: this._getSlidesPerViewMobile(),
+					slidesPerGroup: this._getSlidesToScrollMobile(),
+					spaceBetween: this._getSpaceBetweenMobile()
+				};
+			}
 
             var thumbsSliderOptions = {
                 slidesPerView: this._getSlidesPerView(),
