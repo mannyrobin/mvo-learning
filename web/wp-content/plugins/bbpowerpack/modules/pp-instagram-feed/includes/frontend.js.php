@@ -107,7 +107,11 @@
 			}
 		}
 	});
-	feed.run();
+	
+	if ( ! $('#pp-instagram-<?php echo $id; ?>').hasClass('pp-instagram-initialized') ) {
+		feed.run();
+		$('#pp-instagram-<?php echo $id; ?>').addClass('pp-instagram-initialized');
+	}
 
 	<?php if ( 'yes' == $settings->image_popup ) { ?>
 		$('.fl-node-<?php echo $id; ?> .pp-instagram-feed').magnificPopup({

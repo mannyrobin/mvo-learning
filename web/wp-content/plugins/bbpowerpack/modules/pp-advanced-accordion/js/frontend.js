@@ -29,14 +29,16 @@
 		{
 			if( location.hash && $(location.hash).length > 0 ) {
 				var element = $(location.hash + '.pp-accordion-item');
-				location.href = '#';
-				$('html, body').animate({
-					scrollTop: element.offset().top - 120
-				}, 0, function() {
-					if ( ! element.hasClass('pp-accordion-item-active') ) {
-						element.find('.pp-accordion-button').trigger('click');
-					}
-				});
+				if ( element && element.length > 0 ) {
+					location.href = '#';
+					$('html, body').animate({
+						scrollTop: element.offset().top - 120
+					}, 0, function() {
+						if ( ! element.hasClass('pp-accordion-item-active') ) {
+							element.find('.pp-accordion-button').trigger('click');
+						}
+					});
+				}
 			}
 		},
 
@@ -121,6 +123,7 @@
 			this.clicked = false;
 
 			accordion.trigger( 'fl-builder.pp-accordion-toggle-complete' );
+			$(document).trigger( 'pp-accordion-toggle-complete', [ accordion ] );
 		},
 
 		_openDefaultItem: function()
