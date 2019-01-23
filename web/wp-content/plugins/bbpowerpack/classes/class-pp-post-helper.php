@@ -167,7 +167,8 @@ class BB_PowerPack_Post_Helper {
 		}
 
 		if ( ! empty( $permalink_structure ) ) {
-			$format = ! empty( $page_prefix ) ? '/' . $page_prefix . '/' : '/';
+			$format = substr( $base, -1 ) != '/' ? '/' : '';
+			$format .= $page_prefix . '/';
 			$format .= '%#%';
 			$format .= substr( $permalink_structure, -1 ) == '/' ? '/' : '';
 		} elseif ( empty( $permalink_structure ) || is_search() ) {

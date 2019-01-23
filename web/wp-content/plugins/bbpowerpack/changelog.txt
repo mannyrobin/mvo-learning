@@ -1,3 +1,13 @@
+== 2.6.8.5 ==
+Release date: January 9, 2018
+* Enhancement: Updated PowerPack's row gradient and overlay effects to make them compatible with BB 2.2
+* Enhancement: Moved additional PowerPack options in row settings in single tab
+* Fix: Content Grid - Pagination double slashes issue on some server
+* Fix: Content Grid - No message was showing when matching posts are not available in search results
+* Fix: Image Carousel - Thumbnails were not working with slideshow fade and cube effect
+* Fix: Custom Grid - Equal Heights issue when used as template in Advanced Tabs module
+* Fix: Modal Box - Width computation issue on responsive devices
+
 == 2.6.8.4 ==
 Release date: December 27, 2018
 * Enhancement: Added WP-CLI command for license activation and deactivation
