@@ -103,49 +103,83 @@
         },
 
         _getSlidesPerView: function () {
-			if ( 'slide' === this._getEffect() ) {
-				var slidesPerView = this.slidesPerView.desktop;
-
-            	return Math.min(this._getSlidesCount(), +slidesPerView);
+			if ( this._isSlideshow() ) {
+				return 1;
 			}
 
-			return 1;
+			var slidesPerView = this.slidesPerView.desktop;
+
+            return Math.min(this._getSlidesCount(), +slidesPerView);
         },
 
         _getSlidesPerViewTablet: function () {
-			if ( 'slide' === this._getEffect() ) {
-				var slidesPerView = this.slidesPerView.tablet;
-
-				if (slidesPerView === '' || slidesPerView === 0) {
-					slidesPerView = this.slidesPerView.desktop
-				}
-
-				if (!slidesPerView && 'coverflow' === this.settings.type) {
-					return Math.min(this._getSlidesCount(), 3);
-				}
-
-				return Math.min(this._getSlidesCount(), +slidesPerView);
+			if ( this._isSlideshow() ) {
+				return 1;
 			}
 
-			return 1;
+			var slidesPerView = this.slidesPerView.tablet;
+
+			if (slidesPerView === '' || slidesPerView === 0) {
+				slidesPerView = this.slidesPerView.desktop
+			}
+
+			if (!slidesPerView && 'coverflow' === this.settings.type) {
+				return Math.min(this._getSlidesCount(), 3);
+			}
+
+			return Math.min(this._getSlidesCount(), +slidesPerView);
         },
 
         _getSlidesPerViewMobile: function () {
-			if ( 'slide' === this._getEffect() ) {
-				var slidesPerView = this.slidesPerView.mobile;
-
-				if (slidesPerView === '' || slidesPerView === 0) {
-					slidesPerView = this._getSlidesPerViewTablet();
-				}
-
-				if (!slidesPerView && 'coverflow' === this.settings.type) {
-					return Math.min(this._getSlidesCount(), 3);
-				}
-
-				return Math.min(this._getSlidesCount(), +slidesPerView);
+			if ( this._isSlideshow() ) {
+				return 1;
 			}
 
-			return 1;
+			var slidesPerView = this.slidesPerView.mobile;
+
+			if (slidesPerView === '' || slidesPerView === 0) {
+				slidesPerView = this._getSlidesPerViewTablet();
+			}
+
+			if (!slidesPerView && 'coverflow' === this.settings.type) {
+				return Math.min(this._getSlidesCount(), 3);
+			}
+
+			return Math.min(this._getSlidesCount(), +slidesPerView);
+		},
+
+		_getThumbsSlidesPerView: function () {
+			var slidesPerView = this.slidesPerView.desktop;
+
+            return Math.min(this._getSlidesCount(), +slidesPerView);
+        },
+
+        _getThumbsSlidesPerViewTablet: function () {
+			var slidesPerView = this.slidesPerView.tablet;
+
+			if (slidesPerView === '' || slidesPerView === 0) {
+				slidesPerView = this.slidesPerView.desktop
+			}
+
+			if (!slidesPerView && 'coverflow' === this.settings.type) {
+				return Math.min(this._getSlidesCount(), 3);
+			}
+
+			return Math.min(this._getSlidesCount(), +slidesPerView);
+        },
+
+        _getThumbsSlidesPerViewMobile: function () {
+			var slidesPerView = this.slidesPerView.mobile;
+
+			if (slidesPerView === '' || slidesPerView === 0) {
+				slidesPerView = this._getSlidesPerViewTablet();
+			}
+
+			if (!slidesPerView && 'coverflow' === this.settings.type) {
+				return Math.min(this._getSlidesCount(), 3);
+			}
+
+			return Math.min(this._getSlidesCount(), +slidesPerView);
 		},
 		
 		_getSlidesToScroll: function(device) {
@@ -217,7 +251,7 @@
 			}
 
             var thumbsSliderOptions = {
-                slidesPerView: this._getSlidesPerView(),
+                slidesPerView: this._getThumbsSlidesPerView(),
                 initialSlide: this._getInitialSlide(),
                 centeredSlides: true,
                 slideToClickedSlide: true,
@@ -232,11 +266,11 @@
             };
 
             thumbsSliderOptions.breakpoints[medium_breakpoint] = {
-                slidesPerView: this._getSlidesPerViewTablet(),
+                slidesPerView: this._getThumbsSlidesPerViewTablet(),
                 spaceBetween: this._getSpaceBetweenTablet()
             };
             thumbsSliderOptions.breakpoints[responsive_breakpoint] = {
-                slidesPerView: this._getSlidesPerViewMobile(),
+                slidesPerView: this._getThumbsSlidesPerViewMobile(),
                 spaceBetween: this._getSpaceBetweenMobile()
             };
 

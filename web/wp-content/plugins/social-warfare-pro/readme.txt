@@ -1,9 +1,9 @@
 === WordPress Social Sharing Plugin - Social Warfare ===
 Contributors: holas84, dustinwstout, webinator, warfareplugins, nutsandboltsmedia, cdegraff1, ckmahoney
 Tags: sharing buttons, social media share, floating share buttons, facebook share, google plus share, linkedin share, pin it, pinterest save, mix button, tweet button, twitter share, click to tweet, social sharing buttons, social share, social sharing, social media sharing, wordpress social sharing plugin, social sharing plugin, share buttons, share counts
-Requires at least: 3.5.1
-Tested up to: 4.9
-Stable tag: 3.3.3
+Requires at least: 4.5.0
+Tested up to: 5.0.0
+Stable tag: 3.4.2
 License: GNU General Public License v2.0 or later
 
 The most beautiful, responsive, lightning fast social share buttons built to boost shares and drive more traffic without slowing down your site.
@@ -27,7 +27,7 @@ You can choose from the top social networks sharing buttons, including:
 * Google+
 * Pinterest
 * LinkedIn
-* StumbleUpon
+* Mix
 
 You can also choose where you want the share buttons to show up. Choose from the following placement options:
 
@@ -192,6 +192,39 @@ We have a growing archive of <a href="https://warfareplugins.com/support/" rel="
 > Robert Ryan, Professional Web Designer
 
 == Changelog ==
+
+= 3.4.2 (13 DEC 2018) =
+* Fixed the output of a necessary `.swp-content-locator` element.
+* Fixed Float Before Content to be independent of Pin It.
+* Fixed floating buttons not respecting home page settings.
+* Created a patch query paramter to mass reset swp_float_location.
+
+= 3.4.1 (4 DEC 2018) =
+* Fixed Twitter Card toggle button in post-editr.
+* Fixed Twitter Card logic when outputting <meta> tags.
+* Fixed bug when using Dynamic sorting and there were no shares for a post.
+* Fixed the WhatsApp button destination.
+* Fixed the variable name for Float Before Content option.
+* Fixed the email button.
+* Added support for author-specific twitter handle in Twitter Cards.
+* Updated the Pintrest character counter in the meta box.
+* Updated layout of meta box.
+
+= 3.4.0 (27 NOV 2018) =
+* Props to our Warfare Community beta testers- you guys rock!
+* Added support for Gutenberg block Pinterest Image (as of Gutenberg 4.5.1)
+* Added a fallback ghost buttons panel for floating panels to utilize.
+* Added new fields to Social Warfare metabox.
+* Updated the layout for the Social Warfare metabox.
+* Updates to the mechanics behind Pinterest images and [pinterest_image] shortcode.
+* Updated Bitly integration to only create shortlinks for published posts.
+* Restored the text length counter for tweets in the metabox.
+* Fixed the Pinterest button!
+* Fixed bug when using emojis in a Pinterest description.
+* Fixed title shared when sharing via Flipboard.
+* Fixed floating & mobile button placement rules.
+* Fixed bug where Pinterest image was still being printed when set to OFF.
+* Fixed bug where Bitly created links when set to OFF.
 
 = 3.3.3 (19 SEP 2018)
 * Fixed the output of the og:type meta tag.

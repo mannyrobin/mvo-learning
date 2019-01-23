@@ -84,9 +84,9 @@ var pp_modal_<?php echo $id; ?> = false;
             }
         });
 
-		if ( $(window).width() <= $('#modal-<?php echo $id; ?>').width() ) {
-			$('#modal-<?php echo $id; ?>').css('width', $(window).width() - 20 + 'px');
-			$('#modal-<?php echo $id; ?> .pp-modal').css('width', $(window).width() - 20 + 'px');
+		if ( window.innerWidth <= $('#modal-<?php echo $id; ?> .pp-modal').width() ) {
+			$('#modal-<?php echo $id; ?>').css('width', window.innerWidth - 20 + 'px');
+			$('#modal-<?php echo $id; ?> .pp-modal').css('width', window.innerWidth - 20 + 'px');
 		}
     });
 
