@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -157,6 +157,7 @@ final class SecureOption extends Secure_Abstract {
 				$verified = true;
 			} elseif ( 'update_option' === $type ) {
 				$options = \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+				// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
 				if ( \tsf_extension_manager()->verify_options_hash( serialize( $options ) ) ) {
 					$verified = true;
 				} else {

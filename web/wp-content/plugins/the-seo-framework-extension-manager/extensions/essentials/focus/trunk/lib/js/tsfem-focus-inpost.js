@@ -4,13 +4,13 @@
  * Alas, there's no other way here.
  *
  * @author Sybre Waaijer <https://cyberwire.nl/>
- * @link <https://wordpress.org/plugins/the-seo-framework-extension-manager/>
+ * @link <https://theseoframework.com/extension-manager/>
  */
 
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -60,7 +60,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @var activeFocusAreas  Maintains all active focus elements' selectors.
 	 * @var activeAssessments Maintains all active focus elements' bound raters.
 	 */
-	var focusRegistry = {},
+	let focusRegistry = {},
 		activeFocusAreas = {},
 		activeAssessments = {};
 
@@ -181,8 +181,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				//= Test if entries exist.
 				if ( set ) {
 					let values = Object.values( registry[ area ][ type ] );
-					//= IE11 replacement for Object.values. <https://stackoverflow.com/a/42830295>
-					// let values = Object.keys( registry[ area ][ type ] ).map( e => registry[ area ][ type ][ e ] );
 					if ( values.indexOf( selector ) > -1 ) continue;
 					registry[ area ][ type ].push( selector );
 				} else {
@@ -272,6 +270,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		activeFocusAreas = areas;
 	}
 
+	let _debouncedChecks = {};
 	/**
 	 * Performs check based on rater element's data, attached keyword, inflections
 	 * and synonyms, based on the registry's elements.
@@ -284,108 +283,76 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 */
 	const doCheck = ( rater ) => {
 
-		let data = $( rater ).data( 'scores' ),
-			inflectionCount = 0,
-			synonymCount = 0,
+		let idPrefix   = getSubIdPrefix( rater.id ),
+			workerId   = 'e_focus_pw_' + $( rater ).data( 'assessment-type' ) + '_' + idPrefix,
+			ratingIcon = rater.querySelector( '.tsfem-e-focus-assessment-rating' );
+
+		if ( tsfem_inpost.isWorkerBusy( workerId ) ) {
+			// Debounce if worker is busy.
+			workerId in _debouncedChecks && clearTimeout( _debouncedChecks[ workerId ] );
+			_debouncedChecks[ workerId ] = setTimeout( () => doCheck( rater ), 2000 );
+			return;
+		}
+		delete _debouncedChecks[ workerId ];
+		tsfem_inpost.occupyWorker( workerId );
+		tsfem_inpost.setIconClass( ratingIcon, 'loading' );
+
+		/**
+		 * @param {(boolean|object<number,string>|array)} inflections
+		 * @param {boolean|object<number,string>|array)} synonyms
+		 */
+		let inflections = activeWords( idPrefix ).get( 'inflections' ),
+			synonyms    = activeWords( idPrefix ).get( 'synonyms' );
+
+		let data                = $( rater ).data( 'scores' ),
+			inflectionCount     = 0,
+			synonymCount        = 0,
 			inflectionCharCount = 0,
-			synonymCharCount = 0,
-			contentCharCount = 0,
+			synonymCharCount    = 0,
+			contentCharCount    = 0,
 			content,
-			regex = data.assessment.regex;
+			regex               = data.assessment.regex;
 
 		//= Convert regex to object if it isn't already.
 		if ( regex !== Object( regex ) ) {
 			regex = [ regex ];
 		}
 
-		/**
-		 * @param {(boolean|object<number,string>|array)} inflections
-		 * @param {boolean|object<number,string>|array)} synonyms
-		 */
-		let idPrefix = getSubIdPrefix( rater.id ),
-			inflections = activeWords( idPrefix ).get( 'inflections' ),
-			synonyms = activeWords( idPrefix ).get( 'synonyms' );
-
-		const countChars = ( contents ) => {
-			// Strip all XML tags first.
-			contents = contents.match( /(?!>)[^<>]+(?=<|$)/gi );
-			return contents && contents.join( '' ).length || 0;
-		}
-
-		const countWords = ( word, contentMatch ) => {
-			let pReg,
-				sWord = tsfem_inpost.bewilderRegexNonWords( tsfem_inpost.escapeRegex( tsfem_inpost.escapeStr( word, true ) ) );
-
-			//= Iterate over multiple regex scripts.
-			for ( let i = 0; i < regex.length; i++ ) {
-				pReg = /\/(.*)\/(.*)/.exec( regex[ i ] );
-				contentMatch = contentMatch.match( new RegExp(
-					pReg[1].replace( /\{\{kw\}\}/g, sWord ),
-					pReg[2]
-				) );
-
-				//= Stop if there's no content, or when this is the last iteration.
-				if ( ! contentMatch || i === regex.length - 1 ) break;
-
-				//= Join content as this is a recursive regexp.
-				contentMatch = contentMatch.join( ' ' );
-			}
-			// Return the number of matches found.
-			return contentMatch && contentMatch.length || 0;
-		}
-		const stripWord = ( word, contents ) =>
-			contents.replace(
-				new RegExp(
-					tsfem_inpost.escapeRegex( tsfem_inpost.escapeStr( word, true ) ),
-					'gi'
-				),
-				'/' //? A filler that doesn't break XML tag attribute closures (<|>|"|'|\s).
-			);
-
-		const countInflections = ( content ) => {
-			let _inflections = inflections,
-				_content = content;
-			_inflections.length && _inflections.sort( ( a, b ) => b.length - a.length );
-
-			return tsfem_inpost.promiseLoop( _inflections, ( inflection ) => {
-				let count = countWords( inflection, _content );
-				inflectionCount += count;
-				inflectionCharCount += inflection.length * count;
-				_content = stripWord( inflection, _content );
-			}, 5 );
-		}
-		const countSynonyms = ( content ) => {
-			let _synonyms = synonyms,
-				_content = content;
-
-			_synonyms.length && _synonyms.sort( ( a, b ) => b.length - a.length );
-
-			return tsfem_inpost.promiseLoop( _synonyms, ( synonym ) => {
-				let count = countWords( synonym, _content );
-				synonymCount += count;
-				synonymCharCount += synonym.length * count;
-				_content = stripWord( synonym, _content );
-			}, 5 );
-		}
-
 		const checkElement = ( element ) => {
 			let selector = document.querySelector( element ),
-				 $dfd = $.Deferred();
+				$dfd     = $.Deferred();
 
 			content = typeof selector.value !== 'undefined' ? selector.value : '';
 			// if ( ! content.length ) content = selector.placeholder;
 			if ( ! content.length ) content = selector.innerHTML;
 
 			if ( ! content.length ) return $dfd.resolve();
-			content = tsfem_inpost.normalizeSpacing( content ).trim();
-			if ( ! content.length ) return $dfd.resolve();
 
-			contentCharCount += countChars( content );
-			$.when(
-				countInflections( content ),
-				countSynonyms( content )
-			).done( () => {
-				$dfd.resolve();
+			setTimeout( async () => {
+
+				await ( tsfem_inpost.getWorker( workerId ) || tsfem_inpost.spawnWorker( l10n.scripts.parserWorker, workerId ) );
+
+				$.when(
+					tsfem_inpost.tellWorker( workerId, {
+						regex:       regex,
+						inflections: inflections,
+						synonyms:    synonyms,
+						content:     content,
+						assess:      {
+							getCharCount: 'p' === data.scoring.type, // p stands for "percent", which is relative.
+						},
+					} ),
+				).done( ( data ) => {
+					inflectionCount     = data.inflectionCount;
+					synonymCount        = data.synonymCount;
+					inflectionCharCount = data.inflectionCharCount;
+					synonymCharCount    = data.synonymCharCount;
+					contentCharCount    = data.contentCharCount;
+
+					$dfd.resolve();
+				} ).fail( ( message ) => { // NOTE: Parameters aren't set as intended?
+					$dfd.reject();
+				} );
 			} );
 
 			return $dfd.promise();
@@ -448,7 +415,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			if ( description.innerHTML === newDescription ) {
 				//* Nothing changed.
 				tsfem_inpost.setIconClass(
-					rater.querySelector( '.tsfem-e-focus-assessment-rating' ),
+					ratingIcon,
 					getIconType( data.rating, realScore )
 				);
 				description.style.opacity = '1';
@@ -458,7 +425,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				description.style.opacity = '0';
 				description.innerHTML = newDescription;
 				tsfem_inpost.setIconClass(
-					rater.querySelector( '.tsfem-e-focus-assessment-rating' ),
+					ratingIcon,
 					getIconType( data.rating, realScore )
 				);
 				tsfem_inpost.fadeIn( description );
@@ -466,8 +433,52 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			}
 		}
 
+		const showFailure = () => {
+			//= Store realScore in input for saving (which is 0).
+			let input = document.querySelector( 'input[name="' + rater.id + '"]' );
+			if ( input ) input.value = 0;
+
+			//= Gets description based on nearest threshold value.
+			let description = rater.querySelector( '.tsfem-e-focus-assessment-description' ),
+				newDescription = l10n.i18n.parseFailure;
+
+			if ( description.innerHTML === newDescription ) {
+				//* Nothing changed.
+				tsfem_inpost.setIconClass(
+					ratingIcon,
+					getIconType( -1, -1 )
+				);
+				description.style.opacity = '1';
+				description.style.willChange = 'auto';
+			} else {
+				description.style.willChange = 'contents, opacity';
+				description.style.opacity = '0';
+				description.innerHTML = newDescription;
+				tsfem_inpost.setIconClass(
+					ratingIcon,
+					getIconType( -1, -1 )
+				);
+				tsfem_inpost.fadeIn( description );
+				description.style.willChange = 'auto';
+			}
+		}
+
 		//= Run over element asynchronously and sequentially, when done, resolve function promise.
-		$.when( tsfem_inpost.promiseLoop( activeFocusAreas[ data.assessment.content ], checkElement, 5 ) ).done( showScore );
+		$.when( tsfem_inpost.promiseLoop(
+			activeFocusAreas[ data.assessment.content ],
+			checkElement,
+			5,
+			30000 // fail at 30s
+		) )
+		.done( () => {
+			showScore();
+			tsfem_inpost.freeWorker( workerId );
+		} )
+		.fail( () => {
+			// Worker likely got stuck. Let's despawn it.
+			showFailure();
+			tsfem_inpost.despawnWorker( workerId );
+		} );
 	}
 
 	/**
@@ -502,7 +513,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			}
 		}
 
-		return ret ? ret : obj[ Object.keys( obj )[0] ];
+		return ret ? ret : ( obj[ Object.keys( obj )[0] ] || '' );
 	}
 
 	/**
@@ -556,11 +567,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				lexicalData = getSubElementById( idPrefix, 'lexical_data' );
 
 			//= Get default form field, and append to it.
-			let _forms = JSON.parse( l10n.defaultLexicalForm );
-
-			//? IE11 replacement for Object.values( _forms ).
-			// _forms = Object.keys( _forms ).map( e => _forms[ e ] );
-			_forms = Object.values( _forms );
+			let _forms = Object.values( JSON.parse( l10n.defaultLexicalForm ) );
 
 			if ( entries.length ) {
 				entries.forEach( ( entry ) => {
@@ -772,7 +779,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 	}
 
-	var lexicalFormSelectionBuffer = {};
+	let lexicalFormSelectionBuffer = {};
 	/**
 	 * Performs change actions on lexical selection update.
 	 *
@@ -868,8 +875,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				$dfd.resolve();
 			} ).fail( ( code ) => {
 				switch ( code ) {
-					case 1100202 :
-					case 1100205 :
+					case 1100202:
+					case 1100205:
 						clearData( idPrefix, 'definition' );
 						clearData( idPrefix, 'synonyms' );
 
@@ -878,7 +885,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 						$dfd.resolve();
 						break;
 
-					default :
+					default:
 						setDefinition( lexicalSelector.dataset.prev || 0 );
 						$dfd.reject();
 						break;
@@ -988,11 +995,11 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				let lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' );
 				if ( ! lexicalSelector instanceof HTMLSelectElement ) return;
 				switch ( what ) {
-					case 'enabled' :
+					case 'enabled':
 						enable( lexicalSelector );
 						break;
-					default :
-					case 'disabled' :
+					default:
+					case 'disabled':
 						disable( lexicalSelector );
 						break;
 				}
@@ -1014,6 +1021,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		let scoresWrap = getSubElementById( idPrefix, 'scores' ),
 			subScores = scoresWrap && scoresWrap.querySelectorAll( '.tsfem-e-focus-assessment-wrap' );
 
+		setAnalysisInterval( idPrefix ).to( 'disabled' );
+
 		if ( ! subScores || subScores !== Object( subScores ) ) {
 			//= subScores isn't set.
 			setEvaluationVisuals( idPrefix ).to( 'error' );
@@ -1023,6 +1032,44 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				prepareScoreElement( subScores[ _i ] );
 			}
 			triggerAllAnalysis( idPrefix );
+			setAnalysisInterval( idPrefix ).to( 'enabled' );
+		}
+	}
+
+	let analysisIntervals = {};
+	/**
+	 * Loops over analysis in a set interval.
+	 *
+	 * @since 1.3.0
+	 * @access private
+	 *
+	 * @function
+	 * @param {string} idPrefix
+	 * @return {function} to : {
+	 *    @param {string} state
+	 * }
+	 */
+	const setAnalysisInterval = ( idPrefix ) => {
+		return {
+			to: state => {
+				switch( state ) {
+					case 'disabled':
+						if ( idPrefix in analysisIntervals ) {
+							clearInterval( analysisIntervals[ idPrefix ] );
+							delete analysisIntervals[ idPrefix ];
+						}
+						break;
+
+					case 'enabled':
+						setAnalysisInterval( idPrefix ).to( 'disabled' );
+						if ( l10n.settings.analysisInterval > 4999 )
+							analysisIntervals[ idPrefix ] = setInterval( () => triggerAllAnalysis( idPrefix ), l10n.settings.analysisInterval );
+						break;
+
+					default:
+						break;
+				}
+			}
 		}
 	}
 
@@ -1110,16 +1157,16 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			to: ( state ) => {
 				let show;
 				switch ( state ) {
-					case 'disabled' :
+					case 'disabled':
 						show = '.tsfem-e-focus-no-keyword-wrap';
 						break;
 
-					case 'enabled' :
+					case 'enabled':
 						show = '.tsfem-e-focus-scores-wrap';
 						break;
 
-					default :
-					case 'error' :
+					default:
+					case 'error':
 						show = '.tsfem-e-focus-something-wrong-wrap';
 						break;
 				}
@@ -1153,38 +1200,32 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			state.split( ',' ).forEach( ( _state ) => {
 				switch ( _state.trim() ) {
-					case 'checked' :
+					case 'checked':
 						if ( ! editToggle.checked ) {
 							editToggle.checked = true;
 							$( editToggle ).trigger( 'change' );
 						}
 						break;
-					case 'unchecked' :
+					case 'unchecked':
 						if ( editToggle.checked ) {
 							editToggle.checked = false;
 							$( editToggle ).trigger( 'change' );
 						}
 						break;
 
-					case 'loading' :
+					case 'loading':
 						editLabel && tsfem_inpost.setIconClass( editLabel, 'loading' );
 						break;
-					case 'edit' :
+					case 'edit':
 						editLabel && tsfem_inpost.setIconClass( editLabel, 'edit' );
 						break;
 
-					case 'enabled' :
+					case 'enabled':
 						editToggle.disabled = false;
-						//= Simulate toggle(*,false) IE11.
-						// editWrap.classList.add( disabledClass );
-						// editWrap.classList.remove( disabledClass );
 						editWrap.classList.toggle( disabledClass, false );
 						break;
-					case 'disabled' :
+					case 'disabled':
 						editToggle.disabled = true;
-						//= Simulate toggle(*,true) IE11.
-						// editWrap.classList.remove( disabledClass );
-						// editWrap.classList.add( disabledClass );
 						editWrap.classList.toggle( disabledClass, true );
 						break;
 
@@ -1269,6 +1310,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			target.dataset.prev = val;
 			clearData( idPrefix );
 			setEditButton( idPrefix ).to( 'disabled, edit' );
+			setAnalysisInterval( idPrefix ).to( 'disabled' );
 
 			$( getSubElementById( idPrefix, 'scores' ) )
 				.find( '.tsfem-e-focus-assessment-description' )
@@ -1503,7 +1545,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			.on( subjectEditToggle, showSubjectEditor );
 	}
 
-	var subjectFilterBuffer = {};
+	let subjectFilterBuffer = {};
 	/**
 	 * Enables Subject filling and filtering requests.
 	 *
@@ -1660,7 +1702,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		);
 	}
 
-	var cachedActiveWords = {}
+	let cachedActiveWords = {}
 	/**
 	 * Returns active keyword, inflections and listeners.
 	 *
@@ -1814,7 +1856,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		activeAssessments = assessments;
 	}
 
-	var changeListenersBuffers = {}, changeListenerFlags = {};
+	let changeListenersBuffers = {}, changeListenerFlags = {};
 	/**
 	 * Resets change listeners for analysis on the available content elements.
 	 *
@@ -1841,6 +1883,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 				let el = document.getElementById( id ),
 					rater = el.querySelector( '.tsfem-e-focus-assessment-rating' );
+
 				tsfem_inpost.setIconClass( rater, 'loading' );
 				setTimeout( () => doCheck( el ), 150 );
 			} );
@@ -1887,12 +1930,17 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 	}
 
-	var triggerAllBuffer = {};
+	let triggerAllBuffer = {};
 	/**
 	 * Triggers all analysis.
 	 *
 	 * Another buffer is maintained at trigger level.
 	 * However, this loop can be heavy.
+	 *
+	 * doCheck() debounces. As such, this method may be invoked concurrently with user input without issue.
+	 *
+	 * @see addToChangeListener()
+	 * @see analysisChangeEvents()
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -1910,10 +1958,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				let scoresWrap = getSubElementById( idPrefix, 'scores' ),
 					subScores = scoresWrap && scoresWrap.querySelectorAll( '.tsfem-e-focus-assessment-wrap[data-assess="1"]' );
 				if ( subScores instanceof NodeList && subScores.length ) {
-					tsfem_inpost.promiseLoop( subScores, ( item ) => {
-						tsfem_inpost.setIconClass( item.querySelector( '.tsfem-e-focus-assessment-rating' ), 'loading' );
-						doCheck( item );
-					}, 100 );
+					tsfem_inpost.promiseLoop( subScores, item => doCheck( item ), 150 );
 				} else {
 					setEvaluationVisuals( idPrefix ).to( 'error' );
 				}

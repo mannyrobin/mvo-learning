@@ -11,7 +11,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Focus extension for The SEO Framework
- * Copyright (C) 2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -128,28 +128,26 @@ final class Admin extends Core {
 		 */
 		return \apply_filters_ref_array( 'the_seo_framework_focus_elements', [
 			[
-				'pageTitle' => [
+				'pageTitle'      => [
 					'#titlewrap > input'     => 'append',
 					'#tsfem-focus-gbc-title' => 'dominate',
 					// NOTE: Can't reliably fetch Gutenberg's from DOM.
 				],
-				'pageUrl' => [
+				'pageUrl'        => [
 					'#sample-permalink'     => 'dominate',
 					'#tsfem-focus-gbc-link' => 'dominate',
 					// NOTE: Can't reliably fetch Gutenberg's from DOM.
 				],
-				'pageContent' => [
+				'pageContent'    => [
 					'#content'                 => 'append',
 					'#tsfem-focus-gbc-content' => 'append',
 					// NOTE: Can't reliably fetch Gutenberg's from DOM.
 				],
-				'seoTitle' => [
-					'#autodescription_title' => 'dominate', //= backwards compatibility.
-					'#tsf-title-reference'   => 'dominate', //! TSF 3.0.4+
+				'seoTitle'       => [
+					'#tsf-title-reference' => 'dominate',
 				],
 				'seoDescription' => [
-					'#autodescription_description' => 'dominate', //= backwards compatibility.
-					'#tsf-description-reference'   => 'dominate', //! TSF 3.0.4+
+					'#tsf-description-reference' => 'dominate',
 				],
 			],
 		] );
@@ -183,7 +181,7 @@ final class Admin extends Core {
 			'name' => 'tsfem-focus-inpost',
 			'base' => TSFEM_E_FOCUS_DIR_URL,
 			'ver'  => TSFEM_E_FOCUS_VERSION,
-			'deps' => [ 'jquery', 'tsf', 'tsfem-inpost' ],
+			'deps' => [ 'jquery', 'tsf', 'tsf-tt', 'tsfem-inpost' ],
 			'l10n' => [
 				'name' => 'tsfem_e_focusInpostL10n',
 				'data' => [
@@ -191,10 +189,17 @@ final class Admin extends Core {
 					'focusElements'      => $this->get_focus_elements(),
 					'defaultLexicalForm' => json_encode( $this->default_lexical_form ),
 					'languageSupported'  => $this->is_language_supported(),
-					'i18n' => [
+					'i18n'               => [
 						'noExampleAvailable' => \__( 'No example available.', 'the-seo-framework-extension-manager' ),
+						'parseFailure'       => \__( 'A parsing failure occurred.', 'the-seo-framework-extension-manager' ),
 					],
 					'isGutenbergPage'    => $this->is_gutenberg_page(),
+					'scripts'            => [
+						'parserWorker' => $this->get_worker_file_location(),
+					],
+					'settings'           => [
+						'analysisInterval' => 45000, // 45 seconds, set this to 4999 or lower (preferred: -1) to disable this feature.
+					],
 				],
 			],
 			'tmpl' => [
@@ -206,7 +211,7 @@ final class Admin extends Core {
 			'name'   => 'tsfem-focus-inpost',
 			'base'   => TSFEM_E_FOCUS_DIR_URL,
 			'ver'    => TSFEM_E_FOCUS_VERSION,
-			'deps'   => [ 'tsf', 'tsfem-inpost' ],
+			'deps'   => [ 'tsf', 'tsf-tt', 'tsfem-inpost' ],
 			'inline' => [
 				'.tsfem-e-focus-content-loader-bar' => [
 					'background:{{$color_accent}}',
@@ -216,6 +221,20 @@ final class Admin extends Core {
 				],
 			],
 		] );
+	}
+
+	/**
+	 * Returns the Focus Parser worker file location.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @return string
+	 */
+	private function get_worker_file_location() {
+
+		$min = \the_seo_framework()->script_debug ? '' : '.min';
+
+		return \esc_url( \set_url_scheme( TSFEM_E_FOCUS_DIR_URL . "lib/js/tsfem-focus-parser.worker{$min}.js" ) );
 	}
 
 	/**
@@ -360,6 +379,7 @@ final class Admin extends Core {
 
 			foreach ( (array) $items as $key => $value ) {
 				$out = $this->sanitize_keyword_data_by_type( $key, $value );
+
 				if ( isset( $out ) )
 					$output[ $id ][ $key ] = $out;
 			}
@@ -401,13 +421,8 @@ final class Admin extends Core {
 			case 'lexical_data':
 			case 'inflection_data':
 			case 'synonym_data':
-				//= Decode and encode the values. An empty array will be returned on failure.
-				$value = json_decode(
-					json_encode(
-						json_decode( stripslashes( $value ) ) ?: [],
-						JSON_UNESCAPED_UNICODE
-					), true
-				);
+				//= An empty array will be returned on failure. This will be refilled in the UI.
+				$value = json_decode( $value, true ) ?: [];
 				break;
 
 			case 'scores':
@@ -427,6 +442,7 @@ final class Admin extends Core {
 					'/[^0-9,]+/', // Remove everything but "0-9,"
 					'/(?=(,,)),|,[^0-9]?+$/', // Fix ",,,"->"," and remove trailing ","
 				];
+
 				$value = preg_replace( $patterns, '', $value );
 				break;
 

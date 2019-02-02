@@ -4,12 +4,12 @@
  * Serve JavaScript as an addition, not as an ends or means.
  *
  * @author Sybre Waaijer <https://cyberwire.nl/>
- * @link <https://wordpress.org/plugins/the-seo-framework-extension-manager/>
+ * @link <https://theseoframework.com/extension-manager/>
  */
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2017-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published

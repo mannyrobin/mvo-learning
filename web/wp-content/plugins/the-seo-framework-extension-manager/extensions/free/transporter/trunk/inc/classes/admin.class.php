@@ -11,7 +11,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Transporter extension for The SEO Framework
- * Copyright (C) 2017-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -282,20 +282,20 @@ final class Admin {
 	 */
 	public function _handle_update_post() {
 
-		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ]['nonce-action'] ) )
+		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ]['nonce-action'] ) ) // CSRF, input var ok.
 			return;
 
-		$options = $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
+		$options = $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ]; // phpcs:ignore -- CSRF, input var OK.
 
 		if ( false === $this->handle_update_nonce( $options['nonce-action'], false ) )
 			return;
 
 		switch ( $options['nonce-action'] ) :
-			case $this->request_name['download'] :
+			case $this->request_name['download']:
 				$this->download_seo_settings_file();
 				break;
 
-			default :
+			default:
 				$this->set_error_notice( [ 1060101 => '' ] );
 				break;
 		endswitch;
@@ -335,9 +335,8 @@ final class Admin {
 			 * If this page doesn't parse the site options,
 			 * there's no need to check them on each request.
 			 */
-			if ( empty( $_POST )
-			|| ( ! isset( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) ) // input var, CSRF ok.
-			|| ( ! is_array( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) ) // input var, CSRF ok.
+			if ( ! isset( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )  // input var, CSRF ok.
+			|| ! is_array( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) // input var, CSRF ok.
 			) {
 				return $validated[ $key ] = false;
 			}
@@ -603,19 +602,19 @@ final class Admin {
 		$this->additional_css[] = [
 			'name' => 'tsfem-transporter',
 			'base' => TSFEM_E_TRANSPORTER_DIR_URL,
-			'ver' => TSFEM_E_TRANSPORTER_VERSION,
+			'ver'  => TSFEM_E_TRANSPORTER_VERSION,
 		];
 
 		$this->additional_js[] = [
 			'name' => 'tsfem-transporter',
 			'base' => TSFEM_E_TRANSPORTER_DIR_URL,
-			'ver' => TSFEM_E_TRANSPORTER_VERSION,
+			'ver'  => TSFEM_E_TRANSPORTER_VERSION,
 		];
 
 		$this->additional_l10n[] = [
 			'dependency' => 'tsfem-transporter',
-			'name' => 'tsfem_e_transporterL10n',
-			'strings' => [
+			'name'       => 'tsfem_e_transporterL10n',
+			'strings'    => [
 				'nonce' => \wp_create_nonce( 'tsfem-e-transporter-ajax-nonce' ),
 			],
 		];

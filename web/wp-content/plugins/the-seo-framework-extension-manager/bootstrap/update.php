@@ -70,16 +70,16 @@ function _hook_plugins_api( $res, $action, $args ) {
 	// include an unmodified $wp_version
 	include ABSPATH . WPINC . '/version.php';
 
-	$url = TSF_EXTENSION_MANAGER_DL_URI . 'get/info/1.0/';
-
+	$url       = TSF_EXTENSION_MANAGER_DL_URI . 'get/info/1.0/';
 	$http_args = [
 		'timeout'    => 15,
 		'user-agent' => 'WordPress/' . $wp_version . '; ' . PHP_VERSION_ID . '; ' . \home_url( '/' ),
 		'body'       => [
 			'action'  => $action,
-			'request' => serialize( $args ),
+			'request' => serialize( $args ), // phpcs:ignore -- Object injection is mitigated at the request server.
 		],
 	];
+
 	$request = \wp_remote_post( $url, $http_args );
 
 	if ( \is_wp_error( $request ) ) {
@@ -94,7 +94,7 @@ function _hook_plugins_api( $res, $action, $args ) {
 			$request->get_error_message() // $data
 		);
 	} else {
-		$res = \maybe_unserialize( \wp_remote_retrieve_body( $request ) );
+		$res = \maybe_unserialize( \wp_remote_retrieve_body( $request ) ); // phpcs:ignore -- No objects are sent.
 		if ( ! is_object( $res ) && ! is_array( $res ) ) {
 			$res = new WP_Error( 'plugins_api_failed',
 				sprintf(
@@ -133,69 +133,81 @@ function _clear_update_cache() {
  * as it won't detect changes.
  *
  * @since 2.0.0
+ * @since 2.0.2 Added more cache, because some sites disable transients completely...
  * @access private
  * @see WP Core wp_update_plugins()
+ * @staticvar $runtimecache.
  *
- * @param mixed  $value      Site transient value.
- * @param string $transient  Transient name.
+ * @param mixed  $value     Site transient value.
+ * @param string $transient Transient name.
  * @return mixed $value
  */
 function _push_update( $value, $transient ) {
 
-	// Check's still booting...
+	// Check if it's still booting...
 	// if ( ! isset( $value->checked ) ) return $value;
 
 	unset( $value->checked[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] );
 	unset( $value->response[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] );
 	unset( $value->no_update[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] );
 
-	$cache_timeout = MINUTE_IN_SECONDS * 5;
-	$cache = \get_site_transient( TSF_EXTENSION_MANAGER_UPDATER_CACHE );
+	static $runtimecache = null;
 
 	$this_plugin = \get_plugins()[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ];
 
-	if ( false === $cache ) {
-		// include an unmodified $wp_version
-		include ABSPATH . WPINC . '/version.php';
+	if ( isset( $runtimecache ) ) {
+		$cache =& $runtimecache;
+	} else {
+		$cache_timeout = MINUTE_IN_SECONDS * 15;
+		$cache = \get_site_transient( TSF_EXTENSION_MANAGER_UPDATER_CACHE );
 
-		$url = TSF_EXTENSION_MANAGER_DL_URI . 'get/update/1.0/';
+		if ( false === $cache ) {
+			// include an unmodified $wp_version
+			include ABSPATH . WPINC . '/version.php';
 
-		$http_args = [
-			'timeout'    => 4,
-			'user-agent' => 'WordPress/' . $wp_version . '; ' . PHP_VERSION_ID . '; ' . \home_url( '/' ),
-			'body'       => [
-				'plugins' => [
-					TSF_EXTENSION_MANAGER_PLUGIN_BASENAME => $this_plugin,
+			$url = TSF_EXTENSION_MANAGER_DL_URI . 'get/update/1.0/';
+
+			$http_args = [
+				'timeout'    => 7,
+				'user-agent' => 'WordPress/' . $wp_version . '; ' . PHP_VERSION_ID . '; ' . \home_url( '/' ),
+				'body'       => [
+					'plugins' => [
+						TSF_EXTENSION_MANAGER_PLUGIN_BASENAME => $this_plugin,
+					],
+					// 'translations' => [], // maybe later.
+					// 'locale' => [], // maybe later.
 				],
-				// 'translations' => [], // maybe later.
-				// 'locale' => [], // maybe later.
-			],
-		];
+			];
 
-		$raw_response = \wp_remote_post( $url, $http_args );
+			$raw_response = \wp_remote_post( $url, $http_args );
 
-		if ( \is_wp_error( $raw_response ) || 200 != \wp_remote_retrieve_response_code( $raw_response ) ) {
-			return $value;
-		}
+			if ( \is_wp_error( $raw_response )
+			|| 200 != \wp_remote_retrieve_response_code( $raw_response ) // loose comparison ok.
+			) {
+				return $value;
+			}
 
-		$response = json_decode( \wp_remote_retrieve_body( $raw_response ), true );
-		foreach ( $response['plugins'] as &$plugin ) {
-			$plugin = (object) $plugin;
-			if ( isset( $plugin->compatibility ) ) {
-				$plugin->compatibility = (object) $plugin->compatibility;
-				foreach ( $plugin->compatibility as &$data ) {
-					$data = (object) $data;
+			$response = json_decode( \wp_remote_retrieve_body( $raw_response ), true );
+			foreach ( $response['plugins'] as &$plugin ) {
+				$plugin = (object) $plugin;
+				if ( isset( $plugin->compatibility ) ) {
+					$plugin->compatibility = (object) $plugin->compatibility;
+					foreach ( $plugin->compatibility as &$data ) {
+						$data = (object) $data;
+					}
 				}
 			}
-		}
-		unset( $plugin, $data );
-		foreach ( $response['no_update'] as &$plugin ) {
-			$plugin = (object) $plugin;
-		}
-		unset( $plugin );
+			unset( $plugin, $data );
+			foreach ( $response['no_update'] as &$plugin ) {
+				$plugin = (object) $plugin;
+			}
+			unset( $plugin );
 
-		$cache =& $response;
-		\set_site_transient( TSF_EXTENSION_MANAGER_UPDATER_CACHE, $cache, $cache_timeout );
+			$cache =& $response;
+			\set_site_transient( TSF_EXTENSION_MANAGER_UPDATER_CACHE, $cache, $cache_timeout );
+		}
+
+		$runtimecache = $cache;
 	}
 
 	//? We're only checking this plugin. This type of merge needs expansion in a bulk-updater.

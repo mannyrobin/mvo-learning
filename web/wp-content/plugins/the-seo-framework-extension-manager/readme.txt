@@ -3,9 +3,9 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
 Requires at least: 4.6.0
-Tested up to: 5.0.0
+Tested up to: 5.0.3
 Requires PHP: 5.5.21
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -47,13 +47,20 @@ View our detailed [Plugin Privacy Policy](https://theseoframework.com/privacy-po
 
 Do you have questions about privacy? Feel free to [contact us](https://theseoframework.com/contact/).
 
+= Translation credits =
+
+* Portuguese (Brasil): [Douglas Ferraz](https://profiles.wordpress.org/douglasferraz89/)
+* Russian: [Vitaliy Ralle](https://profiles.wordpress.org/vit-1/)
+* Spanish: [Manuel Ballesta Ruiz](https://profiles.wordpress.org/mbrsolution/)
+* Turkish: [Mehmet Genç](https://profiles.wordpress.org/gncmhmt/)
+
 == Installation ==
 
 = This plugin requires: =
 
 * PHP 5.5.21, 5.6.5, or later. For security and structural reasons.
 * WordPress 4.6 or later. For improved AJAX and meta support.
-* [The SEO Framework](https://wordpress.org/plugins/autodescription/) 2.8 or later. Or it will stay dormant.
+* [The SEO Framework](https://wordpress.org/plugins/autodescription/) 3.1 or later. Or it will stay dormant.
 * Edge 13, Safari 10, better or equivalent for the best admin experience.
 * For improved performance and more available options, your PHP handler should use a 64 bits architecture. 32 bits is also supported.
 
@@ -161,9 +168,63 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 == Changelog ==
 
+= 2.0.4 =
+
+**Release date:**
+
+* January 29th, 2019
+
+**Plugin Improvements:**
+
+* **Fixed:** Settings that don't use AJAX can now be processed again, like for activating or deactivating your license key.
+
+= 2.0.3 =
+
+**Release date:**
+
+* January 28th, 2019
+
+**Plugin Improvements:**
+
+* **Fixed:** The plugin no longer causes an error in the WordPress administrative dashboard on PHP 5.6 or below.
+
+= 2.0.2 =
+
+**Release date:**
+
+* January 28th, 2019
+
+**Updated Extensions:**
+
+* [Local](https://theseoframework.com/extensions/local/#changelog)
+* [Focus](https://theseoframework.com/extensions/focus/#changelog)
+* [Monitor](https://theseoframework.com/extensions/monitor/#changelog)
+
+**Plugin Improvements:**
+
+* **Changed:** This plugin now requires The SEO Framework 3.1.0 or higher.
+* **Changed:** This plugin now uses The SEO Framework's tooltip handler.
+* **Changed:** This plugin now uses The SEO Framework's script handler.
+* **Improved:** The plugin now caches the update request in PHP runtime, instead of just in database transients.
+	* Some caching plugins invoked a DDoS attack to the update services. This improvement alleviates that.
+* **Fixed:** Next to plain notices, errors and warnings from other plugins and themes are now styled correctly on this plugin's pages too.
+* **Fixed:** In Firefox and Edge, the tooltips no longer cause a horizontal pane overflow.
+	* ...In combination with The SEO Framework 3.2.2 or higher.
+* **Fixed:** Extension-related post meta with special HTML characters entered will no longer cause the extension metadata to corrupt on save.
+	* This issue was found during a security checkup (which passed). Luckily, it's yet unlikely that users would encounter this issue.
+
+**In 2.0.2a:**
+
+* **Fixed:** PHP 5.5~5.6 no longer encounter errors in the admin area.
+
+**Added Translations:**
+
+* Russian. Thank you [Vitaliy Ralle](https://profiles.wordpress.org/vit-1/)!
+* Portuguese (Brasil). Thank you [Douglas Ferraz](https://profiles.wordpress.org/douglasferraz89/)!
+
 = 2.0.1 =
 
-** Release date:**
+**Release date:**
 
 * December 4th, 2018
 
