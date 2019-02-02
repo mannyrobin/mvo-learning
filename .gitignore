@@ -15,6 +15,7 @@ web/wp-content/uploads/*
 !web/wp-content/uploads/.gitkeep
 !web/wp-content/plugins/social-warfare-pro
 !web/wp-content/plugins/the-seo-framework-extension-manager
+!web/wp-content/plugins/bb-fast-filesystem
 
 # WordPress
 web/wp

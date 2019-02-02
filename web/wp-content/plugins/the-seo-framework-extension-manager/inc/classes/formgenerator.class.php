@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2017-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -228,7 +228,7 @@ final class FormGenerator {
 	/**
 	 * Prepares the current iteration and option levels and names.
 	 *
-	 * Performs sanitation on items.
+	 * Performs sanitization on items.
 	 *
 	 * @since 1.3.0
 	 * @iterator

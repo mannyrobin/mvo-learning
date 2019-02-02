@@ -3,12 +3,12 @@
  * Serve JavaScript as an addition, not as an ends or means.
  *
  * @author Sybre Waaijer <https://cyberwire.nl/>
- * @pluginURI <https://wordpress.org/plugins/the-seo-framework-extension-manager/>
+ * @pluginURI <https://theseoframework.com/extension-manager/>
  */
 
 /**
  * Monitor extension for The SEO Framework
- * Copyright (C) 2016-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -290,7 +290,7 @@ window.tsfem_e_monitor = {
 					setTimeout( function() { tsfem.updatedResponse( loader, 1, notice, 0 ); }, 1000 );
 
 					//* Update hover cache.
-					jQuery( window ).trigger( 'tsfem-reset-tooltips' );
+					tsfTT.triggerReset();
 				} else if ( 'yield_unchanged' === status ) {
 					tsfem.updatedResponse( loader, 2, notice, 0 );
 				} else if ( 'requires_fix' === status ) {

@@ -11,7 +11,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Focus extension for The SEO Framework
- * Copyright (C) 2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -294,7 +294,7 @@ Scoring::get_instance()->template = [
 			'content' => 'pageContent',
 			'regex' => [
 				// To simulate the `s` modifier (no webkit support), we use `.|\s`.
-				'/(?!>)[^<>]+(?=<|$)/gi',                             // 1: All but tags.
+				'/(?=([^<>]+))\\1(?=<|$)/gi',                         // 1: All but tags. JS equiv. of `[^<>]++(?=<|$)`
 				'/^(.|\\s){0,200}(.|\\s)*?(?=\\r?\\n(\\r?\\n)|$)/gi', // 2: Match first paragraph, or, when it's less than 200 character, the next paragraph(s).
 				'/{{kw}}/gi',                                         // 3: Match words.
 			],
@@ -331,8 +331,8 @@ Scoring::get_instance()->template = [
 		'assessment' => [
 			'content' => 'pageContent',
 			'regex' => [
-				'/(?!>)[^<>]+(?=<|$)/gi', // 1: All but tags.
-				'/{{kw}}/gi',             // 2: Match words.
+				'/(?=([^<>]+))\\1(?=<|$)/gi', // 1: All but tags. JS equiv. of `[^<>]++(?=<|$)`
+				'/{{kw}}/gi',                 // 2: Match words.
 			],
 		],
 		'maxScore' => 800,
@@ -347,9 +347,9 @@ Scoring::get_instance()->template = [
 		'rating' => [
 			1200 => 1, // threshold 6%
 			801  => 2, // threshold 4%
-			400  => 4,
-			200  => 2,
-			0    => 1,
+			400  => 4, // = 2%
+			200  => 2, // = 1%
+			0    => 1, // = 0%
 		],
 		'scoring' => [
 			'type' => 'p',
@@ -434,8 +434,8 @@ Scoring::get_instance()->template = [
 		'assessment' => [
 			'content' => 'pageUrl',
 			'regex' => [
-				'/(?!>)[^<>]+(?=<|$)/gi', // 1: All but tags.
-				'/{{kw}}/gi',             // 2: Match words.
+				'/(?=([^<>]+))\\1(?=<|$)/gi', // 1: All but tags. JS equiv. of `[^<>]++(?=<|$)`
+				'/{{kw}}/gi',                 // 2: Match words.
 			],
 		],
 		'maxScore' => 125,

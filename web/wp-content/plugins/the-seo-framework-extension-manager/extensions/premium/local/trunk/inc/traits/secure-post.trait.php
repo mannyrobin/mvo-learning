@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * Local extension for The SEO Framework
- * Copyright (C) 2017-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -82,8 +82,8 @@ trait Secure_Post {
 	 */
 	protected function init_post_checks() {
 
-		//* Update POST listener.
-		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
+		// AJAX only, not registered. Also, this method AFTER admin_init, so it went by unnoticed.
+		// \add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			$this->init_ajax_post_checks();
