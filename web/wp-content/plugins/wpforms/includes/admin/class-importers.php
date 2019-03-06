@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Load the different form importers.
  *
@@ -49,6 +50,7 @@ class WPForms_Importers {
 		$importers = apply_filters( 'wpforms_load_importers', array(
 			'contact-form-7',
 			'ninja-forms',
+			'pirate-forms',
 		) );
 
 		foreach ( $importers as $importer ) {

@@ -18,15 +18,15 @@ class WPForms_Template_Subscribe extends WPForms_Template {
 	 */
 	public function init() {
 
-		$this->name        = __( 'Newsletter Signup Form', 'wpforms' );
+		$this->name        = esc_html__( 'Newsletter Signup Form', 'wpforms-lite' );
 		$this->slug        = 'subscribe';
-		$this->description = __( 'Add subscribers and grow your email list with this newsletter signup form. You can add and remove fields as needed.', 'wpforms' );
+		$this->description = esc_html__( 'Add subscribers and grow your email list with this newsletter signup form. You can add and remove fields as needed.', 'wpforms-lite' );
 		$this->includes    = '';
 		$this->icon        = '';
 		$this->core        = true;
 		$this->modal       = array(
-			'title'   => __( 'Don&#39;t Forget', 'wpforms' ),
-			'message' => __( 'Click the marketing tab to configure your newsletter service provider', 'wpforms' ),
+			'title'   => esc_html__( 'Don&#39;t Forget', 'wpforms-lite' ),
+			'message' => esc_html__( 'Click the marketing tab to configure your newsletter service provider', 'wpforms-lite' ),
 		);
 		$this->data        = array(
 			'field_id' => '2',
@@ -34,14 +34,14 @@ class WPForms_Template_Subscribe extends WPForms_Template {
 				'0' => array(
 					'id'       => '0',
 					'type'     => 'name',
-					'label'    => __( 'Name', 'wpforms' ),
+					'label'    => esc_html__( 'Name', 'wpforms-lite' ),
 					'required' => '1',
 					'size'     => 'medium',
 				),
 				'1' => array(
 					'id'       => '1',
 					'type'     => 'email',
-					'label'    => __( 'Email', 'wpforms' ),
+					'label'    => esc_html__( 'Email', 'wpforms-lite' ),
 					'required' => '1',
 					'size'     => 'medium',
 				),
@@ -49,7 +49,7 @@ class WPForms_Template_Subscribe extends WPForms_Template {
 			'settings' => array(
 				'honeypot'                    => '1',
 				'confirmation_message_scroll' => '1',
-				'submit_text_processing'      => __( 'Sending...', 'wpforms' ),
+				'submit_text_processing'      => esc_html__( 'Sending...', 'wpforms-lite' ),
 			),
 			'meta'     => array(
 				'template' => $this->slug,
@@ -63,11 +63,11 @@ class WPForms_Template_Subscribe extends WPForms_Template {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $form_data
+	 * @param array $form_data Form data and settings.
 	 *
 	 * @return boolean
 	 */
-	function template_modal_conditional( $form_data ) {
+	public function template_modal_conditional( $form_data ) {
 
 		// If we do not have provider data, then we can assume a provider
 		// method has not yet been configured, so we display the modal to
@@ -75,10 +75,10 @@ class WPForms_Template_Subscribe extends WPForms_Template {
 		// correctly.
 		if ( empty( $form_data['providers'] ) ) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 }
 
-new WPForms_Template_Subscribe;
+new WPForms_Template_Subscribe();

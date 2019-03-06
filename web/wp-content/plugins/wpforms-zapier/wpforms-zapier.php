@@ -5,8 +5,8 @@
  * Description: Zapier integration with WPForms.
  * Author:      WPForms
  * Author URI:  https://wpforms.com
- * Version:     1.0.3
- * Text Domain: wpforms_zapier
+ * Version:     1.1.0
+ * Text Domain: wpforms-zapier
  * Domain Path: languages
  *
  * WPForms is free software: you can redistribute it and/or modify
@@ -28,11 +28,13 @@
  * @copyright  Copyright (c) 2016, WP Forms LLC
  */
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-// Plugin version
-define( 'WPFORMS_ZAPIER_VERSION', '1.0.3' );
+// Plugin version.
+define( 'WPFORMS_ZAPIER_VERSION', '1.1.0' );
 
 /**
  * Load the provider class.
@@ -41,14 +43,14 @@ define( 'WPFORMS_ZAPIER_VERSION', '1.0.3' );
  */
 function wpforms_zapier() {
 
-	// WPForms Pro is required
-	if ( !class_exists( 'WPForms_Pro' ) ) {
+	// WPForms Pro is required.
+	if ( ! wpforms()->pro ) {
 		return;
 	}
 
-	load_plugin_textdomain( 'wpforms_zapier', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	load_plugin_textdomain( 'wpforms-zapier', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 
-	require_once( plugin_dir_path( __FILE__ ) . 'class-zapier.php' );
+	require_once plugin_dir_path( __FILE__ ) . 'class-zapier.php';
 }
 add_action( 'wpforms_loaded', 'wpforms_zapier' );
 
@@ -56,18 +58,21 @@ add_action( 'wpforms_loaded', 'wpforms_zapier' );
  * Load the plugin updater.
  *
  * @since 1.0.0
+ *
+ * @param string $key License key.
  */
-function wpforms_mailchimp_zapier( $key ) {
+function wpforms_zapier_updater( $key ) {
 
-	$args = array(
-		'plugin_name' => 'WPForms Zapier',
-		'plugin_slug' => 'wpforms-zapier',
-		'plugin_path' => plugin_basename( __FILE__ ),
-		'plugin_url'  => trailingslashit( plugin_dir_url( __FILE__ ) ),
-		'remote_url'  => WPFORMS_UPDATER_API,
-		'version'     => WPFORMS_ZAPIER_VERSION,
-		'key'         => $key,
+	new WPForms_Updater(
+		array(
+			'plugin_name' => 'WPForms Zapier',
+			'plugin_slug' => 'wpforms-zapier',
+			'plugin_path' => plugin_basename( __FILE__ ),
+			'plugin_url'  => trailingslashit( plugin_dir_url( __FILE__ ) ),
+			'remote_url'  => WPFORMS_UPDATER_API,
+			'version'     => WPFORMS_ZAPIER_VERSION,
+			'key'         => $key,
+		)
 	);
-	$updater = new WPForms_Updater( $args );
 }
-add_action( 'wpforms_updater', 'wpforms_mailchimp_zapier' );
+add_action( 'wpforms_updater', 'wpforms_zapier_updater' );

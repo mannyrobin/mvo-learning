@@ -1,160 +1,150 @@
-# Copyright (C) 2017 WPForms Zapier
+# Copyright (C) 2019 WPForms Zapier
 # This file is distributed under the same license as the WPForms Zapier package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WPForms Zapier 1.0.3\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpforms-zapier\n"
-"POT-Creation-Date: 2017-03-09 16:30:09+00:00\n"
+"Project-Id-Version: WPForms Zapier\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: WPForms <support@wpforms.com>\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: class-zapier.php:73
+#. translators: %s - field id.
+#: class-zapier.php:81
 msgid "Field #%s"
 msgstr ""
 
-#: class-zapier.php:100
+#: class-zapier.php:108
 msgid "First"
 msgstr ""
 
-#: class-zapier.php:101
+#: class-zapier.php:109
 msgid "Middle"
 msgstr ""
 
-#: class-zapier.php:102
+#: class-zapier.php:110
 msgid "Last"
 msgstr ""
 
-#: class-zapier.php:124
+#: class-zapier.php:142
 msgid "Line 1"
 msgstr ""
 
-#: class-zapier.php:125
+#: class-zapier.php:143
 msgid "Line 2"
 msgstr ""
 
-#: class-zapier.php:126
+#: class-zapier.php:144
 msgid "City"
 msgstr ""
 
-#: class-zapier.php:127
+#: class-zapier.php:145
 msgid "State"
 msgstr ""
 
-#: class-zapier.php:128
+#: class-zapier.php:146
 msgid "Region"
 msgstr ""
 
-#: class-zapier.php:129
+#: class-zapier.php:147
 msgid "Postal"
 msgstr ""
 
-#: class-zapier.php:130
+#: class-zapier.php:148
 msgid "Country"
 msgstr ""
 
-#: class-zapier.php:136
+#: class-zapier.php:154
 msgid "Date"
 msgstr ""
 
-#: class-zapier.php:137
+#: class-zapier.php:155
 msgid "Time"
 msgstr ""
 
-#: class-zapier.php:138
+#: class-zapier.php:156
 msgid "Unix Timestamp"
 msgstr ""
 
-#: class-zapier.php:150
+#: class-zapier.php:168
 msgid "Plain Amount"
 msgstr ""
 
-#: class-zapier.php:213
+#: class-zapier.php:233
 msgid "Zapier Zap error"
 msgstr ""
 
-#: class-zapier.php:280
+#: class-zapier.php:301
 msgid "Invalid WPForms Zapier API key"
 msgstr ""
 
-#: class-zapier.php:375
+#: class-zapier.php:407
 msgid "No data"
 msgstr ""
 
-#: class-zapier.php:420 class-zapier.php:514
-msgid "Your WPForms Zapier API key is "
+#. translators: %s - API key.
+#. translators: %s - API key.
+#: class-zapier.php:454, class-zapier.php:579
+msgid "Your WPForms Zapier API key is %s"
 msgstr ""
 
-#: class-zapier.php:424
+#: class-zapier.php:462
 msgid "No Zaps are connected to this form."
 msgstr ""
 
-#: class-zapier.php:429
+#: class-zapier.php:467
 msgid "No name"
 msgstr ""
 
-#: class-zapier.php:433
-msgid "Date Connected "
+#: class-zapier.php:468
+msgid "Yes"
 msgstr ""
 
-#: class-zapier.php:434
-msgid "Live  "
+#: class-zapier.php:468
+msgid "No"
 msgstr ""
 
-#: class-zapier.php:435
-msgid "Edit this Zap  "
+#: class-zapier.php:472
+msgid "Date Connected"
 msgstr ""
 
-#: class-zapier.php:441
-msgid ""
-"<a href=\"%s\" target=\"_blank\" rel=\"noopener\">Click here for "
-"documentation on connecting WPForms with Zapier.</a>"
+#: class-zapier.php:473
+msgid "Live"
 msgstr ""
 
-#: class-zapier.php:506
+#: class-zapier.php:474
+msgid "Edit this Zap"
+msgstr ""
+
+#. translators: %s - WPForms.com Zapier documentation article URL.
+#. translators: %s - WPForms.com Zapier documentation article URL.
+#: class-zapier.php:483, class-zapier.php:593
+msgid "<a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Click here for documentation on connecting WPForms with Zapier.</a>"
+msgstr ""
+
+#. translators: %s - provider name.
+#: class-zapier.php:563
 msgid "Integrate %s with WPForms"
 msgstr ""
 
-#: class-zapier.php:507
+#: class-zapier.php:568
 msgid "Connected"
 msgstr ""
 
-#: class-zapier.php:518
+#: class-zapier.php:587
 msgid "No forms are currently connected."
 msgstr ""
 
-#: class-zapier.php:519
-msgid ""
-"<a href=\"%s\" target=\"_blank\">Click here for documentation on connecting "
-"WPForms with Zapier.</a>"
+#: class-zapier.php:607
+msgid "The forms below are currently connected to Zapier."
 msgstr ""
 
-#: class-zapier.php:522
-msgid "The forms below are currently connected to Zapier. "
-msgstr ""
-
-#: class-zapier.php:528
-msgid "Connected on: "
-msgstr ""
-
-#. Plugin Name of the plugin/theme
-msgid "WPForms Zapier"
-msgstr ""
-
-#. #-#-#-#-#  wpforms-zapier.pot (WPForms Zapier 1.0.3)  #-#-#-#-#
-#. Plugin URI of the plugin/theme
-#. #-#-#-#-#  wpforms-zapier.pot (WPForms Zapier 1.0.3)  #-#-#-#-#
-#. Author URI of the plugin/theme
-msgid "https://wpforms.com"
-msgstr ""
-
-#. Description of the plugin/theme
-msgid "Zapier integration with WPForms."
-msgstr ""
-
-#. Author of the plugin/theme
-msgid "WPForms"
+#. translators: %s - connection date.
+#: class-zapier.php:616
+msgid "Connected on: %s"
 msgstr ""

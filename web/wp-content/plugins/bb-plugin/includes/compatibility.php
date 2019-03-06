@@ -625,9 +625,12 @@ function fl_fix_seopress() {
 if ( isset( $_GET['fl_builder'] ) ) {
 	$options = array(
 		'optimize_html',
+		'optimize_javascript',
+		'optimize_javascript_async',
 		'remove_query_strings',
 		'fix_insecure_content',
 		'optimize_css',
+		'combine_css',
 		'optimize_javascript',
 	);
 	foreach ( $options as $option ) {
@@ -657,4 +660,3 @@ function fl_set_curl_safe_opts( $handle ) {
 	curl_setopt( $handle, CURLOPT_CAINFO, ABSPATH . WPINC . '/certificates/ca-bundle.crt' );
 	return $handle;
 }
-

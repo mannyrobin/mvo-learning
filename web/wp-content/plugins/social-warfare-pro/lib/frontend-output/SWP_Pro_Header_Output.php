@@ -13,663 +13,532 @@ if ( class_exists( 'SWP_Header_Output' ) ) :
  * @since     3.0.0 | 21 FEB 2018 | Refactored into a class-based system.
  * @since     3.0.8 | 23 MAY 2018 | Added compatibility for custom color/outline combos.
  * @since     3.1.0 | 05 JUL 2018 | Added global $post variable.
- *
+ * @since     3.5.0 | 18 DEC 2018 | Refactored for code optimization.
  *
  * Hook into the core header filter
  *
  * Create and return the values to be used in the header meta tags
  *
- * All meta values will be returned in the $info['meta_tag_values'] array.
- *
- * The following values will be returned from the function open_graph_values():
- *     Open Graph Type          $info['meta_tag_values']['og_type']
- *     Open Graph Title         $info['meta_tag_values']['og_title']
- *     Open Graph Description   $info['meta_tag_values']['og_description']
- *     Open Graph Image         $info['meta_tag_values']['og_image']
- *     Open Graph Image Width   $info['meta_tag_values']['og_image_width']
- *     Open Graph Image Height  $info['meta_tag_values']['og_image_height']
- *     Open Graph URL           $info['meta_tag_values']['og_url']
- *     Open Graph Site Name     $info['meta_tag_values']['og_site_name']
- *     Article Author           $info['meta_tag_values']['article_author']
- *     Article Publisher        $info['meta_tag_values']['article_publisher']
- *     Article Published Time   $info['meta_tag_values']['article_published_time']
- *     Article Modified Time    $info['meta_tag_values']['article_modified_time']
- *     OG Modified Time         $info['meta_tag_values']['og_modified_time']
- *     Facebook App ID          $info['meta_tag_values']['fb_app_id']
- *
- * The following values will be returned from the function twitter_card_values():
- *     Twitter Card type        $info['meta_tag_values']['twitter_card']
- *     Twitter Title            $info['meta_tag_values']['twitter_title']
- *     Twitter Description      $info['meta_tag_values']['twitter_description']
- *     Twitter Image            $info['meta_tag_values']['twitter_image']
- *     Twitter Site             $info['meta_tag_values']['twitter_site']
- *     Twitter creator          $info['meta_tag_values']['twitter_creator']
- *
+ * To view which meta values are processed,
+ * see setup_open_graph() and setup_twitter_card().
  *
  */
 class SWP_Pro_Header_Output extends SWP_Header_Output {
-    public function __construct() {
-        global $post, $swp_user_options;
+	public function __construct() {
+		global $post, $swp_user_options;
 
-        if ( !empty( $post ) && is_object( $post ) ) {
-            //* Store the post for wpseo_replace_vars().
-            $this->post = $post;
-        }
+		$this->options = $swp_user_options;
+		$this->establish_custom_colors();
 
-        $this->options = $swp_user_options;
-        $this->establish_custom_colors();
-        $this->init();
-    }
+		add_filter( 'swp_header_html', array( $this, 'render_meta_html' ) );
+		add_filter( 'swp_header_html', array( $this, 'output_custom_color' ) );
+	}
 
+	/**
+	 * Parses user options and prepares data for header output.
+	 *
+	 * Any <meta> tags which can be configured with options or post_meta will be
+	 * touched by the callbacks in this method body.
+	 *
+	 * @since  3.5.0 | 19 DEC 2018 | Created.
+	 * @param void
+	 * @return void
+	 */
+	public function establish_header_values() {
+		global $post;
 
-     private function init() {
-        add_filter( 'swp_header_values' , array( $this , 'open_graph_values' ), 5 );
-        add_filter( 'swp_header_values' , array( $this , 'twitter_card_values' ) , 10 );
-        add_filter( 'swp_header_html'   , array( $this , 'open_graph_html' ) , 5 );
-        add_filter( 'swp_header_html'   , array( $this , 'twitter_card_html' ) , 10 );
-        add_filter( 'swp_header_html'   , array( $this , 'output_ctt_css' ) , 15 );
-        add_filter( 'swp_header_html'   , array( $this , 'output_custom_color' ), 15 );
-    }
-
-
-    /**
-     * Open Graph Meta Tag Values
-     *
-     * Notes: If the user specifies an Open Graph tag,
-     * we're going to develop a complete set of tags. Order
-     * of preference for each tag is as follows:
-     * 1. Did they fill out our open graph field?
-     * 2. Did they fill out Yoast's social field?
-     * 3. Did they fill out Yoast's SEO field?
-     * 4. We'll just auto-generate the field from the post.
-     *
-     * @since  2.1.4
-     * @since  3.0.0 | 03 FEB 2018 | Added the option to disable OG tag output
-     * @since  3.1.0 | 05 JUL 2018 | Added call to wpseo_replace_vars.
-     * @access public
-     * @param  array $info An array of data about the post
-     * @return array $info The modified array
-     */
-    public function open_graph_values($info){
-    	if( false === is_singular() ) {
-    		return $info;
-    	}
-
-    	// Don't compile them if both the OG Tags and Twitter Cards are Disabled on the options page
-    	if ( false === SWP_Utility::get_option( 'og_tags' ) && false === SWP_Utility::get_option( 'twitter_cards' ) ) :
-            return $info;
-        endif;
-
-
-    	/**
-    	 * Begin by fetching the user's default custom settings
-    	 *
-    	 */
-    	$custom_og_title       = get_post_meta( $info['postID'] , 'swp_og_title' , true );
-        if ( !empty( $custom_og_title) ) :
-            $custom_og_title = htmlspecialchars( $custom_og_title );
-        endif;
-
-    	$custom_og_description = get_post_meta( $info['postID'] , 'swp_og_description' , true );
-        if ( !empty( $custom_og_description ) ) :
-            $custom_og_description = htmlspecialchars( $custom_og_description );
-        endif;
-
-    	$custom_og_image_id    = get_post_meta( $info['postID'] , 'swp_og_image' , true );
-    	$custom_og_image_url   = get_post_meta( $info['postID'] , 'swp_open_graph_image_url' , true );
-    	$custom_og_image_data  = json_decode( get_post_meta( $info['postID'] , 'swp_open_graph_image_data' , true ) );
-
-    	/**
-    	 * Disable Jetpack's Open Graph tags
-    	 *
-    	 */
-    	add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
-    	add_filter( 'jetpack_enable_open_graph', '__return_false', 99 );
-
-    	/**
-    	 * Check for and coordinate with Yoast to create the best possible values for each tag
-    	 *
-    	 */
-    	if ( defined( 'WPSEO_VERSION' ) ) :
-    		global $wpseo_og;
-    		$info['yoast_og_setting'] = has_action( 'wpseo_head', array( $wpseo_og, 'opengraph' ) );
-    	else :
-    		$info['yoast_og_setting'] = false;
-    	endif;
-
-    	// Check if the user has filled out at least one of the custom fields
-    	if ( defined( 'WPSEO_VERSION' ) && ( !empty( $custom_og_title ) || !empty( $custom_og_description ) || !empty( $custom_og_image_url ) ) ):
-
-    		/**
-    		 * YOAST SEO: It rocks, so if it's installed, let's coordinate with it
-    		 *
-    		 */
-
-    		// Collect their Social Descriptions as backups if they're not defined in ours
-    		$yoast_og_title         = get_post_meta( $info['postID'] , '_yoast_wpseo_opengraph-title' , true );
-    		$yoast_og_description   = get_post_meta( $info['postID'] , '_yoast_wpseo_opengraph-description' , true );
-    		$yoast_og_image         = get_post_meta( $info['postID'] , '_yoast_wpseo_opengraph-image' , true );
-    		$yoast_seo_title        = get_post_meta( $info['postID'] , '_yoast_wpseo_title' , true );
-    		$yoast_seo_description  = get_post_meta( $info['postID'] , '_yoast_wpseo_metadesc' , true );
-
-			if ( function_exists( 'wpseo_replace_vars' ) ) :
-				global $post;
-
-				if( false !== $yoast_og_title ):
-		            $yoast_og_title = wpseo_replace_vars( $yoast_og_title, $post );
-				endif;
-
-                if( false !== $yoast_og_description ):
-		            $yoast_og_description = wpseo_replace_vars( $yoast_og_description, $post );
-				endif;
-
-                if( false !== $yoast_og_image ):
-		            $yoast_og_image = wpseo_replace_vars( $yoast_og_image, $post );
-				endif;
-
-                if( false !== $yoast_seo_title ):
-		            $yoast_seo_title = wpseo_replace_vars( $yoast_seo_title, $post );
-				endif;
-
-                if( false !== $yoast_seo_description ):
-		            $yoast_seo_description = wpseo_replace_vars( $yoast_seo_description, $post );
-				endif;
-			endif;
-
-    		// Cancel their output if ours have been defined so we don't have two sets of tags
-    		global $wpseo_og;
-    		remove_action( 'wpseo_head', array( $wpseo_og, 'opengraph' ), 30 );
-    		$info['yoast_og_setting'] = false;
-
-    		// Fetch the WPSEO_SOCIAL Values
-    		$wpseo_social = get_option( 'wpseo_social' );
-
-    	// End of the Yoast Conditional
-    	endif;
-
-    	/**
-    	 * Open Graph Tags (The Easy Ones That Don't Need Conditional Fallbacks)
-    	 *
-    	 */
-    	$info['meta_tag_values']['og_url']                 = get_permalink();
-    	$info['meta_tag_values']['og_site_name']           = get_bloginfo( 'name' );
-    	$info['meta_tag_values']['article_published_time'] = get_post_time( 'c' );
-    	$info['meta_tag_values']['article_modified_time']  = get_post_modified_time( 'c' );
-    	$info['meta_tag_values']['og_modified_time']       = get_post_modified_time( 'c' );
-
-    	/**
-    	 * Open Graph Type
-    	 * @since 2.2.4 | Updated | 05 MAY 2017 | Added the global options for og:type values
-    	 */
-    	$type = get_post_type();
-
-    	if ( !SWP_Utility::get_option( 'og_' . $type ) ) {
-    		$this->options['og_type_' . $type] = 'article';
-    	}
-
-        $og_type = get_post_meta( $info['postID'] , 'swp_og_type' , true );
-
-        if ( empty( $og_type ) ) {
-            $og_type = SWP_Utility::get_option( 'og_' . $type );
-        }
-
-		$og_type = str_replace( 'og_', '', $og_type);
-
-        $info['meta_tag_values']['og_type'] = $og_type;
-
-    	/**
-    	 *  Open Graph Title: Create an open graph title meta tag
-    	 *
-    	 */
-    	if ( !empty( $custom_og_title ) ) :
-    		$info['meta_tag_values']['og_title'] = $custom_og_title;
-    	elseif ( !empty( $yoast_og_title )) :
-    		$info['meta_tag_values']['og_title'] = $yoast_og_title;
-    	elseif ( !empty( $yoast_seo_title ) ) :
-    		$info['meta_tag_values']['og_title'] = $yoast_seo_title;
-    	else :
-    		$info['meta_tag_values']['og_title'] = trim( SWP_Utility::convert_smart_quotes( htmlspecialchars_decode( get_the_title() ) ) );
-    	endif;
-
-    	/**
-    	 * Open Graph Description
-    	 *
-    	 */
-    	if ( !empty( $custom_og_description ) ) :
-    		$info['meta_tag_values']['og_description'] = $custom_og_description;
-    	elseif ( !empty( $yoast_og_description ) ) :
-    		$info['meta_tag_values']['og_description'] = $yoast_og_description;
-    	elseif ( !empty( $yoast_seo_description ) ) :
-    		$info['meta_tag_values']['og_description'] = $yoast_seo_description;
-    	else :
-    		$info['meta_tag_values']['og_description'] = html_entity_decode( SWP_Utility::convert_smart_quotes( htmlspecialchars_decode( SWP_Utility::get_the_excerpt( $info['postID'] ) ) ) );
-    	endif;
-
-    	/**
-    	 * Open Graph image
-    	 *
-    	 */
-    	if ( !empty( $custom_og_image_url ) ) :
-    		$info['meta_tag_values']['og_image'] = $custom_og_image_url;
-    	elseif ( !empty( $yoast_og_image ) ) :
-    		$info['meta_tag_values']['og_image'] = $yoast_og_image;
-    	else :
-    		$thumbnail_url = wp_get_attachment_url( get_post_thumbnail_id( $info['postID'] ) );
-    		if ( $thumbnail_url ) :
-    			$info['meta_tag_values']['og_image'] = $thumbnail_url;
-    		endif;
-    	endif;
-
-    	/**
-    	 * Open Graph Image Dimensions
-    	 *
-    	 */
-    	if ( !empty( $custom_og_image_data ) ) :
-    		$info['meta_tag_values']['og_image_width']   = $custom_og_image_data[1];
-    		$info['meta_tag_values']['og_image_height']	 = $custom_og_image_data[2];
-    	endif;
-
-    	/**
-    	 * Facebook Author
-    	 *
-    	 */
-    	if ( get_the_author_meta( 'swp_fb_author' , SWP_User_Profile::get_author( $info['postID'] ) ) ) :
-    		$info['meta_tag_values']['article_author'] = get_the_author_meta( 'swp_fb_author' , SWP_User_Profile::get_author( $info['postID'] ) );
-    	elseif ( get_the_author_meta( 'facebook' , SWP_User_Profile::get_author( $info['postID'] ) ) && defined( 'WPSEO_VERSION' ) ) :
-    		$info['meta_tag_values']['article_author'] = get_the_author_meta( 'facebook' , SWP_User_Profile::get_author( $info['postID'] ) );
-    	endif;
-
-    	/**
-    	 * Open Graph Publisher
-    	 *
-    	 */
-    	if ( !empty( $this->options['facebook_publisher_url'] )) :
-    		$info['meta_tag_values']['article_publisher'] = $this->options['facebook_publisher_url'];
-    	elseif ( isset( $wpseo_social ) && !empty( $wpseo_social['facebook_site'] ) ) :
-    		$info['meta_tag_values']['article_publisher'] = $wpseo_social['facebook_site'];
-    	endif;
-
-    	/**
-    	 * Open Graph App ID
-    	 *
-    	 */
-    	if ( !empty( $this->options['facebook_app_id'] ) ) :
-    		$info['meta_tag_values']['fb_app_id'] = $this->options['facebook_app_id'];
-    	elseif ( isset( $wpseo_social ) && !empty( $wpseo_social['fbadminapp'] ) ) :
-    		$info['meta_tag_values']['fb_app_id'] = $wpseo_social['fbadminapp'];
-    	else :
-    		$info['meta_tag_values']['fb_app_id'] = '529576650555031';
-    	endif;
-
-    	return $info;
-    }
-
-    /**
-     * A function to compile the meta tags into HTML
-     * @since  3.0.0 | 03 FEB 2018 | Added the option to disable OG tag output
-     * @param  array $info The info array
-     * @return array $info The modified info array
-     */
-    public function open_graph_html($info) {
-    	if ( false === is_singular() ) {
-    		return $info;
-    	}
-
-    	// Don't compile them if the OG Tags are Disabled on the options page
-    	if ( isset( $this->options['og_tags'] ) && false === $this->options['og_tags'] ) {
-    		return $info;
-    	}
-
-    	// Check to ensure that we don't need to defer to Yoast
-    	if ( isset( $info['yoast_og_setting'] ) && false != $info['yoast_og_setting'] ) {
-			return $info;
+		if( false === is_singular() || !is_object( $post ) ) {
+			return;
 		}
 
-		if( isset( $info['meta_tag_values']['og_type'] ) && !empty( $info['meta_tag_values']['og_type'] ) ) :
-			$info['html_output'] .= PHP_EOL . '<meta property="og:type" content="'. trim( $info['meta_tag_values']['og_type'] ).'" />';
-		endif;
+		$this->post = $post;
+		$this->setup_open_graph();
+		$this->setup_twitter_card();
+	}
 
-		if( isset( $info['meta_tag_values']['og_title'] ) && !empty( $info['meta_tag_values']['og_title'] ) ) :
-			$info['html_output'] .= PHP_EOL . '<meta property="og:title" content="'. trim( $info['meta_tag_values']['og_title'] ).'" />';
-		endif;
+	/**
+	 * Takes stored class data and returns meta tag HTML.
+	 *
+	 * @since  3.5.0 | 19 DEC 2018 | Created.
+	 * @hook   swp_header_html | filter | origin SWP_Header_Output
+	 * @param  string $meta_html Ready to print HTML for the <head>.
+	 * @return string $meta_html Ready to print HTML for the <head>.
+	 *
+	 */
+	public function render_meta_html( $meta_html ) {
+		$this->establish_header_values();
 
-		if( isset( $info['meta_tag_values']['og_description'] ) && !empty( $info['meta_tag_values']['og_description'] ) ) :
-			$info['html_output'] .= PHP_EOL . '<meta property="og:description" content="'. trim( $info['meta_tag_values']['og_description'] ).'" />';
-		endif;
-
-		if( isset( $info[ 'meta_tag_values'][ 'og_image' ] )         && !empty( $info['meta_tag_values']['og_image'] ) ) :
-			$info['html_output'] .= PHP_EOL . '<meta property="og:image" content="'. trim( $info['meta_tag_values']['og_image'] ).'" />';
-		endif;
-
-		if( isset( $info[ 'meta_tag_values'][ 'og_image_width' ] )  && !empty( $info['meta_tag_values']['og_image_width'] ) ):
-			$info['html_output'] .= PHP_EOL . '<meta property="og:image:width" content="'. trim( $info['meta_tag_values']['og_image_width'] ).'" />';
-		endif;
-		if( isset( $info[ 'meta_tag_values'][ 'og_image_height' ] ) && !empty( $info['meta_tag_values']['og_image_height'] ) ):
-			$info['html_output'] .= PHP_EOL . '<meta property="og:image:height" content="'. trim( $info['meta_tag_values']['og_image_height'] ).'" />';
-		endif;
-
-		if( isset( $info['meta_tag_values']['og_url'] ) && !empty( $info['meta_tag_values']['og_url'] ) ) :
-			$info['html_output'] .= PHP_EOL . '<meta property="og:url" content="'. trim( $info['meta_tag_values']['og_url'] ).'" />';
-		endif;
-
-		if( isset( $info['meta_tag_values']['og_site_name'] ) && !empty( $info['meta_tag_values']['og_site_name'] ) ) :
-			$info['html_output'] .= PHP_EOL . '<meta property="og:site_name" content="'. trim( $info['meta_tag_values']['og_site_name'] ).'" />';
-		endif;
-
-		if( isset( $info['meta_tag_values']['article_author'] ) && !empty( $info['meta_tag_values']['article_author'] ) ):
-			$info['html_output'] .= PHP_EOL . '<meta property="article:author" content="'. trim( $info['meta_tag_values']['article_author'] ).'" />';
-		endif;
-
-		if( isset( $info['meta_tag_values']['article_publisher'] ) && !empty( $info['meta_tag_values']['article_publisher'] ) ):
-			$info['html_output'] .= PHP_EOL . '<meta property="article:publisher" content="'. trim( $info['meta_tag_values']['article_publisher'] ) .'" />';
-		endif;
-
-		if( isset( $info['meta_tag_values']['article_published_time'] ) && !empty( $info['meta_tag_values']['article_published_time'] ) ):
-			$info['html_output'] .= PHP_EOL . '<meta property="article:published_time" content="'. trim( $info['meta_tag_values']['article_published_time'] ) .'" />';
-		endif;
-
-		if( isset( $info['meta_tag_values']['article_modified_time'] ) && !empty( $info['meta_tag_values']['article_modified_time'] ) ):
-			$info['html_output'] .= PHP_EOL . '<meta property="article:modified_time" content="'. trim( $info['meta_tag_values']['article_modified_time'] ) .'" />';
-		endif;
-
-		if( isset( $info['meta_tag_values']['og_modified_time'] ) && !empty( $info['meta_tag_values']['og_modified_time'] ) ):
-			$info['html_output'] .= PHP_EOL . '<meta property="og:updated_time" content="'. trim( $info['meta_tag_values']['og_modified_time'] ) .'" />';
-		endif;
-
-		if( isset( $info['meta_tag_values']['fb_app_id'] ) && !empty( $info['meta_tag_values']['fb_app_id'] ) ):
-			$info['html_output'] .= PHP_EOL . '<meta property="fb:app_id" content="'. trim( $info['meta_tag_values']['fb_app_id'] ).'" />';
-		endif;
-
-    	return $info;
-    }
-
-
-    /**
-     *  Generate the Twitter Card fields
-     *
-     *	Notes: If the user has Twitter cards turned on, we
-     *	need to generate them, but we also like Yoast so we'll
-     *	pay attention to their settings as well. Here's the order
-     *	of preference for each field:
-     *	1. Did the user fill out the Social Media field?
-     *	2. Did the user fill out the Yoast Twitter Field?
-     *	3. Did the user fill out the Yoast SEO field?
-     *	4. We'll auto generate something logical from the post.
-     *
-     * @since 2.1.4
-     * @access public
-     * @param array $info An array of information about the post
-     * @return array $info The modified array
-     *
-     */
-    public function twitter_card_values($info) {
-    	if( false === is_singular() ) {
-    		return $info;
-    	}
-
-    	if ( !SWP_Utility::get_option( 'twitter_cards' ) ) {
-			return $info;
+		if( !empty( $this->open_graph_data ) ) {
+			$open_graph_html = $this->generate_meta_html( $this->open_graph_data );
+			$meta_html .= $open_graph_html;
 		}
 
-		$twitter_use_open_graph = get_post_meta( $info['postID'], 'swp_twitter_use_open_graph', true );
-        $twitter_use_open_graph = ( 'true' == $twitter_use_open_graph || false == $twitter_use_open_graph );
+		if ( !empty( $this->twitter_card_data) ) {
+			$twitter_card_html = $this->generate_meta_html( $this->twitter_card_data );
+			$meta_html .= $twitter_card_html;
+		}
 
-		if ( !$twitter_use_open_graph ) {
-			$twitter_card_title 		= get_post_meta( $info['postID'] , 'swp_twitter_card_title' , true );
-			$twitter_card_description 	= get_post_meta( $info['postID'] , 'swp_twitter_card_description' , true );
-			$twitter_card_image 		= get_post_meta( $info['postID'] , 'swp_twitter_card_image' , true );
+		return $meta_html;
+	}
 
-			if ( $twitter_card_image ) {
-				$twitter_card_image = wp_get_attachment_url( $twitter_card_image );
-			} else {
-				$twitter_card_image = '';
+	/**
+	 * Open Graph metadata can come from a variety of sources.
+	 *
+	 * This method prioritizes prioritizes Open Graph data as follows:
+	 * 1. Values stored in Yoast fields
+	 * 2. Values stored in Social Warfare fields
+	 * 3. Values inferred from WordPress fields.
+	 *
+	 * However, we would rather use any valid value over an empty value, so
+	 * if the field does not exist by step 3, we keep the values found in 1 or 2.
+	 *
+	 * The resulting array is stored locally for use in $this->render_meta_html().
+	 *
+	 * @see $this render_meta_html()
+	 * @since 3.5.0 | 19 DEC 2018 | Created.
+	 * @param void
+	 * @return void
+	 *
+	 */
+	public function setup_open_graph() {
+		if ( false === SWP_Utility::get_option( 'og_tags' ) && false === SWP_Utility::get_option( 'twitter_cards' ) ) {
+			return;
+		}
+
+		add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
+		add_filter( 'jetpack_enable_open_graph', '__return_false', 99 );
+
+		$known_fields = array(
+			'og:type' => 'article',
+			'og:url' => get_permalink(),
+			'og:site_name' => get_bloginfo( 'name' ),
+			'article:published_time' => get_post_time( 'c' ),
+			'article:modified_time' => get_post_modified_time( 'c' ),
+			'og:updated_time' => get_post_modified_time( 'c' )
+		);
+
+		/**
+		 * We prioritize the source of a value in this order:
+		 * 1 Post meta
+		 * 2 Yoast (OG)
+		 * 3 Yoast (Social)
+		 * 4 Post content.
+		 */
+		$fields = $this->fetch_social_warfare_open_graph_fields();
+		$fields = $this->fetch_yoast_open_graph_fields( $fields );
+		$fields = $this->apply_default_open_graph_fields( $fields );
+
+		foreach( $fields as $key => $value ) {
+			$og_key = str_replace('og_', 'og:', $key);
+			unset($fields[$key]);
+			$fields[$og_key] = $value;
+		}
+
+		$fields = array_map( 'htmlspecialchars', $fields );
+		$this->open_graph_data = array_merge( $fields, $known_fields );
+	}
+
+	/**
+	 * Grabs OG data based on Social Warfare settings.
+	 *
+	 * This is the most valuable source for og metadata. If we find a value
+	 * for a key here, then the remaining checks skip that key.
+	 *
+	 * @since  3.5.0 | 19 DEC 2018 | Created.
+	 * @param void
+	 * @return array $fields Social Warfare field data.
+	 *
+	 */
+	protected function fetch_social_warfare_open_graph_fields() {
+		// echo __METHOD__;
+		$fields = array(
+			// These have a meta field.
+			'og_title',
+			'og_description',
+			'og_image_url',
+			'og_image_width',
+			'og_image_height',
+			// These do not have a meta field.
+			'og_url',
+			'og_site_name',
+		);
+
+		foreach ($fields as $index => $key) {
+			$maybe_value = SWP_Utility::get_meta( $this->post->ID, "swp_$key" );
+			// Go from indexed array to associative, with possibly missing values.
+			unset($fields[$index]);
+			$fields[$key] = $maybe_value;
+		}
+
+		return $fields;
+	}
+
+	/**
+	 * Sets values for Twitter card from known SW values.
+	 *
+	 * This is the most valuable source for twitter metadata. If we find a value for
+	 * a key here, then the remaining checks skip that key.
+	 *
+	 * @since  3.5.0 | 19 DEC 2018 | Created.
+	 * @param  array $fields array('og_key' => $og_value)
+	 * @return array $fields array('og_key2' => $default_og_value)
+	 *
+	 */
+	protected function fetch_social_warfare_twitter_fields() {
+		$twitter_fields = array(
+			'twitter_title' => false,
+			'twitter_description' => false,
+			'twitter_image' => false
+		);
+
+		foreach ($twitter_fields as $key => $value) {
+			$field = str_replace( 'twitter_', 'swp_twitter_card_', $key );
+			$maybe_value = SWP_Utility::get_meta( $this->post->ID, $field );
+
+			if ( !empty( $maybe_value ) ) {
+				$twitter_fields[$key] = $maybe_value;
 			}
 		}
 
-		/**
-		 * JET PACK: If ours are activated, disable theirs
-		 *
-		 */
-		add_filter( 'jetpack_disable_twitter_cards', '__return_true', 99 );
-
-		/**
-		 * Begin by fetching the user's default custom settings
-		 *
-		 */
-        $custom_og_title       = get_post_meta( $info['postID'] , 'swp_og_title' , true );
-        if ( !empty( $custom_og_title) ) :
-            $custom_og_title = htmlspecialchars( $custom_og_title );
-        endif;
-
-        $custom_og_description = get_post_meta( $info['postID'] , 'swp_og_description' , true );
-        if ( !empty( $custom_og_description ) ) :
-            $custom_og_description = htmlspecialchars( $custom_og_description );
-        endif;
-		$custom_og_image_id    = get_post_meta( $info['postID'] , 'swp_og_image' , true );
-		$custom_og_image_url   = get_post_meta( $info['postID'] , 'swp_open_graph_image_url' , true );
-		$user_twitter_handle   = get_the_author_meta( 'swp_twitter' , SWP_User_Profile::get_author( $info['postID'] ) );
-
-		/**
-		 * YOAST SEO: It rocks, so if it's installed, let's coordinate with it
-		 *
-		 */
-		if ( defined( 'WPSEO_VERSION' ) ) :
-			$yoast_twitter_title        = get_post_meta( $info['postID'] , '_yoast_wpseo_twitter-title' , true );
-			$yoast_twitter_description  = get_post_meta( $info['postID'] , '_yoast_wpseo_twitter-description' , true );
-			$yoast_twitter_image        = get_post_meta( $info['postID'] , '_yoast_wpseo_twitter-image' , true );
-			$yoast_seo_title            = get_post_meta( $info['postID'] , '_yoast_wpseo_title' , true );
-			$yoast_seo_description      = get_post_meta( $info['postID'] , '_yoast_wpseo_metadesc' , true );
-
-			// Cancel their output if ours have been defined so we don't have two sets of tags
-			remove_action( 'wpseo_head' , array( 'WPSEO_Twitter', 'get_instance' ) , 40 );
-		endif;
-
-		/**
-		 * The Twitter Card Site
-		 *
-		 */
 		$twitter_id = SWP_Utility::get_option( 'twitter_id' );
-		if ( !empty( $twitter_id ) ) :
-			$twitter_id = trim( $twitter_id );
-			$info['meta_tag_values']['twitter_site'] = '@' . str_replace( '@' , '' , $twitter_id );
-		endif;
-
-		$author = SWP_User_Profile::get_author( $info['postID'] );
-        $author_twitter_handle = get_the_author_meta( 'swp_twitter' , $author );
-
-		if ($author_twitter_handle) {
-			$twitter_id = trim( $author_twitter_handle );
+		if ( !empty( $twitter_id ) ) {
+			$twitter_id = '@' . str_replace( '@' , '' , trim ( $twitter_id ) );
+			$twitter_fields['twitter_site'] = $twitter_id;
 		}
 
-		if ( !empty( $twitter_id) ) {
-			$info['meta_tag_values']['twitter_creator'] = '@' . str_replace( '@' , '' , $twitter_id );
+		$author_twitter_handle = get_the_author_meta( 'swp_twitter' );
+		if ( !empty( $author_twitter_handle ) ) {
+			$twitter_fields['twitter_creator'] = '@' . str_replace( '@' , '' , trim ( $author_twitter_handle ) );
+		} else {
+			$twitter_fields['twitter_creator'] = $twitter_id;
 		}
 
-		/**
-		 * TWITTER TITLE
-		 *
-		 */
-		 if( !$twitter_use_open_graph && !empty( $twitter_card_title ) ):
-             $info['meta_tag_values']['twitter_title'] = $twitter_card_title;
-         elseif ( !empty( $custom_og_title ) ):
-             $info['meta_tag_values']['twitter_title'] = $custom_og_title;
-         elseif( !empty( $yoast_twitter_title ) ) :
-             $info['meta_tag_values']['twitter_title'] = $yoast_twitter_title;
-         else:
-             $info['meta_tag_values']['twitter_title'] = $info['meta_tag_values']['og_title'];
-         endif;
-
-		/**
-		 * TWITTER DESCRIPTION
-		 *
-		 */
-		if( !$twitter_use_open_graph && !empty( $twitter_card_description ) ):
- 			$info['meta_tag_values']['twitter_description'] = $twitter_card_description;
- 		elseif ( !empty( $custom_og_description ) ):
-			$info['meta_tag_values']['twitter_description'] = $custom_og_description;
-		elseif ( !empty( $yoast_twitter_description ) ) :
-			$info['meta_tag_values']['twitter_description'] = $yoast_twitter_description;
-		else:
-			$info['meta_tag_values']['twitter_description'] = $info['meta_tag_values']['og_description'];
-		endif;
-
-		/**
-		 * TWITTER IMAGE
-		 *
-		 */
-		 if( !$twitter_use_open_graph && !empty( $twitter_card_image ) ):
-  			$info['meta_tag_values']['twitter_image'] = $twitter_card_image;
-  		elseif ( !empty( $custom_og_image_url ) ):
-			$info['meta_tag_values']['twitter_image'] = $custom_og_image_url;
-		elseif ( !empty( $yoast_twitter_image ) ) :
-			$info['meta_tag_values']['twitter_image'] = $yoast_twitter_image;
-		elseif( !empty( $info['meta_tag_values']['og_image'] ) ):
-			$info['meta_tag_values']['twitter_image'] = $info['meta_tag_values']['og_image'];
-		endif;
-
-		/**
-		 * The Twitter Card Type
-		 *
-		 */
-		if( !empty( $info['meta_tag_values']['twitter_image'] ) ):
-			$info['meta_tag_values']['twitter_card'] = 'summary_large_image';
-		else:
-			$info['meta_tag_values']['twitter_card'] = 'summary';
-		endif;
-
-
-
-        return $info;
-    }
+		return $twitter_fields;
+	}
 
 	/**
-     *  Generate the Twitter Card meta fields HTML
-     *
-     * This function will take the values for the Twitter Cards and convert
-     * those values into HTML to be output to the screen.
-     *
-     * @since 2.1.4
-     * @access public
-     * @param array $info An array of information about the post
-     * @return array $info The modified array
-     *
-     */
-    public function twitter_card_html($info) {
+	 * Grabs OG data based on Yoast boxes.
+	 *
+	 * If a value already exists for $key in $fields, we'll skip that one.
+	 * Only sets values for a key that still needs one.
+	 *
+	 * @since  3.5.0 | 19 DEC 2018 | Created.
+	 * @param array $fields Open graph field data
+	 * @return array $fields Open graph field data
+	 *
+	 */
+	protected function fetch_yoast_open_graph_fields( $fields ) {
+		if ( !defined( 'WPSEO_VERSION' ) ) {
+			return $fields;
+		}
 
-    	if( false === is_singular() ) {
-    		return $info;
-    	}
+		global $wpseo_og;
+		if ( has_action( 'wpseo_head', array( $wpseo_og, 'opengraph' ) ) ) {
+			remove_action( 'wpseo_head', array( $wpseo_og, 'opengraph' ), 30 );
+		}
 
-    	if ( isset( $this->options['twitter_cards'] ) ) :
+		// Establish the relationship between swp_keys => _yoast_keys
+		$yoast_og_map = array(
+			'og_title' => '_yoast_wpseo_opengraph-title',
+			'og_description' => '_yoast_wpseo_opengraph-description',
+			'og_image'	=> '_yoast_wpseo_opengraph-image',
+		);
 
-    		if( isset( $info['meta_tag_values']['twitter_card'] ) && !empty( $info['meta_tag_values']['twitter_card'] ) ) :
-    			$info['html_output'] .= PHP_EOL . '<meta name="twitter:card" content="'. trim( $info['meta_tag_values']['twitter_card'] ) .'">';
-    		endif;
+		$yoast_social_map = array(
+			'og_title'	=> '_yoast_wpseo_title',
+			'og_description'	=> '_yoast_wpseo_metadesc'
+		);
 
-    		if( isset( $info['meta_tag_values']['twitter_title'] ) && !empty( $info['meta_tag_values']['twitter_title'] ) ) :
-    			$info['html_output'] .= PHP_EOL . '<meta name="twitter:title" content="' . trim( $info['meta_tag_values']['twitter_title'] ) . '">';
-    		endif;
+		// Fill in values based on priority.
+		foreach ($fields as $swp_meta_key => $maybe_value) {
+			if ( isset( $maybe_value ) ) {
+				// post_meta value already exists from SWP.
+				continue;
+			}
 
-    		if( isset( $info['meta_tag_values']['twitter_description'] ) && !empty( $info['meta_tag_values']['twitter_description'] ) ) :
-    			$info['html_output'] .= PHP_EOL . '<meta name="twitter:description" content="' . trim( $info['meta_tag_values']['twitter_description'] ) . '">';
-    		endif;
+			// OG Values
+			if ( array_key_exists( $swp_meta_key, $yoast_og_map ) ) :
+				foreach ($yoast_og_map as $swp_og_key => $yoast_og_key) {
+					$yoast_og_value = SWP_Utility::get_meta( $this->post->ID, $yoast_og_key );
 
-    		if( isset( $info['meta_tag_values']['twitter_image'] ) && !empty($info['meta_tag_values']['twitter_image']) ):
-    			$info['html_output'] .= PHP_EOL . '<meta name="twitter:image" content="' . trim( $info['meta_tag_values']['twitter_image'] ) . '">';
-    		endif;
+					if ( !empty( $yoast_og_value ) ) {
+						if ( function_exists (' wpseo_replace_vars' ) ) {
+							$yoast_og_value = wpseo_replace_vars( $yoast_og_value, $this->post );
+						}
+						$fields[$swp_meta_key] = $yoast_og_value;
+						$maybe_value = $yoast_og_value;
+					}
+				}
+			endif;
 
-    		if ( isset( $info['meta_tag_values']['twitter_site'] ) && !empty( $info['meta_tag_values']['twitter_site'] ) ) :
-    			$info['html_output'] .= PHP_EOL . '<meta name="twitter:site" content="' . trim( $info['meta_tag_values']['twitter_site'] ) . '">';
-    		endif;
+			// Social Values
+			if ( empty( $maybe_value ) && array_key_exists( $swp_meta_key, $yoast_social_map) ) :
+				foreach( $yoast_social_map as $swp_og_key => $yoast_social_key ) {
+					$yoast_social_value = SWP_Utility::get_meta( $this->post->ID, $yoast_social_key );
 
-    		if ( isset( $info['meta_tag_values']['twitter_creator'] ) && !empty( $info['meta_tag_values']['twitter_creator'] ) ) :
-    			$info['html_output'] .= PHP_EOL . '<meta name="twitter:creator" content="' . trim( $info['meta_tag_values']['twitter_creator'] ) . '">';
-    		endif;
+					if ( !empty( $yoast_og_value ) ) {
+						if ( function_exists (' wpseo_replace_vars' ) ) {
+							$yoast_og_value = wpseo_replace_vars( $yoast_og_value, $this->post );
+						}
+						$fields[$swp_meta_key] = $yoast_social_value;
+					}
+				}
+			endif;
+		}
 
-    	endif;
+		return $fields;
+	}
 
-    	return $info;
-    }
+	/**
+	 * Sets values for meta tags from default sources.
+	 *
+	 * This method will fill in the gaps missed by meta boxes and Yoast.
+	 *
+	 * @since  3.5.0 | 19 DEC 2018 | Created.
+	 * @param  array $fields array('meta_key' => $meta_value)
+	 * @return array $fields array('meta_key2' => $default_meta_value)
+	 *
+	 */
+	protected function apply_default_open_graph_fields( $fields ) {
+		$defaults = array(
+			'og_description' => html_entity_decode( SWP_Utility::convert_smart_quotes( htmlspecialchars_decode( SWP_Utility::get_the_excerpt( $this->post->ID ) ) ) ),
+			'og_title' => trim( SWP_Utility::convert_smart_quotes( htmlspecialchars_decode( get_the_title() ) ) )
+		);
 
-    /**
-     * Verifies that the color has been properly set.
-     *
-     * @since 3.0.8 | MAY 23 2018 | Created the method.
-     * @param string $hex The color to check.
-     * @return string $hex The sanitized color string.
-     *
-     */
-    private function parse_hex_color( $hex ) {
-        if ( !isset( $hex ) ) :
-            //* Default to a dark grey.
-            return  "#333333";
-        endif;
+		// Author.
+		$author = get_the_author_meta( 'swp_fb_author' );
+		if ( empty( $author ) ) {
+			$author = get_the_author_meta( 'facebook' );
+			if ( empty( $author ) )  {
+				$author = get_the_author();
+			}
+		}
+		$defaults['article_author'] = $author;
 
-        if ( strpos( $hex, "#" !== 0 ) ) :
-            $hex = "#" . $hex;
-        endif;
+		// Publisher.
+		$publisher = SWP_Utility::get_option('facebook_publisher_url');
+		if ( empty( $publisher ) ) {
+			//@TODO Before this update, there was a call to $wpseo_social['facebook_site']. Where does $wpseo_social come from, is it a global?
+			// $publisher = $wpseo_social['facebook_site'];
+			$publisher = $author;
+		}
+		$defaults['article_publisher'] = $publisher;
 
-        return $hex;
-    }
+		// Image.
+		$thumbnail_url = wp_get_attachment_url( get_post_thumbnail_id( $this->post->ID ) );
+		if ( $thumbnail_url ) {
+			$defaults['og_image'] = $thumbnail_url;
+		}
 
-    /**
-     * Localizes the custom color settings from admin.
-     *
-     * @since  3.0.8 | MAY 23 2018 | Created the method.
-     * @param  none
-     * @return void
-     *
-     */
-    private function establish_custom_colors() {
+		// Facebook App ID.
+		$app_id = SWP_Utility::get_option( 'facebook_app_id' );
+		if ( empty( $app_id ) ) {
+			// $wpseo_social['fbadminapp'];
+			$app_id = '529576650555031';
+		}
 
-        //* Static custom color.
-        if ( SWP_Utility::get_option('default_colors') == 'custom_color' || SWP_Utility::get_option('single_colors') == 'custom_color' || SWP_Utility::get_option('hover_colors') == 'custom_color' ) :
+		return array_merge( $defaults, $fields );
+	}
 
-            $custom_color = $this->parse_hex_color( $this->options['custom_color'] );
-            $this->custom_color = $custom_color;
+	/**
+	 * Sets values for Twitter card from known Yoast values.
+	 *
+	 * This method will fill in the gaps missed by meta boxes and Yoast.
+	 *
+	 * @since  3.5.0 | 19 DEC 2018 | Created.
+	 * @param  array $fields array('og_key' => $og_value)
+	 * @return array $fields array('og_key2' => $default_og_value)
+	 *
+	 */
+	protected function fetch_yoast_twitter_fields( $fields ) {
+		if ( !defined( 'WPSEO_VERSION' ) ) {
+			return $fields;
+		}
 
-        else :
-            $this->custom_color = '';
-        endif;
+		$yoast_to_twitter = array(
+			'_yoast_wpseo_twitter-title' => 'twitter_title',
+			'_yoast_wpseo_twitter-title' => 'twitter_description',
+			'_yoast_wpseo_twitter-image' => 'twitter_image'
+		);
 
-        //* Float custom color.
-        if ( SWP_Utility::get_option('float_default_colors') == 'float_custom_color' ||  SWP_Utility::get_option('float_single_colors') == 'float_custom_color' ||  SWP_Utility::get_option('float_hover_colors') == 'float_custom_color' ) :
+		foreach( $yoast_to_twitter as $yoast_key => $twitter_key ) {
+			$value = SWP_Utility::get_meta( $this->post->ID, $yoast_key );
+			if ( !empty( $value ) ) {
+				if ( function_exists ( 'wpseo_replace_vars' ) ) {
+					$maybe_value = wpseo_replace_vars( $value, $this->post );
+				}
+				$fields[$twitter_key] = $value;
+			}
+		}
 
-            if ( true === $this->options['float_style_source'] ) :
-                //* Inherit the static button style.
-                $this->float_custom_color = $this->custom_color;
-            else :
-                $this->float_custom_color = $this->parse_hex_color( $this->options['float_custom_color'] );
-            endif;
+		return $fields;
+	}
 
-        else :
-            $this->float_custom_color = '';
-        endif;
+	/**
+	 * Sets values for Open Graph meta tags from known Twitter values.
+	 *
+	 * @since  3.5.0 | 19 DEC 2018 | Created.
+	 * @param  array $fields twitter_key => $maybe_value pairs.
+	 * @return array $fields Updated $fields, with gaps filled in by open_graph.
+	 *
+	 */
+	protected function apply_open_graph_to_twitter( $twitter_fields ) {
+		$shared_fields = array();
+		$field_map = array(
+			'og:title'	=> 'twitter_title',
+			'og:description' => 'twitter_description',
+			'og:author'	=> 'twitter_creator',
+			'og:image'	=> 'twitter_image'
+		);
 
-        //* Static custom outlines.
-        if ( SWP_Utility::get_option('default_colors') == 'custom_color_outlines' ||  SWP_Utility::get_option('single_colors') == 'custom_color_outlines' ||  SWP_Utility::get_option('hover_colors') == 'custom_color_outlines' ) :
+		foreach ( $field_map as $og => $twitter ) {
+			if ( !empty( $this->open_graph_data[$og] ) ) {
+				$shared_fields[$twitter] = $this->open_graph_data[$og];
+			}
+		}
 
-            $custom_color_outlines = $this->parse_hex_color( $this->options['custom_color_outlines'] );
-            $this->custom_color_outlines = $custom_color_outlines;
+		// Apply the OG data as a priority over twitter data
+		if ( true == SWP_Utility::get_meta( $this->post->ID, 'swp_twitter_use_open_graph' ) ) {
+			return array_merge($twitter_fields, $shared_fields);
+		}
 
-        else:
-            $this->custom_color_outlines = '';
-        endif;
+		// Apply Twitter data the prioritized data.
+		return array_merge( $shared_fields, $twitter_fields );
+	}
 
-        if (  SWP_Utility::get_option('float_default_colors') == 'float_custom_color_outlines' ||  SWP_Utility::get_option('float_single_colors') == 'float_custom_color_outlines' ||  SWP_Utility::get_option('float_hover_colors') == 'float_custom_color_outlines' ) :
-            if ( true === $this->options['float_style_source'] ) :
 
-                //* Inherit the static button style.
-                $this->float_custom_color_outlines = $this->custom_color_outlines;
-            else:
-                $this->float_custom_color_outlines = $this->parse_hex_color( $this->options['float_custom_color_outlines'] );
-            endif;
+	 /**
+	  * Loops through open graph data to create <meta> tags for the <head>
+	  *
+	  * @since  3.5.0 | 19 DEC 2018 | Created.
+	  * @param  array $fields array('og_key' => $og_value)
+	  * @return string The HTML for meta tags.
+	  *
+	  */
+	public function generate_meta_html( $fields ) {
+		$meta = '';
 
-        else:
-            $this->float_custom_color_outlines = '';
-        endif;
+		if ( !is_array($fields)) {
+			error_log(__METHOD__.' (caught) Parameter \$fields should be an array. I got ' . gettype($fields) . ' :'.var_export($fields, 1));
+			return '';
+		}
 
-    }
+		foreach ( $fields as $key => $content ) {
+			if ( $key == 'og:image_url' ) {
+				$meta .= '<meta name="image" property="og:image" content="' . $content . '">';
+				continue;
+			}
+			$meta .= '<meta property="' . $key . '" content="' . $content . '">';
+		}
+
+		return $meta;
+	}
+
+
+	/**
+	* Loops through open graph data to create <meta> tags for the <head>
+	*
+	* @since  3.5.0 | 19 DEC 2018 | Created.
+	* @param  void
+	* @return array $fields array('og_key' => $og_value)
+	*
+	*/
+	public function setup_twitter_card() {
+		if ( !SWP_Utility::get_option( 'twitter_cards' ) ) {
+			return;
+		}
+
+		add_filter( 'jetpack_disable_twitter_cards', '__return_true', 99 );
+
+		$fields = $this->fetch_social_warfare_twitter_fields();
+		$fields = $this->apply_open_graph_to_twitter( $fields );
+		$fields = $this->fetch_yoast_twitter_fields( $fields );
+
+		$fields['twitter_card'] = !empty( $fields['twitter_image']) ? 'summary_large_image' : 'summary';
+
+		$this->twitter_card_data = $fields;
+	}
+
+
+	/**
+	 * Verifies that the color has been properly set.
+	 *
+	 * @since 3.0.8 | MAY 23 2018 | Created the method.
+	 * @param string $hex The color to check.
+	 * @return string $hex The sanitized color string.
+	 *
+	 */
+	private function parse_hex_color( $hex ) {
+		if ( !isset( $hex ) ) :
+			//* Default to a dark grey.
+			return  "#333333";
+		endif;
+
+		if ( strpos( $hex, "#" !== 0 ) ) :
+			$hex = "#" . $hex;
+		endif;
+
+		return $hex;
+	}
+
+	/**
+	 * Localizes the custom color settings from admin.
+	 *
+	 * @since  3.0.8 | MAY 23 2018 | Created the method.
+	 * @param  none
+	 * @return void
+	 *
+	 */
+	private function establish_custom_colors() {
+
+		//* Static custom color.
+		if ( SWP_Utility::get_option('default_colors') == 'custom_color' || SWP_Utility::get_option('single_colors') == 'custom_color' || SWP_Utility::get_option('hover_colors') == 'custom_color' ) :
+
+			$custom_color = $this->parse_hex_color( $this->options['custom_color'] );
+			$this->custom_color = $custom_color;
+
+		else :
+			$this->custom_color = '';
+		endif;
+
+		//* Float custom color.
+		if ( SWP_Utility::get_option('float_default_colors') == 'float_custom_color' ||  SWP_Utility::get_option('float_single_colors') == 'float_custom_color' ||  SWP_Utility::get_option('float_hover_colors') == 'float_custom_color' ) :
+
+			if ( true === $this->options['float_style_source'] ) :
+				//* Inherit the static button style.
+				$this->float_custom_color = $this->custom_color;
+			else :
+				$this->float_custom_color = $this->parse_hex_color( $this->options['float_custom_color'] );
+			endif;
+
+		else :
+			$this->float_custom_color = '';
+		endif;
+
+		//* Static custom outlines.
+		if ( SWP_Utility::get_option('default_colors') == 'custom_color_outlines' ||  SWP_Utility::get_option('single_colors') == 'custom_color_outlines' ||  SWP_Utility::get_option('hover_colors') == 'custom_color_outlines' ) :
+
+			$custom_color_outlines = $this->parse_hex_color( $this->options['custom_color_outlines'] );
+			$this->custom_color_outlines = $custom_color_outlines;
+
+		else:
+			$this->custom_color_outlines = '';
+		endif;
+
+		if (  SWP_Utility::get_option('float_default_colors') == 'float_custom_color_outlines' ||  SWP_Utility::get_option('float_single_colors') == 'float_custom_color_outlines' ||  SWP_Utility::get_option('float_hover_colors') == 'float_custom_color_outlines' ) :
+			if ( true === $this->options['float_style_source'] ) :
+
+				//* Inherit the static button style.
+				$this->float_custom_color_outlines = $this->custom_color_outlines;
+			else:
+				$this->float_custom_color_outlines = $this->parse_hex_color( $this->options['float_custom_color_outlines'] );
+			endif;
+
+		else:
+			$this->float_custom_color_outlines = '';
+		endif;
+
+	}
 
 
 	/**
@@ -681,23 +550,23 @@ class SWP_Pro_Header_Output extends SWP_Header_Output {
 	 * @return string            The CSS to be output.
 	 *
 	 */
-    private function get_css( $floating = false ) {
-        $float = '';
-        $class = '';
+	private function get_css( $floating = false ) {
+		$float = '';
+		$class = '';
 		$panel = '';
-        $custom_color = $this->custom_color;
-        $custom_outlines = $this->custom_color_outlines;
+		$custom_color = $this->custom_color;
+		$custom_outlines = $this->custom_color_outlines;
 
-        if ( $floating ) {
-            $float = 'float_';
-            $class = '.swp_social_panelSide';
-            $custom_color = $this->float_custom_color;
-            $custom_outlines = $this->float_custom_color_outlines;
-        } else {
+		if ( $floating ) {
+			$float = 'float_';
+			$class = '.swp_social_panelSide';
+			$custom_color = $this->float_custom_color;
+			$custom_outlines = $this->float_custom_color_outlines;
+		} else {
 			$panel = '.swp_social_panel';
 		}
 
-        $css = '';
+		$css = '';
 
 
 		/**
@@ -705,33 +574,33 @@ class SWP_Pro_Header_Output extends SWP_Header_Output {
 		 *
 		 *
 		 */
-        // Default: Custom Color
-        if ( SWP_Utility::get_option($float . "default_colors") === $float . "custom_color" ) :
-            $css .= "
+		// Default: Custom Color
+		if ( SWP_Utility::get_option($float . "default_colors") === $float . "custom_color" ) :
+			$css .= "
 
-            $class.swp_default_custom_color a
-                {color:white}
-            $class$panel.swp_default_custom_color .nc_tweetContainer
-                {
-                    background-color:" . $custom_color . ";
-                    border:1px solid " . $custom_color . ";
-                }
-            ";
-        endif;
+			$class.swp_default_custom_color a
+				{color:white}
+			$class$panel.swp_default_custom_color .nc_tweetContainer
+				{
+					background-color:" . $custom_color . ";
+					border:1px solid " . $custom_color . ";
+				}
+			";
+		endif;
 
 		// Default: Custom Outlines
-        if ( SWP_Utility::get_option($float . "default_colors") === $float . "custom_color_outlines" ) :
-                $css .= "
+		if ( SWP_Utility::get_option($float . "default_colors") === $float . "custom_color_outlines" ) :
+				$css .= "
 
-            $class.swp_default_custom_color_outlines a
-                {color: " . $custom_outlines . "}
-            $class.swp_default_custom_color_outlines .nc_tweetContainer
-                {
-                    background-color: transparent ;
-                    border:1px solid " . $custom_outlines . " ;
-                }
-            ";
-        endif;
+			$class.swp_default_custom_color_outlines a
+				{color: " . $custom_outlines . "}
+			$class.swp_default_custom_color_outlines .nc_tweetContainer
+				{
+					background-color: transparent ;
+					border:1px solid " . $custom_outlines . " ;
+				}
+			";
+		endif;
 
 
 		/**
@@ -739,33 +608,33 @@ class SWP_Pro_Header_Output extends SWP_Header_Output {
 		 *
 		 *
 		 */
-        // Individual: Custom Color
-        if ( SWP_Utility::get_option($float . "single_colors") === $float . "custom_color" ) :
-            $css .= "
+		// Individual: Custom Color
+		if ( SWP_Utility::get_option($float . "single_colors") === $float . "custom_color" ) :
+			$css .= "
 
-            html body $class$panel.swp_individual_custom_color .nc_tweetContainer:not(.total_shares):hover a
-                {color:white !important}
-            html body $class$panel.swp_individual_custom_color .nc_tweetContainer:not(.total_shares):hover
-                {
-                    background-color:" . $custom_color . "!important;
-                    border:1px solid " . $custom_color . "!important;
-                }
-            ";
-        endif;
+			html body $class$panel.swp_individual_custom_color .nc_tweetContainer:not(.total_shares):hover a
+				{color:white !important}
+			html body $class$panel.swp_individual_custom_color .nc_tweetContainer:not(.total_shares):hover
+				{
+					background-color:" . $custom_color . "!important;
+					border:1px solid " . $custom_color . "!important;
+				}
+			";
+		endif;
 
-        // Individual: Custom Outlines
-        if ( SWP_Utility::get_option($float . "single_colors") === $float . "custom_color_outlines" ) :
-            $css .= "
+		// Individual: Custom Outlines
+		if ( SWP_Utility::get_option($float . "single_colors") === $float . "custom_color_outlines" ) :
+			$css .= "
 
-            html body $class.swp_individual_custom_color_outlines .nc_tweetContainer:not(.total_shares):hover a
-                {color:" . $custom_outlines . " !important}
-            html body $class.swp_individual_custom_color_outlines .nc_tweetContainer:not(.total_shares):hover
-                {
-                    background-color: transparent !important;
-                    border:1px solid " . $custom_outlines . "!important ;
-                }
-            ";
-        endif;
+			html body $class.swp_individual_custom_color_outlines .nc_tweetContainer:not(.total_shares):hover a
+				{color:" . $custom_outlines . " !important}
+			html body $class.swp_individual_custom_color_outlines .nc_tweetContainer:not(.total_shares):hover
+				{
+					background-color: transparent !important;
+					border:1px solid " . $custom_outlines . "!important ;
+				}
+			";
+		endif;
 
 
 		/**
@@ -773,87 +642,87 @@ class SWP_Pro_Header_Output extends SWP_Header_Output {
 		 *
 		 *
 		 */
-        // Other: Custom Color
-        if ( SWP_Utility::get_option($float . "hover_colors") === $float . "custom_color" ) :
-            $css .= "
+		// Other: Custom Color
+		if ( SWP_Utility::get_option($float . "hover_colors") === $float . "custom_color" ) :
+			$css .= "
 
-            body $class$panel.swp_other_custom_color:hover a
-                {color:white}
-            body $class$panel.swp_other_custom_color:hover .nc_tweetContainer
-                {
-                    background-color:" . $custom_color . ";
-                    border:1px solid " . $custom_color . ";
-                }
-            ";
-        endif;
+			body $class$panel.swp_other_custom_color:hover a
+				{color:white}
+			body $class$panel.swp_other_custom_color:hover .nc_tweetContainer
+				{
+					background-color:" . $custom_color . ";
+					border:1px solid " . $custom_color . ";
+				}
+			";
+		endif;
 
 		// Other: Custom Outlines
-        if (SWP_Utility::get_option($float . "hover_colors") === $float . "custom_color_outlines" ) :
-            $css .= "
+		if (SWP_Utility::get_option($float . "hover_colors") === $float . "custom_color_outlines" ) :
+			$css .= "
 
-            html body $class.swp_other_" . $float . "custom_color_outlines:hover a
-                {color:" . $custom_outlines . " }
-            html body $class.swp_other_" . $float . "custom_color_outlines:hover .nc_tweetContainer
-                {
-                    background-color: transparent ;
-                    border:1px solid " . $custom_outlines . " ;
-                }
-            ";
-        endif;
+			html body $class.swp_other_" . $float . "custom_color_outlines:hover a
+				{color:" . $custom_outlines . " }
+			html body $class.swp_other_" . $float . "custom_color_outlines:hover .nc_tweetContainer
+				{
+					background-color: transparent ;
+					border:1px solid " . $custom_outlines . " ;
+				}
+			";
+		endif;
 
-        return $css;
+		return $css;
 
-    }
+	}
 
 
-    /**
-     * Output the CSS for custom selected colors
-     *
-     * Don't nest the CSS. This way it will be fully "minified" on output.
-     *
-     * @since  1.4.0
-     * @access public
-     * @param  array $info The array of information about the post
-     * @return array $info The modified array
-     *
-     */
-    public function output_custom_color( $info ) {
-        $static = $this->get_css();
-        $floaters_on = SWP_Utility::get_option( 'floating_panel' );
-        $floating = $this->get_css( $floaters_on );
+	/**
+	 * Output the CSS for custom selected colors
+	 *
+	 * Don't nest the CSS. This way it will be fully "minified" on output.
+	 *
+	 * @since  1.4.0
+	 * @access public
+	 * @param  array $info The array of information about the post
+	 * @return array $info The modified array
+	 *
+	 */
+	public function output_custom_color( $meta_html ) {
+		$static = $this->get_css();
+		$floaters_on = SWP_Utility::get_option( 'floating_panel' );
+		$floating = $this->get_css( $floaters_on );
 
-        $css = $static . $floating;
+		$css = $static . $floating;
 
-        if ( !empty( $css) ) :
-            $css = '<style type="text/css">' . $css . '</style>';
-        endif;
+		if ( !empty( $css) ) :
+			$css = '<style type="text/css">' . $css . '</style>';
+		endif;
 
-        //* Replaces newlines and excessive whitespace with a single space.
-        $info['html_output'] .= trim( preg_replace( '/\s+/', ' ', $css ) );
-		// $info['html_output'] .= $css;
-    	return $info;
-    }
+		//* Replaces newlines and excessive whitespace with a single space.
+		$meta_html .= trim( preg_replace( '/\s+/', ' ', $css ) );
+		// $meta_html .= $css;
+		return $meta_html;
+	}
 
-    /**
-     * Output custom CSS for Click To Tweet
-     *
-     * Note: This is done in the header rather than in a CSS file to
-     * avoid having the styles called from a CDN
-     *
-     * @since  3.0.0
-     * @access public
-     * @param  array  $info An array of information about the post
-     * @return array  $info The modified array
-     */
-    public function output_ctt_css( $info = array() ) {
-        if (!empty($this->options['ctt_css']) && count($this->options)['ctt_css'] > 0) {
-            // Add it to our array if we're using the frontend Head Hook
-            $info['html_output'] .= PHP_EOL . '<style id=ctt-css>' . $this->options['ctt_css'] . '</style>';
+	/**
+	 * Output custom CSS for Click To Tweet
+	 *
+	 * Note: This is done in the header rather than in a CSS file to
+	 * avoid having the styles called from a CDN
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @param  array  $info An array of information about the post
+	 * @return array  $info The modified array
+	 */
+	public function output_ctt_css( $meta_html ) {
+		if (!empty($this->options['ctt_css']) && count($this->options)['ctt_css'] > 0) {
+			// Add it to our array if we're using the frontend Head Hook
+			$meta_html .= PHP_EOL . '<style id=ctt-css>' . $this->options['ctt_css'] . '</style>';
 
-        }
+		}
 
-        return $info;
-    }
+		return $meta_html;
+	}
 }
 
 endif;

@@ -1,3 +1,27 @@
+== 2.6.9.3 ==
+Release date: March 4, 2019
+* Fix: Info Box - Icon border was not working in some cases after updating PowerPack to 2.6.9
+* Fix: Logos & Carousel - Number of Columns setting was not working for desktop after updating PowerPack to 2.6.9
+* Fix: Contact Form 7 - Button border and background hover color were not wroking after updating PowerPack to 2.6.9
+* Fix: Smart Button - Padding was not working after updating PowerPack to 2.6.9
+* Fix: Advanced Menu - Multiple full screen menu overlap issue
+* Fix: Social Icons - Re-added Custom Title option that was somehow removed in previous update
+* Fix: Image Panels - Last panel image shift down on hover in Safari browser
+
+== 2.6.9.2 ==
+Release date: February 22, 2019
+* Enhancement: Contact Form - Added hooks pp_contact_form_before_send, pp_contact_form_after_send
+* Enhancement: Contact Form - Added shortcode support for Subject and Email field
+* Fix: Subscribe Form - Button border hover color was not working after updating PowerPack to 2.6.9
+* Fix: Advanced Accordion - Incorrect content background color value after updating PowerPack to 2.6.9
+* Fix: Info Box - Icon border hover color was not working after updating PowerPack to 2.6.9
+* Fix: Advanced Tabs - Vertical layout offset issue when using URL parameter to switch tabs
+* Fix: Advanced Tabs - Content auto closing issue on swipe in mobile devices
+* Fix: Contact Form - Form submission fails when message field is set to be hidden
+* Fix: WPForms - Button text color was not working
+* Fix: Core - PowerPack's UI panel icons were not displaying correct color in dark mode
+* Fix: Core - Expandable Row duplicate instance issue
+
 == 2.6.9.1 ==
 Release date: February 18, 2019
 * Fix: Advanced Menu - Submenu link padding issue after updating PowerPack to 2.6.9

@@ -505,6 +505,33 @@ FLBuilder::render_module_css('fl-button', $id, array(
 ));
 ?>
 
+<?php
+// Button Border - Settings
+FLBuilderCSS::border_field_rule( array(
+	'settings' 		=> $settings,
+	'setting_name' 	=> 'button_border_group',
+	'selector' 		=> ".fl-builder-content .fl-node-$id .pp-subscribe-form a.fl-button, .fl-builder-content .fl-node-$id .pp-subscribe-form a.fl-button:visited",
+) );
+?>
+.fl-node-<?php echo $id; ?> .pp-subscribe-form a.fl-button,
+.fl-node-<?php echo $id; ?> .pp-subscribe-form a.fl-button:visited {
+	text-decoration: none;
+	background-color: <?php echo $settings->btn_bg_color ? pp_get_color_value( $settings->btn_bg_color ) : 'transparent'; ?>;
+	display: block;
+	clear: both;
+	height: <?php echo $settings->btn_height; ?>px;
+	<?php if( $settings->layout == 'stacked' ) { ?>
+		margin-top: <?php echo $settings->btn_margin; ?>%;
+	<?php } ?>
+}
+
+div.fl-node-<?php echo $id; ?> .pp-subscribe-form a.fl-button:hover {
+	background-color: <?php echo $settings->btn_bg_hover_color ? pp_get_color_value( $settings->btn_bg_hover_color ) : 'transparent'; ?>;
+	<?php if( $settings->btn_border_hover_color ) { ?>
+		border-color: <?php echo pp_get_color_value($settings->btn_border_hover_color); ?>;
+    <?php } ?>
+}
+
 <?php if ('enable' == $settings->btn_button_transition): ?>
 .fl-builder-content .fl-node-<?php echo $id; ?> .fl-button,
 .fl-builder-content .fl-node-<?php echo $id; ?> .fl-button * {
@@ -525,27 +552,6 @@ FLBuilder::render_module_css('fl-button', $id, array(
 	<?php } ?>
 }
 
-.fl-node-<?php echo $id; ?> .pp-subscribe-form a.fl-button,
-.fl-node-<?php echo $id; ?> .pp-subscribe-form a.fl-button:visited {
-	text-decoration: none;
-	background-color: <?php echo $settings->btn_bg_color ? pp_get_color_value( $settings->btn_bg_color ) : 'transparent'; ?>;
-	display: block;
-	clear: both;
-	height: <?php echo $settings->btn_height; ?>px;
-	<?php if( $settings->layout == 'stacked' ) { ?>
-		margin-top: <?php echo $settings->btn_margin; ?>%;
-	<?php } ?>
-}
-
-<?php
-// Button Border - Settings
-FLBuilderCSS::border_field_rule( array(
-	'settings' 		=> $settings,
-	'setting_name' 	=> 'button_border_group',
-	'selector' 		=> ".fl-builder-content .fl-node-$id .pp-subscribe-form a.fl-button, .fl-builder-content .fl-node-$id .pp-subscribe-form a.fl-button:visited",
-) );
-?>
-
 <?php if( $settings->layout == 'stacked' ) { ?>
 	.fl-node-<?php echo $id; ?> .pp-subscribe-form-compact .pp-form-field:last-child {
 		margin-bottom: <?php echo $settings->btn_margin; ?>%;
@@ -557,14 +563,6 @@ FLBuilderCSS::border_field_rule( array(
 	margin-bottom: <?php echo $settings->btn_margin; ?>%;
 }
 <?php } ?>
-
-
-.fl-node-<?php echo $id; ?> .pp-subscribe-form a.fl-button:hover {
-	background-color: <?php echo $settings->btn_bg_hover_color ? pp_get_color_value( $settings->btn_bg_hover_color ) : 'transparent'; ?>;
-	<?php if( $settings->btn_border_hover_color ) { ?>
-		border-color: <?php echo pp_get_color_value($settings->btn_border_hover_color); ?>;
-    <?php } ?>
-}
 
 .fl-node-<?php echo $id; ?> .pp-subscribe-form a.fl-button .fl-button-icon,
 .fl-node-<?php echo $id; ?> .pp-subscribe-form a.fl-button .fl-button-icon:before {

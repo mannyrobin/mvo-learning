@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Handles plugin upgrades.
  *
@@ -25,10 +26,10 @@ class WPForms_Upgrades {
 	 */
 	public function __construct() {
 
-		add_action( 'admin_init',                        array( $this, 'init'              ), -9999 );
-		add_action( 'wp_ajax_wpforms_upgrade_143',       array( $this, 'v143_upgrade_ajax' )        );
-		add_action( 'admin_notices',                     array( $this, 'admin_notice'      )        );
-		add_action( 'wpforms_tools_display_tab_upgrade', array( $this, 'upgrade_tab'       )        );
+		add_action( 'admin_init', array( $this, 'init' ), - 9999 );
+		add_action( 'wp_ajax_wpforms_upgrade_143', array( $this, 'v143_upgrade_ajax' ) );
+		add_action( 'admin_notices', array( $this, 'admin_notice' ) );
+		add_action( 'wpforms_tools_display_tab_upgrade', array( $this, 'upgrade_tab' ) );
 	}
 
 	/**
@@ -55,6 +56,10 @@ class WPForms_Upgrades {
 
 		if ( version_compare( $version, '1.4.3', '<' ) ) {
 			$this->v143_upgrade();
+		}
+
+		if ( version_compare( $version, '1.5.0', '<' ) ) {
+			$this->v150_upgrade();
 		}
 
 		// If upgrade has occurred, update version options in database.
@@ -124,7 +129,7 @@ class WPForms_Upgrades {
 		check_ajax_referer( 'wpforms-admin', 'nonce' );
 
 		// Check for permissions.
-		if ( ! current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) ) {
+		if ( ! wpforms_current_user_can() ) {
 			wp_send_json_error();
 		}
 
@@ -155,10 +160,12 @@ class WPForms_Upgrades {
 				);
 			}
 
-			wp_send_json_success( array(
-				'total'    => wpforms()->entry->get_entries( array(), true ),
-				'upgraded' => $upgraded,
-			) );
+			wp_send_json_success(
+				array(
+					'total'    => wpforms()->entry->get_entries( array(), true ),
+					'upgraded' => $upgraded,
+				)
+			);
 		}
 
 		if ( empty( $_POST['upgraded'] ) ) {
@@ -170,10 +177,12 @@ class WPForms_Upgrades {
 			update_option( 'wpforms_fields_update', 'incomplete' );
 
 			// Fetch the first 10 entries.
-			$entries = wpforms()->entry->get_entries( array(
-				'number' => 10,
-				'order'  => 'ASC',
-			) );
+			$entries = wpforms()->entry->get_entries(
+				array(
+					'number' => 10,
+					'order'  => 'ASC',
+				)
+			);
 
 		} else {
 
@@ -198,13 +207,15 @@ class WPForms_Upgrades {
 				if ( ! empty( $fields ) ) {
 					foreach ( $fields as $field ) {
 						if ( isset( $field['id'] ) && isset( $field['value'] ) && '' !== $field['value'] ) {
-							wpforms()->entry_fields->add( array(
-								'entry_id' => absint( $entry->entry_id ),
-								'form_id'  => absint( $entry->form_id ),
-								'field_id' => absint( $field['id'] ),
-								'value'    => $field['value'],
-								'date'     => $entry->date,
-							) );
+							wpforms()->entry_fields->add(
+								array(
+									'entry_id' => absint( $entry->entry_id ),
+									'form_id'  => absint( $entry->form_id ),
+									'field_id' => absint( $field['id'] ),
+									'value'    => $field['value'],
+									'date'     => $entry->date,
+								)
+							);
 						}
 					}
 				}
@@ -217,9 +228,31 @@ class WPForms_Upgrades {
 			delete_option( 'wpforms_fields_update' );
 		}
 
-		wp_send_json_success( array(
-			'count' => count( $entries ),
-		) );
+		wp_send_json_success(
+			array(
+				'count' => count( $entries ),
+			)
+		);
+	}
+
+	/**
+	 * Perform database upgrades for version 1.5.0.
+	 *
+	 * @since 1.5.0
+	 */
+	private function v150_upgrade() {
+
+		$forms = \wpforms()->form->get( '', array( 'fields' => 'ids' ) );
+
+		if ( empty( $forms ) || ! \is_array( $forms ) ) {
+			return;
+		}
+
+		foreach ( $forms as $form_id ) {
+			delete_post_meta( $form_id, 'wpforms_entries_count' );
+		}
+
+		$this->upgraded = true;
 	}
 
 	/**
@@ -241,20 +274,27 @@ class WPForms_Upgrades {
 
 		// v1.4.3 fields database upgrade notice.
 		$upgrade_v143 = get_option( 'wpforms_fields_update', false );
+
 		if ( $upgrade_v143 ) {
-
-			/* translators: %1$s - opening link tag; %2$s - closing link tag. */
-			$msg = esc_html__( 'WPForms needs to upgrade the database, click %1$shere%2$s to start the upgrade.', 'wpforms' );
-
 			if ( 'incomplete' === $upgrade_v143 ) {
-				/* translators: %1$s - opening link tag; %2$s - closing link tag. */
-				$msg = esc_html__( 'WPForms database upgrade is incomplete, click %1$shere%2$s to resume.', 'wpforms' );
+				/* translators: %s - resume page URL. */
+				$msg = __( 'WPForms database upgrade is incomplete, click <a href="%s">here</a> to resume.', 'wpforms' );
+			} else {
+				/* translators: %s - entries upgrade page URL. */
+				$msg = __( 'WPForms needs to upgrade the database, click <a href="%s">here</a> to start the upgrade.', 'wpforms' );
 			}
+
 			echo '<div class="notice notice-info"><p>';
 				printf(
-					$msg,
-					'<a href="' . esc_url( admin_url( 'admin.php?page=wpforms-tools&view=upgrade' ) ) . '">',
-					'</a>'
+					wp_kses(
+						$msg,
+						array(
+							'a' => array(
+								'href' => array(),
+							),
+						)
+					),
+					esc_url( admin_url( 'admin.php?page=wpforms-tools&view=upgrade' ) )
 				);
 			echo '</p></div>';
 		}
@@ -289,21 +329,17 @@ class WPForms_Upgrades {
 				echo '<div class="status" style="display:none;">';
 					echo '<div class="progress-bar"><div class="bar"></div></div>';
 					echo '<p class="msg"><span class="percent">0%</span> - ';
-					/* translators: %1$s - total number of entries upgraded; %2$s - total number of entries on site.  */
-					printf(
-						wp_kses(
-							__( 'Updated %1$s of %2$s entries.', 'wpforms' ),
-							array(
-								'span' => array( 'class' ),
-							)
-						),
-						'<span class="current">0</span>',
-						'<span class="total">0</span>'
-					);
+						printf(
+							/* translators: %1$s - total number of entries upgraded; %2$s - total number of entries on site. */
+							esc_html__( 'Updated %1$s of %2$s entries.', 'wpforms' ),
+							'<span class="current">0</span>',
+							'<span class="total">0</span>'
+						);
 					echo '</p>';
 				echo '</div>';
 
 			echo '</div>';
+
 			return;
 		}
 

@@ -68,6 +68,9 @@ $scheme = 'http';
 define('CONTENT_DIR', '/wp-content');
 define('WP_CONTENT_DIR', $webroot_dir . CONTENT_DIR);
 define('WP_CONTENT_URL', WP_HOME . CONTENT_DIR);
+define('WPMDB_LICENCE', '36b68ad8-fe9c-4fff-ae80-e3082798399e');
+define('WPFORMS_LICENSE_KEY', '5bb6670118011a86a86ee3f58c85847e' );
+define('FL_LICENSE_KEY', '7a62702e706176726976676e72657063767540617667666877' );
 
 /**
  * DB settings

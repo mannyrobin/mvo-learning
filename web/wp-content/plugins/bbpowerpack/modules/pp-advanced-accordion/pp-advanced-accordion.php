@@ -108,7 +108,9 @@ class PPAccordionModule extends FLBuilderModule {
 				$opacity = ( $settings->content_bg_opacity / 100 );
 			}
 			$content_bg_color = $settings->content_bg_color;
-			$settings->content_bg_color = pp_hex2rgba( $content_bg_color, $opacity );
+			if ( ! empty( $content_bg_color ) ) {
+				$settings->content_bg_color = pp_hex2rgba( $content_bg_color, $opacity );
+			}
 
 			unset( $settings->content_bg_opacity );
 		}

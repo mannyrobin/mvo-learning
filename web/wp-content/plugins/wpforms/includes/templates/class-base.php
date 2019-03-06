@@ -90,14 +90,14 @@ abstract class WPForms_Template {
 	 */
 	public function __construct() {
 
-		// Bootstrap
+		// Bootstrap.
 		$this->init();
 
 		$type = $this->core ? '_core' : '';
 
 		add_filter( "wpforms_form_templates{$type}", array( $this, 'template_details' ), $this->priority );
 		add_filter( 'wpforms_create_form_args', array( $this, 'template_data' ), 10, 2 );
-		add_filter( 'wpforms_save_form_args', array( $this, 'template_replace' ), 10, 4 );
+		add_filter( 'wpforms_save_form_args', array( $this, 'template_replace' ), 10, 3 );
 		add_filter( 'wpforms_builder_template_active', array( $this, 'template_active' ), 10, 2 );
 	}
 
@@ -118,7 +118,7 @@ abstract class WPForms_Template {
 	 *
 	 * @return array
 	 */
-	function template_details( $templates ) {
+	public function template_details( $templates ) {
 
 		$templates[] = array(
 			'name'        => $this->name,
@@ -141,7 +141,7 @@ abstract class WPForms_Template {
 	 *
 	 * @return array
 	 */
-	function template_data( $args, $data ) {
+	public function template_data( $args, $data ) {
 
 		if ( ! empty( $data ) && ! empty( $data['template'] ) ) {
 			if ( $data['template'] === $this->slug ) {
@@ -163,7 +163,7 @@ abstract class WPForms_Template {
 	 *
 	 * @return array
 	 */
-	function template_replace( $form, $data, $args ) {
+	public function template_replace( $form, $data, $args ) {
 
 		if ( ! empty( $args['template'] ) ) {
 			if ( $args['template'] === $this->slug ) {
@@ -186,7 +186,7 @@ abstract class WPForms_Template {
 	 *
 	 * @return array
 	 */
-	function template_active( $details, $form ) {
+	public function template_active( $details, $form ) {
 
 		if ( empty( $form ) ) {
 			return;
@@ -219,11 +219,11 @@ abstract class WPForms_Template {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $form_data
+	 * @param array $form_data Form data and settings.
 	 *
 	 * @return boolean
 	 */
-	function template_modal_conditional( $form_data ) {
+	public function template_modal_conditional( $form_data ) {
 
 		return false;
 	}
