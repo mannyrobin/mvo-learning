@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Entry DB class
+ * Entry DB class.
  *
  * @package    WPForms
  * @author     WPForms
@@ -21,6 +22,7 @@ class WPForms_Entry_Handler extends WPForms_DB {
 
 		$this->table_name  = $wpdb->prefix . 'wpforms_entries';
 		$this->primary_key = 'entry_id';
+		$this->type        = 'entries';
 	}
 
 	/**
@@ -57,7 +59,18 @@ class WPForms_Entry_Handler extends WPForms_DB {
 	public function get_column_defaults() {
 
 		return array(
-			'date' => date( 'Y-m-d H:i:s' ),
+			'form_id'       => '',
+			'post_id'       => '',
+			'user_id'       => '',
+			'status'        => '',
+			'type'          => '',
+			'fields'        => '',
+			'meta'          => '',
+			'date'          => date( 'Y-m-d H:i:s' ),
+			'date_modified' => date( 'Y-m-d H:i:s' ),
+			'ip_address'    => '',
+			'user_agent'    => '',
+			'user_uuid'     => '',
 		);
 	}
 
@@ -68,7 +81,7 @@ class WPForms_Entry_Handler extends WPForms_DB {
 	 *
 	 * @since 1.1.6
 	 *
-	 * @param int|string $row_id Row ID.
+	 * @param int $row_id Entry ID.
 	 *
 	 * @return bool False if the record could not be deleted, true otherwise.
 	 */
@@ -86,8 +99,8 @@ class WPForms_Entry_Handler extends WPForms_DB {
 	 *
 	 * @since 1.1.5
 	 *
-	 * @param int $row_id
-	 * @param int $form_id
+	 * @param int $row_id  Entry ID.
+	 * @param int $form_id Form ID.
 	 *
 	 * @return mixed object or null
 	 */
@@ -115,8 +128,8 @@ class WPForms_Entry_Handler extends WPForms_DB {
 	 *
 	 * @since 1.1.5
 	 *
-	 * @param int $row_id
-	 * @param int $form_id
+	 * @param int $row_id  Entry ID.
+	 * @param int $form_id Form ID.
 	 *
 	 * @return mixed object or null
 	 */
@@ -140,11 +153,41 @@ class WPForms_Entry_Handler extends WPForms_DB {
 	}
 
 	/**
+	 * Get last entry.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int $form_id Form ID.
+	 *
+	 * @return mixed Object from DB values or null.
+	 */
+	public function get_last( $form_id ) {
+
+		global $wpdb;
+
+		if ( empty( $form_id ) ) {
+			return false;
+		}
+
+		$last = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$this->table_name}
+				WHERE `form_id` = %d
+				ORDER BY {$this->primary_key} DESC
+				LIMIT 1;",
+				absint( $form_id )
+			)
+		);
+
+		return $last;
+	}
+
+	/**
 	 * Mark all entries read for a form.
 	 *
 	 * @since 1.1.6
 	 *
-	 * @param int $form_id
+	 * @param int $form_id Form ID.
 	 *
 	 * @return bool
 	 */
@@ -164,24 +207,60 @@ class WPForms_Entry_Handler extends WPForms_DB {
 	}
 
 	/**
+	 * Get next entries count.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int $row_id  Entry ID.
+	 * @param int $form_id Form ID.
+	 *
+	 * @return int
+	 */
+	public function get_next_count( $row_id, $form_id ) {
+
+		global $wpdb;
+
+		if ( empty( $form_id ) ) {
+			return 0;
+		}
+
+		$prev_count = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT({$this->primary_key}) FROM {$this->table_name}
+				WHERE `form_id` = %d AND {$this->primary_key} > %d
+				ORDER BY {$this->primary_key} ASC;",
+				absint( $form_id ),
+				absint( $row_id )
+			)
+		);
+
+		return absint( $prev_count );
+	}
+
+	/**
 	 * Get previous entries count.
 	 *
+	 * @since 1.5.0 Changed return type to always be an integer.
 	 * @since 1.1.5
-	 * @param int $row_id
-	 * @param int $form_id
-	 * @return mixed object or null
+	 *
+	 * @param int $row_id  Entry ID.
+	 * @param int $form_id Form ID.
+	 *
+	 * @return int
 	 */
 	public function get_prev_count( $row_id, $form_id ) {
 
 		global $wpdb;
 
 		if ( empty( $row_id ) || empty( $form_id ) ) {
-			return false;
+			return 0;
 		}
 
 		$prev_count = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT({$this->primary_key}) FROM {$this->table_name} WHERE `form_id` = %d AND {$this->primary_key} < %d ORDER BY {$this->primary_key};",
+				"SELECT COUNT({$this->primary_key}) FROM {$this->table_name}
+				WHERE `form_id` = %d AND {$this->primary_key} < %d
+				ORDER BY {$this->primary_key} ASC;",
 				absint( $form_id ),
 				absint( $row_id )
 			)
@@ -195,8 +274,8 @@ class WPForms_Entry_Handler extends WPForms_DB {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $args
-	 * @param bool $count
+	 * @param array $args  Redefine query parameters by providing own arguments.
+	 * @param bool  $count Whether to just count entries or get the list of them. True to just count.
 	 *
 	 * @return array|int
 	 */
@@ -205,6 +284,7 @@ class WPForms_Entry_Handler extends WPForms_DB {
 		global $wpdb;
 
 		$defaults = array(
+			'select'        => 'all',
 			'number'        => 30,
 			'offset'        => 0,
 			'form_id'       => 0,
@@ -216,28 +296,51 @@ class WPForms_Entry_Handler extends WPForms_DB {
 			'viewed'        => '',
 			'starred'       => '',
 			'user_uuid'     => '',
-			//'date'          => '', @todo
-			//'date_modified' => '', @todo
+			'date'          => '',
+			'date_modified' => '',
 			'ip_address'    => '',
 			'orderby'       => 'entry_id',
 			'order'         => 'DESC',
-			'search'        => false,
 		);
 
-		$args  = wp_parse_args( $args, $defaults );
+		$args = apply_filters(
+			'wpforms_entry_handler_get_entries_args',
+			wp_parse_args( $args, $defaults )
+		);
 
-		if ( $args['number'] < 1 ) {
-			$args['number'] = PHP_INT_MAX;
+		/*
+		 * Modify the SELECT.
+		 */
+		$select = '*';
+
+		$possible_select_values = apply_filters(
+			'wpforms_entry_handler_get_entries_select',
+			array(
+				'all'       => '*',
+				'entry_ids' => '`entry_id`',
+			)
+		);
+		if ( array_key_exists( $args['select'], $possible_select_values ) ) {
+			$select = esc_sql( $possible_select_values[ $args['select'] ] );
 		}
 
-		$where = '';
+		/*
+		 * Modify the WHERE.
+		 *
+		 * Always define a default WHERE clause.
+		 * MySQL/MariaDB optimizations are clever enough to strip this out later before actual execution.
+		 * But having this default here in the code will make everything a bit better to read and understand.
+		 */
+		$where = array(
+			'default' => '1=1',
+		);
 
 		// Allowed int arg items.
 		$keys = array( 'entry_id', 'form_id', 'post_id', 'user_id', 'viewed', 'starred' );
 		foreach ( $keys as $key ) {
 			// Value `$args[ $key ]` can be a natural number and a numeric string.
 			// We should skip empty string values, but continue working with '0'.
-			// For some reason using `==` makes various parts of the code work.
+			// For sad reason using `==` makes various parts of the code work.
 			if ( '' == $args[ $key ] ) {
 				continue;
 			}
@@ -245,11 +348,10 @@ class WPForms_Entry_Handler extends WPForms_DB {
 			if ( is_array( $args[ $key ] ) && ! empty( $args[ $key ] ) ) {
 				$ids = implode( ',', array_map( 'intval', $args[ $key ] ) );
 			} else {
-				$ids = intval( $args[ $key ] );
+				$ids = (int) $args[ $key ];
 			}
 
-			$where .= empty( $where ) ? 'WHERE' : 'AND';
-			$where .= " `{$key}` IN( {$ids} ) ";
+			$where[ 'arg_' . $key ] = "`{$key}` IN ( {$ids} )";
 		}
 
 		// Allowed string arg items.
@@ -257,36 +359,92 @@ class WPForms_Entry_Handler extends WPForms_DB {
 		foreach ( $keys as $key ) {
 
 			if ( '' !== $args[ $key ] ) {
-				$where .= empty( $where ) ? 'WHERE' : 'AND';
-				$where .= " `{$key}` = '" . esc_sql( $args[ $key ] ) . "' ";
+				$where[ 'arg_' . $key ] = "`{$key}` = '" . esc_sql( $args[ $key ] ) . "'";
 			}
 		}
 
-		// Orderby.
+		// Process dates.
+		$keys = array( 'date', 'date_modified' );
+		foreach ( $keys as $key ) {
+			if ( empty( $args[ $key ] ) ) {
+				continue;
+			}
+
+			// We can pass array and treat it as a range from:to.
+			if ( is_array( $args[ $key ] ) && count( $args[ $key ] ) === 2 ) {
+				$date_start = wpforms_get_day_period_date( 'start_of_day', strtotime( $args[ $key ][0] ) );
+				$date_end   = wpforms_get_day_period_date( 'end_of_day', strtotime( $args[ $key ][1] ) );
+
+				if ( ! empty( $date_start ) && ! empty( $date_end ) ) {
+					$where[ 'arg_' . $key . '_start' ] = "`{$key}` >= '{$date_start}'";
+					$where[ 'arg_' . $key . '_end' ]   = "`{$key}` <= '{$date_end}'";
+				}
+			} elseif ( is_string( $args[ $key ] ) ) {
+				/*
+				 * If we pass the only string representation of a date -
+				 * that means we want to get records of that day only.
+				 * So we generate start and end MySQL dates for the specified day.
+				 */
+				$timestamp  = strtotime( $args[ $key ] );
+				$date_start = wpforms_get_day_period_date( 'start_of_day', $timestamp );
+				$date_end   = wpforms_get_day_period_date( 'end_of_day', $timestamp );
+
+				if ( ! empty( $date_start ) && ! empty( $date_end ) ) {
+					$where[ 'arg_' . $key . '_start' ] = "`{$key}` >= '{$date_start}'";
+					$where[ 'arg_' . $key . '_end' ]   = "`{$key}` <= '{$date_end}'";
+				}
+			}
+		}
+
+		// Give developers an ability to modify WHERE (unset clauses, add new, etc).
+		$where     = (array) apply_filters( 'wpforms_entry_handler_get_entries_where', $where, $args );
+		$where_sql = implode( ' AND ', $where );
+
+		/*
+		 * Modify the ORDER BY.
+		 */
 		$args['orderby'] = ! array_key_exists( $args['orderby'], $this->get_columns() ) ? $this->primary_key : $args['orderby'];
 
-		// Offset.
-		$args['offset'] = absint( $args['offset'] );
-
-		// Number.
-		$args['number'] = absint( $args['number'] );
-
-		// Order.
 		if ( 'ASC' === strtoupper( $args['order'] ) ) {
 			$args['order'] = 'ASC';
 		} else {
 			$args['order'] = 'DESC';
 		}
 
+		/*
+		 * Modify the OFFSET / NUMBER.
+		 */
+		$args['offset'] = absint( $args['offset'] );
+		if ( $args['number'] < 1 ) {
+			$args['number'] = PHP_INT_MAX;
+		}
+		$args['number'] = absint( $args['number'] );
+
+		/*
+		 * Retrieve the results.
+		 */
+
 		if ( true === $count ) {
 
-			$results = absint( $wpdb->get_var( "SELECT COUNT({$this->primary_key}) FROM {$this->table_name} {$where};" ) );
+			// @codingStandardsIgnoreStart
+			$results = absint( $wpdb->get_var(
+				"SELECT COUNT({$this->primary_key})
+				FROM {$this->table_name}
+				WHERE {$where_sql};"
+			) );
+			// @codingStandardsIgnoreEnd
 
 		} else {
 
+			// @codingStandardsIgnoreStart
 			$results = $wpdb->get_results(
-				"SELECT * FROM {$this->table_name} {$where} ORDER BY {$args['orderby']} {$args['order']} LIMIT {$args['offset']}, {$args['number']};"
+				"SELECT {$select}
+				FROM {$this->table_name}
+				WHERE {$where_sql}
+				ORDER BY {$args['orderby']} {$args['order']}
+				LIMIT {$args['offset']}, {$args['number']};"
 			);
+			// @codingStandardsIgnoreEnd
 		}
 
 		return $results;
@@ -301,7 +459,7 @@ class WPForms_Entry_Handler extends WPForms_DB {
 
 		global $wpdb;
 
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		$charset_collate = '';
 

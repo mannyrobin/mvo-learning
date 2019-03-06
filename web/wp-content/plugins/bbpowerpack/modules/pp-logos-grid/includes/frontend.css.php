@@ -41,7 +41,7 @@
 .fl-node-<?php echo $id; ?> .pp-logos-content .pp-logo {
     position: relative;
     <?php if( $settings->logos_layout == 'grid' ) { ?>
-        width: calc((100% - <?php echo $space_desktop + 1; ?>px) / <?php echo $settings->logos_grid_columns_desktop; ?>);
+        width: calc((100% - <?php echo $space_desktop + 1; ?>px) / <?php echo $settings->logos_grid_columns; ?>);
         <?php if ( $settings->logos_grid_spacing == 0 ) { ?>
         margin-right: <?php echo $settings->logos_grid_spacing - ( $logo_grid_border_style != 'none' ? $logo_grid_border_width : 0 ); ?>px;
         margin-bottom: <?php echo $settings->logos_grid_spacing - ( $logo_grid_border_style != 'none' ? $logo_grid_border_width : 0 ); ?>px;
@@ -86,12 +86,12 @@
 ?>
 
 <?php if( $settings->logos_layout == 'grid' ) { ?>
-.fl-node-<?php echo $id; ?> .pp-logos-content .pp-logo:nth-of-type(<?php echo $settings->logos_grid_columns_desktop; ?>n+1) {
+.fl-node-<?php echo $id; ?> .pp-logos-content .pp-logo:nth-of-type(<?php echo $settings->logos_grid_columns; ?>n+1) {
     clear: left;
 }
 <?php } ?>
 
-.fl-node-<?php echo $id; ?> .pp-logos-content .pp-logo:nth-of-type(<?php echo $settings->logos_layout == 'grid' ? $settings->logos_grid_columns_desktop : $settings->logo_carousel_minimum_grid; ?>n) {
+.fl-node-<?php echo $id; ?> .pp-logos-content .pp-logo:nth-of-type(<?php echo $settings->logos_layout == 'grid' ? $settings->logos_grid_columns : $settings->logo_carousel_minimum_grid; ?>n) {
     margin-right: 0;
 }
 
@@ -308,7 +308,7 @@
             clear: left;
         <?php } ?>
     }
-    .fl-node-<?php echo $id; ?> .pp-logos-content .pp-logo:nth-of-type(<?php echo $settings->logos_grid_columns_desktop; ?>n) {
+    .fl-node-<?php echo $id; ?> .pp-logos-content .pp-logo:nth-of-type(<?php echo $settings->logos_grid_columns; ?>n) {
         <?php if( $settings->logos_layout == 'grid' ) { ?>
             <?php if ( $settings->logos_grid_spacing == 0 ) { ?>
             margin-right: <?php echo $settings->logos_grid_spacing - ( $logo_grid_border_style != 'none' ? $logo_grid_border_width : 0 ); ?>px;
@@ -324,7 +324,7 @@
             margin-right: 0;
         <?php } ?>
     }
-    .fl-node-<?php echo $id; ?> .pp-logos-content .pp-logo:nth-of-type(<?php echo $settings->logos_grid_columns_desktop; ?>n+1) {
+    .fl-node-<?php echo $id; ?> .pp-logos-content .pp-logo:nth-of-type(<?php echo $settings->logos_grid_columns; ?>n+1) {
         <?php if( $settings->logos_layout == 'grid' ) { ?>
             clear: none;
         <?php } ?>

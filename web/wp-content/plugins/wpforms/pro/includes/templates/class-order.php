@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Billing / Order form template.
  *
@@ -7,7 +8,7 @@
  * @since      1.0.0
  * @license    GPL-2.0+
  * @copyright  Copyright (c) 2016, WPForms LLC
-*/
+ */
 class WPForms_Template_Order extends WPForms_Template {
 
 	/**
@@ -17,87 +18,87 @@ class WPForms_Template_Order extends WPForms_Template {
 	 */
 	public function init() {
 
-		$this->name        = __( 'Billing / Order Form', 'wpforms' );
+		$this->name        = esc_html__( 'Billing / Order Form', 'wpforms' );
 		$this->slug        = 'order';
-		$this->description = __( 'Collect Payments for product and service orders with this ready-made form template. You can add and remove fields as needed.', 'wpforms' );
+		$this->description = esc_html__( 'Collect Payments for product and service orders with this ready-made form template. You can add and remove fields as needed.', 'wpforms' );
 		$this->includes    = '';
 		$this->icon        = '';
 		$this->core        = true;
 		$this->modal       = array(
-			'title'   => __( 'Don&#39;t Forget', 'wpforms' ),
-			'message' => __( 'Click the Payments tab to configure your payment provider', 'wpforms' ),
+			'title'   => esc_html__( 'Don&#39;t Forget', 'wpforms' ),
+			'message' => esc_html__( 'Click the Payments tab to configure your payment provider', 'wpforms' ),
 		);
 		$this->data        = array(
 			'field_id' => '7',
 			'fields'   => array(
-				'0'  => array(
-					'id'          => '0',
-					'type'        => 'name',
-					'label'       => __( 'Name', 'wpforms' ),
-					'required'    => '1',
-					'size'        => 'medium',
+				'0' => array(
+					'id'       => '0',
+					'type'     => 'name',
+					'label'    => esc_html__( 'Name', 'wpforms' ),
+					'required' => '1',
+					'size'     => 'medium',
 				),
-				'1'  => array(
-					'id'          => '1',
-					'type'        => 'email',
-					'label'       => __( 'Email', 'wpforms' ),
-					'required'    => '1',
-					'size'        => 'medium',
+				'1' => array(
+					'id'       => '1',
+					'type'     => 'email',
+					'label'    => esc_html__( 'Email', 'wpforms' ),
+					'required' => '1',
+					'size'     => 'medium',
 				),
-				'2'  => array(
-					'id'          => '2',
-					'type'        => 'phone',
-					'label'       => __( 'Phone', 'wpforms' ),
-					'format'      => 'us',
-					'required'    => '1',
-					'size'        => 'medium',
+				'2' => array(
+					'id'       => '2',
+					'type'     => 'phone',
+					'label'    => esc_html__( 'Phone', 'wpforms' ),
+					'format'   => 'us',
+					'required' => '1',
+					'size'     => 'medium',
 				),
-				'3'  => array(
-					'id'          => '3',
-					'type'        => 'address',
-					'label'       => __( 'Address', 'wpforms' ),
-					'required'    => '1',
-					'size'        => 'medium',
+				'3' => array(
+					'id'              => '3',
+					'type'            => 'address',
+					'label'           => esc_html__( 'Address', 'wpforms' ),
+					'required'        => '1',
+					'size'            => 'medium',
 					'country_default' => 'US',
 				),
 
-				'4'  => array(
-					'id'          => '4',
-					'type'        => 'payment-multiple',
-					'label'       => __( 'Available Items', 'wpforms' ),
-					'required'    => '1',
-					'choices'     => array(
+				'4' => array(
+					'id'       => '4',
+					'type'     => 'payment-multiple',
+					'label'    => esc_html__( 'Available Items', 'wpforms' ),
+					'required' => '1',
+					'choices'  => array(
 						'1' => array(
-							'label' => __( 'First Item', 'wpforms' ),
+							'label' => esc_html__( 'First Item', 'wpforms' ),
 							'value' => '$10.00',
 						),
 						'2' => array(
-							'label' => __( 'Second Item', 'wpforms' ),
+							'label' => esc_html__( 'Second Item', 'wpforms' ),
 							'value' => '$20.00',
 						),
 						'3' => array(
-							'label' => __( 'Third Item', 'wpforms' ),
+							'label' => esc_html__( 'Third Item', 'wpforms' ),
 							'value' => '$30.00',
 						),
 					),
 				),
-				'5'  => array(
-					'id'          => '5',
-					'type'        => 'payment-total',
-					'label'       => __( 'Total Amount', 'wpforms' ),
+				'5' => array(
+					'id'    => '5',
+					'type'  => 'payment-total',
+					'label' => esc_html__( 'Total Amount', 'wpforms' ),
 				),
-				'6'  => array(
-					'id'          => '6',
-					'type'        => 'textarea',
-					'label'       => __( 'Comment or Message', 'wpforms' ),
-					'required'    => '1',
-					'size'        => 'medium',
+				'6' => array(
+					'id'       => '6',
+					'type'     => 'textarea',
+					'label'    => esc_html__( 'Comment or Message', 'wpforms' ),
+					'required' => '1',
+					'size'     => 'medium',
 				),
 			),
 			'settings' => array(
 				'honeypot'                    => '1',
 				'confirmation_message_scroll' => '1',
-				'submit_text_processing'      => __( 'Sending...', 'wpforms' ),
+				'submit_text_processing'      => esc_html__( 'Sending...', 'wpforms' ),
 			),
 			'meta'     => array(
 				'template' => $this->slug,
@@ -110,10 +111,12 @@ class WPForms_Template_Order extends WPForms_Template {
 	 * should display.
 	 *
 	 * @since 1.0.0
-	 * @param array $form_data
+	 *
+	 * @param array $form_data Form data and settings.
+	 *
 	 * @return boolean
 	 */
-	function template_modal_conditional( $form_data ) {
+	public function template_modal_conditional( $form_data ) {
 
 		// If we do not have payment data, then we can assume a payment
 		// method has not yet been configured, so we display the modal to
@@ -126,4 +129,5 @@ class WPForms_Template_Order extends WPForms_Template {
 		}
 	}
 }
+
 new WPForms_Template_Order;

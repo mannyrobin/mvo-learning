@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Hidden text field.
  *
@@ -17,11 +18,11 @@ class WPForms_Field_Hidden extends WPForms_Field {
 	 */
 	public function init() {
 
-		// Define field type information
-		$this->name  = __( 'Hidden Field', 'wpforms' );
+		// Define field type information.
+		$this->name  = esc_html__( 'Hidden Field', 'wpforms' );
 		$this->type  = 'hidden';
 		$this->icon  = 'fa-eye-slash';
-		$this->order = 13;
+		$this->order = 150;
 		$this->group = 'fancy';
 	}
 
@@ -29,13 +30,13 @@ class WPForms_Field_Hidden extends WPForms_Field {
 	 * Field options panel inside the builder.
 	 *
 	 * @since 1.0.0
-	 * @param array $field
+	 *
+	 * @param array $field Field data and settings.
 	 */
 	public function field_options( $field ) {
-
-		// -------------------------------------------------------------------//
-		// Basic field options.
-		// -------------------------------------------------------------------//
+		/*
+		 * Basic field options.
+		 */
 
 		// Options open markup.
 		$args = array(
@@ -52,7 +53,7 @@ class WPForms_Field_Hidden extends WPForms_Field {
 			'slug'  => 'label_disable',
 			'value' => '1',
 		);
-		$this->field_element( 'text',  $field, $args );
+		$this->field_element( 'text', $field, $args );
 
 		// Default value.
 		$this->field_option( 'default_value', $field );
@@ -71,7 +72,8 @@ class WPForms_Field_Hidden extends WPForms_Field {
 	 * Field preview inside the builder.
 	 *
 	 * @since 1.0.0
-	 * @param array $field
+	 *
+	 * @param array $field Field data and settings.
 	 */
 	public function field_preview( $field ) {
 
@@ -86,9 +88,10 @@ class WPForms_Field_Hidden extends WPForms_Field {
 	 * Field display on the form front-end.
 	 *
 	 * @since 1.0.0
-	 * @param array $field
-	 * @param array $deprecated
-	 * @param array $form_data
+	 *
+	 * @param array $field      Field data and settings.
+	 * @param array $deprecated Not used any more field attributes.
+	 * @param array $form_data  Form data and settings.
 	 */
 	public function field_display( $field, $deprecated, $form_data ) {
 
@@ -96,9 +99,11 @@ class WPForms_Field_Hidden extends WPForms_Field {
 		$primary = $field['properties']['inputs']['primary'];
 
 		// Primary field.
-		printf( '<input type="hidden" %s>',
+		printf(
+			'<input type="hidden" %s>',
 			wpforms_html_attributes( $primary['id'], $primary['class'], $primary['data'], $primary['attr'] )
 		);
 	}
 }
-new WPForms_Field_Hidden;
+
+new WPForms_Field_Hidden();

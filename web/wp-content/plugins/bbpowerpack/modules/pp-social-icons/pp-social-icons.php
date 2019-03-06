@@ -243,6 +243,12 @@ FLBuilder::register_settings_form('social_icon_form', array(
 							'type'			=> 'icon',
 							'label'         => __('Custom Icon', 'bb-powerpack'),
 						),
+						'icon_custom_title'	=> array(
+							'type'				=> 'text',
+							'label'				=> __('Custom Title', 'bb-powerpack'),
+							'default'			=> '',
+							'help'				=> __('Add custom title for HTML "title" attribute.', 'bb-powerpack')
+						),
 						'link'  => array(
 							'type'          => 'link',
 							'label'         => __('Link', 'bb-powerpack'),

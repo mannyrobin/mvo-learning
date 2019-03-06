@@ -153,7 +153,7 @@ class PPContactFormModule extends FLBuilderModule {
 			}
 
 			$pp_contact_from_email = (isset($_POST['email']) ? sanitize_email($_POST['email']) : null);
-			$pp_contact_from_name = (isset($_POST['name']) ? $_POST['name'] : null);
+			$pp_contact_from_name = (isset($_POST['name']) ? $_POST['name'] : '');
 
 			$headers = array(
 				'From: ' . $site_name . ' <' . $admin_email . '>',
@@ -170,11 +170,32 @@ class PPContactFormModule extends FLBuilderModule {
 			if ( isset( $_POST['phone'] ) ) { $template .= "Phone: $_POST[phone] \r\n";
 			}
 
-			$template .= __('Message', 'bb-powerpack') . ": \r\n" . stripslashes( $_POST['message'] );
+			$msg = '';
+
+			if ( isset( $settings->message_toggle ) && 'show' == $settings->message_toggle ) {
+				$msg = isset( $_POST['message'] ) ? stripslashes( $_POST['message'] ) : '';
+			}
+
+			$template .= __('Message', 'bb-powerpack') . ": \r\n" . $msg;
 
 			// Double check the mailto email is proper and no validation error found, then send.
 			if ( $mailto && false === $response['error'] ) {
-				wp_mail( $mailto, $subject, $template, $headers );
+				
+				$subject = esc_html( do_shortcode( $subject ) );
+				$mailto  = esc_html( do_shortcode( $mailto ) );
+
+				/**
+				 * Before sending with wp_mail()
+				 * @see pp_contact_form_before_send
+				 */
+				do_action( 'pp_contact_form_before_send', $mailto, $subject, $template, $headers, $settings );
+				$result = wp_mail( $mailto, $subject, $template, $headers );
+
+				/**
+				 * After sending with wp_mail()
+				 * @see pp_contact_form_after_send
+				 */
+				do_action( 'pp_contact_form_after_send', $mailto, $subject, $template, $headers, $settings, $result );
 				$response['message'] = __( 'Sent!', 'bb-powerpack' );
 				$response['error'] = false;
 			}

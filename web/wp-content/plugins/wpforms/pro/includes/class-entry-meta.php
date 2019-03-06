@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Entry meta DB class.
  *
@@ -7,7 +8,7 @@
  * @since      1.1.6
  * @license    GPL-2.0+
  * @copyright  Copyright (c) 2016, WPForms LLC
-*/
+ */
 class WPForms_Entry_Meta_Handler extends WPForms_DB {
 
 	/**
@@ -21,6 +22,7 @@ class WPForms_Entry_Meta_Handler extends WPForms_DB {
 
 		$this->table_name  = $wpdb->prefix . 'wpforms_entry_meta';
 		$this->primary_key = 'id';
+		$this->type        = 'entry_meta';
 	}
 
 	/**
@@ -50,7 +52,13 @@ class WPForms_Entry_Meta_Handler extends WPForms_DB {
 	public function get_column_defaults() {
 
 		return array(
-			'date' => date( 'Y-m-d H:i:s' ),
+			'entry_id' => '',
+			'form_id'  => '',
+			'user_id'  => '',
+			'type'     => '',
+			'status'   => '',
+			'data'     => '',
+			'date'     => date( 'Y-m-d H:i:s' ),
 		);
 	}
 
@@ -58,28 +66,31 @@ class WPForms_Entry_Meta_Handler extends WPForms_DB {
 	 * Get entry meta rows from the database.
 	 *
 	 * @since 1.1.6
+	 *
 	 * @param array $args
 	 * @param bool $count
+	 *
+	 * @return array|int
 	 */
 	public function get_meta( $args = array(), $count = false ) {
 
 		global $wpdb;
 
 		$defaults = array(
-			'number'        => 30,
-			'offset'        => 0,
-			'id'            => 0,
-			'entry_id'      => 0,
-			'form_id'       => 0,
-			'user_id'       => '',
-			'status'        => '',
-			'type'          => '',
+			'number'   => 30,
+			'offset'   => 0,
+			'id'       => 0,
+			'entry_id' => 0,
+			'form_id'  => 0,
+			'user_id'  => '',
+			'status'   => '',
+			'type'     => '',
 			//'date'          => '', @todo
-			'orderby'       => 'id',
-			'order'         => 'DESC',
+			'orderby'  => 'id',
+			'order'    => 'DESC',
 		);
 
-		$args  = wp_parse_args( $args, $defaults );
+		$args = wp_parse_args( $args, $defaults );
 
 		if ( $args['number'] < 1 ) {
 			$args['number'] = PHP_INT_MAX;
@@ -155,7 +166,7 @@ class WPForms_Entry_Meta_Handler extends WPForms_DB {
 
 		global $wpdb;
 
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		$charset_collate = '';
 

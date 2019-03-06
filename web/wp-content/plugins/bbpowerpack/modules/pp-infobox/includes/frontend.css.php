@@ -50,6 +50,14 @@ FLBuilderCSS::typography_field_rule( array(
 		color: #<?php echo $settings->text_color_h; ?>;
 	<?php } ?>
 }
+<?php
+// Icon - Border
+FLBuilderCSS::border_field_rule( array(
+	'settings' 		=> $settings,
+	'setting_name' 	=> 'icon_border',
+	'selector' 		=> ".fl-node-$id .pp-infobox-icon, .fl-node-$id .pp-infobox-image img",
+) );
+?>
 <?php if( $settings->icon_type == 'icon' ) { ?>
 	.fl-node-<?php echo $id; ?> .pp-infobox-icon {
 		<?php if( $settings->icon_box_size ) { ?>padding: <?php echo $settings->icon_box_size; ?>px;<?php } ?>
@@ -68,9 +76,7 @@ FLBuilderCSS::typography_field_rule( array(
 		<?php if( $settings->icon_font_size ) { ?>font-size: <?php echo $settings->icon_font_size; ?>px;<?php } ?>
 	}
 	.fl-node-<?php echo $id; ?> .pp-infobox:hover .pp-infobox-icon {
-		<?php if( $settings->show_border == 'yes' ) { ?>
-			<?php if( $settings->icon_border_color_hover ) { ?>border-color: #<?php echo $settings->icon_border_color_hover; ?>;<?php } ?>
-		<?php } ?>
+		<?php if( ! empty( $settings->icon_border_color_hover ) ) { ?>border-color: #<?php echo $settings->icon_border_color_hover; ?>;<?php } ?>
 	}
 	.fl-node-<?php echo $id; ?> .pp-infobox:hover .pp-infobox-icon span.pp-icon {
 		<?php if( $settings->icon_background_hover ) { ?>background: <?php echo pp_get_color_value( $settings->icon_background_hover ); ?>;<?php } ?>
@@ -95,20 +101,11 @@ FLBuilderCSS::typography_field_rule( array(
 		max-width: 100%;
 	}
 	.fl-node-<?php echo $id; ?> .pp-infobox:hover .pp-infobox-image img {
-		<?php if( $settings->show_border == 'yes' ) { ?>
-			<?php if( $settings->icon_border_color_hover ) { ?>border-color: #<?php echo $settings->icon_border_color_hover; ?>;<?php } ?>
+		<?php if( ! empty( $settings->icon_border_color_hover ) ) { ?>
+			border-color: #<?php echo $settings->icon_border_color_hover; ?>;
 		<?php } ?>
 	}
 <?php } ?>
-
-<?php
-// Icon - Border
-FLBuilderCSS::border_field_rule( array(
-	'settings' 		=> $settings,
-	'setting_name' 	=> 'icon_border',
-	'selector' 		=> ".fl-node-$id .pp-infobox-icon, .fl-node-$id .pp-infobox-image img",
-) );
-?>
 
 .fl-node-<?php echo $id; ?> .pp-infobox-icon-inner span.pp-icon,
 .fl-node-<?php echo $id; ?> .pp-infobox-image img {

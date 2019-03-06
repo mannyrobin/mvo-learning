@@ -367,7 +367,7 @@
 
 .fl-node-<?php echo $id; ?> .pp-wpforms-content div.wpforms-container-full .wpforms-form button {
     <?php if( $settings->button_text_color_default ) { ?>
-	color: <?php echo $settings->button_text_color_default; ?>;
+	color: #<?php echo $settings->button_text_color_default; ?>;
     <?php } ?>
 	<?php if ( isset( $settings->button_bg_color_default ) && ! empty( $settings->button_bg_color_default ) ) { ?>
 	background-color: <?php echo pp_get_color_value( $settings->button_bg_color_default ); ?>;
@@ -407,7 +407,7 @@
 
 .fl-node-<?php echo $id; ?> .pp-wpforms-content div.wpforms-container-full .wpforms-form button:hover {
     <?php if( $settings->button_text_color_hover ) { ?>
-	color: <?php echo $settings->button_text_color_hover; ?>;
+	color: #<?php echo $settings->button_text_color_hover; ?>;
     <?php } ?>
 	<?php if ( isset( $settings->button_background_color_hover ) && ! empty( $settings->button_background_color_hover ) ) { ?>
 	background-color: <?php echo pp_get_color_value( $settings->button_background_color_hover ); ?>;

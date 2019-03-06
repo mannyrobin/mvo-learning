@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Payment class.
  *
@@ -55,7 +56,7 @@ abstract class WPForms_Payment {
 	public $icon;
 
 	/**
-	 * Form data.
+	 * Form data and settings.
 	 *
 	 * @since 1.1.0
 	 * @var array
@@ -71,16 +72,16 @@ abstract class WPForms_Payment {
 
 		$this->init();
 
-		// Add to list of available payments
+		// Add to list of available payments.
 		add_filter( 'wpforms_payments_available', array( $this, 'register_payment' ), $this->priority, 1 );
 
-		// Fetch and store the current form data when in the builder
+		// Fetch and store the current form data when in the builder.
 		add_action( 'wpforms_builder_init', array( $this, 'builder_form_data' ) );
 
-		// Output builder sidebar
+		// Output builder sidebar.
 		add_action( 'wpforms_payments_panel_sidebar', array( $this, 'builder_sidebar' ), $this->priority );
 
-		// Output builder content
+		// Output builder content.
 		add_action( 'wpforms_payments_panel_content', array( $this, 'builder_output' ), $this->priority );
 	}
 
@@ -96,20 +97,21 @@ abstract class WPForms_Payment {
 	 * Add to list of registered payments.
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param array $payments
+	 *
 	 * @return array
 	 */
-	function register_payment( $payments = array() ) {
+	public function register_payment( $payments = array() ) {
 
 		$payments[ $this->slug ] = $this->name;
+
 		return $payments;
 	}
 
-	// ************************************************************************ //
-	//
-	// Builder methods - these methods _build_ the Builder.
-	//
-	// ************************************************************************ //
+	/********************************************************
+	 * Builder methods - these methods _build_ the Builder. *
+	 ********************************************************/
 
 	/**
 	 * Fetch and store the current form data when in the builder.
@@ -139,15 +141,15 @@ abstract class WPForms_Payment {
 
 		echo '<a href="#" class="wpforms-panel-sidebar-section icon ' . $configured . ' wpforms-panel-sidebar-section-' . esc_attr( $this->slug ) . '" data-section="' . esc_attr( $this->slug ) . '">';
 
-			echo '<img src="' . esc_url( $this->icon ) . '">';
+		echo '<img src="' . esc_url( $this->icon ) . '">';
 
-			echo esc_html( $this->name );
+		echo esc_html( $this->name );
 
-			echo '<i class="fa fa-angle-right wpforms-toggle-arrow"></i>';
+		echo '<i class="fa fa-angle-right wpforms-toggle-arrow"></i>';
 
-			if ( ! empty( $configured ) ) {
-				echo '<i class="fa fa-check-circle-o"></i>';
-			}
+		if ( ! empty( $configured ) ) {
+			echo '<i class="fa fa-check-circle-o"></i>';
+		}
 
 		echo '</a>';
 	}
@@ -160,7 +162,8 @@ abstract class WPForms_Payment {
 	public function builder_output() {
 
 		?>
-		<div class="wpforms-panel-content-section wpforms-panel-content-section-<?php echo esc_attr( $this->slug ); ?>" id="<?php echo esc_attr( $this->slug ); ?>-provider">
+		<div class="wpforms-panel-content-section wpforms-panel-content-section-<?php echo esc_attr( $this->slug ); ?>"
+			id="<?php echo esc_attr( $this->slug ); ?>-provider">
 
 			<div class="wpforms-panel-content-section-title">
 

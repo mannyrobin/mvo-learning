@@ -1,9 +1,10 @@
 <?php
-/*
+
+/**
  * Zapier integration.
  *
  * @since 1.0.0
- * @package WPFormsMailchimp
+ * @package WPFormsZapier
  */
 class WPForms_Zapier extends WPForms_Provider {
 
@@ -21,7 +22,8 @@ class WPForms_Zapier extends WPForms_Provider {
 		$this->icon     = plugins_url( 'assets/images/addon-icon-zapier.png', __FILE__ );
 		$this->type     = 'Zap';
 
-		add_action( 'init',                                array( $this, 'zapier_callback'            ) );
+		add_action( 'init', array( $this, 'zapier_callback' ) );
+
 		add_filter( 'wpforms_providers_zapier_configured', array( $this, 'builder_sidebar_configured' ) );
 	}
 
@@ -32,14 +34,16 @@ class WPForms_Zapier extends WPForms_Provider {
 	 * the correct data location.
 	 *
 	 * @since 1.0.0
-	 * @param string $configured
+	 *
 	 * @return string
 	 */
-	public function builder_sidebar_configured( $configured ) {
+	public function builder_sidebar_configured() {
 
-		if ( !empty( $_GET['form_id'] ) ) {
-			$zaps = get_post_meta( $_GET['form_id'], 'wpforms_zapier', true );
-			if ( !empty( $zaps ) ) {
+		if ( ! empty( $_GET['form_id'] ) ) {
+
+			$zaps = get_post_meta( absint( $_GET['form_id'] ), 'wpforms_zapier', true );
+
+			if ( ! empty( $zaps ) ) {
 				return 'configured';
 			}
 		}
@@ -51,8 +55,11 @@ class WPForms_Zapier extends WPForms_Provider {
 	 * Build the entry field information to send to Zapier.
 	 *
 	 * @since 1.0.0
-	 * @param array $form_data
-	 * @param array $entry
+	 *
+	 * @param array|int  $form_data Form data or Form ID.
+	 * @param array      $entry     Entry details.
+	 * @param string|int $entry_id  Entry ID.
+	 *
 	 * @return array
 	 */
 	public function format_fields( $form_data, $entry = '', $entry_id = '' ) {
@@ -64,106 +71,117 @@ class WPForms_Zapier extends WPForms_Provider {
 			return $data;
 		}
 
-		if ( !empty( $entry_id ) ) {
+		if ( ! empty( $entry_id ) ) {
 			$data['id'] = absint( $entry_id );
 		}
 
 		foreach ( $fields as $field_id => $field ) {
 
-			$label  = !empty( $field['label'] ) ? sanitize_text_field( $field['label'] ) : sprintf( __( 'Field #%s', 'wpforms_zapier' ), $field_id );
+			/* translators: %s - field id. */
+			$label  = ! empty( $field['label'] ) ? sanitize_text_field( $field['label'] ) : sprintf( esc_html__( 'Field #%s', 'wpforms-zapier' ), $field_id );
 			$extras = array();
 
-			if ( !empty( $entry[$field_id]['value'] ) )  {
-				$value = implode( "\n", array_map( 'sanitize_text_field', explode( "\n", $entry[$field_id]['value'] ) ) );
+			if ( ! empty( $entry[ $field_id ]['value'] ) ) {
+				$value = wpforms_sanitize_textarea_field( $entry[ $field_id ]['value'] );
 			} else {
 				$value = '';
 			}
 
-			if ( in_array( $field['type'], array( 'checkbox' ) ) ) {
-				$value = implode( ', ', explode( "\n", trim( $entry[$field_id]['value'] ) ) );
+			if ( in_array( $field['type'], array( 'checkbox' ), true ) ) {
+				$value = implode( ', ', explode( "\n", trim( $entry[ $field_id ]['value'] ) ) );
 			}
 
 			if ( empty( $entry ) ) {
 				$data[] = array(
-					'key'    => 'field' . $field_id,
+					'key'   => 'field' . $field_id,
 					'label' => $label,
 					'type'  => 'unicode',
 				);
 			} else {
-				$data['field' . $field_id] = $value;
+				$data[ 'field' . $field_id ] = $value;
 			}
 
-			// Add additional sub fields
-			if ( 'name' == $field['type'] ) {
+			// Add additional sub fields.
+			if ( 'name' === $field['type'] ) {
 
 				$extras = array(
-					'first'  => __( 'First', 'wpforms_zapier' ),
-					'middle' => __( 'Middle', 'wpforms_zapier' ),
-					'last'   => __( 'Last', 'wpforms_zapier' ),
+					'first'  => esc_html__( 'First', 'wpforms-zapier' ),
+					'middle' => esc_html__( 'Middle', 'wpforms-zapier' ),
+					'last'   => esc_html__( 'Last', 'wpforms-zapier' ),
 				);
 
-			} elseif( 'checkbox' == $field['type'] ) {
+			} elseif ( 'checkbox' === $field['type'] ) {
 
-				foreach( $field['choices'] as $choice_id => $choice ) {
-					$choice        = sanitize_text_field( $choice['label'] );
-					$choice_val    = ( strpos( $value, $choice ) !== false ) ? 'checked' : '';
+				foreach ( $field['choices'] as $choice_id => $choice ) {
+					$choice = sanitize_text_field( $choice['label'] );
+					if ( empty( $choice ) ) {
+						if (
+							( 1 === count( $field['choices'] ) && 'Checked' === $value ) ||
+							( count( $field['choices'] ) > 1 && $value === 'Choice ' . $choice_id )
+						) {
+							$choice_val = 'checked';
+						} else {
+							$choice_val = '';
+						}
+					} else {
+						$choice_val = ( strpos( $value, $choice ) !== false ) ? 'checked' : '';
+					}
 					if ( empty( $entry ) ) {
 						$data[] = array(
-							'key'    => 'field' . $field_id . '_choice' . $choice_id,
+							'key'   => 'field' . $field_id . '_choice' . $choice_id,
 							'label' => $choice,
 							'type'  => 'unicode',
 						);
 					} else {
-						$data['field' . $field_id . '_choice' . $choice_id] = $choice_val;
+						$data[ 'field' . $field_id . '_choice' . $choice_id ] = $choice_val;
 					}
 				}
-
-			} elseif( 'address' == $field['type'] ) {
-
-				$extras = array(
-					'address1' => __( 'Line 1', 'wpforms_zapier' ),
-					'address2' => __( 'Line 2', 'wpforms_zapier' ),
-					'city'     => __( 'City', 'wpforms_zapier' ),
-					'state'    => __( 'State', 'wpforms_zapier' ),
-					'region'   => __( 'Region', 'wpforms_zapier'),
-					'postal'   => __( 'Postal', 'wpforms_zapier' ),
-					'country'  => __( 'Country', 'wpforms_zapier' ),
-				);
-
-			} elseif( 'date-time' == $field['type'] ) {
+			} elseif ( 'address' === $field['type'] ) {
 
 				$extras = array(
-					'date' => __( 'Date', 'wpforms_zapier' ),
-					'time' => __( 'Time', 'wpforms_zapier' ),
-					'unix' => __( 'Unix Timestamp', 'wpforms_zapier' ),
+					'address1' => esc_html__( 'Line 1', 'wpforms-zapier' ),
+					'address2' => esc_html__( 'Line 2', 'wpforms-zapier' ),
+					'city'     => esc_html__( 'City', 'wpforms-zapier' ),
+					'state'    => esc_html__( 'State', 'wpforms-zapier' ),
+					'region'   => esc_html__( 'Region', 'wpforms-zapier' ),
+					'postal'   => esc_html__( 'Postal', 'wpforms-zapier' ),
+					'country'  => esc_html__( 'Country', 'wpforms-zapier' ),
 				);
 
-			} elseif( in_array( $field['type'], array( 'payment-total', 'payment-single', 'payment-multiple', 'payment-select' ) ) ) {
+			} elseif ( 'date-time' === $field['type'] ) {
 
-				// Decode for currency symbols
-				if ( !empty( $entry ) ) {
-					$data['field' . $field_id] = html_entity_decode( $value );
+				$extras = array(
+					'date' => esc_html__( 'Date', 'wpforms-zapier' ),
+					'time' => esc_html__( 'Time', 'wpforms-zapier' ),
+					'unix' => esc_html__( 'Unix Timestamp', 'wpforms-zapier' ),
+				);
+
+			} elseif ( in_array( $field['type'], array( 'payment-total', 'payment-single', 'payment-multiple', 'payment-select' ), true ) ) {
+
+				// Decode for currency symbols.
+				if ( ! empty( $entry ) ) {
+					$data[ 'field' . $field_id ] = html_entity_decode( $value );
 				}
 
-				// Send raw amount
+				// Send raw amount.
 				$extras = array(
-					'amount_raw' => __( 'Plain Amount', 'wpforms_zapier' ),
+					'amount_raw' => esc_html__( 'Plain Amount', 'wpforms-zapier' ),
 				);
 			}
 
-			// Add extra fields
-			if ( !empty( $extras ) ) {
-				foreach( $extras as $extra_key => $extra ) {
-					$extra_value = !empty( $entry[$field_id][$extra_key] ) ? sanitize_text_field( $entry[$field_id][$extra_key] ) : '' ;
+			// Add extra fields.
+			if ( ! empty( $extras ) ) {
+				foreach ( $extras as $extra_key => $extra ) {
+					$extra_value = ! empty( $entry[ $field_id ][ $extra_key ] ) ? sanitize_text_field( $entry[ $field_id ][ $extra_key ] ) : '';
 					$extra_label = sprintf( '%s (%s)', $label, $extra );
 					if ( empty( $entry ) ) {
 						$data[] = array(
-							'key'    => 'field' . $field_id . '_' . $extra_key,
+							'key'   => 'field' . $field_id . '_' . $extra_key,
 							'label' => $extra_label,
 							'type'  => 'unicode',
 						);
 					} else {
-						$data['field' . $field_id . '_' . $extra_key] = $extra_value;
+						$data[ 'field' . $field_id . '_' . $extra_key ] = $extra_value;
 					}
 				}
 			}
@@ -176,41 +194,43 @@ class WPForms_Zapier extends WPForms_Provider {
 	 * Process and submit entry to provider.
 	 *
 	 * @since 1.0.0
-	 * @param array $fields
-	 * @param array $entry
-	 * @param array $form_data
-	 * @param array $entry_id
+	 *
+	 * @param array $fields    Final/sanitized submitted field data.
+	 * @param array $entry     Copy of original $_POST.
+	 * @param array $form_data Form data and settings.
+	 * @param int   $entry_id  Entry ID.
 	 */
 	public function process_entry( $fields, $entry, $form_data, $entry_id = 0 ) {
 
-		// Only run if this form has a connections for this provider and entry has fields
+		// Only run if this form has connections for this provider and entry has fields.
 		$zaps = get_post_meta( $form_data['id'], 'wpforms_zapier', true );
-		if ( empty( $zaps ) || empty( $fields ) )
+		if ( empty( $zaps ) || empty( $fields ) ) {
 			return;
+		}
 
-		$zapier = empty( $form_data['providers'][$this->slug] );
-		$data   = $this->format_fields( $form_data , $fields );
+		$data = apply_filters( 'wpforms_zapier_process_entry_data', $this->format_fields( $form_data, $fields, $entry_id ), $entry_id, $form_data );
 
-		// Fire for each Zap --------------------------------------//
+		/*
+		 * Fire for each Zap.
+		 */
 
 		foreach ( $zaps as $zap_id => $zap ) :
 
-			// Only process this Zap if it is enabled
+			// Only process this Zap if it is enabled.
 			if ( empty( $zap['hook'] ) ) {
 				continue;
 			}
 
 			$post_data = array(
-				'sslverify' => false,
-				'ssl'       => true,
-				'body'      => json_encode( $data ),
+				'ssl'  => true,
+				'body' => wp_json_encode( $data ),
 			);
-			$response = wp_remote_post( $zap['hook'], $post_data );
+			$response  = wp_remote_post( $zap['hook'], $post_data );
 
-			// Check for errors
+			// Check for errors.
 			if ( is_wp_error( $response ) ) {
 				wpforms_log(
-					__( 'Zapier Zap error', 'wpforms_zapier' ),
+					esc_html__( 'Zapier Zap error', 'wpforms-zapier' ),
 					$post_data,
 					array(
 						'type'    => array( 'provider', 'error' ),
@@ -234,12 +254,12 @@ class WPForms_Zapier extends WPForms_Provider {
 
 		$key = get_option( 'wpforms_zapier_apikey' );
 
-		if ( empty(  $key ) ) {
+		if ( empty( $key ) ) {
 
-			$chars = array_merge( range(0,9), range( 'a', 'z' ) );
+			$chars = array_merge( range( 0, 9 ), range( 'a', 'z' ) );
 			$key   = '';
-			for ( $i=0; $i < 20; $i++ ) {
-				$key .= $chars[mt_rand( 0, count( $chars ) - 1 )];
+			for ( $i = 0; $i < 20; $i ++ ) {
+				$key .= $chars[ wp_rand( 0, count( $chars ) - 1 ) ];
 			}
 			update_option( 'wpforms_zapier_apikey', $key );
 		}
@@ -247,12 +267,9 @@ class WPForms_Zapier extends WPForms_Provider {
 		return $key;
 	}
 
-
-	//************************************************************************//
-	//
-	//	API methods - these methods interact directly with the provider API.
-	//
-	//************************************************************************//
+	/************************************************************************
+	 * API methods - these methods interact directly with the provider API. *
+	 ************************************************************************/
 
 	/**
 	 * Callback to provide Zapier with specific information for forms and fields.
@@ -263,67 +280,77 @@ class WPForms_Zapier extends WPForms_Provider {
 
 		$data = array();
 
-		// WPForms Zapier API key is required
-		if ( empty( $_GET['wpforms_zapier'] ) )
+		// WPForms Zapier API key is required.
+		if ( empty( $_GET['wpforms_zapier'] ) ) {
 			return;
+		}
 
-		// Callback action is required
-		if ( empty( $_GET['wpforms_action'] ) )
+		// Callback action is required.
+		if ( empty( $_GET['wpforms_action'] ) ) {
 			return;
+		}
 
-		// Validate provided API Key
+		// Validate provided API Key.
 		$apikey = get_option( 'wpforms_zapier_apikey' );
-		if ( empty( $apikey ) || $apikey != trim( $_GET['wpforms_zapier'] ) ) {
-			// Key is incorrect or missing
+		if ( empty( $apikey ) || trim( $_GET['wpforms_zapier'] ) !== $apikey ) {
+			// Key is incorrect or missing.
 			nocache_headers();
 			header( 'HTTP/1.1 401 Unauthorized' );
-			echo json_encode( array( 'error' => __( 'Invalid WPForms Zapier API key', 'wpforms_zapier' ) ) );
+			echo wp_json_encode(
+				array(
+					'error' => esc_html__( 'Invalid WPForms Zapier API key', 'wpforms-zapier' ),
+				)
+			);
 			exit;
 		}
 
-		// Provide available forms
-		if ( $_GET['wpforms_action'] == 'forms' ) {
+		// Provide available forms.
+		if ( 'forms' === $_GET['wpforms_action'] ) {
 
 			$forms = wpforms()->form->get();
 
-			if ( !empty( $forms ) ) {
+			if ( ! empty( $forms ) ) {
 
-				foreach( $forms as $form ) {
+				foreach ( $forms as $form ) {
 					$data['forms'][] = array(
 						'id'   => $form->ID,
-						'name' => sanitize_text_field( $form->post_title ),
+						'name' => wpforms_decode_string( sanitize_text_field( $form->post_title ) ),
 					);
 				}
 			}
 		}
 
-		// Provide available fields from a recent form entry
-		if ( $_GET['wpforms_action'] == 'entries' && !empty( $_GET['wpforms_form'] ) ) {
+		// Provide available fields from a recent form entry.
+		if ( 'entries' === $_GET['wpforms_action'] && ! empty( $_GET['wpforms_form'] ) ) {
 
-			$entries = wpforms()->entry->get_entries( array( 'form_id' => absint( $_GET['wpforms_form'] ) ) );
+			$entries = wpforms()->entry->get_entries(
+				array(
+					'form_id' => absint( $_GET['wpforms_form'] ),
+				)
+			);
 
-			if ( !empty( $entries ) ) {
-				foreach( $entries as $entry ) {
+			if ( ! empty( $entries ) ) {
+				foreach ( $entries as $entry ) {
 					$fields = json_decode( $entry->fields, true );
 					$data[] = $this->format_fields( absint( $_GET['wpforms_form'] ), $fields, $entry->entry_id );
 				}
 			}
 		}
 
-		// Provide available fields
-		if ( $_GET['wpforms_action'] == 'entry' && !empty( $_GET['wpforms_form'] ) ) {
+		// Provide available fields.
+		if ( 'entry' === $_GET['wpforms_action'] && ! empty( $_GET['wpforms_form'] ) ) {
 
 			$data = $this->format_fields( $_GET['wpforms_form'] );
 		}
 
-		// Subscribe/Add Zap
-		if ( $_GET['wpforms_action'] == 'subscribe' ) {
+		// Subscribe/Add Zap.
+		if ( 'subscribe' === $_GET['wpforms_action'] ) {
 
 			$form_id = absint( $_GET['wpforms_form'] );
-			$hook    = !empty( $_GET['hook_url'] ) ? esc_url_raw( $_GET['hook_url'] ) : '';
-			$name    = !empty( $_GET['zap_name'] ) ? sanitize_text_field( $_GET['zap_name'] ) : '';
-			$link    = !empty( $_GET['zap_link'] ) ? esc_url_raw( $_GET['zap_link'] ) : '';
-			$live    = !empty( $_GET['zap_live'] ) && strtolower( $_GET['zap_live'] ) == 'true' ? true : false;
+			$hook    = ! empty( $_GET['hook_url'] ) ? esc_url_raw( $_GET['hook_url'] ) : '';
+			$name    = ! empty( $_GET['zap_name'] ) ? sanitize_text_field( $_GET['zap_name'] ) : '';
+			$link    = ! empty( $_GET['zap_link'] ) ? esc_url_raw( $_GET['zap_link'] ) : '';
+			$live    = ! empty( $_GET['zap_live'] ) && strtolower( $_GET['zap_live'] ) === 'true' ? true : false;
 			$id      = uniqid();
 
 			$zaps = get_post_meta( $form_id, 'wpforms_zapier', true );
@@ -332,7 +359,7 @@ class WPForms_Zapier extends WPForms_Provider {
 				$zaps = array();
 			}
 
-			$zaps[$id] = array(
+			$zaps[ $id ] = array(
 				'name' => $name,
 				'hook' => $hook,
 				'link' => $link,
@@ -342,21 +369,23 @@ class WPForms_Zapier extends WPForms_Provider {
 
 			update_post_meta( $form_id, 'wpforms_zapier', $zaps );
 
-			$data = array( 'status' => 'subscribed' );
+			$data = array(
+				'status' => 'subscribed',
+			);
 		}
 
-		// Unsubscribe/Delete Zap
-		if ( $_GET['wpforms_action'] == 'unsubscribe' ) {
+		// Unsubscribe/Delete Zap.
+		if ( 'unsubscribe' === $_GET['wpforms_action'] ) {
 
 			$form_id = absint( $_GET['wpforms_form'] );
-			$url     = !empty( $_GET['hook_url'] ) ? esc_url_raw( $_GET['hook_url'] ) : '';
+			$url     = ! empty( $_GET['hook_url'] ) ? esc_url_raw( $_GET['hook_url'] ) : '';
 
 			$zaps = get_post_meta( $form_id, 'wpforms_zapier', true );
 
-			if ( !empty( $zaps ) ) {
-				foreach( $zaps as $zap_id => $zap ) {
-					if ( $url == $zap['hook'] ) {
-						unset( $zaps[$zap_id] );
+			if ( ! empty( $zaps ) ) {
+				foreach ( $zaps as $zap_id => $zap ) {
+					if ( $url === $zap['hook'] ) {
+						unset( $zaps[ $zap_id ] );
 					}
 				}
 				if ( empty( $zaps ) ) {
@@ -366,18 +395,22 @@ class WPForms_Zapier extends WPForms_Provider {
 				}
 			}
 
-			$data = array( 'status' => 'unsubscribed' );
+			$data = array(
+				'status' => 'unsubscribed',
+			);
 		}
 
 
-		// If data is empty something went wrong, so we stop
+		// If data is empty something went wrong, so we stop.
 		if ( empty( $data ) ) {
-			$data = array( 'error' => __( 'No data', 'wpforms_zapier' ) );
+			$data = array(
+				'error' => esc_html__( 'No data', 'wpforms-zapier' ),
+			);
 		}
 
 		nocache_headers();
 		header( 'Content-Type: application/json; charset=utf-8' );
-		echo json_encode( $data );
+		echo wp_json_encode( $data );
 		exit;
 	}
 
@@ -389,12 +422,9 @@ class WPForms_Zapier extends WPForms_Provider {
 	public function zapier_post() {
 	}
 
-
-	//************************************************************************//
-	//
-	//	Builder methods - these methods _build_ the Builder.
-	//
-	//************************************************************************//
+	/********************************************************
+	 * Builder methods - these methods _build_ the Builder. *
+	 ********************************************************/
 
 	/**
 	 * Custom Zapier builder content.
@@ -405,11 +435,11 @@ class WPForms_Zapier extends WPForms_Provider {
 
 		$zaps = get_post_meta( absint( $_GET['form_id'] ), 'wpforms_zapier', true );
 		?>
-		<div class="wpforms-panel-content-section wpforms-panel-content-section-<?php echo $this->slug; ?>" id="<?php echo $this->slug; ?>-provider">
+		<div class="wpforms-panel-content-section wpforms-panel-content-section-<?php echo esc_attr( $this->slug ); ?>" id="<?php echo esc_attr( $this->slug ); ?>-provider">
 
 			<div class="wpforms-panel-content-section-title">
 
-				<?php echo $this->name; ?>
+				<?php echo esc_html( $this->name ); ?>
 
 			</div>
 
@@ -417,28 +447,50 @@ class WPForms_Zapier extends WPForms_Provider {
 
 				<div class="wpforms-provider-connections">
 
-					<p><?php _e( 'Your WPForms Zapier API key is ', 'wpforms_zapier' ); ?> <code><?php echo $this->get_apikey(); ?></code></p>
+					<p>
+						<?php
+						printf(
+							/* translators: %s - API key. */
+							esc_html__( 'Your WPForms Zapier API key is %s', 'wpforms-zapier' ),
+							'<code>' . $this->get_apikey() . '</code>'
+						);
+						?>
+					</p>
 
 					<?php
 					if ( empty( $zaps ) ) {
-						echo '<p>' . __( 'No Zaps are connected to this form.', 'wpforms_zapier' ) . '</p>';
+						echo '<p>' . esc_html__( 'No Zaps are connected to this form.', 'wpforms-zapier' ) . '</p>';
 					} else {
 
-						foreach( $zaps as $zap_id => $zap ) {
+						foreach ( $zaps as $zap_id => $zap ) {
 							echo '<div class="wpforms-provider-connection">';
-								$name = !empty( $zap['name'] ) ? sanitize_text_field( $zap['name'] ) : __( 'No name', 'wpforms_zapier' );
-								$live = $zap['live'] == 'true' ? 'Yes' : 'No';
-								echo '<div class="wpforms-provider-connection-header"><span>'  . $name . '</span></div>';
-								echo '<div style="padding:0 20px;">';
-									echo '<p><strong>' . __( 'Date Connected ', 'wpforms_zapier' ) . '</strong><br>' . date( get_option( 'date_format', $zap['date'] ) ) . '</p>';
-									echo '<p><strong>' . __( 'Live  ', 'wpforms_zapier' ) . '</strong><br>' . $live . '</p>';
-									echo '<p><a href="' . esc_url( $zap['link'] ) . '" target="_blank" rel="noopener">' . __( 'Edit this Zap  ', 'wpforms_zapier' ) . '</a></p>';
-								echo '</div>';
+							$name = ! empty( $zap['name'] ) ? sanitize_text_field( $zap['name'] ) : esc_html__( 'No name', 'wpforms-zapier' );
+							$live = $zap['live'] ? esc_html__( 'Yes', 'wpforms-zapier' ) : esc_html__( 'No', 'wpforms-zapier' );
+
+							echo '<div class="wpforms-provider-connection-header"><span>' . $name . '</span></div>';
+							echo '<div style="padding:0 20px;">';
+							echo '<p><strong>' . esc_html__( 'Date Connected', 'wpforms-zapier' ) . '</strong><br>&nbsp;' . date_i18n( get_option( 'date_format', $zap['date'] ) ) . '</p>';
+							echo '<p><strong>' . esc_html__( 'Live', 'wpforms-zapier' ) . '</strong><br>&nbsp;' . $live . '</p>';
+							echo '<p><a href="' . esc_url( urldecode( $zap['link'] ) ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Edit this Zap', 'wpforms-zapier' ) . '</a></p>';
+							echo '</div>';
 							echo '</div>';
 						}
 					}
 
-					printf( __( '<a href="%s" target="_blank" rel="noopener">Click here for documentation on connecting WPForms with Zapier.</a>', 'wpforms_zapier' ), 'https://wpforms.com/docs/how-to-install-and-use-zapier-addon-in-wpforms/' );
+					printf(
+						wp_kses(
+							/* translators: %s - WPForms.com Zapier documentation article URL. */
+							__( '<a href="%s" target="_blank" rel="noopener noreferrer">Click here for documentation on connecting WPForms with Zapier.</a>', 'wpforms-zapier' ),
+							array(
+								'a' => array(
+									'href'   => array(),
+									'target' => array(),
+									'rel'    => array(),
+								),
+							)
+						),
+						'https://wpforms.com/docs/how-to-install-and-use-zapier-addon-in-wpforms/'
+					);
 					?>
 
 				</div>
@@ -449,41 +501,42 @@ class WPForms_Zapier extends WPForms_Provider {
 		<?php
 	}
 
-
-	//************************************************************************//
-	//
-	//	Integrations tab methods - these methods relate to the settings page.
-	//
-	//************************************************************************//
+	/*************************************************************************
+	 * Integrations tab methods - these methods relate to the settings page. *
+	 *************************************************************************/
 
 	/**
 	 * Add custom Zapier panel to the Settings Integrations tab.
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param array $active
 	 * @param array $settings
 	 */
 	public function integrations_tab_options( $active, $settings ) {
 
-		$args = array(
-			'posts_per_page' => 999,
-			'post_type'      => 'wpforms',
-			'meta_query'     => array(
-				array(
-					'key'     => 'wpforms_zapier',
-					'compare' => 'EXISTS',
+		$forms = get_posts(
+			array(
+				'posts_per_page' => 999,
+				'post_type'      => 'wpforms',
+				'meta_query'     => array(
+					array(
+						'key'     => 'wpforms_zapier',
+						'compare' => 'EXISTS',
+					),
 				),
-		) );
-		$forms     = get_posts( $args );
-		$slug      = esc_html( $this->slug );
+			)
+		);
+
+		$slug      = esc_attr( $this->slug );
 		$name      = esc_html( $this->name );
-		$connected = !empty( $forms );
+		$connected = ! empty( $forms );
 		$class     = $connected ? 'connected' : '';
 		$arrow     = 'right';
 
-		// This lets us highlight a specific service by a special link
-		if ( !empty( $_GET['wpforms-integration'] ) ) {
-			if ( $this->slug == $_GET['wpforms-integration'] ) {
+		// This lets us highlight a specific service by a special link.
+		if ( ! empty( $_GET['wpforms-integration'] ) ) {
+			if ( $this->slug === $_GET['wpforms-integration'] ) {
 				$class .= ' focus-in';
 				$arrow  = 'down';
 			} else {
@@ -503,29 +556,67 @@ class WPForms_Zapier extends WPForms_Provider {
 
 				<div class="wpforms-settings-provider-info">
 					<h3><?php echo $name; ?></h3>
-					<p><?php printf( __( 'Integrate %s with WPForms', 'wpforms_zapier' ), $name ); ?></p>
-					<span class="connected-indicator green"><i class="fa fa-check-circle-o"></i> <?php _e( 'Connected', 'wpforms_zapier' ); ?></span>
+					<p>
+						<?php
+						printf(
+							/* translators: %s - provider name. */
+							esc_html__( 'Integrate %s with WPForms', 'wpforms-zapier' ),
+							$name
+						);
+						?>
+					</p>
+					<span class="connected-indicator green"><i class="fa fa-check-circle-o"></i>&nbsp;<?php esc_html_e( 'Connected', 'wpforms-zapier' ); ?></span>
 				</div>
 
 			</div>
 
 			<div class="wpforms-settings-provider-accounts" id="provider-<?php echo $slug; ?>">
 
-				<p><?php _e( 'Your WPForms Zapier API key is ', 'wpforms_zapier' ); ?> <code><?php echo $this->get_apikey(); ?></code></p>
+				<p>
+					<?php
+					printf(
+						/* translators: %s - API key. */
+						esc_html__( 'Your WPForms Zapier API key is %s', 'wpforms-zapier' ),
+						'<code>' . $this->get_apikey() . '</code>'
+					);
+					?>
+				</p>
 
 				<?php
 				if ( empty( $forms ) ) {
-					echo '<p>' . __( 'No forms are currently connected.', 'wpforms_zapier' ) . '</p>';
-					echo '<p>' . sprintf( __( '<a href="%s" target="_blank">Click here for documentation on connecting WPForms with Zapier.</a>', 'wpforms_zapier' ), 'https://wpforms.com/docs/how-to-install-and-use-zapier-addon-in-wpforms/' ) . '</p>';
+					echo '<p>' . esc_html__( 'No forms are currently connected.', 'wpforms-zapier' ) . '</p>';
+					echo
+						'<p>' .
+						sprintf(
+							wp_kses(
+								/* translators: %s - WPForms.com Zapier documentation article URL. */
+								__( '<a href="%s" target="_blank" rel="noopener noreferrer">Click here for documentation on connecting WPForms with Zapier.</a>', 'wpforms-zapier' ),
+								array(
+									'a' => array(
+										'href'   => array(),
+										'target' => array(),
+										'rel'    => array(),
+									),
+								)
+							),
+							'https://wpforms.com/docs/how-to-install-and-use-zapier-addon-in-wpforms/'
+						) .
+						'</p>';
 
 				} else {
-					echo '<p>' . __( 'The forms below are currently connected to Zapier. ', 'wpforms_zapier' ) . '</p>';
+					echo '<p>' . esc_html__( 'The forms below are currently connected to Zapier.', 'wpforms-zapier' ) . '</p>';
 					echo '<div class="wpforms-settings-provider-accounts-list">';
 						echo '<ul>';
 						foreach ( $forms as $form ) {
-							echo '<li>';
+							echo '<li class="wpforms-clear">';
 								echo '<span class="label">' . esc_html( $form->post_title ) . '</span>';
-								echo '<span class="date">' . __( 'Connected on: ', 'wpforms_zapier' ) . date( get_option( 'date_format', $form->post_date ) ) . '</span>';
+								echo '<span class="date">' .
+									sprintf(
+										/* translators: %s - connection date. */
+										esc_html__( 'Connected on: %s', 'wpforms-zapier' ),
+										date_i18n( get_option( 'date_format', $form->post_date ) )
+									) .
+									'</span>';
 							echo '</li>';
 						}
 						echo '</ul>';
@@ -539,4 +630,5 @@ class WPForms_Zapier extends WPForms_Provider {
 		<?php
 	}
 }
-new WPForms_Zapier;
+
+new WPForms_Zapier();

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Updater class.
  *
@@ -120,8 +121,6 @@ class WPForms_Updater {
 			return;
 		}
 
-		//echo '<pre>' . print_r( $config, true ) . '</pre>';
-
 		// Load the updater hooks and filters.
 		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'update_plugins_filter' ) );
 		//add_filter( 'set_site_transient_update_plugins', array( $this, 'set_site_transient_update_plugins' ) );
@@ -239,6 +238,7 @@ class WPForms_Updater {
 		$api->homepage              = isset( $this->info->homepage ) ? $this->info->homepage : '';
 		$api->sections['changelog'] = isset( $this->info->changelog ) ? $this->info->changelog : '';
 		$api->download_link         = isset( $this->info->download_link ) ? $this->info->download_link : '';
+		$api->active_installs       = isset( $this->info->active_installs ) ? $this->info->active_installs : '';
 		$api->banners               = isset( $this->info->banners ) ? (array) $this->info->banners : '';
 
 		// Return the new API object with our custom data.
@@ -296,7 +296,20 @@ class WPForms_Updater {
 			return false;
 		}
 
+		$response_body = json_decode( $response_body );
+
+		// A few items need to be converted from an object to an array as that
+		// is what WordPress expects.
+		if ( ! empty( $response_body->package ) ) {
+			if ( ! empty ( $response_body->icons ) ) {
+				$response_body->icons = (array) $response_body->icons;
+			}
+			if ( ! empty ( $response_body->banners ) ) {
+				$response_body->banners = (array) $response_body->banners;
+			}
+		}
+
 		// Return the json decoded content.
-		return json_decode( $response_body );
+		return $response_body;
 	}
 }

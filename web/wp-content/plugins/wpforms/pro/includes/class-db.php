@@ -6,6 +6,8 @@
  * This handy class originated from Pippin's Easy Digital Downloads.
  * https://github.com/easydigitaldownloads/easy-digital-downloads/blob/master/includes/class-edd-db.php
  *
+ * Sub-classes should define $table_name, $version, and $primary_key in __construct() method.
+ *
  * @package    WPForms
  * @author     WPForms
  * @since      1.1.6
@@ -42,13 +44,13 @@ abstract class WPForms_DB {
 	public $primary_key;
 
 	/**
-	 * Primary class constructor.
-	 * Sub-classes should define $table_name, $version, and $primary_key here.
+	 * Database type type identifier.
 	 *
-	 * @since 1.1.6
+	 * @since 1.5.1
+	 *
+	 * @var string
 	 */
-	public function __construct() {
-	}
+	public $type;
 
 	/**
 	 * Retrieves the list of columns for the database table.
@@ -103,7 +105,7 @@ abstract class WPForms_DB {
 	 * @param string $column Column name.
 	 * @param int|string $row_id Row ID.
 	 *
-	 * @return object|null|bool Database query result object or null on failure
+	 * @return object|null|bool Database query result, object or null on failure.
 	 */
 	public function get_by( $column, $row_id ) {
 
@@ -129,7 +131,7 @@ abstract class WPForms_DB {
 	 * @param string $column Column name.
 	 * @param int|string $row_id Row ID.
 	 *
-	 * @return string|null Database query result (as string), or null on failure
+	 * @return string|null Database query result (as string), or null on failure.
 	 */
 	public function get_column( $column, $row_id ) {
 
@@ -156,7 +158,7 @@ abstract class WPForms_DB {
 	 * @param string $column_where Column to match against in the WHERE clause.
 	 * @param string $column_value Value to match to the column in the WHERE clause.
 	 *
-	 * @return string|null Database query result (as string), or null on failure
+	 * @return string|null Database query result (as string), or null on failure.
 	 */
 	public function get_column_by( $column, $column_where, $column_value ) {
 
@@ -184,27 +186,27 @@ abstract class WPForms_DB {
 	 * @param array $data Column data.
 	 * @param string $type Optional. Data type context.
 	 *
-	 * @return int ID for the newly inserted record
+	 * @return int ID for the newly inserted record.
 	 */
 	public function add( $data, $type = '' ) {
 
 		global $wpdb;
 
-		// Set default values
+		// Set default values.
 		$data = wp_parse_args( $data, $this->get_column_defaults() );
 
 		do_action( 'wpforms_pre_insert_' . $type, $data );
 
-		// Initialise column format array
+		// Initialise column format array.
 		$column_formats = $this->get_columns();
 
-		// Force fields to lower case
+		// Force fields to lower case.
 		$data = array_change_key_case( $data );
 
-		// White list columns
+		// White list columns.
 		$data = array_intersect_key( $data, $column_formats );
 
-		// Reorder $column_formats to match the order of columns given in $data
+		// Reorder $column_formats to match the order of columns given in $data.
 		$data_keys      = array_keys( $data );
 		$column_formats = array_merge( array_flip( $data_keys ), $column_formats );
 
@@ -224,7 +226,7 @@ abstract class WPForms_DB {
 	 *
 	 * @param array $data Column data.
 	 *
-	 * @return int ID for the newly inserted record
+	 * @return int ID for the newly inserted record.
 	 */
 	public function insert( $data ) {
 
@@ -250,7 +252,7 @@ abstract class WPForms_DB {
 
 		global $wpdb;
 
-		// Row ID must be positive integer
+		// Row ID must be positive integer.
 		$row_id = absint( $row_id );
 
 		if ( empty( $row_id ) ) {
@@ -261,16 +263,16 @@ abstract class WPForms_DB {
 			$where = $this->primary_key;
 		}
 
-		// Initialise column format array
+		// Initialise column format array.
 		$column_formats = $this->get_columns();
 
-		// Force fields to lower case
+		// Force fields to lower case.
 		$data = array_change_key_case( $data );
 
-		// White list columns
+		// White list columns.
 		$data = array_intersect_key( $data, $column_formats );
 
-		// Reorder $column_formats to match the order of columns given in $data
+		// Reorder $column_formats to match the order of columns given in $data.
 		$data_keys      = array_keys( $data );
 		$column_formats = array_merge( array_flip( $data_keys ), $column_formats );
 
@@ -298,7 +300,7 @@ abstract class WPForms_DB {
 
 		global $wpdb;
 
-		// Row ID must be positive integer
+		// Row ID must be positive integer.
 		$row_id = absint( $row_id );
 
 		if ( empty( $row_id ) ) {
@@ -310,6 +312,7 @@ abstract class WPForms_DB {
 		}
 
 		do_action( 'wpforms_post_delete', $row_id );
+		do_action( 'wpforms_post_delete_' . $this->type, $row_id );
 
 		return true;
 	}
@@ -339,6 +342,7 @@ abstract class WPForms_DB {
 		}
 
 		do_action( 'wpforms_post_delete', $row_id );
+		do_action( 'wpforms_post_delete_' . $this->type, $row_id );
 
 		return true;
 	}

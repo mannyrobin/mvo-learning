@@ -594,8 +594,8 @@ FLBuilder::register_module('PPFilterableGalleryModule', array(
 						'responsive' => array(
 							'placeholder' => array(
 								'default' => '4',
-								'medium' => '2',
-								'responsive' => '1',
+								'medium' => '',
+								'responsive' => '',
 							),
 						),
                     ),
