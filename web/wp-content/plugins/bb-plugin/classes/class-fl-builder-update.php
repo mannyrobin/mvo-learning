@@ -51,6 +51,8 @@ final class FLBuilderUpdate {
 				self::run( $saved_version );
 			}
 
+			do_action( 'fl_builder_cache_cleared' );
+
 			update_site_option( '_fl_builder_version', FL_BUILDER_VERSION );
 
 			update_site_option( '_fl_builder_update_info', array(

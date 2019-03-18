@@ -36,8 +36,8 @@ FLBuilderCSS::typography_field_rule( array(
     display: block;
 }
 .fl-node-<?php echo $id; ?> .pp-dual-button-content .pp-dual-button-1 a.pp-button {
-    <?php if ( isset( $settings->button_1_bg_color_default ) && ! empty( $settings->button_1_bg_color_default ) ) { ?>
-	background-color: <?php echo pp_get_color_value( $settings->button_1_bg_color_default ); ?>;
+    <?php if ( isset( $settings->button_1_bg_color_default ) ) { ?>
+	background-color: <?php echo ! empty( $settings->button_1_bg_color_default ) ? pp_get_color_value( $settings->button_1_bg_color_default ) : 'transparent'; ?>;
 	<?php } ?>
 	<?php if ( isset( $settings->button_1_text_color_default ) && ! empty( $settings->button_1_text_color_default ) ) { ?>
 	color: <?php echo pp_get_color_value( $settings->button_1_text_color_default ); ?>;
@@ -66,8 +66,8 @@ FLBuilderCSS::typography_field_rule( array(
 }
 
 .fl-node-<?php echo $id; ?> .pp-dual-button-content .pp-dual-button-2 a.pp-button {
-    <?php if ( isset( $settings->button_2_bg_color_default ) && ! empty( $settings->button_2_bg_color_default ) ) { ?>
-	background-color: <?php echo pp_get_color_value( $settings->button_2_bg_color_default ); ?>;
+    <?php if ( isset( $settings->button_2_bg_color_default ) ) { ?>
+	background-color: <?php echo ! empty( $settings->button_2_bg_color_default ) ? pp_get_color_value( $settings->button_2_bg_color_default ) : 'transparent'; ?>;
 	<?php } ?>
 	<?php if ( isset( $settings->button_2_text_color_default ) && ! empty( $settings->button_2_text_color_default ) ) { ?>
 	color: <?php echo pp_get_color_value( $settings->button_2_text_color_default ); ?>;

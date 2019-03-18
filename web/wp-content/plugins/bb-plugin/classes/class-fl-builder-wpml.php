@@ -69,7 +69,7 @@ final class FLBuilderWPML {
 	 * @return string
 	 */
 	static public function filter_parent_template_node_id( $template_node_id, $parent, $layout_data ) {
-		if ( ! $parent->template_root_node ) {
+		if ( ! isset( $parent->template_root_node ) ) {
 			return $template_node_id;
 		}
 

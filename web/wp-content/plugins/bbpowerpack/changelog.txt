@@ -1,3 +1,14 @@
+== 2.6.9.4 ==
+Release date: March 14, 2019
+* Fix: Filterable Gallery - Overlay background color field was not showing
+* Fix: Instagram Feed - Responsive center alignment issue
+* Fix: Timeline - Icon color was not working
+* Fix: Timeline - Text color was not working
+* Fix: Logos Grid & Columns - Medium and responsive columns setting was not working
+* Fix: Gravity Forms - Database query when fetching forms list
+* Fix: Hover Cards 2 - Medium and responsive columns setting was not working properly
+* Fix: Modal Box - Increased width field maximum slider input value
+
 == 2.6.9.3 ==
 Release date: March 4, 2019
 * Fix: Info Box - Icon border was not working in some cases after updating PowerPack to 2.6.9
@@ -7,6 +18,8 @@ Release date: March 4, 2019
 * Fix: Advanced Menu - Multiple full screen menu overlap issue
 * Fix: Social Icons - Re-added Custom Title option that was somehow removed in previous update
 * Fix: Image Panels - Last panel image shift down on hover in Safari browser
+* Fix: Logos Grid & Carousel - PHP notice
+* Fix: Advanced Tabs - Scroll to tab's content in vertical layout
 
 == 2.6.9.2 ==
 Release date: February 22, 2019
