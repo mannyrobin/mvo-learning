@@ -660,3 +660,15 @@ function fl_set_curl_safe_opts( $handle ) {
 	curl_setopt( $handle, CURLOPT_CAINFO, ABSPATH . WPINC . '/certificates/ca-bundle.crt' );
 	return $handle;
 }
+
+/**
+ * Remove Sumo JS when builder is open.
+ * @since 2.2.1
+ */
+add_filter( 'option_sumome_site_id', 'fl_fix_sumo' );
+function fl_fix_sumo( $option ) {
+	if ( isset( $_GET['fl_builder'] ) ) {
+		return false;
+	}
+	return $option;
+}

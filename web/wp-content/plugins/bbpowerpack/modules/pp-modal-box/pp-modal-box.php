@@ -237,7 +237,11 @@ FLBuilder::register_module('PPModalBoxModule', array(
                         'type'              => 'unit',
                         'label'             => __('Width', 'bb-powerpack'),
                         'units'       		=> array( 'px' ),
-                        'slider'             => true,
+                        'slider'            => array(
+							'min'				=> 1,
+							'max'				=> 1000,
+							'step'				=> 1
+						),
                         'default'           => 550,
                     ),
                     'modal_height_auto' => array(
