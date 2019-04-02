@@ -1,3 +1,14 @@
+== 2.6.9.6 ==
+Release date: March 22, 2019
+* Fix: Content Grid - Featured Image was not loading after updating PowerPack to 2.6.9.5
+
+== 2.6.9.5 ==
+Release date: March 22, 2019
+* Fix: Content Tiles - Web accessibility issue due to empty link
+* Fix: Content Grid - User added content was not showing on filtering the grid using AJAX filters in overrided module by theme
+* Fix: Image Carousel - Images were not loading due to spaces in image file name
+* Fix: Dual Button - Button hover transparent background issue
+
 == 2.6.9.4 ==
 Release date: March 14, 2019
 * Fix: Filterable Gallery - Overlay background color field was not showing
