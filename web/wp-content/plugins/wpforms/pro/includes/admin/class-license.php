@@ -128,6 +128,7 @@ class WPForms_License {
 		$option['is_invalid']  = false;
 		$this->success[]       = $success;
 		update_option( 'wpforms_license', $option );
+		delete_transient( '_wpforms_addons' );
 
 		wp_clean_plugins_cache( true );
 
@@ -312,6 +313,7 @@ class WPForms_License {
 		$success         = isset( $deactivate->success ) ? $deactivate->success : esc_html__( 'You have deactivated the key from this site successfully.', 'wpforms' );
 		$this->success[] = $success;
 		update_option( 'wpforms_license', '' );
+		delete_transient( '_wpforms_addons' );
 
 		if ( $ajax ) {
 			wp_send_json_success( $success );

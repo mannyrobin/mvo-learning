@@ -214,8 +214,6 @@ class WPForms_Addons {
 			echo '</div>';
 		}
 
-		// Ultimate is the same level pro.
-
 		if ( in_array( $type_current, array( 'ultimate', 'agency', 'elite' ), true ) ) {
 			$type_current = 'pro';
 		}

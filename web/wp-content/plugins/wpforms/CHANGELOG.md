@@ -1,9 +1,18 @@
 # Change Log
 All notable changes to this project will be documented in this file, formatted via [this recommendation](http://keepachangelog.com/).
 
+## [1.5.1.3] - 2019-03-14
+### Fixed
+- Styling issue with single entry previous/next buttons.
+- Importing forms that containing `target="_blank"`.
+- Issues with duplicating Form Notifications and conditional logic rules inside Form Notifications.
+- Quote support/display inside query param Smart Tags.
+- Addon cache not clearing when license key is switched or deactivated.
+- Other minor fixes.
+
 ## [1.5.1.2] - 2019-02-28
 ### Fixed
-- Conditonal logic issue with Checkbox/Multiple choice fields when default values are set.
+- Conditional logic issue with Checkbox/Multiple choice fields when default values are set.
 
 ## [1.5.1.1] - 2019-02-26
 ### Fixed
