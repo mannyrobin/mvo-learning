@@ -478,11 +478,11 @@ class WPForms_Entries_Table extends WP_List_Table {
 				};
 
 			if (
-				Flatpickr !== 'undefined' &&
-				Flatpickr.hasOwnProperty( 'l10ns' ) &&
-				Flatpickr.l10ns.hasOwnProperty( wpforms_lang_code )
+				flatpickr !== 'undefined' &&
+				flatpickr.hasOwnProperty( 'l10ns' ) &&
+				flatpickr.l10ns.hasOwnProperty( wpforms_lang_code )
 			) {
-				flatpickr_locale = Flatpickr.l10ns[ wpforms_lang_code ];
+				flatpickr_locale = flatpickr.l10ns[ wpforms_lang_code ];
 				// Rewrite separator for all locales to make filtering work.
 				flatpickr_locale.rangeSeparator = ' - ';
 			}

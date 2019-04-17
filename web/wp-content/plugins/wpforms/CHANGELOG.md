@@ -1,5 +1,47 @@
 # Change Log
-All notable changes to this project will be documented in this file, formatted via [this recommendation](http://keepachangelog.com/).
+All notable changes to this project will be documented in this file, formatted via [this recommendation](https://keepachangelog.com/).
+
+## [1.5.2.2] - 2019-04-15
+### Fixed
+- PHP notice/warnings from undefined constant (typo).
+- Addons screen not populating for all license levels.
+
+## [1.5.2.1] - 2019-04-11
+### Fixed
+- Entry print preview page not supporting non-UTF8 charsets.
+- Entry print preview page not displaying entry notes.
+- Required Checkbox fields asking for all inputs to be checked to pass validation.
+
+## [1.5.2] - 2019-04-10
+### Added
+- Smart format for Phone fields.
+- Choice Limit advanced option for Checkbox fields.
+- Smart domain name typo detection for Email fields.
+- New Gutenberg block keywords to help with discovery.
+- Link to "How to Properly Test Your WordPress Forms Before Launching" doc inside Gutenberg block.
+- Filter `wpforms_upload_root` to change uploads location.
+
+### Changed
+- Form builder field delete icon, now a trash can.
+- Removed legacy check for conditional logic.
+- Improved Entries list table on small devices.
+- User IP detection method, now filterable.
+- Updated flatpickr JS library to v4.5.5.
+- Updated jQuery inputmask library to v4.0.6.
+- Updated jQuery validation plugin to v1.19.0.
+- Clear Dashboard widget cache when form is created/deleted/updated.
+
+### Fixed
+- Blank form if using form template containing `target="_blank"`.
+- Honeypot field not using unique IDs.
+- Duplicating forms creating another duplicate if afterwards the table was sorted.
+- Minor issues with Gutenberg editor.
+- Browser autocomplete conflict with US address zipcode input mask.
+- Form Builder embed modal showing Classic Editor instructions for Gutenberg users.
+- No detection or errors if combined multiple file uploads size is greater than `post_max_size`.
+- Number field allowing non-numerical characters on iOS devices.
+- Incorrect data in CSV entry exports if fields have been deleted.
+- Field Dynamic Choices not showing in form preview when using "Post Type".
 
 ## [1.5.1.3] - 2019-03-14
 ### Fixed

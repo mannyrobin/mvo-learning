@@ -965,7 +965,8 @@ FLBuilder::register_module('PPGravityFormModule', array(
                                     'unit'            => 'px'
                                 ),
                             ),
-                        )
+						),
+						'responsive'	=> true
                     ),
                     'button_padding_left_right'    => array(
                         'type'          => 'unit',
@@ -987,7 +988,8 @@ FLBuilder::register_module('PPGravityFormModule', array(
                                     'unit'            => 'px'
                                 ),
                             ),
-                        )
+						),
+						'responsive'	=> true
                     ),
                 )
             ),

@@ -83,6 +83,10 @@ class DashboardWidget {
 		\add_action( 'wp_ajax_wpforms_dash_widget_get_chart_data', array( $this, 'get_chart_data_ajax' ) );
 		\add_action( 'wp_ajax_wpforms_dash_widget_get_forms_list', array( $this, 'get_forms_list_ajax' ) );
 		\add_action( 'wp_ajax_wpforms_dash_widget_save_widget_meta', array( $this, 'save_widget_meta_ajax' ) );
+
+		\add_action( 'wpforms_create_form', __CLASS__ . '::clear_widget_cache' );
+		\add_action( 'wpforms_save_form', __CLASS__ . '::clear_widget_cache' );
+		\add_action( 'wpforms_delete_form', __CLASS__ . '::clear_widget_cache' );
 	}
 
 	/**
@@ -138,7 +142,7 @@ class DashboardWidget {
 				'empty_chart_html' => $this->get_empty_chart_html(),
 				'chart_data'       => $this->get_entries_count_by(
 					'date',
-					$this->widget_meta( 'get', 'chart_timespan' ),
+					$this->widget_meta( 'get', 'timespan' ),
 					$this->widget_meta( 'get', 'active_form_id' )
 				),
 				'show_more_html'   => \esc_html__( 'Show More', 'wpforms' ) . '<span class="dashicons dashicons-arrow-down"></span>',
@@ -241,7 +245,7 @@ class DashboardWidget {
 	 */
 	public function widget_content_html() {
 
-		$forms_list_timespan = $this->widget_meta( 'get', 'forms_list_timespan' );
+		$timespan = $this->widget_meta( 'get', 'timespan' );
 		$active_form_id      = $this->widget_meta( 'get', 'active_form_id' );
 
 		$title = empty( $active_form_id ) ? \esc_html__( 'Total Entries', 'wpforms' ) : \get_the_title( $active_form_id );
@@ -257,11 +261,6 @@ class DashboardWidget {
 					<?php echo empty( $active_form_id ) ? 'style="display: none;"' : ''; ?>>
 					<span class="dashicons dashicons-dismiss"></span>
 				</button>
-				<select id="wpforms-dash-widget-chart-timespan" class="wpforms-dash-widget-select-timespan" title="<?php \esc_html_e( 'Select chart timespan', 'wpforms' ); ?>"
-					<?php echo ! empty( $active_form_id ) ? 'data-active-form-id="' . \absint( $active_form_id ) . '"' : ''; ?>
-					style="display: none;">
-					<?php $this->timespan_options_html( $this->get_timespan_options_for( 'chart' ), 'chart_timespan' ); ?>
-				</select>
 			</div>
 
 			<div class="wpforms-dash-widget-block wpforms-dash-widget-chart-block">
@@ -273,13 +272,14 @@ class DashboardWidget {
 
 		<div class="wpforms-dash-widget-block">
 			<h3><?php \esc_html_e( 'Total Entries by Form', 'wpforms' ); ?></h3>
-			<select id="wpforms-dash-widget-form-entries-timespan" class="wpforms-dash-widget-select-timespan" title="<?php \esc_html_e( 'Select forms list timespan', 'wpforms' ); ?>">
-				<?php $this->timespan_options_html( $this->get_timespan_options_for( 'forms_list' ), 'forms_list_timespan' ); ?>
+			<select id="wpforms-dash-widget-timespan" class="wpforms-dash-widget-select-timespan" title="<?php \esc_html_e( 'Select timespan', 'wpforms' ); ?>"
+				<?php echo ! empty( $active_form_id ) ? 'data-active-form-id="' . \absint( $active_form_id ) . '"' : ''; ?>>
+				<?php $this->timespan_options_html( $this->get_timespan_options() ); ?>
 			</select>
 		</div>
 
 		<div id="wpforms-dash-widget-forms-list-block" class="wpforms-dash-widget-block wpforms-dash-widget-forms-list-block">
-			<?php $this->forms_list_block( $forms_list_timespan ); ?>
+			<?php $this->forms_list_block( $timespan ); ?>
 		</div>
 		<?php
 	}
@@ -292,9 +292,9 @@ class DashboardWidget {
 	 * @param array  $options Timespan options (in days).
 	 * @param string $meta    Widget meta name to get user saved timespan from.
 	 */
-	public function timespan_options_html( $options, $meta ) {
+	public function timespan_options_html( $options ) {
 
-		$timespan = $this->widget_meta( 'get', \sanitize_key( $meta ) );
+		$timespan = $this->widget_meta( 'get', 'timespan' );
 
 		foreach ( $options as $option ) :
 			?>
@@ -427,44 +427,77 @@ class DashboardWidget {
 	 * Get timespan options for $element (in days).
 	 *
 	 * @since 1.5.0
+	 * @deprecated 1.5.2
 	 *
 	 * @param string $element 'chart' or 'forms_list'.
-	 *
 	 * @return array
 	 */
 	public function get_timespan_options_for( $element ) {
+		_deprecated_function( __METHOD__, '1.5.2 of WPForms plugin', 'get_timespan_options()' );
+		return $this->get_timespan_options();
+	}
 
-		$defaults = array(
-			'chart'      => array( 7, 30 ),
-			'forms_list' => array( 7, 30 ),
-		);
+	/**
+	 * Get timespan options (in days).
+	 *
+	 * @since 1.5.2
+	 *
+	 * @return array
+	 */
+	public function get_timespan_options() {
 
-		if ( ! \array_key_exists( $element, $defaults ) ) {
-			return array();
+		$default = array( 7, 30 );
+
+		$options = $default;
+
+		// Apply deprecated filters.
+		if ( function_exists( 'apply_filters_deprecated' ) ) {
+			$options = \apply_filters_deprecated( 'wpforms_dash_widget_chart_timespan_options', array( $options ), '5.0', 'wpforms_dash_widget_timespan_options' );
+			$options = \apply_filters_deprecated( 'wpforms_dash_widget_forms_list_timespan_options', array( $options ), '5.0', 'wpforms_dash_widget_timespan_options' );
+		} else {
+			$options = \apply_filters( 'wpforms_dash_widget_chart_timespan_options', $options );
+			$options = \apply_filters( 'wpforms_dash_widget_forms_list_timespan_options', $options );
 		}
 
-		$options = \apply_filters( 'wpforms_dash_widget_' . $element . '_timespan_options', $defaults[ $element ] );
+		if ( ! \is_array( $options ) ) {
+			$options = $default;
+		}
+
+		$options = \apply_filters( 'wpforms_dash_widget_timespan_options', $options );
 		if ( ! \is_array( $options ) ) {
 			return array();
 		}
 
 		$options = \array_filter( $options, 'is_numeric' );
 
-		return empty( $options ) ? $defaults[ $element ] : $options;
+		return empty( $options ) ? $default : $options;
 	}
+
 
 	/**
 	 * Get default timespan option for $element.
 	 *
-	 * @param string $element 'chart' or 'forms_list'.
-	 *
 	 * @since 1.5.0
+	 * @deprecated 1.5.2
 	 *
+	 * @param string $element 'chart' or 'forms_list'.
 	 * @return int|null
 	 */
 	public function get_timespan_default_for( $element ) {
+		_deprecated_function( __METHOD__, '1.5.2 of WPForms plugin', 'get_timespan_default()' );
+		return $this->get_timespan_default();
+	}
 
-		$options = $this->get_timespan_options_for( $element );
+	/**
+	 * Get default timespan option.
+	 *
+	 * @since 1.5.3
+	 *
+	 * @return int|null
+	 */
+	public function get_timespan_default() {
+
+		$options = $this->get_timespan_options();
 		$default = \reset( $options );
 		if ( ! \is_numeric( $default ) ) {
 			return null;
@@ -492,8 +525,7 @@ class DashboardWidget {
 		}
 
 		$defaults = array(
-			'chart_timespan'         => $this->get_timespan_default_for( 'chart' ),
-			'forms_list_timespan'    => $this->get_timespan_default_for( 'forms_list' ),
+			'timespan'               => $this->get_timespan_default(),
 			'active_form_id'         => 0,
 			'hide_recommended_block' => 0,
 		);
@@ -891,5 +923,17 @@ class DashboardWidget {
 		$this->widget_meta( 'set', $meta, $value );
 
 		exit();
+	}
+
+	/**
+	 * Clear dashboard widget cached data.
+	 *
+	 * @since 1.5.2
+	 */
+	public static function clear_widget_cache() {
+
+		global $wpdb;
+
+		$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '%wpforms_dash_widget_pro_entries_by_%'" ); //phpcs:ignore
 	}
 }

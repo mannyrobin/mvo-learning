@@ -71,12 +71,12 @@ class PrintPreview {
 		}
 
 		// Check that entry ID was passed.
-		if ( empty( $_GET['entry_id'] ) ) {
+		if ( empty( $_GET['entry_id'] ) ) { //phpcs:ignore;
 			return false;
 		}
 
 		// Fetch the entry.
-		$this->entry = \wpforms()->entry->get( \absint( $_GET['entry_id'] ) );
+		$this->entry = \wpforms()->entry->get( \absint( $_GET['entry_id'] ) ); //phpcs:ignore
 
 		// Check valid entry was found.
 		if ( empty( $this->entry ) ) {
@@ -107,6 +107,11 @@ class PrintPreview {
 		return true;
 	}
 
+	/**
+	 * Outputs HTML markup for the print preview page.
+	 *
+	 * @since 1.5.1
+	 */
 	public function print_html() {
 
 		// Under normal circumstances this should never return false.
@@ -119,9 +124,9 @@ class PrintPreview {
 		<!doctype html>
 		<html>
 		<head>
-			<meta charset="utf-8">
+			<meta charset="<?php bloginfo( 'charset' ); ?>">
 			<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-			<title>WPForms Print Preview - <?php echo ucfirst( \sanitize_text_field( $this->form_data['settings']['form_title'] ) ); ?> </title>
+			<title>WPForms Print Preview - <?php echo ucfirst( \esc_html( \sanitize_text_field( $this->form_data['settings']['form_title'] ) ) ); ?> </title>
 			<meta name="description" content="">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<meta name="robots" content="noindex,nofollow,noarchive">
@@ -185,7 +190,7 @@ class PrintPreview {
 				<?php \do_action( 'wpforms_pro_admin_entries_printpreview_print_html_header_before', $this->entry, $this->form_data ); ?>
 				<h1>
 					<?php /* translators: %d - entry ID. */ ?>
-					<?php echo \sanitize_text_field( $this->form_data['settings']['form_title'] ); ?> <span> - <?php printf( \esc_html__( 'Entry #%d', 'wpforms-lite' ), \absint( $this->entry->entry_id ) ); ?></span>
+					<?php echo \esc_html( \sanitize_text_field( $this->form_data['settings']['form_title'] ) ); ?> <span> - <?php printf( \esc_html__( 'Entry #%d', 'wpforms-lite' ), \absint( $this->entry->entry_id ) ); ?></span>
 					<div class="buttons">
 						<a href="" class="button button-secondary close-window"><?php \esc_html_e( 'Close', 'wpforms-lite' ); ?></a>
 						<a href="" class="button button-primary print"><?php \esc_html_e( 'Print', 'wpforms-lite' ); ?></a>
@@ -215,13 +220,13 @@ class PrintPreview {
 						$field_value  = \apply_filters( 'wpforms_html_field_value', \wp_strip_all_tags( $field['value'] ), $field, $this->form_data, 'entry-single' );
 						$field_class  = \sanitize_html_class( 'wpforms-field-' . $field['type'] );
 						$field_class .= empty( $field_value ) ? ' empty' : '';
-						echo '<div class="field ' . $field_class . '">';
+						echo '<div class="field ' . \esc_attr( $field_class ) . '">';
 							echo '<p class="field-name">';
 								/* translators: %d - field ID. */
-								echo ! empty( $field['name'] ) ? \wp_strip_all_tags( $field['name'] ) : sprintf( \esc_html__( 'Field ID #%d', 'wpforms-lite' ), \absint( $field['id'] ) );
+								echo ! empty( $field['name'] ) ? \esc_html( \wp_strip_all_tags( $field['name'] ) ) : sprintf( \esc_html__( 'Field ID #%d', 'wpforms-lite' ), \absint( $field['id'] ) );
 							echo '</p>';
 							echo '<p class="field-value">';
-								echo ! empty( $field_value ) ? nl2br( \make_clickable( $field_value ) ) : \esc_html__( 'Empty', 'wpforms-lite' );
+								echo ! empty( $field_value ) ? nl2br( \make_clickable( $field_value ) ) : \esc_html__( 'Empty', 'wpforms-lite' ); //phpcs:ignore
 							echo '</p>';
 						echo '</div>';
 					}
@@ -230,12 +235,12 @@ class PrintPreview {
 
 				\do_action( 'wpforms_pro_admin_entries_printpreview_print_hrml_fields_after', $this->entry, $this->form_data );
 
-				if ( ! empty( $entry->entry_notes ) ) {
+				if ( ! empty( $this->entry->entry_notes ) ) {
 
 					echo '<h2 class="notes-head">' . \esc_html__( 'Notes', 'wpforms-lite' ) . '</h2>';
 					echo '<div class="notes">';
 
-					foreach ( $entry->entry_notes as $note ) {
+					foreach ( $this->entry->entry_notes as $note ) {
 
 						$user        = \get_userdata( $note->user_id );
 						$user_name   = \esc_html( ! empty( $user->display_name ) ? $user->display_name : $user->user_login );
@@ -256,7 +261,7 @@ class PrintPreview {
 				\do_action( 'wpforms_pro_admin_entries_printpreview_print_hrml_notes_after', $this->entry, $this->form_data );
 				?>
 			</div>
-			<p class="site"><a href="<?php echo \home_url(); ?>"><?php echo \get_bloginfo( 'name'); ?></a></p>
+			<p class="site"><a href="<?php echo \esc_url( \home_url() ); ?>"><?php echo \esc_html( \get_bloginfo( 'name' ) ); ?></a></p>
 		</body>
 		<?php
 		exit();

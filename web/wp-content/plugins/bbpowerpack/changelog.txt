@@ -1,3 +1,20 @@
+== 2.6.9.7 ==
+Release date: April 8, 2019
+* Enhancement: Social Icons - Added link nofollow option and rel="noopener" attribute for _blank target
+* Enhancement: Image - Added link nofollow option and rel="noopener" attribute for _blank target
+* Enhancement: Advanced Tabs - Added accessibility attributes
+* Enhancement: Gravity Forms Styler - Added responsive options for button padding fields
+* Enhancement: Advanced Tabs - Added option to change tab icon color
+* Fix: Logos Grid & Carousel - Number of Columns option was not working as expected
+* Fix: Content Grid - Scroll pagination was not working in respect of active filter
+* Fix: Content Grid - Load More pagination was not working as expected when having multiple module instances on the same page
+* Fix: Table - PHP warnings in CSS
+* Fix: Advanced Tabs - Tabs title alignement was not working in typography setting
+* Fix: Filterable Gallery - Filter by URL hash was not working
+* Fix: InfoBox - Icon vertical alignment option was not working
+* Fix: Row Extensions - Row Extensions were showing in row settings despite being unchecked in PowerPack admin settings
+* Fix: Core - FontAwesome icons were not working after BB's latest update
+
 == 2.6.9.6 ==
 Release date: March 22, 2019
 * Fix: Content Grid - Featured Image was not loading after updating PowerPack to 2.6.9.5

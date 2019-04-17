@@ -154,7 +154,7 @@ class WPForms_Field_CreditCard extends WPForms_Field {
 		// If this field is required we need to make some adjustments.
 		if ( ! empty( $field['required'] ) ) {
 
-			// Add required class if needed (for multipage validation).
+			// Add required class if needed (for multi-page validation).
 			$properties['inputs']['number']['class'][] = 'wpforms-field-required';
 			$properties['inputs']['cvc']['class'][]    = 'wpforms-field-required';
 			$properties['inputs']['name']['class'][]   = 'wpforms-field-required';
@@ -165,7 +165,7 @@ class WPForms_Field_CreditCard extends WPForms_Field {
 			// required. jQuery Validation library will not correctly validate
 			// fields that do not have a name attribute, so we use the
 			// `wpforms-input-temp-name` class to let jQuery know we should add
-			// a temporary name attribute before validation is initilized, then
+			// a temporary name attribute before validation is initialized, then
 			// remove it before the form submits.
 			$properties['inputs']['number']['class'][] = 'wpforms-input-temp-name';
 			$properties['inputs']['cvc']['class'][]    = 'wpforms-input-temp-name';

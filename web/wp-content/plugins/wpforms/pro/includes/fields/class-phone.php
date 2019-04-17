@@ -27,6 +27,12 @@ class WPForms_Field_Phone extends WPForms_Field {
 
 		// Define additional field properties.
 		add_filter( 'wpforms_field_properties_phone', array( $this, 'field_properties' ), 5, 3 );
+
+		// Form frontend CSS enqueues.
+		add_action( 'wpforms_frontend_css', array( $this, 'enqueue_frontend_css' ) );
+
+		// Form frontend JS enqueues.
+		add_action( 'wpforms_frontend_js', array( $this, 'enqueue_frontend_js' ) );
 	}
 
 	/**
@@ -42,6 +48,12 @@ class WPForms_Field_Phone extends WPForms_Field {
 	 */
 	public function field_properties( $properties, $field, $form_data ) {
 
+		// Input primary: add validation rule and class for smart phone field.
+		if ( 'smart' === $field['format'] ) {
+			$properties['inputs']['primary']['class'][]                        = 'wpforms-smart-phone-field';
+			$properties['inputs']['primary']['data']['rule-smart-phone-field'] = 'true';
+		}
+
 		// Input primary: add input mask and class for US formatted numbers.
 		if ( 'us' === $field['format'] ) {
 			$properties['inputs']['primary']['class'][]           = 'wpforms-masked-input';
@@ -54,6 +66,43 @@ class WPForms_Field_Phone extends WPForms_Field {
 		}
 
 		return $properties;
+	}
+
+	/**
+	 * Form frontend CSS enqueues.
+	 *
+	 * @since 1.5.2
+	 */
+	public function enqueue_frontend_css() {
+
+		$min = \wpforms_get_min_suffix();
+
+		// International Telephone Input library CSS.
+		wp_enqueue_style(
+			'wpforms-smart-phone-field',
+			WPFORMS_PLUGIN_URL . "pro/assets/css/vendor/intl-tel-input{$min}.css",
+			array(),
+			'15.0.0'
+		);
+	}
+
+	/**
+	 * Form frontend JS enqueues.
+	 *
+	 * @since 1.5.2
+	 */
+	public function enqueue_frontend_js() {
+
+		$min = \wpforms_get_min_suffix();
+
+		// Load International Telephone Input library - https://github.com/jackocnr/intl-tel-input.
+		wp_enqueue_script(
+			'wpforms-smart-phone-field',
+			WPFORMS_PLUGIN_URL . "pro/assets/js/vendor/jquery.intl-tel-input{$min}.js",
+			array( 'jquery' ),
+			'15.0.0',
+			true
+		);
 	}
 
 	/**
@@ -93,8 +142,9 @@ class WPForms_Field_Phone extends WPForms_Field {
 			$field,
 			array(
 				'slug'    => 'format',
-				'value'   => ! empty( $field['format'] ) ? esc_attr( $field['format'] ) : 'us',
+				'value'   => ! empty( $field['format'] ) ? esc_attr( $field['format'] ) : 'smart',
 				'options' => array(
+					'smart'         => esc_html__( 'Smart', 'wpforms' ),
 					'us'            => esc_html__( 'US', 'wpforms' ),
 					'international' => esc_html__( 'International', 'wpforms' ),
 				),

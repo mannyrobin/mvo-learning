@@ -39,7 +39,7 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 		// Customize value format for HTML emails.
 		add_filter( 'wpforms_html_field_value', array( $this, 'html_email_value' ), 10, 4 );
 
-		// Maybe format/upload file depending on the conditional visiblity state.
+		// Maybe format/upload file depending on the conditional visibility state.
 		add_action( 'wpforms_process_format_after', array( $this, 'format_conditional' ), 6, 1 );
 	}
 
@@ -481,10 +481,17 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 		$file_name            = sanitize_file_name( $file['name'] );
 		$file_ext             = pathinfo( $file_name, PATHINFO_EXTENSION );
 		$file_base            = wp_basename( $file_name, ".$file_ext" );
-		$file_name_new        = sprintf( '%s-%s.%s', $file_base, uniqid(), strtolower( $file_ext ) );
+		$file_name_new        = sprintf( '%s-%s.%s', $file_base, wp_hash( $file_name . uniqid() . $form_id . $field_id ), strtolower( $file_ext ) );
 		$uploads              = wp_upload_dir();
-		$form_directory       = absint( $form_id ) . '-' . md5( $form_id . $form_data['created'] );
 		$wpforms_uploads_root = trailingslashit( $uploads['basedir'] ) . 'wpforms';
+
+		// Add filter to allow redefine store directory.
+		$custom_uploads_root = apply_filters( 'wpforms_upload_root', $wpforms_uploads_root );
+		if ( wp_is_writable( $custom_uploads_root ) ) {
+			$wpforms_uploads_root = $custom_uploads_root;
+		}
+
+		$form_directory       = absint( $form_id ) . '-' . md5( $form_id . $form_data['created'] );
 		$wpforms_uploads_form = trailingslashit( $wpforms_uploads_root ) . $form_directory;
 		$file_new             = trailingslashit( $wpforms_uploads_form ) . $file_name_new;
 		$file_url             = trailingslashit( $uploads['baseurl'] ) . 'wpforms/' . trailingslashit( $form_directory ) . $file_name_new;
