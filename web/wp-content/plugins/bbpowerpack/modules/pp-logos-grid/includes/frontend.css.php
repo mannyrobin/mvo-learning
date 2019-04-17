@@ -104,20 +104,22 @@
     <?php } ?>
 }
 
+.fl-node-<?php echo $id; ?> .pp-logos-content .pp-logo {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
 .fl-node-<?php echo $id; ?> .pp-logos-content .pp-logo .pp-logo-inner {
-    <?php if ( $settings->equal_height == 'yes' ) { ?>
-    display: table;
-    <?php } ?>
     width: 100%;
     height: 100%;
 }
 
 .fl-node-<?php echo $id; ?> .pp-logos-content .pp-logo .pp-logo-inner .pp-logo-inner-wrap {
-    <?php if ( $settings->equal_height == 'yes' ) { ?>
-    display: table-cell;
-    <?php } ?>
-    vertical-align: middle;
     text-align: center;
+	height: 100%;
+	display: flex;
+	align-items: center;
 }
 
 

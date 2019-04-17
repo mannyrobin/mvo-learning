@@ -139,7 +139,7 @@ class WPForms_Upgrades {
 		$fields_table  = $wpdb->prefix . 'wpforms_entry_fields';
 		$entries_table = $wpdb->prefix . 'wpforms_entries';
 
-		// Check if this is the inital total check.
+		// Check if this is the initial total check.
 		if ( ! empty( $_POST['init'] ) ) {
 
 			$upgraded = count( $wpdb->get_results( "SELECT DISTINCT entry_id FROM {$fields_table}" ) );

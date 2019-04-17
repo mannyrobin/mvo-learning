@@ -983,7 +983,7 @@ class WPForms_Field_Date_Time extends WPForms_Field {
 			$time = date( 'g:i A', strtotime( $time ) );
 		}
 
-		// Always store the date in m/d/Y format so it is `strtotime()` compatible.
+		// Always store the date in m/d/Y format so it is strtotime() compatible.
 		if (
 			( 'dd/mm/yyyy' === $date_format || 'd/m/Y' === $date_format ) &&
 			! empty( $date )

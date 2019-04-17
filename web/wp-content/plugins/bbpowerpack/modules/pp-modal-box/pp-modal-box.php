@@ -147,7 +147,7 @@ class PPModalBoxModule extends FLBuilderModule {
 
     public static function get_saved_templates()
     {
-        if ( is_admin() && isset( $_GET['page'] ) && 'pp-settings' == $_GET['page'] ) {
+        if ( is_admin() && isset( $_GET['page'] ) && 'ppbb-settings' == $_GET['page'] ) {
             return;
         }
 

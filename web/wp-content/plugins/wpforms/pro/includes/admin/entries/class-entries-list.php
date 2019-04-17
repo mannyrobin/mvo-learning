@@ -202,7 +202,7 @@ class WPForms_Entries_List {
 			'wpforms-flatpickr',
 			WPFORMS_PLUGIN_URL . 'assets/js/flatpickr.min.js',
 			array( 'jquery' ),
-			'2.3.4'
+			'4.5.5'
 		);
 
 		// CSS.
@@ -210,7 +210,7 @@ class WPForms_Entries_List {
 			'wpforms-flatpickr',
 			WPFORMS_PLUGIN_URL . 'assets/css/flatpickr.min.css',
 			array(),
-			'2.3.4'
+			'4.5.5'
 		);
 
 		// Hook for addons.

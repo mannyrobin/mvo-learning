@@ -234,6 +234,12 @@ class WPForms_Pro {
 			'type'    => 'text',
 			'default' => esc_html__( 'Please enter a valid credit card number.', 'wpforms' ),
 		);
+		$settings['validation']['validation-post_max_size']   = array(
+			'id'      => 'validation-post_max_size',
+			'name'    => esc_html__( 'File Upload Total Size', 'wpforms' ),
+			'type'    => 'text',
+			'default' => esc_html__( 'The total size of the selected files {totalSize} Mb exceeds the allowed limit {maxSize} Mb.', 'wpforms' ),
+		);
 
 		// Payment settings.
 		$settings['payments']['payments-heading'] = array(
@@ -346,11 +352,14 @@ class WPForms_Pro {
 						'value'    => $field['value'],
 						'date'     => $date,
 					) );
+
+
 				}
 			}
 		}
 
 		wpforms()->process->entry_id = $entry_id;
+
 	}
 
 	/**
