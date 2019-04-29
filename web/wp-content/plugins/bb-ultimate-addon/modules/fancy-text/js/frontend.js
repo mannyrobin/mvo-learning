@@ -26,6 +26,9 @@
       this.speed       = settings.speed;
       this.pause       = settings.pause;
       this.mousePause  = settings.mousePause;
+      this.suffix      = settings.suffix;
+      this.prefix      = settings.prefix;
+      this.alignment   = settings.alignment;
     }
 
     /* Slide Up Var */
@@ -83,7 +86,22 @@
           cursorChar: this.cursorChar,
         });
       }else if ( this.animation == 'slide_up' ) { 
-       $( this.nodeClass + " .uabb-slide-main")
+
+        if( ( this.suffix.trim() == '' && this.alignment == 'left' ) || ( this.suffix.trim() == '' && this.prefix.trim() == '' ) ) {
+
+          var max = 0;
+          jQuery( '.uabb-slide-block' ).each(function(){
+            var c_width = jQuery(this).outerWidth();
+            if (c_width > max) {
+                  max = c_width;
+              }
+          });
+          jQuery( this.nodeClass + " .uabb-slide-main" ).css('min-width', max +'px');
+        } else {
+          jQuery( this.nodeClass + " .uabb-slide-main" ).removeAttr('style');          
+        }
+
+        $( this.nodeClass + " .uabb-slide-main")
               .vTicker('init', {
                   speed       : this.speed, 
                   pause       : this.pause,

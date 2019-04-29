@@ -1,9 +1,23 @@
 <?php
+/**
+ * Render the frontend content.
+ *
+ * @package UABB Info Box Module
+ */
+
+$nofollow = '';
+$target   = '';
+if ( isset( $settings->link_nofollow ) ) {
+	$nofollow = $settings->link_nofollow;
+}
+if ( isset( $settings->link_target ) ) {
+	$target = $settings->link_target;
+}
 $stacked_class = '';
-if( $settings->image_type != 'none' ) {
-	if( $settings->img_icon_position == 'right' ) {
-		if( $settings->mobile_view == 'stack' ) {
-			if( $settings->stacking_order == 'reversed' ) {
+if ( 'none' != $settings->image_type ) {
+	if ( 'right' == $settings->img_icon_position ) {
+		if ( 'stack' == $settings->mobile_view ) {
+			if ( 'reversed' == $settings->stacking_order ) {
 				$stacked_class = 'uabb-reverse-order';
 			}
 		}
@@ -14,31 +28,31 @@ if( $settings->image_type != 'none' ) {
 	<div class="uabb-infobox-left-right-wrap">
 	<?php 
 	if( $settings->cta_type == 'module' && !empty($settings->link) ) {
-		echo '<a href="' . $settings->link . '" target="' . $settings->link_target . '" class="uabb-infobox-module-link"></a>';
+		echo '<a href="' . $settings->link . '" target="' . $target . '" '. BB_Ultimate_Addon_Helper::get_link_rel( $target, $nofollow, 0 ) .' class="uabb-infobox-module-link"></a>';
 	}
-	// Image left
+	// Image left.
 	$module->render_image('left'); 
 	
 	?><div class="uabb-infobox-content">
 			<?php 
-			// Image above title
+			// Image above title.
 			$module->render_image('above-title');
-			// Title
+			// Title.
 			$module->render_title();
-			// Image below title
+			// Image below title.
 			$module->render_image('below-title');
-			// Separator
+			// Separator.
 			$module->render_separator();
 			
 			if( $settings->text != "" || $settings->cta_type == 'link' || $settings->cta_type == 'button' ) {
 			?>
 			<div class="uabb-infobox-text-wrap">
 				<?php 
-				// Text 
+				// Text.
 				$module->render_text();
-				// Link CTA
+				// Link CTA.
 				$module->render_link();
-				// Button CTA 
+				// Button CTA.
 				$module->render_button();
 				?>
 			</div> 
@@ -46,7 +60,7 @@ if( $settings->image_type != 'none' ) {
 			}
 			?>
 		</div><?php
-		// Image right
+		// Image right.
 		$module->render_image('right'); 
 		?>
 	</div>

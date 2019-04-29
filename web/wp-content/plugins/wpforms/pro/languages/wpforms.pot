@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WPForms 1.5.2.1\n"
+"Project-Id-Version: WPForms 1.5.2.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpforms\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-04-11T11:19:44+00:00\n"
+"POT-Creation-Date: 2019-04-23T13:57:21+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: wpforms\n"
@@ -126,7 +126,7 @@ msgid "Disable storing user details (IP address and user agent)"
 msgstr ""
 
 #: pro/wpforms-pro.php:415
-#: pro/includes/admin/entries/class-entries-list.php:543
+#: pro/includes/admin/entries/class-entries-list.php:544
 #: src/Pro/Admin/DashboardWidget.php:152
 msgid "Entries"
 msgstr ""
@@ -677,64 +677,64 @@ msgid "All entries for the currently selected form were successfully deleted."
 msgstr ""
 
 #. translators: %s - WPForms Builder page.
-#: pro/includes/admin/entries/class-entries-list.php:492
+#: pro/includes/admin/entries/class-entries-list.php:493
 msgid "Whoops, you haven't created a form yet. Want to <a href=\"%s\">give it a go</a>?"
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list.php:576
+#: pro/includes/admin/entries/class-entries-list.php:577
 msgid "Search"
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list.php:606
+#: pro/includes/admin/entries/class-entries-list.php:607
 msgid "Select the fields to show when viewing the entries list for this form."
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list.php:608
+#: pro/includes/admin/entries/class-entries-list.php:609
 msgid "Currently columns have not been configured, so we're showing the first 3 fields."
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list.php:619
-#: pro/includes/admin/entries/class-entries-list.php:632
+#: pro/includes/admin/entries/class-entries-list.php:620
+#: pro/includes/admin/entries/class-entries-list.php:633
 #: pro/includes/admin/entries/class-entries-list-table.php:222
 #: pro/includes/admin/entries/class-entries-list-table.php:233
-#: pro/includes/admin/entries/class-entries-list-table.php:728
+#: pro/includes/admin/entries/class-entries-list-table.php:732
 msgid "Field"
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list.php:711
+#: pro/includes/admin/entries/class-entries-list.php:712
 msgid "Select Form"
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list.php:721
+#: pro/includes/admin/entries/class-entries-list.php:722
 msgid "Open form selector"
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list.php:747
+#: pro/includes/admin/entries/class-entries-list.php:748
 msgid "All Entries"
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list.php:753
+#: pro/includes/admin/entries/class-entries-list.php:754
 msgid "Edit This Form"
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list.php:758
+#: pro/includes/admin/entries/class-entries-list.php:759
 msgid "Preview Form"
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list.php:763
+#: pro/includes/admin/entries/class-entries-list.php:764
 msgid "Download Export (CSV)"
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list.php:768
+#: pro/includes/admin/entries/class-entries-list.php:769
 msgid "Mark All Read"
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list.php:773
+#: pro/includes/admin/entries/class-entries-list.php:774
 msgid "Delete All"
 msgstr ""
 
 #. translators: %d - Number of form entries.
-#: pro/includes/admin/entries/class-entries-list.php:857
+#: pro/includes/admin/entries/class-entries-list.php:858
 msgid "See %d new entry"
 msgid_plural "See %d new entries"
 msgstr[0] ""
@@ -861,27 +861,31 @@ msgstr ""
 msgid "Entries were successfully deleted."
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list-table.php:691
+#: pro/includes/admin/entries/class-entries-list-table.php:692
+msgid "No entries found."
+msgstr ""
+
+#: pro/includes/admin/entries/class-entries-list-table.php:694
 msgid "Whoops, it appears you do not have any form entries yet."
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list-table.php:723
+#: pro/includes/admin/entries/class-entries-list-table.php:727
 msgid "Any form field"
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list-table.php:744
+#: pro/includes/admin/entries/class-entries-list-table.php:748
 msgid "contains"
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list-table.php:745
+#: pro/includes/admin/entries/class-entries-list-table.php:749
 msgid "does not contain"
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list-table.php:746
+#: pro/includes/admin/entries/class-entries-list-table.php:750
 msgid "is"
 msgstr ""
 
-#: pro/includes/admin/entries/class-entries-list-table.php:747
+#: pro/includes/admin/entries/class-entries-list-table.php:751
 msgid "is not"
 msgstr ""
 

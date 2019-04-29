@@ -1,17 +1,33 @@
 <?php
-$settings->responsive_breakpoint = ( isset( $settings->responsive_breakpoint ) && $settings->responsive_breakpoint != '' ) ? $settings->responsive_breakpoint : $global_settings->responsive_breakpoint;
+/**
+ *  UABB Advanced Tabs Module front-end file
+ *
+ *  @package UABB Advanced Tabs Module
+ */
 
-if( $settings->responsive == 'accordion' ) {
 ?>
+(function($) {
+
+	$(function() {
+		new UABBTabs({
+			id: '<?php echo $id; ?>'
+		});
+	});
+
+})(jQuery);
+<?php
+$settings->responsive_breakpoint = ( isset( $settings->responsive_breakpoint ) && '' != $settings->responsive_breakpoint ) ? $settings->responsive_breakpoint : $global_settings->responsive_breakpoint;
+if ( 'accordion' == $settings->responsive ) {
+	?>
 	jQuery(window).resize(function() {
 		var breakpoint_val = parseInt( '<?php echo $settings->responsive_breakpoint; ?>' );
 		if( jQuery(document).width() <= breakpoint_val ) {
 
 			<?php
-			if( $settings->enable_first == 'yes' ) {
-			?>
+			if ( 'yes' == $settings->enable_first ) {
+				?>
 			jQuery('.fl-node-<?php echo $id; ?> .uabb-tabs').find('.uabb-content-current .uabb-content').slideUp('normal');
-			<?php
+				<?php
 			}
 			?>
 		}
@@ -22,14 +38,14 @@ if( $settings->responsive == 'accordion' ) {
 		if( jQuery(document).width() <= breakpoint_val ) {
 
 			<?php
-			if( $settings->enable_first == 'yes' ) {
-			?>
+			if ( 'yes' == $settings->enable_first ) {
+				?>
 			jQuery('.fl-node-<?php echo $id; ?> .uabb-tabs').find('.uabb-content-current .uabb-content').slideUp('normal');
-			<?php
+				<?php
 			}
 			?>
 		}
 	});
-<?php
+	<?php
 }
 ?>

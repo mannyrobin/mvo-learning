@@ -1,5 +1,33 @@
 (function($) {
 
+	window.onLoadUABBReCaptcha = function() {
+		var reCaptchaFields = $( '.uabb-grecaptcha' ),
+			widgetID;
+		if ( reCaptchaFields.length > 0 ) {
+			reCaptchaFields.each(function(){
+				var self 		= $( this ),
+				 	attrWidget 	= self.attr('data-widgetid');
+
+				// Avoid re-rendering as it's throwing API error
+				if ( (typeof attrWidget !== typeof undefined && attrWidget !== false) ) {
+					return;
+				}
+				else {
+					widgetID = grecaptcha.render( $(this).attr('id'), { 
+						sitekey : self.data( 'sitekey' ),
+						theme	: self.data( 'theme' ),
+						callback: function( response ){
+							if ( response != '' ) {
+								self.attr( 'data-uabb-grecaptcha-response', response );
+							}
+						}
+					});
+					self.attr( 'data-widgetid', widgetID );					
+				}
+			});
+		}
+	};
+
 	UABBContactForm = function( settings )
 	{
 		this.settings	= settings;
@@ -9,7 +37,10 @@
 		this.email_required = settings.email_required;
 		this.subject_required = settings.subject_required;
 		this.phone_required = settings.phone_required;
-		this.msg_required = settings.msg_required;
+		this.msg_required = settings.msg_required;		
+		this.button_text = settings.button_text;
+		this.form 		= $( this.nodeClass + ' .uabb-contact-form' );
+		this.button		= this.form.find( '.uabb-contact-form-submit' );
 
 		this._init();
 	};
@@ -41,11 +72,14 @@
 				phone		= $(this.nodeClass + ' .uabb-phone input'),
 				subject	  	= $(this.nodeClass + ' .uabb-subject input'),
 				message	  	= $(this.nodeClass + ' .uabb-message textarea'),
+				reCaptchaField  = $('#'+ this.settings.id + '-uabb-grecaptcha'),
+				reCaptchaValue	= reCaptchaField.data( 'uabb-grecaptcha-response' ),
 				mailto	  	= $(this.nodeClass + ' .uabb-mailto'),
 				ajaxurl	  	= this.ajaxurl, //FLBuilderLayoutConfig.paths.wpAjaxUrl,
 				email_regex = /\S+@\S+\.\S+/,
 				phone_regex = /^[ 0-9.()\[\]+-]*$/,
 				isValid	  	= true;
+				termsCheckbox 	= $(this.nodeClass + ' .uabb-terms-checkbox input'),
 				postId      	= theForm.closest( '.fl-builder-content' ).data( 'post-id' ),
 				templateId		= theForm.data( 'template-id' ),
 				templateNodeId	= theForm.data( 'template-node-id' ),
@@ -170,6 +204,26 @@
 					message.siblings( '.uabb-form-error-message' ).hide();
 				}
 			}
+
+			if ( termsCheckbox.length ) {
+				if ( ! termsCheckbox.is(':checked') ) {
+					isValid = false;
+					termsCheckbox.closest('.uabb-contact-form .uabb-terms-checkbox').addClass('uabb-error');
+				}
+				else if (termsCheckbox.closest('.uabb-contact-form .uabb-terms-checkbox').hasClass('uabb-error')) {
+					termsCheckbox.closest('.uabb-contact-form .uabb-terms-checkbox').removeClass('uabb-error');
+				}
+			}
+
+			// validate if reCAPTCHA is enabled and checked
+			if ( reCaptchaField.length > 0 ) {
+				if ( 'undefined' === typeof reCaptchaValue || reCaptchaValue === false ) {
+					isValid = false;
+					reCaptchaField.parent().addClass( 'uabb-error' );
+				} else {
+					reCaptchaField.parent().removeClass('uabb-error');
+				}
+			}
 			
 			// end if we're invalid, otherwise go on..
 			if (!isValid) {
@@ -179,6 +233,7 @@
 			
 				// disable send button
 				submit.addClass('uabb-disabled');
+				submit.html( '<span>'+this.button.closest( '.uabb-contact-form-button' ).data( 'wait-text' )+'</span>' );
 				
 				// post the form data
 				$.post(ajaxurl, {
@@ -189,6 +244,7 @@
 					phone	: phone.val(),
 					mailto	: mailto.val(),
 					message	: message.val(),
+					terms_checked		: termsCheckbox.is(':checked') ? '1' : '0',
 					post_id 			: postId,
 					node_id 			: nodeId,
 					template_id 		: templateId,
@@ -210,11 +266,14 @@
 
 		_submitComplete: function( response ) {
 			var urlField 	= $( this.nodeClass + ' .uabb-success-url' ),
+				submit	  	= $(this.nodeClass + ' .uabb-contact-form-submit'),
 				noMessage 	= $( this.nodeClass + ' .uabb-success-none' );
+
+			submit.html( '<span>'+this.button_text+'</span>' );
 			
 			// On success show the success message
-			if (response === '1') {
-				
+			if(response === '1' || response == 1 || response == '1') {
+
 				$( this.nodeClass + ' .uabb-send-error' ).fadeOut();
 				
 				if ( urlField.length > 0 ) {

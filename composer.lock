@@ -144,10 +144,10 @@
         },
         {
             "name": "deliciousbrains-plugin/wp-migrate-db-pro",
-            "version": "1.9.5",
+            "version": "1.9.6",
             "dist": {
                 "type": "zip",
-                "url": "https://composer.deliciousbrains.com/?wc-api=delicious-brains&request=composer_download&package=wp-migrate-db-pro&version=1.9.5&composer_key=7EF044F879F5B9A2EBAE334D29EFA943"
+                "url": "https://composer.deliciousbrains.com/?wc-api=delicious-brains&request=composer_download&package=wp-migrate-db-pro&version=1.9.6&composer_key=7EF044F879F5B9A2EBAE334D29EFA943"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -156,10 +156,10 @@
         },
         {
             "name": "deliciousbrains-plugin/wp-migrate-db-pro-media-files",
-            "version": "1.4.13",
+            "version": "1.4.14",
             "dist": {
                 "type": "zip",
-                "url": "https://composer.deliciousbrains.com/?wc-api=delicious-brains&request=composer_download&package=wp-migrate-db-pro-media-files&version=1.4.13&composer_key=7EF044F879F5B9A2EBAE334D29EFA943"
+                "url": "https://composer.deliciousbrains.com/?wc-api=delicious-brains&request=composer_download&package=wp-migrate-db-pro-media-files&version=1.4.14&composer_key=7EF044F879F5B9A2EBAE334D29EFA943"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -273,16 +273,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.94",
+            "version": "v0.96",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "9686fc7dfd5b92dd9ff075bdcd674cd5c15294be"
+                "reference": "c03d878a948843844428e440e18b760b5d7a744e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/9686fc7dfd5b92dd9ff075bdcd674cd5c15294be",
-                "reference": "9686fc7dfd5b92dd9ff075bdcd674cd5c15294be",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/c03d878a948843844428e440e18b760b5d7a744e",
+                "reference": "c03d878a948843844428e440e18b760b5d7a744e",
                 "shasum": ""
             },
             "require": {
@@ -306,7 +306,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2019-04-13T00:23:08+00:00"
+            "time": "2019-04-28T00:23:08+00:00"
         },
         {
             "name": "google/auth",
@@ -829,16 +829,16 @@
         },
         {
             "name": "hipdevteam/staff",
-            "version": "1.1.9",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/staff.git",
-                "reference": "2ea75bec4a96c44992e0067d5268e938bc7923a7"
+                "reference": "f57d0aa9b104345db38f3a53e97b7ea3b8281e06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fstaff/repository/archive.zip?sha=2ea75bec4a96c44992e0067d5268e938bc7923a7",
-                "reference": "2ea75bec4a96c44992e0067d5268e938bc7923a7",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fstaff/repository/archive.zip?sha=f57d0aa9b104345db38f3a53e97b7ea3b8281e06",
+                "reference": "f57d0aa9b104345db38f3a53e97b7ea3b8281e06",
                 "shasum": ""
             },
             "require": {
@@ -858,20 +858,20 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Everything needed to manage staff members for Hip client sites.",
-            "time": "2018-11-16T00:41:32+00:00"
+            "time": "2019-04-25T07:18:14+00:00"
         },
         {
             "name": "hipdevteam/video-collection",
-            "version": "1.6.2",
+            "version": "1.6.3",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/video-collection.git",
-                "reference": "bcd3776329604541db976fbb20522fe96d6853c7"
+                "reference": "3fb82c690b58fc6b43d7c0c4b0c44f385456727b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fvideo-collection/repository/archive.zip?sha=bcd3776329604541db976fbb20522fe96d6853c7",
-                "reference": "bcd3776329604541db976fbb20522fe96d6853c7",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fvideo-collection/repository/archive.zip?sha=3fb82c690b58fc6b43d7c0c4b0c44f385456727b",
+                "reference": "3fb82c690b58fc6b43d7c0c4b0c44f385456727b",
                 "shasum": ""
             },
             "require": {
@@ -883,7 +883,7 @@
             },
             "type": "wordpress-plugin",
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2018-12-10T16:58:40+00:00"
+            "time": "2019-04-18T06:11:48+00:00"
         },
         {
             "name": "hipdevteam/video-lightbox",
@@ -1814,16 +1814,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.39.1",
+            "version": "v1.40.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "23e7b6f0cfa1d7ba3de69f30d8e05cf957412fec"
+                "reference": "2ba4eaf6b0649760a2cdbc0ada19486f9c1b4125"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/23e7b6f0cfa1d7ba3de69f30d8e05cf957412fec",
-                "reference": "23e7b6f0cfa1d7ba3de69f30d8e05cf957412fec",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/2ba4eaf6b0649760a2cdbc0ada19486f9c1b4125",
+                "reference": "2ba4eaf6b0649760a2cdbc0ada19486f9c1b4125",
                 "shasum": ""
             },
             "require": {
@@ -1838,7 +1838,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.39-dev"
+                    "dev-master": "1.40-dev"
                 }
             },
             "autoload": {
@@ -1876,7 +1876,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2019-04-16T17:12:57+00:00"
+            "time": "2019-04-28T06:54:53+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -1931,15 +1931,15 @@
         },
         {
             "name": "wpackagist-plugin/addfunc-head-footer-code",
-            "version": "2.1",
+            "version": "2.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/addfunc-head-footer-code/",
-                "reference": "tags/2.1"
+                "reference": "tags/2.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/addfunc-head-footer-code.2.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/addfunc-head-footer-code.2.2.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2021,15 +2021,15 @@
         },
         {
             "name": "wpackagist-plugin/fatal-error-notify",
-            "version": "1.3",
+            "version": "1.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/fatal-error-notify/",
-                "reference": "trunk"
+                "reference": "tags/1.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/fatal-error-notify.zip?timestamp=1524322835"
+                "url": "https://downloads.wordpress.org/plugin/fatal-error-notify.1.4.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2201,15 +2201,15 @@
         },
         {
             "name": "wpackagist-plugin/safe-svg",
-            "version": "1.9.3",
+            "version": "1.9.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/safe-svg/",
-                "reference": "tags/1.9.3"
+                "reference": "tags/1.9.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/safe-svg.1.9.3.zip"
+                "url": "https://downloads.wordpress.org/plugin/safe-svg.1.9.4.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2219,15 +2219,15 @@
         },
         {
             "name": "wpackagist-plugin/schema-app-structured-data-for-schemaorg",
-            "version": "1.11.2",
+            "version": "1.11.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/schema-app-structured-data-for-schemaorg/",
-                "reference": "tags/1.11.2"
+                "reference": "tags/1.11.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/schema-app-structured-data-for-schemaorg.1.11.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/schema-app-structured-data-for-schemaorg.1.11.4.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -3041,7 +3041,7 @@
         },
         {
             "name": "symfony/config",
-            "version": "v3.4.25",
+            "version": "v3.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
@@ -3105,7 +3105,7 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.4.25",
+            "version": "v3.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
@@ -3177,7 +3177,7 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.25",
+            "version": "v3.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
@@ -3233,16 +3233,16 @@
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v3.4.25",
+            "version": "v3.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "a076234bdf3e087d09e7fd698589337bf6f1bae3"
+                "reference": "dee85a9148399cdb2731603802842bcfd8afe5ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/a076234bdf3e087d09e7fd698589337bf6f1bae3",
-                "reference": "a076234bdf3e087d09e7fd698589337bf6f1bae3",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/dee85a9148399cdb2731603802842bcfd8afe5ab",
+                "reference": "dee85a9148399cdb2731603802842bcfd8afe5ab",
                 "shasum": ""
             },
             "require": {
@@ -3300,11 +3300,11 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2019-04-12T14:33:47+00:00"
+            "time": "2019-04-16T11:13:42+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v3.4.25",
+            "version": "v3.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
@@ -3367,7 +3367,7 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v3.4.25",
+            "version": "v3.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
@@ -3417,7 +3417,7 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v3.4.25",
+            "version": "v3.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -3525,7 +3525,7 @@
         },
         {
             "name": "symfony/process",
-            "version": "v3.4.25",
+            "version": "v3.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
@@ -3574,7 +3574,7 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v3.4.25",
+            "version": "v3.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
@@ -3644,7 +3644,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.4.25",
+            "version": "v3.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",

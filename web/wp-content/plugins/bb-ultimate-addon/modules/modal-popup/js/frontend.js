@@ -23,14 +23,15 @@ jQuery(document).ready(function( $ ) {
 		this.responsive_display = settings.responsive_display;
 		this.medium_device = settings.medium_device;
 		this.small_device = settings.small_device;
-
-		
+	
 		this._initModalPopup();
+		this._initModalPopupVideo();
 
 		var modal_resize = this;
 
 		$( window ).resize(function() {
-		  modal_resize._resizeModalPopup();
+			modal_resize._centerModal();
+			modal_resize._resizeModalPopup();
 		});
 
 	};
@@ -107,7 +108,6 @@ jQuery(document).ready(function( $ ) {
 					
 				this.overlay        = $popup_id.find( '.uabb-overlay' );
 
-
 				$node_module.find( '.uabb-trigger' ).each(function( index ) {
 				 	$this.modal_trigger = $(this);
 					$this.modal_popup   = $( '#modal-' + $this.node );
@@ -132,26 +132,22 @@ jQuery(document).ready(function( $ ) {
 					*/
 
 				});
+
+				this._centerModal();
+				this._iphonecursorfix();			
 			},
 			_showAutomaticModalPopup: function() {
 
-				console.log ( this._isShowModal() );
 				if( ! this._isShowModal() ) {
 					return;
 				}
-
-				//console.log( this );
-				this._videoAutoplay();
-
+				
+				jQuery(".uabb-modal-parent-wrapper.uabb-module-content").find(".uabb-modal.uabb-modal-custom").css("pointer-events", "none");
+				
 				var cookies_name = 'modal-' + this.node,
 					refresh_cookies_name = 'refresh-modal-' + this.node,
 					cookies_status = this.enable_cookies,
 					show_modal = true;
-				
-
-				// console.log(  cookies_status );
-				// console.log( Cookies.get( cookies_name ) );
-				// console.log( Cookies.get( refresh_cookies_name ) );
 
 				if ( cookies_status == 1 ) {
 					if ( Cookies.get( cookies_name ) == 'true' ) {
@@ -165,11 +161,6 @@ jQuery(document).ready(function( $ ) {
 			    		Cookies.remove( cookies_name );
 					}
 				}		
-
-				//console.log( 'frontend' );
-			    //console.log('Cookie Name' + Cookies.get( cookies_name ) );
-			    //Cookies.remove( cookies_name );
-			    //console.log('Cookie Name after Remove' + Cookies.get( cookies_name ) );
 				
 				if ( show_modal == true ) {
 
@@ -184,20 +175,30 @@ jQuery(document).ready(function( $ ) {
 						$('html').addClass('uabb-html-modal');
 						popup_wrap.find('.uabb-modal').addClass('uabb-modal-scroll');
 					}
-					this.modal_popup.addClass('uabb-show' );
+
+					var modal = this.modal_popup;
+
+					if( this.modal_content == 'youtube' || this.modal_content == 'vimeo' ) {
+						setTimeout( function() { modal.addClass('uabb-show' ); }, 300 );
+					} else {
+						modal.addClass('uabb-show' );
+					}
+
+					this._videoAutoplay();
 
 				    if ( this.esc_keypress == 1 ) {
 						$(document).on('keyup.uabb-modal',function(e) {
 							if (e.keyCode == 27) { 
 								current_this.modal_popup.removeClass( 'uabb-show' );
 								current_this._stopVideo();
-								//console.log( e.keyCode );
 								$(document).unbind('keyup.uabb-modal');
 								if ( cookies_status == 1 ) {
 									Cookies.set( cookies_name, 'true', { expires: cookies_days });
 								}else{
 									Cookies.set( refresh_cookies_name, 'true' );
 								}
+
+								UABBTrigger.triggerHook( 'uabb-modal-after-close', popup_wrap );
 							}
 						});
 
@@ -205,6 +206,7 @@ jQuery(document).ready(function( $ ) {
 
 
 				    if ( this.overlay_click == 1 ) {
+
 						this.overlay.on( 'click', function( ev ) {
 							current_this.modal_popup.removeClass( 'uabb-show' );
 							current_this._stopVideo();
@@ -213,7 +215,10 @@ jQuery(document).ready(function( $ ) {
 							}else{
 								Cookies.set( refresh_cookies_name, 'true' );
 							}
+							
+							UABBTrigger.triggerHook( 'uabb-modal-after-close', popup_wrap );
 						} );
+
 					}
 					/*$this.overlay.addEventListener( 'click', function( ev ) {
 						classie.remove( $this.modal_popup, 'uabb-show' );
@@ -236,6 +241,7 @@ jQuery(document).ready(function( $ ) {
 							Cookies.set( refresh_cookies_name, 'true' );
 						}
 
+						UABBTrigger.triggerHook( 'uabb-modal-after-close', popup_wrap );
 					} );
 
 					inner_content_close = popup_wrap.find( '.uabb-close-modal' );
@@ -248,6 +254,8 @@ jQuery(document).ready(function( $ ) {
 							}else{
 								Cookies.set( refresh_cookies_name, 'true' );
 							}
+
+							UABBTrigger.triggerHook( 'uabb-modal-after-close', popup_wrap );
 						});
 					}
 
@@ -283,11 +291,16 @@ jQuery(document).ready(function( $ ) {
 					active_popup.find('.uabb-modal').addClass('uabb-modal-scroll');
 				}
 
-				//console.log( active_popup.find( '.uabb-content' ).outerHeight() );
-				//console.log( $(window).height() );
-				
-				//console.log( $this );
-				$( '#modal-' + this.node ).addClass('uabb-show' );
+				jQuery(".uabb-modal-title-wrap").siblings(".uabb-modal-close").css("top", "0");
+
+				var modal = $( '#modal-' + this.node );
+
+				if( this.modal_content == 'youtube' || this.modal_content == 'vimeo' ) {
+					setTimeout( function() { modal.addClass('uabb-show' ); }, 300 );
+				} else {
+					modal.addClass('uabb-show' );
+				}
+
 				if ( this.overlay_click == 1) {
 					this.overlay.on( 'click',$.proxy( this._removeModalHandler, this ) );
 				}
@@ -303,7 +316,6 @@ jQuery(document).ready(function( $ ) {
 					$(document).on('keyup.uabb-modal',function(e) {
 						if (e.keyCode == 27) { 
 							current_this._removeModalHandler();
-							//console.log( e.keyCode );
 						}
 					});
 				}
@@ -319,11 +331,9 @@ jQuery(document).ready(function( $ ) {
 				var active_modal = $('.fl-node-' + this.node ),
 				    active_popup = $('.uamodal-' + this.node ) ;
 				
-				//console.log( hasPerspective );
 				this.modal_popup.removeClass('uabb-show' );
 
 				this._stopVideo();
-				// console.log( this.modal_content );
 				/*if ( this.modal_content == 'youtube' || this.modal_content == 'vimeo' || this.modal_content == 'video' ) {
 
 					var modal_iframe 		= active_popup.find( 'iframe' ),
@@ -333,7 +343,6 @@ jQuery(document).ready(function( $ ) {
 					    modal_iframe.attr( "src", modal_src );
 				}*/
 				
-				//console.log( modal_iframe );
 				if( hasPerspective ) {
 					this.modal_trigger.removeClass( 'uabb-perspective' );
 				}
@@ -345,9 +354,10 @@ jQuery(document).ready(function( $ ) {
 
 				$(document).unbind('keyup.uabb-modal');
 
+				UABBTrigger.triggerHook( 'uabb-modal-after-close', active_popup );
+
 			},
 			_removeModalHandler: function( ev ) {
-				//console.log( $(this) );
 				this._removeModal( this.modal_trigger.hasClass('uabb-setperspective' ) ); 
 			},
 			_resizeModalPopup: function() {
@@ -368,19 +378,56 @@ jQuery(document).ready(function( $ ) {
 				    active_popup = $('.uamodal-' + this.node );
 
 
-				if ( this.video_autoplay == 'yes' && ( this.modal_content == 'youtube' || this.modal_content == 'vimeo' ) ) {
+				if ( this.video_autoplay === 'yes' && ( this.modal_content === 'youtube' || this.modal_content === 'vimeo' ) ) {
 
-					var modal_iframe 		= active_popup.find( 'iframe' ),
-						modal_src 			= modal_iframe.attr( "src" ) + '&autoplay=1';
-						
+					var vid_id = $( '#modal-' + this.node ).find( '.uabb-video-player' ).data( 'id' );
+
+					if( 0 === $( '#modal-' + this.node ).find( '.uabb-video-player iframe' ).length ) {
+
+						$( '#modal-' + this.node ).find( '.uabb-video-player div[data-id=' + vid_id + ']' ).trigger( 'click' );
+
+					}
+					else{
+						var modal_iframe 		= active_popup.find( 'iframe' ),
+						modal_src 				= modal_iframe.attr( "src" ) + '&autoplay=1';
+
 						modal_iframe.attr( "src",  modal_src );
+					}
+					
+				}
+				if ( 'iframe' === this.modal_content ) {
+
+					if( active_popup.find( '.uabb-modal-content-data iframe' ).length === 0 ) {
+
+						var src = active_popup.find( '.uabb-modal-content-type-iframe' ).data( 'src' );
+
+						var iframe = document.createElement( "iframe" );
+									iframe.setAttribute( "src", src );
+									iframe.setAttribute( "style", "display:none;" );
+									iframe.setAttribute( "frameborder", "0" );
+									iframe.setAttribute( "allowfullscreen", "1" );
+									iframe.setAttribute( "width", "100%" );
+									iframe.setAttribute( "height", "100%" );
+									iframe.setAttribute( "class", "uael-content-iframe" );
+
+									active_popup.find( '.uabb-modal-content-data' ).html( iframe );
+									active_popup.find( '.uabb-modal-content-data' ).append( '<div class="uabb-loader"><div class="uabb-loader-1"></div><div class="uabb-loader-2"></div><div class="uabb-loader-3"></div></div>' );
+
+						var id = this.node;
+
+						iframe.onload = function() {
+							window.parent.jQuery( document ).find('#modal-' + id + ' .uabb-loader' ).fadeOut();
+							this.style.display='block';
+						};
+
+					}
 				}
 			},
 			_stopVideo: function() {
 				var active_modal = $('.fl-node-' + this.node ),
 				    active_popup = $('.uamodal-' + this.node );
 
-				if ( this.modal_content == 'youtube' || this.modal_content == 'vimeo' || this.modal_content == 'video' ) {
+				if ( this.modal_content != 'photo' ) {
 
 					var modal_iframe 		= active_popup.find( 'iframe' ),
 						modal_video_tag 	= active_popup.find( 'video' );
@@ -425,6 +472,109 @@ jQuery(document).ready(function( $ ) {
 				}
 
 				return true;
+			},
+			_centerModal: function () {
+
+				$this 		 = this;
+				popup_wrap = $('.uamodal-' + this.node );
+				modal_popup  = '#modal-' + $this.node;
+				node 		 = '.uamodal-' + $this.node;
+
+				if ( $( '#modal-' + this.node ).hasClass('uabb-center-modal') ) {
+		        	$( '#modal-' + this.node ).removeClass('uabb-center-modal');
+
+				}
+
+				if( $( '#modal-' + this.node + '.uabb-show' ).outerHeight() != null ) {
+
+					var top_pos  = (($(window).height() - $( '#modal-' + this.node + '.uabb-show' ).outerHeight()) / 2);
+					
+					if ( popup_wrap.find( '.uabb-content' ).outerHeight() > $(window).height() ) {
+	   		            $(node).find( modal_popup ).css( 'top', '0' );
+						$(node).find( modal_popup ).css( 'transform', 'none' );
+					} else {
+						$(node).find( modal_popup ).css( 'top', + top_pos +'px' );
+						$(node).find( modal_popup ).css( 'transform', 'none' );
+					}
+					
+				} else {
+					
+					if ( popup_wrap.find( '.uabb-content' ).outerHeight() > $(window).height() ) {
+	   		            $(node).find( modal_popup ).css( 'top', '0' );
+						$(node).find( modal_popup ).css( 'transform', 'none' );
+					} else {
+						$(node).find( modal_popup ).css( 'top', '50%' );
+						$(node).find( modal_popup ).css( 'transform', 'translateY(-50%)' );
+					}
+				}
+
+			},
+			_iphonecursorfix: function () {
+
+				$this 		 = this;
+				popup_wrap = $('.uamodal-' + this.node );
+				modal_popup  = '#modal-' + $this.node;
+				node 		 = '.uamodal-' + $this.node;
+
+				iphone = (( navigator.userAgent.match(/iPhone/i) == 'iPhone' ) ? 'iphone' : '' );
+				ipod = (( navigator.userAgent.match(/iPod/i) == 'iPod' ) ? 'ipod' : '' );
+
+				jQuery('html').addClass(iphone).addClass(ipod);
+				jQuery( 'html.iphone .uabb-modal-action-wrap .uabb-module-content .uabb-button.uabb-trigger, html.ipod .uabb-modal-action-wrap .uabb-module-content .uabb-button.uabb-trigger' ).click ( function() {
+				    jQuery('body').css( 'position', 'fixed' );
+				});
+
+				if( this.overlay_click == 1 ) {
+					jQuery(document).on('click', '.uabb-overlay', function() {  
+					   if( jQuery('html').hasClass('iphone') || jQuery('html').hasClass('ipod') ) {
+					      jQuery('body').css( 'position', 'relative' );
+					   }
+					});
+				}
+
+				jQuery(document).on('click', '.uabb-modal-close', function() {  
+				   if( jQuery('html').hasClass('iphone') || jQuery('html').hasClass('ipod') ) {
+				      jQuery('body').css( 'position', 'relative' );
+				   }
+				});
+			},
+			_initModalPopupVideo : function(){
+
+				var play_icon = 'fa fa-play-circle';
+
+				if ( this.modal_content === 'youtube' || this.modal_content === 'vimeo' ) {
+
+					if( 0 === $( '.uabb-video-player iframe' ).length ){
+
+						$( '.uabb-video-player' ).each( function( index, value ) {
+
+							var div = $( "<div/>" );
+								div.attr( 'data-id', $( this ).data( 'id' ) );
+								div.attr( 'data-src', $( this ).data( 'src' ) );
+								div.attr( 'data-append', $( this ).data( 'append' ) );
+								div.html( '<img src="' + $( this ).data( 'thumb' ) + '"><div class="play ' + play_icon + '"></div>' );
+
+								div.on( "click",function(){
+
+									var iframe 	= document.createElement( "iframe" );
+									var src 	= this.dataset.src;
+									var append 	= this.dataset.append;
+        							var url 	= '';
+
+									 if ( 'youtube' === src ) {
+        								url = 'https://www.youtube.com/embed/' + this.dataset.id + this.dataset.append + '&autoplay=1';
+        							} else {
+        								url = 'https://player.vimeo.com/video/' + this.dataset.id + this.dataset.append + '&autoplay=1';
+        							}
+									iframe.setAttribute( "src", url );
+									iframe.setAttribute( "frameborder", "0" );
+									iframe.setAttribute( "allowfullscreen", "1" );
+									this.parentNode.replaceChild( iframe, this );
+								});
+								$( this ).html( div );
+						});
+					}	
+				}
 			}
 	}
 

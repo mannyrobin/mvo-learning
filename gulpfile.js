@@ -1,28 +1,31 @@
 var gulp = require('gulp'),
 	sass = require('gulp-sass'),
-	uglify = require('gulp-uglify'),
+	uglify = require('gulp-uglify-es').default,
 	cleancss = require('gulp-clean-css'),
-	util = require('gulp-util'),
-	log = util.log,
+	sourcemaps = require('gulp-sourcemaps'),
+	babel = require('gulp-babel'),
 	childtheme = 'web/wp-content/themes/hip-med-child/';
 
-gulp.task('sass', function() {
-	log( 'Generate CSS files ' + ( new Date()).toString() );
-	gulp.src( childtheme + 'assets/styles/*.scss' )
+gulp.task('sass', function(){
+	return gulp.src( childtheme+'assets/styles/*.scss' )
+		.pipe(sourcemaps.init())
 		.pipe( sass() )
 		.pipe( cleancss() )
-		.pipe( gulp.dest( childtheme + 'dist/css' ) );
-} );
+		.pipe(sourcemaps.write(''))
+		.pipe( gulp.dest( childtheme+'dist/css'));
+});
 
 gulp.task('js', function() {
-	log( 'Uglify JS files ' + ( new Date()).toString() );
-	gulp.src( childtheme + 'assets/scripts/*.js' )
-		.pipe( uglify() )
-		.pipe( gulp.dest( childtheme + 'dist/js' ) );
+	return gulp.src(childtheme+ 'assets/scripts/*.js' )
+		.pipe(sourcemaps.init())
+		.pipe(babel({
+			presets: ['@babel/env']
+		}))
+		.pipe( uglify())
+		.pipe(sourcemaps.write(''))
+		.pipe( gulp.dest( childtheme+'dist/js'));
 } );
-
 gulp.task('watch', function() {
-	gulp.watch( childtheme + 'assets/styles/**/*.scss', ['sass'] );
-	gulp.watch( childtheme + 'assets/js/**/*.js', ['js'] );
+	gulp.watch( childtheme+'assets/styles/**/*.scss',  gulp.series('sass'));
+	gulp.watch( childtheme+'assets/scripts/*.js', gulp.series('js'));
 });
-	
