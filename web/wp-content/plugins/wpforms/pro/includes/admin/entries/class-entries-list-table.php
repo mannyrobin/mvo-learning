@@ -688,7 +688,11 @@ class WPForms_Entries_Table extends WP_List_Table {
 	 * @since 1.0.0
 	 */
 	public function no_items() {
-		esc_html_e( 'Whoops, it appears you do not have any form entries yet.', 'wpforms' );
+		if ( isset( $_GET['search'] ) || isset( $_GET['date'] ) ) { // phpcs:ignore
+			esc_html_e( 'No entries found.', 'wpforms' );
+		} else {
+			esc_html_e( 'Whoops, it appears you do not have any form entries yet.', 'wpforms' );
+		}
 	}
 
 	/**

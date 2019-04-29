@@ -8,7 +8,33 @@
 			}
 		},
 
-		init: function() {}
+		init: function() {
+
+            this._hideDocs();
+        },
+         /**
+         * Branding is on hide the Docs Tab.
+         *
+         * @since 1.16.1
+        */
+        _hideDocs: function() {
+            var form            = $('.fl-builder-settings'),
+            branding_selector   = form.find('#fl-field-uabb_helpful_information .uabb-docs-list');
+            settings_tab        = form.find('.fl-builder-settings-tabs');
+            get_anchor          =  settings_tab.find('a');
+
+            $( get_anchor ).each(function() {
+
+                if ( '#fl-builder-settings-tab-uabb_docs' === $(this) .attr('href') ) {
+
+                    if ( 'yes' === branding_selector.data('branding') ) {
+                        $( this ).hide();
+                    } else {
+                        $( this ).show();
+                    }
+                }
+            });
+        }
 
 	});
 
@@ -23,13 +49,10 @@
                 icon_style              = form.find('select[name=icon_style]'),
                 image_style             = form.find('select[name=image_style]'),
                 photo_source            = form.find('select[name=photo_source]'),
-                img_src = $('.fl-builder-uabb-hotspot-settings').find('#fl-field-photo img').attr('src'),
                 img_border_style        = form.find('select[name=img_border_style]'),
                 icon_border_style        = form.find('select[name=icon_border_style]'),
-                n = img_src.lastIndexOf('-150x150');
-
-            img_src = img_src.slice(0, n) + img_src.slice(n).replace('-150x150', '');
-
+                img_src = $('.fl-builder-uabb-hotspot-settings').find('#fl-field-photo .fl-photo-preview .fl-photo-preview-controls select').val();
+            
             form.find('.uabb-hotspot-draggable').append('<img src="'+img_src+'" />');
 
             this._imageTypeChange();
@@ -42,6 +65,8 @@
             photo_source.on('change',  $.proxy( this._imageTypeChange, this ) );
             img_border_style.on('change',  $.proxy( this._imageTypeChange, this ) );
             icon_border_style.on('change',  $.proxy( this._imageTypeChange, this ) );
+
+           
         },
 
         _imageTypeChange: function() {
@@ -192,7 +217,7 @@
                 }
             }
         }
-
+       
     });
 
 })(jQuery);

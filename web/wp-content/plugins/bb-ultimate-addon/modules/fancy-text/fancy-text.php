@@ -1,389 +1,397 @@
 <?php
+/**
+ *  UABB Fancy Text Module file
+ *
+ *  @package UABB Fancy Text Module
+ */
 
 /**
+ * Function that initializes UABB Fancy Text Module
+ *
  * @class UABBFancyTextModule
  */
 class UABBFancyTextModule extends FLBuilderModule {
-
 	/**
+	 * Constructor function that constructs default values for the Fancy Text Module
+	 *
 	 * @method __construct
 	 */
-	public function __construct()
-	{
-		parent::__construct(array(
-			'name'          	=> __('Fancy Text', 'uabb'),
-			'description'   	=> __('Awesome Animation Text.', 'uabb'),
-			'category'      	=> UABB_CAT,
-			'dir'           	=> BB_ULTIMATE_ADDON_DIR . 'modules/fancy-text/',
-            'url'           	=> BB_ULTIMATE_ADDON_URL . 'modules/fancy-text/',
-            'partial_refresh'	=> true
-		));
+	public function __construct() {
+		parent::__construct(
+			array(
+				'name'            => __( 'Fancy Text', 'uabb' ),
+				'description'     => __( 'Awesome Animation Text.', 'uabb' ),
+				'category'        => BB_Ultimate_Addon_Helper::module_cat( BB_Ultimate_Addon_Helper::$creative_modules ),
+				'group'           => UABB_CAT,
+				'dir'             => BB_ULTIMATE_ADDON_DIR . 'modules/fancy-text/',
+				'url'             => BB_ULTIMATE_ADDON_URL . 'modules/fancy-text/',
+				'partial_refresh' => true,
+				'icon'            => 'text.svg',
 
-		$this->add_js('jquery-waypoints');
-    }
+			)
+		);
 
-	public function enqueue_scripts()
-	{
-		if( class_exists('FLBuilderModel') && FLBuilderModel::is_builder_active() ){
-        	$this->add_js('typed', $this->url . 'js/typed.js', array(), '', true);
-        	$this->add_js('vticker', $this->url . 'js/rvticker.js', array(), '', true);
-		}else{
-			if( $this->settings && $this->settings->effect_type == 'type' ) {
-	        	$this->add_js('typed', $this->url . 'js/typed.js', array(), '', true);
-		    }
-		    if ( $this->settings && $this->settings->effect_type == 'slide_up' ) {
-	        	$this->add_js('vticker', $this->url . 'js/rvticker.js', array(), '', true);
-		    }
+		$this->add_js( 'jquery-waypoints' );
+	}
+	/**
+	 * Ensure backwards compatibility with old settings.
+	 *
+	 * @since 1.14.0
+	 * @param object $settings A module settings object.
+	 * @param object $helper A settings compatibility helper.
+	 * @return object
+	 */
+	public function filter_settings( $settings, $helper ) {
+
+		$version_bb_check        = UABB_Compatibility::check_bb_version();
+		$page_migrated           = UABB_Compatibility::check_old_page_migration();
+		$stable_version_new_page = UABB_Compatibility::check_stable_version_new_page();
+
+		if ( $version_bb_check && ( 'yes' == $page_migrated || 'yes' == $stable_version_new_page ) ) {
+			/* Backward for Static Text */
+			if ( ! isset( $settings->static_text_typo ) || ! is_array( $settings->static_text_typo ) ) {
+
+				$settings->static_text_typo            = array();
+				$settings->static_text_typo_medium     = array();
+				$settings->static_text_typo_responsive = array();
+			}
+			if ( isset( $settings->font_family ) ) {
+				if ( isset( $settings->font_family['weight'] ) ) {
+					if ( 'regular' == $settings->font_family['weight'] ) {
+						$settings->static_text_typo['font_weight'] = 'normal';
+					} else {
+						$settings->static_text_typo['font_weight'] = $settings->font_family['weight'];
+					}
+					unset( $settings->font_family['weight'] );
+				}
+				if ( isset( $settings->font_family['family'] ) ) {
+					$settings->static_text_typo['font_family'] = $settings->font_family['family'];
+					unset( $settings->font_family['family'] );
+				}
+			}
+			if ( isset( $settings->font_size_unit ) ) {
+
+				$settings->static_text_typo['font_size'] = array(
+					'length' => $settings->font_size_unit,
+					'unit'   => 'px',
+				);
+				unset( $settings->font_size_unit );
+			}
+			if ( isset( $settings->font_size_unit_medium ) ) {
+				$settings->static_text_typo_medium['font_size'] = array(
+					'length' => $settings->font_size_unit_medium,
+					'unit'   => 'px',
+				);
+				unset( $settings->font_size_unit_medium );
+			}
+			if ( isset( $settings->font_size_unit_responsive ) ) {
+				$settings->static_text_typo_responsive['font_size'] = array(
+					'length' => $settings->font_size_unit_responsive,
+					'unit'   => 'px',
+				);
+				unset( $settings->font_size_unit_responsive );
+			}
+			if ( isset( $settings->line_height_unit ) ) {
+
+				$settings->static_text_typo['line_height'] = array(
+					'length' => $settings->line_height_unit,
+					'unit'   => 'em',
+				);
+				unset( $settings->line_height_unit );
+			}
+			if ( isset( $settings->line_height_unit_medium ) ) {
+				$settings->static_text_typo_medium['line_height'] = array(
+					'length' => $settings->line_height_unit_medium,
+					'unit'   => 'em',
+				);
+				unset( $settings->line_height_unit_medium );
+			}
+			if ( isset( $settings->line_height_unit_responsive ) ) {
+				$settings->static_text_typo_responsive['line_height'] = array(
+					'length' => $settings->line_height_unit_responsive,
+					'unit'   => 'em',
+				);
+				unset( $settings->line_height_unit_responsive );
+			}
+			if ( isset( $settings->transform ) ) {
+				$settings->static_text_typo['text_transform'] = $settings->transform;
+				unset( $settings->transform );
+			}
+			if ( isset( $settings->letter_spacing ) ) {
+				$settings->static_text_typo['letter_spacing'] = array(
+					'length' => $settings->letter_spacing,
+					'unit'   => 'px',
+				);
+				unset( $settings->letter_spacing );
+			}
+			/* Fancy Text */
+			if ( ! isset( $settings->fancy_text_typo ) || ! is_array( $settings->fancy_text_typo ) ) {
+				$settings->fancy_text_typo            = array();
+				$settings->fancy_text_typo_medium     = array();
+				$settings->fancy_text_typo_responsive = array();
+			}
+			if ( isset( $settings->fancy_font_family ) ) {
+				if ( isset( $settings->fancy_font_family['weight'] ) ) {
+					if ( 'regular' == $settings->fancy_font_family['weight'] ) {
+						$settings->fancy_text_typo['font_weight'] = 'normal';
+					} else {
+						$settings->fancy_text_typo['font_weight'] = $settings->fancy_font_family['weight'];
+					}
+					unset( $settings->fancy_font_family['weight'] );
+				}
+				if ( isset( $settings->fancy_font_family['family'] ) ) {
+					$settings->fancy_text_typo['font_family'] = $settings->fancy_font_family['family'];
+					unset( $settings->fancy_font_family['family'] );
+				}
+			}
+			if ( isset( $settings->fancy_font_size_unit ) ) {
+
+				$settings->fancy_text_typo['font_size'] = array(
+					'length' => $settings->fancy_font_size_unit,
+					'unit'   => 'px',
+				);
+				unset( $settings->fancy_font_size_unit );
+			}
+			if ( isset( $settings->fancy_font_size_unit_medium ) ) {
+				$settings->fancy_text_typo_medium['font_size'] = array(
+					'length' => $settings->fancy_font_size_unit_medium,
+					'unit'   => 'px',
+				);
+				unset( $settings->fancy_font_size_unit_medium );
+			}
+			if ( isset( $settings->fancy_font_size_unit_responsive ) ) {
+
+				$settings->fancy_text_typo_responsive['font_size'] = array(
+					'length' => $settings->fancy_font_size_unit_responsive,
+					'unit'   => 'px',
+				);
+				unset( $settings->fancy_font_size_unit_responsive );
+			}
+			if ( isset( $settings->fancy_line_height_unit ) ) {
+
+				$settings->fancy_text_typo['line_height'] = array(
+					'length' => $settings->fancy_line_height_unit,
+					'unit'   => 'em',
+				);
+				unset( $settings->fancy_line_height_unit );
+			}
+			if ( isset( $settings->fancy_line_height_unit_medium ) ) {
+
+				$settings->fancy_text_typo_medium['line_height'] = array(
+					'length' => $settings->fancy_line_height_unit_medium,
+					'unit'   => 'em',
+				);
+				unset( $settings->fancy_line_height_unit_medium );
+			}
+			if ( isset( $settings->fancy_line_height_unit_responsive ) ) {
+				$settings->fancy_text_typo_responsive['line_height'] = array(
+					'length' => $settings->fancy_line_height_unit_responsive,
+					'unit'   => 'em',
+				);
+				unset( $settings->fancy_line_height_unit_responsive );
+			}
+			if ( isset( $settings->fancy_transform ) ) {
+				$settings->fancy_text_typo['text_transform'] = $settings->fancy_transform;
+				unset( $settings->fancy_transform );
+			}
+			if ( isset( $settings->fancy_letter_spacing ) ) {
+				$settings->fancy_text_typo['letter_spacing'] = array(
+					'length' => $settings->fancy_letter_spacing,
+					'unit'   => 'px',
+				);
+				unset( $settings->fancy_letter_spacing );
+			}
+		} elseif ( $version_bb_check && 'yes' != $page_migrated ) {
+			/* Backward for Static Text */
+			if ( ! isset( $settings->static_text_typo ) || ! is_array( $settings->static_text_typo ) ) {
+
+				$settings->static_text_typo            = array();
+				$settings->static_text_typo_medium     = array();
+				$settings->static_text_typo_responsive = array();
+			}
+			if ( isset( $settings->font_family ) ) {
+				if ( isset( $settings->font_family['weight'] ) ) {
+					if ( 'regular' == $settings->font_family['weight'] ) {
+						$settings->static_text_typo['font_weight'] = 'normal';
+					} else {
+						$settings->static_text_typo['font_weight'] = $settings->font_family['weight'];
+					}
+					unset( $settings->font_family['weight'] );
+				}
+				if ( isset( $settings->font_family['family'] ) ) {
+					$settings->static_text_typo['font_family'] = $settings->font_family['family'];
+					unset( $settings->font_family['family'] );
+				}
+			}
+			if ( isset( $settings->font_size['desktop'] ) ) {
+				$settings->static_text_typo['font_size'] = array(
+					'length' => $settings->font_size['desktop'],
+					'unit'   => 'px',
+				);
+			}
+			if ( isset( $settings->font_size['medium'] ) ) {
+				$settings->static_text_typo_medium['font_size'] = array(
+					'length' => $settings->font_size['medium'],
+					'unit'   => 'px',
+				);
+			}
+			if ( isset( $settings->font_size['small'] ) ) {
+				$settings->static_text_typo_responsive['font_size'] = array(
+					'length' => $settings->font_size['small'],
+					'unit'   => 'px',
+				);
+			}
+			if ( isset( $settings->line_height['desktop'] ) && isset( $settings->font_size['desktop'] ) && 0 != $settings->font_size['desktop'] ) {
+				if ( is_numeric( $settings->line_height['desktop'] ) && is_numeric( $settings->font_size['desktop'] ) ) {
+					$settings->static_text_typo['line_height'] = array(
+						'length' => round( $settings->line_height['desktop'] / $settings->font_size['desktop'], 2 ),
+						'unit'   => 'em',
+					);
+				}
+			}
+			if ( isset( $settings->line_height['medium'] ) && isset( $settings->font_size['medium'] ) && 0 != $settings->font_size['medium'] ) {
+				if ( is_numeric( $settings->line_height['medium'] ) && is_numeric( $settings->font_size['medium'] ) ) {
+					$settings->static_text_typo_medium['line_height'] = array(
+						'length' => round( $settings->line_height['medium'] / $settings->font_size['medium'], 2 ),
+						'unit'   => 'em',
+					);
+				}
+			}
+			if ( isset( $settings->line_height['small'] ) && isset( $settings->font_size['small'] ) && 0 != $settings->font_size['small'] ) {
+				if ( is_numeric( $settings->line_height['small'] ) && is_numeric( $settings->font_size['small'] ) ) {
+					$settings->static_text_typo_responsive['line_height'] = array(
+						'length' => round( $settings->line_height['small'] / $settings->font_size['small'], 2 ),
+						'unit'   => 'em',
+					);
+				}
+			}
+			/* Fancy Text */
+			if ( ! isset( $settings->fancy_text_typo ) || ! is_array( $settings->fancy_text_typo ) ) {
+				$settings->fancy_text_typo            = array();
+				$settings->fancy_text_typo_medium     = array();
+				$settings->fancy_text_typo_responsive = array();
+			}
+			if ( isset( $settings->fancy_font_family ) ) {
+				if ( isset( $settings->fancy_font_family['weight'] ) ) {
+					if ( 'regular' == $settings->fancy_font_family['weight'] ) {
+						$settings->fancy_text_typo['font_weight'] = 'normal';
+					} else {
+						$settings->fancy_text_typo['font_weight'] = $settings->fancy_font_family['weight'];
+					}
+					unset( $settings->fancy_font_family['weight'] );
+				}
+				if ( isset( $settings->fancy_font_family['family'] ) ) {
+					$settings->fancy_text_typo['font_family'] = $settings->fancy_font_family['family'];
+					unset( $settings->fancy_font_family['family'] );
+				}
+			}
+			if ( isset( $settings->fancy_font_size['desktop'] ) ) {
+				$settings->fancy_text_typo['font_size'] = array(
+					'length' => $settings->fancy_font_size['desktop'],
+					'unit'   => 'px',
+				);
+			}
+			if ( isset( $settings->fancy_font_size['medium'] ) ) {
+				$settings->fancy_text_typo_medium['font_size'] = array(
+					'length' => $settings->fancy_font_size['medium'],
+					'unit'   => 'px',
+				);
+			}
+			if ( isset( $settings->fancy_font_size['small'] ) ) {
+				$settings->fancy_text_typo_responsive['font_size'] = array(
+					'length' => $settings->fancy_font_size['small'],
+					'unit'   => 'px',
+				);
+			}
+			if ( isset( $settings->fancy_line_height['desktop'] ) && isset( $settings->fancy_font_size['small'] ) && 0 != $settings->fancy_font_size['desktop'] ) {
+				if ( is_numeric( $settings->fancy_line_height['desktop'] ) && is_numeric( $settings->fancy_font_size['desktop'] ) ) {
+					$settings->fancy_text_typo['line_height'] = array(
+						'length' => round( $settings->fancy_line_height['desktop'] / $settings->fancy_font_size['desktop'], 2 ),
+						'unit'   => 'em',
+					);
+				}
+			}
+			if ( isset( $settings->fancy_line_height['medium'] ) && isset( $settings->fancy_font_size['medium'] ) && 0 != $settings->fancy_font_size['medium'] ) {
+				if ( is_numeric( $settings->fancy_line_height['medium'] ) && is_numeric( $settings->fancy_font_size['medium'] ) ) {
+					$settings->fancy_text_typo_medium['line_height'] = array(
+						'length' => round( $settings->fancy_line_height['medium'] / $settings->fancy_font_size['medium'], 2 ),
+						'unit'   => 'em',
+					);
+				}
+			}
+			if ( isset( $settings->fancy_line_height['small'] ) && isset( $settings->fancy_font_size['small'] ) && 0 != $settings->fancy_font_size['small'] ) {
+				if ( is_numeric( $settings->fancy_line_height['small'] ) && is_numeric( $settings->fancy_font_size['small'] ) ) {
+					$settings->fancy_text_typo_responsive['line_height'] = array(
+						'length' => round( $settings->fancy_line_height['small'] / $settings->fancy_font_size['small'], 2 ),
+						'unit'   => 'em',
+					);
+				}
+			}
+			if ( isset( $settings->font_size['desktop'] ) ) {
+				unset( $settings->font_size['desktop'] );
+			}
+			if ( isset( $settings->font_size['medium'] ) ) {
+				unset( $settings->font_size['medium'] );
+			}
+			if ( isset( $settings->font_size['small'] ) ) {
+				unset( $settings->font_size['small'] );
+			}
+			if ( isset( $settings->line_height['desktop'] ) ) {
+				unset( $settings->line_height['desktop'] );
+			}
+			if ( isset( $settings->line_height['medium'] ) ) {
+				unset( $settings->line_height['medium'] );
+			}
+			if ( isset( $settings->line_height['small'] ) ) {
+				unset( $settings->line_height['small'] );
+			}
+			if ( isset( $settings->fancy_font_size['desktop'] ) ) {
+				unset( $settings->fancy_font_size['desktop'] );
+			}
+			if ( isset( $settings->fancy_font_size['medium'] ) ) {
+				unset( $settings->fancy_font_size['medium'] );
+			}
+			if ( isset( $settings->fancy_font_size['small'] ) ) {
+				unset( $settings->fancy_font_size['small'] );
+			}
+			if ( isset( $settings->fancy_line_height['desktop'] ) ) {
+				unset( $settings->fancy_line_height['desktop'] );
+			}
+			if ( isset( $settings->fancy_line_height['medium'] ) ) {
+				unset( $settings->fancy_line_height['medium'] );
+			}
+			if ( isset( $settings->fancy_line_height['small'] ) ) {
+				unset( $settings->fancy_line_height['small'] );
+			}
+		}
+		return $settings;
+	}
+	/**
+	 * Function that enqueue's scripts
+	 */
+	public function enqueue_scripts() {
+		if ( class_exists( 'FLBuilderModel' ) && FLBuilderModel::is_builder_active() ) {
+			$this->add_js( 'typed', $this->url . 'js/typed.js', array(), '', true );
+			$this->add_js( 'vticker', $this->url . 'js/rvticker.js', array(), '', true );
+		} else {
+			if ( $this->settings && 'type' == $this->settings->effect_type ) {
+				$this->add_js( 'typed', $this->url . 'js/typed.js', array(), '', true );
+			}
+			if ( $this->settings && 'slide_up' == $this->settings->effect_type ) {
+				$this->add_js( 'vticker', $this->url . 'js/rvticker.js', array(), '', true );
+			}
 		}
 	}
 }
 
-/**
- * Register the module and its form settings.
+/*
+ * Condition to verify Beaver Builder version.
+ * And accordingly render the required form settings file.
+ *
  */
-FLBuilder::register_module('UABBFancyTextModule', array(
-	'general'       => array(
-		'title'         => __('General', 'uabb'),
-		'sections'      => array(
-			'general'       => array(
-				'title'         => '',
-				'fields'        => array(
-					'prefix'        => array(
-						'type'            => 'text',
-						'label'           => __('Prefix', 'uabb'),
-						'default'         => '',
-						'help'			=> __('String placed before fancy text.', 'uabb'),
-						'connections'	=> array( 'string', 'html' )
-					),
-					'fancy_text'        => array(
-						'type'          => 'textarea',
-						'label'           => __('Fancy Text', 'uabb'),
-						'default'         => '',
-						'rows'          => '5',
-						'help'			=> __('String with fancy effects. You can add multiple strings by adding each string on a new line.', 'uabb'),
-						'connections'	=> array( 'string', 'html' )
-					),
-					'suffix'        => array(
-						'type'            => 'text',
-						'label'           => __('Suffix', 'uabb'),
-						'default'         => '',
-						'help'			=> __('String placed at the end of fancy text.', 'uabb'),
-						'connections'	=> array( 'string', 'html' )
-					)
-				)
-			),
-			'effect'          => array(
-				'title'         => __('Effect', 'uabb'),
-				'fields'        => array(
-					'effect_type'     => array(
-						'type'          => 'select',
-						'label'         => __('Effect', 'uabb'),
-						'default'       => 'type',
-						'options'       => array(
-							'type'      =>  __('Type', 'uabb'),
-							'slide_up'    =>  __('Slide', 'uabb'),
-						),
-						'toggle'        => array(
-							'type'        => array(
-								'fields'        => array('typing_speed', 'back_speed', 'start_delay', 'back_delay', 'enable_loop', 'show_cursor', 'cursor_text', 'cursor_blink', 'min_height')
-							),
-							'slide_up'		=> array(
-								'fields'        => array('animation_speed', 'pause_time', 'show_items', 'pause_hover')
-							),
-						),
-						'help'			=> __('Select the effect for fancy text.', 'uabb')
 
-					),
-					'typing_speed' => array(
-						'type'          => 'text',
-						'label'         => __('Typing Speed', 'uabb'),
-						'default'       => '80',
-						'maxlength'     => '6',
-						'size'          => '8',
-						'description'   => 'ms',
-						'help'   => __('Speed of typing effect. The time to appear single character of word.','uabb'),
-					),
-					'back_speed' => array(
-						'type'          => 'text',
-						'label'         => __('Backspeed', 'uabb'),
-						'default'       => '50',
-						'maxlength'     => '6',
-						'description'   => 'ms',
-						'size'          => '8',
-						'help'   		=> __('Speed of backspace effect. The time to disappear single character of word.','uabb'),
-					),
-					'start_delay' => array(
-						'type'          => 'text',
-						'label'         => __('Start Delay', 'uabb'),
-						'default'       => '0',
-						'maxlength'     => '6',
-						'size'          => '8',
-						'description'   => 'ms',
-						'help'   		=> __('Delay for the start of type effect. If set to 5000, the first string will appear after 5 seconds.','uabb'),
-					),
-					'back_delay' => array(
-						'type'          => 'text',
-						'label'         => __('Back Delay', 'uabb'),
-						'default'       => '2000',
-						'maxlength'     => '6',
-						'size'          => '8',
-						'description'   => 'ms',
-						'help'   		=> __('Delay for the start of backspace effect. If set to 5000, the string will remain visible for 5 seconds before backspace effect.','uabb'),
-					),
-					'enable_loop'     => array(
-						'type'          => 'select',
-						'label'         => __('Enable Loop', 'uabb'),
-						'default'       => 'yes',
-						'options'       => array(
-							'yes'      =>  __('Yes', 'uabb'),
-							'no'    =>  __('No', 'uabb'),
-						),
-						'help'			=> __("Select 'Yes' if type effect should be played continuously.", 'uabb' )
-					),
-					'show_cursor'     => array(
-						'type'          => 'select',
-						'label'         => __('Show Cursor', 'uabb'),
-						'default'       => 'yes',
-						'options'       => array(
-							'yes'      =>  __('Yes', 'uabb'),
-							'no'    =>  __('No', 'uabb'),
-						),
-						'toggle'        => array(
-							'yes'        => array(
-								'fields'        => array('cursor_text', 'cursor_blink'),
-							),
-						),
-						'help'			=> __( "Select 'Yes' if you want to display cursor at the end of fancy text & before suffix.", 'uabb' )
-					),
-					'cursor_text' => array(
-						'type'          => 'text',
-						'label'         => __('Cursor Text', 'uabb'),
-						'default'       => '|',
-						'maxlength'     => '2',
-						'size'          => '8',
-						'help'			=> __('Enter the text / symbol for your cursor. e.g. Vertical Pipe Symbol ( | )', 'uabb')
-					),
-					'cursor_blink' => array(
-						'type'          => 'select',
-						'label'         => __('Cursor Blink Effect', 'uabb'),
-						'default'       => 'yes',
-						'options'       => array(
-							'yes'      =>  __('Yes', 'uabb'),
-							'no'    =>  __('No', 'uabb'),
-						),
-					),
-
-
-					'animation_speed' => array(
-						'type'          => 'text',
-						'label'         => __('Animation Speed', 'uabb'),
-						'default'       => '500',
-						'maxlength'     => '6',
-						'size'          => '8',
-						'description'   => 'ms',
-						'help'			=> __('Speed of fancy text transition.', 'uabb')
-					),
-					'pause_time' => array(
-						'type'          => 'text',
-						'label'         => __('Pause Time', 'uabb'),
-						'default'       => '2000',
-						'maxlength'     => '6',
-						'size'          => '8',
-						'description'   => 'ms',
-						'help'			=> __('Delay before scrolling to next fancy text.', 'uabb')
-					),
-					'pause_hover'     => array(
-						'type'          => 'select',
-						'label'         => __('Pause on Hover', 'uabb'),
-						'default'       => 'yes',
-						'options'       => array(
-							'yes'      =>  __('Yes', 'uabb'),
-							'no'    =>  __('No', 'uabb'),
-						),
-						'help'   		=> __('When mouse is over fancy text, it should pause slide effect.','uabb'),
-					),
-				)
-			)
-		)
-	),
-	'style'         => array(
-		'title'         => __('Style', 'uabb'),
-		'sections'      => array(
-			'structure'     => array(
-				'title'         => __('Structure', 'uabb'),
-				'fields'        => array(
-					'alignment'     => array(
-						'type'          => 'select',
-						'label'         => __('Alignment', 'uabb'),
-						'default'       => 'left',
-						'options'       => array(
-							'left'      =>  __('Left', 'uabb'),
-							'center'    =>  __('Center', 'uabb'),
-							'right'     =>  __('Right', 'uabb')
-						),
-						'preview'         => array(
-							'type'            => 'css',
-							'selector'        => '.uabb-fancy-text-wrap',
-							'property'        => 'text-align'
-						),
-						'help'			=> __('Select alignment for complete element.', 'uabb')
-					),
-					'space_prefix' => array(
-						'type'          => 'text',
-						'label'         => __('Space After Prefix', 'uabb'),
-						'default'       => '5',
-						'maxlength'     => '6',
-						'size'          => '8',
-						'description'   => 'px',
-						'preview'         => array(
-							'type'            => 'css',
-							'selector'        => '.uabb-fancy-text-prefix',
-							'property'        => 'margin-right',
-							'unit'			  => 'px'	
-						),
-						'help'			=> __('Space between Prefix and Fancy Text.', 'uabb')
-					),
-					'space_suffix' => array(
-						'type'          => 'text',
-						'label'         => __('Space Before Suffix', 'uabb'),
-						'default'       => '5',
-						'maxlength'     => '6',
-						'size'          => '8',
-						'description'   => 'px',
-						'preview'         => array(
-							'type'            => 'css',
-							'selector'        => '.uabb-fancy-text-suffix',
-							'property'        => 'margin-left',
-							'unit'			  => 'px'
-						),
-						'help'			=> __('Space between Fancy Text and Suffix.', 'uabb')
-					),
-					'min_height'          => array(
-						'type'          => 'text',
-		                'label'         => __('Minimum Height', 'uabb'),
-		                'description'   => 'px',
-		                'maxlength'     => '4',
-		                'size'          => '5',
-		                'placeholder'   => 'auto',
-		                'help'          => __('If your text is long and dropping down to next line then apply minimum height to prevent page to jump. Keep it empty for default', 'uabb'),
-					),
-				)
-			),
-		)
-	),
-	'typography'	=> array(
-		'title'			=> __('Typography', 'uabb'),
-		'sections'		=> array(
-			'text_tag'	=> array(
-				'title'		=> __('Full Text', 'uabb' ),
-				'fields'	=> array(
-					'text_tag_selection'   => array(
-		                'type'          => 'select',
-		                'label'         => __('Title Tag', 'uabb'),
-		                'default'       => 'h2',
-		                'options'       => array(
-		                	'h1'	  => __('H1', 'uabb'),
-		                    'h2'      => __('H2', 'uabb'),
-		                    'h3'      => __('H3', 'uabb'),
-		                    'h4'      => __('H4', 'uabb'),
-		                    'h5'      => __('H5', 'uabb'),
-		                    'h6'      => __('H6', 'uabb'),
-		                )
-		            ),
-				)
-			),
-			'static_text_typography' => array(
-				'title' 	=> __('Prefix / Suffix Text', 'uabb' ),
-                'fields'    => array(
-                    'font_family'       => array(
-                        'type'          => 'font',
-                        'label'         => __('Font Family', 'uabb'),
-                        'default'       => array(
-                            'family'        => 'Default',
-                            'weight'        => 'Default'
-                        ),
-                        'preview'	=> array(
-                            'type'		=> 'font',
-                            'selector'	=> '.uabb-fancy-text-prefix, .uabb-fancy-text-suffix'
-                    	),
-                    ),
-                    'font_size'     => array(
-                        'type'          => 'uabb-simplify',
-                        'label'         => __( 'Font Size', 'uabb' ),
-                        'default'       => array(
-                            'desktop'       => '',
-                            'medium'        => '',
-                            'small'         => '',
-                        ),
-                    ),
-                    'line_height'    => array(
-                        'type'          => 'uabb-simplify',
-                        'label'         => __( 'Line Height', 'uabb' ),
-                        'default'       => array(
-                            'desktop'       => '',
-                            'medium'        => '',
-                            'small'         => '',
-                        ),
-                    ),
-                    'color'        => array( 
-                        'type'       => 'color',
-                        'label'      => __('Color', 'uabb'),
-                        'default'    => '',
-                        'show_reset' => true,
-                    	'preview'	=> array(
-                            'type'		=> 'css',
-                            'selector'	=> '.uabb-fancy-text-prefix, .uabb-fancy-text-suffix',
-                            'property'	=> 'color'
-                    	),
-                    ),
-                )
-            ),
-			'fancy_text_typography' => array(
-				'title' => __('Fancy Text', 'uabb' ),
-                'fields'    => array(
-                    'fancy_font_family'       => array(
-                        'type'          => 'font',
-                        'label'         => __('Font Family', 'uabb'),
-                        'default'       => array(
-                            'family'        => 'Default',
-                            'weight'        => 'Default'
-                        ),
-                        'preview'	=> array(
-                            'type'		=> 'font',
-                            'selector'	=> '.uabb-fancy-text-main'
-                    	),
-                    ),
-                    'fancy_font_size'     => array(
-                        'type'          => 'uabb-simplify',
-                        'label'         => __( 'Font Size', 'uabb' ),
-                        'default'       => array(
-                            'desktop'       => '',
-                            'medium'        => '',
-                            'small'         => '',
-                        ),
-                    ),
-                    'fancy_line_height'    => array(
-                        'type'          => 'uabb-simplify',
-                        'label'         => __( 'Line Height', 'uabb' ),
-                        'default'       => array(
-                            'desktop'       => '',
-                            'medium'        => '',
-                            'small'         => '',
-                        ),
-                    ),
-                    'fancy_color'        => array( 
-                        'type'       => 'color',
-                        'label'      => __('Color', 'uabb'),
-                        'default'    => '',
-                        'show_reset' => true,
-                    	'preview'	=> array(
-                            'type'		=> 'css',
-                            'selector'	=> '.uabb-fancy-text-main',
-                            'property'	=> 'color'
-                    	),
-                    ),
-                )
-            ),
-		)
-	)
-));
+if ( UABB_Compatibility::check_bb_version() ) {
+	require_once BB_ULTIMATE_ADDON_DIR . 'modules/fancy-text/fancy-text-bb-2-2-compatibility.php';
+} else {
+	require_once BB_ULTIMATE_ADDON_DIR . 'modules/fancy-text/fancy-text-bb-less-than-2-2-compatibility.php';
+}

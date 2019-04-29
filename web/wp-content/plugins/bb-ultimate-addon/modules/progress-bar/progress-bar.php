@@ -1,53 +1,702 @@
 <?php
+/**
+ *  UABB Progress Bar Module file
+ *
+ *  @package UABB Progress Bar Module
+ */
 
 /**
+ * Function that initializes UABB Progress Bar Module
  *
  * @class ProgressBarModule
  */
 class ProgressBarModule extends FLBuilderModule {
+	/**
+	 * Constructor function that constructs default values for the Progress Bar Module
+	 *
+	 * @method __construct
+	 */
+	public function __construct() {
+		parent::__construct(
+			array(
+				'name'            => __( 'Progress Bar', 'uabb' ),
+				'description'     => __( 'Progress Bar', 'uabb' ),
+				'category'        => BB_Ultimate_Addon_Helper::module_cat( BB_Ultimate_Addon_Helper::$creative_modules ),
+				'group'           => UABB_CAT,
+				'dir'             => BB_ULTIMATE_ADDON_DIR . 'modules/progress-bar/',
+				'url'             => BB_ULTIMATE_ADDON_URL . 'modules/progress-bar/',
+				'editor_export'   => true, // Defaults to true and can be omitted.
+				'enabled'         => true, // Defaults to true and can be omitted.
+				'partial_refresh' => true,
+				'icon'            => 'progress-bar.svg',
+			)
+		);
 
-    /**
-     *
-     * @method __construct
-     */
-    public function __construct()
-    {
-        parent::__construct(array(
-            'name'          => __('Progress Bar', 'uabb'),
-            'description'   => __('Progress Bar', 'uabb'),
-            'category'		=> UABB_CAT,
-            'dir'           => BB_ULTIMATE_ADDON_DIR . 'modules/progress-bar/',
-            'url'           => BB_ULTIMATE_ADDON_URL . 'modules/progress-bar/',
-            'editor_export' => true, // Defaults to true and can be omitted.
-            'enabled'       => true, // Defaults to true and can be omitted.
-        ));
-        $this->add_js('jquery-waypoints');
-    }
+		$this->add_js( 'jquery-waypoints' );
+	}
 
-    public function render_horizontal_content( $obj, $style = '', $position = '', $i ) {
+	/**
+	 * Function to get the icon for the Progress Bar
+	 *
+	 * @method get_icon
+	 * @param string $icon gets the icon for the module.
+	 */
+	public function get_icon( $icon = '' ) {
 
-        if( $this->settings->horizontal_style == $style ) {
-            if( $style == 'style4' ) {
-                if( $this->settings->text_position == $position ) {
+		// check if $icon is referencing an included icon.
+		if ( '' != $icon && file_exists( BB_ULTIMATE_ADDON_DIR . 'modules/progress-bar/icon/' . $icon ) ) {
+			$path = BB_ULTIMATE_ADDON_DIR . 'modules/progress-bar/icon/' . $icon;
+		}
 
-                    echo '<div class="uabb-progress-info uabb-progress-bar-info-' . $i . '">
+		if ( file_exists( $path ) ) {
+			$remove_icon = apply_filters( 'uabb_remove_svg_icon', false, 10, 1 );
+			if ( true === $remove_icon ) {
+				return;
+			} else {
+				return file_get_contents( $path );
+			}
+		} else {
+			return '';
+		}
+	}
+
+	/**
+	 * Ensure backwards compatibility with old settings.
+	 *
+	 * @since 1.14.0
+	 * @param object $settings A module settings object.
+	 * @param object $helper A settings compatibility helper.
+	 * @return object
+	 */
+	public function filter_settings( $settings, $helper ) {
+
+		$version_bb_check        = UABB_Compatibility::check_bb_version();
+		$page_migrated           = UABB_Compatibility::check_old_page_migration();
+		$stable_version_new_page = UABB_Compatibility::check_stable_version_new_page();
+
+		if ( $version_bb_check && ( 'yes' == $page_migrated || 'yes' == $stable_version_new_page ) ) {
+
+			// Handle old border settings.
+			if ( isset( $settings->border_color ) ) {
+
+				$settings->progress_border = array();
+
+				// Border style, color, and width.
+				if ( isset( $settings->border_style ) ) {
+					$settings->progress_border['style'] = $settings->border_style;
+					unset( $settings->border_style );
+				}
+				if ( isset( $settings->border_color ) ) {
+					$settings->progress_border['color'] = $settings->border_color;
+					unset( $settings->border_color );
+				}
+				if ( isset( $settings->border_size ) ) {
+					$settings->progress_border['width'] = array(
+						'top'    => $settings->border_size,
+						'right'  => $settings->border_size,
+						'bottom' => $settings->border_size,
+						'left'   => $settings->border_size,
+					);
+
+					unset( $settings->border_size );
+				}
+				// Border radius.
+				if ( isset( $settings->border_radius ) ) {
+					$settings->progress_border['radius'] = array(
+						'top_left'     => $settings->border_radius,
+						'top_right'    => $settings->border_radius,
+						'bottom_left'  => $settings->border_radius,
+						'bottom_right' => $settings->border_radius,
+					);
+					unset( $settings->border_radius );
+				}
+			}
+			$helper->handle_opacity_inputs( $settings, 'background_color_opc', 'background_color' );
+
+			$helper->handle_opacity_inputs( $settings, 'gradient_color_opc', 'gradient_color' );
+
+			// For Text Typo.
+			if ( ! isset( $settings->text_typo ) || ! is_array( $settings->text_typo ) ) {
+
+				$settings->text_typo            = array();
+				$settings->text_typo_medium     = array();
+				$settings->text_typo_responsive = array();
+			}
+			if ( isset( $settings->text_font_family ) ) {
+				if ( isset( $settings->text_font_family['family'] ) ) {
+					$settings->text_typo['font_family'] = $settings->text_font_family['family'];
+					unset( $settings->text_font_family['family'] );
+				}
+				if ( isset( $settings->text_font_family['weight'] ) ) {
+					if ( 'regular' == $settings->text_font_family['weight'] ) {
+						$settings->text_typo['font_weight'] = 'normal';
+					} else {
+						$settings->text_typo['font_weight'] = $settings->text_font_family['weight'];
+					}
+					unset( $settings->text_font_family['weight'] );
+				}
+			}
+			if ( isset( $settings->text_font_size_unit ) ) {
+				$settings->text_typo['font_size'] = array(
+					'length' => $settings->text_font_size_unit,
+					'unit'   => 'px',
+				);
+				unset( $settings->text_font_size_unit );
+			}
+			if ( isset( $settings->text_font_size_unit_medium ) ) {
+
+				$settings->text_typo_medium['font_size'] = array(
+					'length' => $settings->text_font_size_unit_medium,
+					'unit'   => 'px',
+				);
+				unset( $settings->text_font_size_unit_medium );
+			}
+			if ( isset( $settings->text_font_size_unit_responsive ) ) {
+
+				$settings->text_typo_responsive['font_size'] = array(
+					'length' => $settings->text_font_size_unit_responsive,
+					'unit'   => 'px',
+				);
+				unset( $settings->text_font_size_unit_responsive );
+			}
+			if ( isset( $settings->text_line_height_unit ) ) {
+
+				$settings->text_typo['line_height'] = array(
+					'length' => $settings->text_line_height_unit,
+					'unit'   => 'em',
+				);
+				unset( $settings->text_line_height_unit );
+			}
+			if ( isset( $settings->text_line_height_unit_medium ) ) {
+
+				$settings->text_typo_medium['line_height'] = array(
+					'length' => $settings->text_line_height_unit_medium,
+					'unit'   => 'em',
+				);
+				unset( $settings->text_line_height_unit_medium );
+			}
+			if ( isset( $settings->text_line_height_unit_responsive ) ) {
+
+				$settings->text_typo_responsive['line_height'] = array(
+					'length' => $settings->text_line_height_unit_responsive,
+					'unit'   => 'em',
+				);
+				unset( $settings->text_line_height_unit_responsive );
+			}
+			if ( isset( $settings->text_transform ) ) {
+				$settings->text_typo['text_transform'] = $settings->text_transform;
+				unset( $settings->text_transform );
+			}
+			if ( isset( $settings->text_letter_spacing ) ) {
+				$settings->text_typo['letter_spacing'] = array(
+					'length' => $settings->text_letter_spacing,
+					'unit'   => 'px',
+				);
+				unset( $settings->text_letter_spacing );
+			}
+			// For Before/After Text Typo.
+			if ( ! isset( $settings->before_after_typo ) || ! is_array( $settings->before_after_typo ) ) {
+
+				$settings->before_after_typo            = array();
+				$settings->before_after_typo_medium     = array();
+				$settings->before_after_typo_responsive = array();
+			}
+			if ( isset( $settings->before_after_font_family ) ) {
+				if ( isset( $settings->before_after_font_family['family'] ) ) {
+					$settings->before_after_typo['font_family'] = $settings->before_after_font_family['family'];
+					unset( $settings->before_after_font_family['family'] );
+				}
+				if ( isset( $settings->before_after_font_family['weight'] ) ) {
+					if ( 'regular' == $settings->before_after_font_family['weight'] ) {
+						$settings->before_after_typo['font_weight'] = 'normal';
+					} else {
+						$settings->before_after_typo['font_weight'] = $settings->before_after_font_family['weight'];
+					}
+					unset( $settings->before_after_font_family['weight'] );
+				}
+			}
+			if ( isset( $settings->before_after_font_size_unit ) ) {
+
+				$settings->before_after_typo['font_size'] = array(
+					'length' => $settings->before_after_font_size_unit,
+					'unit'   => 'px',
+				);
+				unset( $settings->before_after_font_size_unit );
+			}
+			if ( isset( $settings->before_after_font_size_unit_medium ) ) {
+
+				$settings->before_after_typo_medium['font_size'] = array(
+					'length' => $settings->before_after_font_size_unit_medium,
+					'unit'   => 'px',
+				);
+				unset( $settings->before_after_font_size_unit_medium );
+			}
+			if ( isset( $settings->before_after_font_size_unit_responsive ) ) {
+
+				$settings->before_after_typo_responsive['font_size'] = array(
+					'length' => $settings->before_after_font_size_unit_responsive,
+					'unit'   => 'px',
+				);
+				unset( $settings->before_after_font_size_unit_responsive );
+			}
+			if ( isset( $settings->before_after_line_height_unit ) ) {
+
+				$settings->before_after_typo['line_height'] = array(
+					'length' => $settings->before_after_line_height_unit,
+					'unit'   => 'em',
+				);
+				unset( $settings->before_after_line_height_unit );
+			}
+			if ( isset( $settings->before_after_line_height_unit_medium ) ) {
+
+				$settings->before_after_typo_medium['line_height'] = array(
+					'length' => $settings->before_after_line_height_unit_medium,
+					'unit'   => 'em',
+				);
+				unset( $settings->before_after_line_height_unit_medium );
+			}
+			if ( isset( $settings->before_after_line_height_unit_responsive ) ) {
+
+				$settings->before_after_typo_responsive['line_height'] = array(
+					'length' => $settings->before_after_line_height_unit_responsive,
+					'unit'   => 'em',
+				);
+				unset( $settings->before_after_line_height_unit_responsive );
+			}
+			if ( isset( $settings->before_after_transform ) ) {
+
+				$settings->before_after_typo['text_transform'] = $settings->before_after_transform;
+				unset( $settings->before_after_transform );
+			}
+			if ( isset( $settings->before_after_letter_spacing ) ) {
+
+				$settings->before_after_typo['letter_spacing'] = array(
+					'length' => $settings->before_after_letter_spacing,
+					'unit'   => 'px',
+				);
+				unset( $settings->before_after_letter_spacing );
+			}
+
+			// For Progress Value Typo.
+			if ( ! isset( $settings->number_typo ) || ! is_array( $settings->number_typo ) ) {
+
+				$settings->number_typo            = array();
+				$settings->number_typo_medium     = array();
+				$settings->number_typo_responsive = array();
+			}
+			if ( isset( $settings->number_font_family ) ) {
+
+				if ( isset( $settings->number_font_family['family'] ) ) {
+
+					$settings->number_typo['font_family'] = $settings->number_font_family['family'];
+					unset( $settings->number_font_family['family'] );
+				}
+				if ( isset( $settings->number_font_family['weight'] ) ) {
+
+					if ( 'regular' == $settings->number_font_family['weight'] ) {
+						$settings->number_typo['font_weight'] = 'normal';
+					} else {
+						$settings->number_typo['font_weight'] = $settings->number_font_family['weight'];
+					}
+					unset( $settings->number_font_family['weight'] );
+				}
+			}
+			if ( isset( $settings->number_font_size_unit ) ) {
+
+				$settings->number_typo['font_size'] = array(
+					'length' => $settings->number_font_size_unit,
+					'unit'   => 'px',
+				);
+				unset( $settings->number_font_size_unit );
+			}
+			if ( isset( $settings->number_font_size_unit_medium ) ) {
+
+				$settings->number_typo_medium['font_size'] = array(
+					'length' => $settings->number_font_size_unit_medium,
+					'unit'   => 'px',
+				);
+				unset( $settings->number_font_size_unit_medium );
+			}
+			if ( isset( $settings->number_font_size_unit_responsive ) ) {
+
+				$settings->number_typo_responsive['font_size'] = array(
+					'length' => $settings->number_font_size_unit_responsive,
+					'unit'   => 'px',
+				);
+				unset( $settings->number_font_size_unit_responsive );
+			}
+			if ( isset( $settings->number_line_height_unit ) ) {
+
+				$settings->number_typo['line_height'] = array(
+					'length' => $settings->number_line_height_unit,
+					'unit'   => 'em',
+				);
+				unset( $settings->number_line_height_unit );
+			}
+			if ( isset( $settings->number_line_height_unit_medium ) ) {
+
+				$settings->number_typo_medium['line_height'] = array(
+					'length' => $settings->number_line_height_unit_medium,
+					'unit'   => 'em',
+				);
+				unset( $settings->number_line_height_unit_medium );
+			}
+			if ( isset( $settings->number_line_height_unit_responsive ) ) {
+
+				$settings->number_typo_responsive['line_height'] = array(
+					'length' => $settings->number_line_height_unit_responsive,
+					'unit'   => 'em',
+				);
+				unset( $settings->number_line_height_unit_responsive );
+			}
+			if ( isset( $settings->number_letter_spacing ) ) {
+
+				$settings->number_typo['letter_spacing'] = array(
+					'length' => $settings->number_letter_spacing,
+					'unit'   => 'px',
+				);
+				unset( $settings->number_letter_spacing );
+			}
+		} elseif ( $version_bb_check && 'yes' != $page_migrated ) {
+
+			// Handle old border settings.
+			if ( isset( $settings->border_color ) ) {
+
+				$settings->progress_border = array();
+
+				if ( isset( $settings->border_style ) ) {
+					$settings->progress_border['style'] = $settings->border_style;
+					unset( $settings->border_style );
+				}
+				if ( isset( $settings->border_color ) ) {
+					$settings->progress_border['color'] = $settings->border_color;
+					unset( $settings->border_color );
+				}
+				if ( isset( $settings->border_size ) ) {
+					$settings->progress_border['width'] = array(
+						'top'    => $settings->border_size,
+						'right'  => $settings->border_size,
+						'bottom' => $settings->border_size,
+						'left'   => $settings->border_size,
+					);
+					unset( $settings->border_size );
+				}
+
+				// Border radius.
+				if ( isset( $settings->border_radius ) ) {
+					$settings->progress_border['radius'] = array(
+						'top_left'     => $settings->border_radius,
+						'top_right'    => $settings->border_radius,
+						'bottom_left'  => $settings->border_radius,
+						'bottom_right' => $settings->border_radius,
+					);
+					unset( $settings->border_radius );
+				}
+			}
+
+			$helper->handle_opacity_inputs( $settings, 'background_color_opc', 'background_color' );
+
+			$helper->handle_opacity_inputs( $settings, 'gradient_color_opc', 'gradient_color' );
+
+			// For Text Typo.
+			if ( ! isset( $settings->text_typo ) || ! is_array( $settings->text_typo ) ) {
+
+				$settings->text_typo            = array();
+				$settings->text_typo_medium     = array();
+				$settings->text_typo_responsive = array();
+			}
+			if ( isset( $settings->text_font_family ) ) {
+
+				if ( isset( $settings->text_font_family['family'] ) ) {
+					$settings->text_typo['font_family'] = $settings->text_font_family['family'];
+					unset( $settings->text_font_family['family'] );
+				}
+				if ( isset( $settings->text_font_family['weight'] ) ) {
+					if ( 'regular' == $settings->text_font_family['weight'] ) {
+						$settings->text_typo['font_weight'] = 'normal';
+					} else {
+						$settings->text_typo['font_weight'] = $settings->text_font_family['weight'];
+					}
+					unset( $settings->text_font_family['weight'] );
+				}
+			}
+			if ( isset( $settings->text_font_size['small'] ) ) {
+				$settings->text_typo_responsive['font_size'] = array(
+					'length' => $settings->text_font_size['small'],
+					'unit'   => 'px',
+				);
+			}
+			if ( isset( $settings->text_font_size['medium'] ) ) {
+				$settings->text_typo_medium['font_size'] = array(
+					'length' => $settings->text_font_size['medium'],
+					'unit'   => 'px',
+				);
+			}
+			if ( isset( $settings->text_font_size['desktop'] ) ) {
+				$settings->text_typo['font_size'] = array(
+					'length' => $settings->text_font_size['desktop'],
+					'unit'   => 'px',
+				);
+			}
+
+			if ( isset( $settings->text_line_height['small'] ) && isset( $settings->text_font_size['small'] ) && 0 != $settings->text_font_size['small'] ) {
+				if ( is_numeric( $settings->text_line_height['small'] ) && is_numeric( $settings->text_font_size['small'] ) ) {
+					$settings->text_typo_responsive['line_height'] = array(
+						'length' => round( $settings->text_line_height['small'] / $settings->text_font_size['small'], 2 ),
+						'unit'   => 'em',
+					);
+				}
+			}
+			if ( isset( $settings->text_line_height['medium'] ) && isset( $settings->text_font_size['medium'] ) && 0 != $settings->text_font_size['medium'] ) {
+				if ( is_numeric( $settings->text_line_height['medium'] ) && is_numeric( $settings->text_font_size['medium'] ) ) {
+					$settings->text_typo_medium['line_height'] = array(
+						'length' => round( $settings->text_line_height['medium'] / $settings->text_font_size['medium'], 2 ),
+						'unit'   => 'em',
+					);
+				}
+			}
+			if ( isset( $settings->text_line_height['desktop'] ) && isset( $settings->text_font_size['desktop'] ) && 0 != $settings->text_font_size['desktop'] ) {
+				if ( is_numeric( $settings->text_line_height['desktop'] ) && is_numeric( $settings->text_font_size['desktop'] ) ) {
+					$settings->text_typo['line_height'] = array(
+						'length' => round( $settings->text_line_height['desktop'] / $settings->text_font_size['desktop'], 2 ),
+						'unit'   => 'em',
+					);
+				}
+			}
+
+			// For Before/After Text Typo.
+			if ( ! isset( $settings->before_after_typo ) || ! is_array( $settings->before_after_typo ) ) {
+
+				$settings->before_after_typo            = array();
+				$settings->before_after_typo_medium     = array();
+				$settings->before_after_typo_responsive = array();
+			}
+			if ( isset( $settings->before_after_font_family ) ) {
+
+				if ( isset( $settings->before_after_font_family['family'] ) ) {
+					$settings->before_after_typo['font_family'] = $settings->before_after_font_family['family'];
+					unset( $settings->before_after_font_family['family'] );
+				}
+				if ( isset( $settings->before_after_font_family['weight'] ) ) {
+					if ( 'regular' == $settings->before_after_font_family['weight'] ) {
+						$settings->before_after_typo['font_weight'] = 'normal';
+					} else {
+						$settings->before_after_typo['font_weight'] = $settings->before_after_font_family['weight'];
+					}
+					unset( $settings->before_after_font_family['weight'] );
+				}
+			}
+
+			if ( isset( $settings->before_after_font_size['small'] ) ) {
+				$settings->before_after_typo_responsive['font_size'] = array(
+					'length' => $settings->before_after_font_size['small'],
+					'unit'   => 'px',
+				);
+			}
+			if ( isset( $settings->before_after_font_size['medium'] ) ) {
+				$settings->before_after_typo_medium['font_size'] = array(
+					'length' => $settings->before_after_font_size['medium'],
+					'unit'   => 'px',
+				);
+			}
+			if ( isset( $settings->before_after_font_size['desktop'] ) ) {
+				$settings->before_after_typo['font_size'] = array(
+					'length' => $settings->before_after_font_size['desktop'],
+					'unit'   => 'px',
+				);
+			}
+
+			if ( isset( $settings->before_after_line_height['small'] ) && isset( $settings->before_after_font_size['small'] ) && 0 != $settings->before_after_font_size['small'] ) {
+				if ( is_numeric( $settings->before_after_line_height['small'] ) && is_numeric( $settings->before_after_font_size['small'] ) ) {
+					$settings->before_after_typo_responsive['line_height'] = array(
+						'length' => round( $settings->before_after_line_height['small'] / $settings->before_after_font_size['small'], 2 ),
+						'unit'   => 'em',
+					);
+				}
+			}
+			if ( isset( $settings->before_after_line_height['medium'] ) && isset( $settings->before_after_font_size['medium'] ) && 0 != $settings->before_after_font_size['medium'] ) {
+				if ( is_numeric( $settings->before_after_line_height['medium'] ) && is_numeric( $settings->before_after_font_size['medium'] ) ) {
+					$settings->before_after_typo_medium['line_height'] = array(
+						'length' => round( $settings->before_after_line_height['medium'] / $settings->before_after_font_size['medium'], 2 ),
+						'unit'   => 'em',
+					);
+				}
+			}
+			if ( isset( $settings->before_after_line_height['desktop'] ) && isset( $settings->before_after_font_size['desktop'] ) && 0 != $settings->before_after_font_size['desktop'] ) {
+				if ( is_numeric( $settings->before_after_line_height['desktop'] ) && is_numeric( $settings->before_after_font_size['desktop'] ) ) {
+					$settings->before_after_typo['line_height'] = array(
+						'length' => round( $settings->before_after_line_height['desktop'] / $settings->before_after_font_size['desktop'], 2 ),
+						'unit'   => 'em',
+					);
+				}
+			}
+
+			// For Progress Value Typo.
+			if ( ! isset( $settings->number_typo ) || ! is_array( $settings->number_typo ) ) {
+
+				$settings->number_typo            = array();
+				$settings->number_typo_medium     = array();
+				$settings->number_typo_responsive = array();
+			}
+			if ( isset( $settings->number_font_family ) ) {
+				if ( isset( $settings->number_font_family['family'] ) ) {
+
+					$settings->number_typo['font_family'] = $settings->number_font_family['family'];
+					unset( $settings->number_font_family['family'] );
+				}
+				if ( isset( $settings->number_font_family['weight'] ) ) {
+					if ( 'regular' == $settings->number_font_family['weight'] ) {
+						$settings->number_typo['font_weight'] = 'normal';
+					} else {
+						$settings->number_typo['font_weight'] = $settings->number_font_family['weight'];
+					}
+					unset( $settings->number_font_family['weight'] );
+				}
+			}
+			if ( isset( $settings->number_font_size['small'] ) ) {
+				$settings->number_typo_responsive['font_size'] = array(
+					'length' => $settings->number_font_size['small'],
+					'unit'   => 'px',
+				);
+			}
+			if ( isset( $settings->number_font_size['medium'] ) ) {
+				$settings->number_typo_medium['font_size'] = array(
+					'length' => $settings->number_font_size['medium'],
+					'unit'   => 'px',
+				);
+			}
+			if ( isset( $settings->number_font_size['desktop'] ) ) {
+				$settings->number_typo['font_size'] = array(
+					'length' => $settings->number_font_size['desktop'],
+					'unit'   => 'px',
+				);
+			}
+
+			if ( isset( $settings->number_line_height['small'] ) && isset( $settings->number_font_size['small'] ) && 0 != $settings->number_font_size['small'] ) {
+				if ( is_numeric( $settings->number_line_height['small'] ) && is_numeric( $settings->number_font_size['small'] ) ) {
+					$settings->number_typo_responsive['line_height'] = array(
+						'length' => round( $settings->number_line_height['small'] / $settings->number_font_size['small'], 2 ),
+						'unit'   => 'em',
+					);
+				}
+			}
+			if ( isset( $settings->number_line_height['medium'] ) && isset( $settings->number_font_size['medium'] ) && 0 != $settings->number_font_size['medium'] ) {
+				if ( is_numeric( $settings->number_line_height['medium'] ) && is_numeric( $settings->number_font_size['medium'] ) ) {
+					$settings->number_typo_medium['line_height'] = array(
+						'length' => round( $settings->number_line_height['medium'] / $settings->number_font_size['medium'], 2 ),
+						'unit'   => 'em',
+					);
+				}
+			}
+			if ( isset( $settings->number_line_height['desktop'] ) && isset( $settings->number_font_size['desktop'] ) && 0 != $settings->number_font_size['desktop'] ) {
+				if ( is_numeric( $settings->number_line_height['desktop'] ) && is_numeric( $settings->number_font_size['desktop'] ) ) {
+					$settings->number_typo['line_height'] = array(
+						'length' => round( $settings->number_line_height['desktop'] / $settings->number_font_size['desktop'], 2 ),
+						'unit'   => 'em',
+					);
+				}
+			}
+			// Unset the old values.
+			if ( isset( $settings->text_font_size['desktop'] ) ) {
+				unset( $settings->text_font_size['desktop'] );
+			}
+			if ( isset( $settings->text_font_size['medium'] ) ) {
+				unset( $settings->text_font_size['medium'] );
+			}
+			if ( isset( $settings->text_font_size['small'] ) ) {
+				unset( $settings->text_font_size['small'] );
+			}
+			if ( isset( $settings->text_line_height['desktop'] ) ) {
+				unset( $settings->text_line_height['desktop'] );
+			}
+			if ( isset( $settings->text_line_height['medium'] ) ) {
+				unset( $settings->text_line_height['medium'] );
+			}
+			if ( isset( $settings->text_line_height['small'] ) ) {
+				unset( $settings->text_line_height['small'] );
+			}
+			// Unset the old values.
+			if ( isset( $settings->before_after_font_size['desktop'] ) ) {
+				unset( $settings->before_after_font_size['desktop'] );
+			}
+			if ( isset( $settings->before_after_font_size['medium'] ) ) {
+				unset( $settings->before_after_font_size['medium'] );
+			}
+			if ( isset( $settings->before_after_font_size['small'] ) ) {
+				unset( $settings->before_after_font_size['small'] );
+			}
+			if ( isset( $settings->before_after_line_height['desktop'] ) ) {
+				unset( $settings->before_after_line_height['desktop'] );
+			}
+			if ( isset( $settings->before_after_line_height['medium'] ) ) {
+				unset( $settings->before_after_line_height['medium'] );
+			}
+			if ( isset( $settings->before_after_line_height['small'] ) ) {
+				unset( $settings->before_after_line_height['small'] );
+			}
+			// Unset the old values.
+			if ( isset( $settings->number_font_size['desktop'] ) ) {
+				unset( $settings->number_font_size['desktop'] );
+			}
+			if ( isset( $settings->number_font_size['medium'] ) ) {
+				unset( $settings->number_font_size['medium'] );
+			}
+			if ( isset( $settings->number_font_size['small'] ) ) {
+				unset( $settings->number_font_size['small'] );
+			}
+			if ( isset( $settings->number_line_height['desktop'] ) ) {
+				unset( $settings->number_line_height['desktop'] );
+			}
+			if ( isset( $settings->number_line_height['medium'] ) ) {
+				unset( $settings->number_line_height['medium'] );
+			}
+			if ( isset( $settings->number_line_height['small'] ) ) {
+				unset( $settings->number_line_height['small'] );
+			}
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Function to render Horizontal Content
+	 *
+	 * @method render_horizontal_content
+	 * @param object $obj gets the object for the content.
+	 * @param string $style gets the value for various styles.
+	 * @param var    $position gets the positon for the content.
+	 * @param var    $i gets the value for the content.
+	 */
+	public function render_horizontal_content( $obj, $style = '', $position = '', $i ) {
+
+		if ( $this->settings->horizontal_style == $style ) {
+			if ( 'style4' == $style ) {
+				if ( $this->settings->text_position == $position ) {
+
+					echo '<div class="uabb-progress-info uabb-progress-bar-info-' . $i . '">
                         <' . $this->settings->text_tag_selection . ' class="uabb-progress-title">' . $obj->horizontal_before_number . '</' . $this->settings->text_tag_selection . '>
                     </div>';
-                }
+				}
+			} elseif ( 'style3' != $style ) {
 
-            } else if( $style != 'style3' ) {
-
-                echo '<div class="uabb-progress-info uabb-progress-bar-info-' . $i . '">
+				echo '<div class="uabb-progress-info uabb-progress-bar-info-' . $i . '">
                         <' . $this->settings->text_tag_selection . ' class="uabb-progress-title">' . $obj->horizontal_before_number . '</' . $this->settings->text_tag_selection . '>
                         <div class="uabb-progress-value">0%</div>
                     </div>';
-            }
-        }
-    }
+			}
+		}
+	}
 
-    public function render_horizontal_progress_bar( $obj, $i ) {
-        if( $this->settings->horizontal_style == 'style3' ) {
-            echo '<div class="uabb-progress-wrap">
+	/**
+	 * Function to render Horizontal Progress Bar Content
+	 *
+	 * @method render_horizontal_progress_bar
+	 * @param object $obj gets the object for the content.
+	 * @param var    $i gets the value for the content.
+	 */
+	public function render_horizontal_progress_bar( $obj, $i ) {
+		if ( 'style3' == $this->settings->horizontal_style ) {
+			echo '<div class="uabb-progress-wrap">
                     <div class="uabb-progress-box">
                         <div class="uabb-progress-bar"></div>
                         <div class="uabb-progress-info uabb-progress-bar-info-' . $i . '">
@@ -56,8 +705,8 @@ class ProgressBarModule extends FLBuilderModule {
                         </div>
                     </div>
                 </div>';
-        } else if( $this->settings->horizontal_style == 'style4' ) {
-            echo '<div class="uabb-progress-wrap">
+		} elseif ( 'style4' == $this->settings->horizontal_style ) {
+			echo '<div class="uabb-progress-wrap">
                     <div class="uabb-progress-box">
                         <div class="uabb-progress-bar"></div>
                         <div class="uabb-progress-info uabb-progress-bar-info-' . $i . '">
@@ -65,34 +714,49 @@ class ProgressBarModule extends FLBuilderModule {
                         </div>
                     </div>
                 </div>';
-        } else {
-            echo '<div class="uabb-progress-wrap">
+		} else {
+			echo '<div class="uabb-progress-wrap">
                     <div class="uabb-progress-box">
                         <div class="uabb-progress-bar"></div>
                     </div>
                 </div>';
-        }
-    }
+		}
+	}
 
-    public function render_vertical_content( $obj, $style = '', $i ) {
-        
-        if( $this->settings->vertical_style == $style ) {
-            if( $style != 'style3' ) {
-                echo '<div class="uabb-progress-info uabb-progress-bar-info-' . $i . '">
+	/**
+	 * Function to render Vertical Content
+	 *
+	 * @method render_vertical_content
+	 * @param object $obj gets the object for the content.
+	 * @param string $style gets the value for various styles.
+	 * @param var    $i gets the value for the content.
+	 */
+	public function render_vertical_content( $obj, $style = '', $i ) {
+
+		if ( $this->settings->vertical_style == $style ) {
+			if ( 'style3' != $style ) {
+				echo '<div class="uabb-progress-info uabb-progress-bar-info-' . $i . '">
                         <' . $this->settings->text_tag_selection . ' class="uabb-progress-title">' . $obj->horizontal_before_number . '</' . $this->settings->text_tag_selection . '>
                         <div class="uabb-progress-value">0%</div>
                     </div>';
-            } else {
-                echo '<div class="uabb-progress-info uabb-progress-bar-info-' . $i . '">
+			} else {
+				echo '<div class="uabb-progress-info uabb-progress-bar-info-' . $i . '">
                         <' . $this->settings->text_tag_selection . ' class="uabb-progress-title">' . $obj->horizontal_before_number . '</' . $this->settings->text_tag_selection . '>
                     </div>';
-            }
-        }
-    }
+			}
+		}
+	}
 
-    public function render_vertical_progress_bar( $obj, $i ) {
-        if( $this->settings->vertical_style == 'style3' ) {
-            echo '<div class="uabb-progress-wrap">
+	/**
+	 * Function to render Vertical Progree Bar Content
+	 *
+	 * @method render_vertical_progress_bar
+	 * @param object $obj gets the object for the content.
+	 * @param var    $i gets the value for the content.
+	 */
+	public function render_vertical_progress_bar( $obj, $i ) {
+		if ( 'style3' == $this->settings->vertical_style ) {
+			echo '<div class="uabb-progress-wrap">
                     <div class="uabb-progress-box">
                         <div class="uabb-progress-bar"></div>
                         <div class="uabb-progress-info uabb-progress-bar-info-' . $i . '">
@@ -100,684 +764,77 @@ class ProgressBarModule extends FLBuilderModule {
                         </div>
                     </div>
                 </div>';
-        } else {
-            echo '<div class="uabb-progress-wrap">
+		} else {
+			echo '<div class="uabb-progress-wrap">
                     <div class="uabb-progress-box">
                         <div class="uabb-progress-bar"></div>
                     </div>
                 </div>';
-        }
-    }
+		}
+	}
 
-    public function render_circle_progress_bar( $obj ) {
-               
-        $obj->background_color = UABB_Helper::uabb_colorpicker( $obj, 'background_color', true );
-        $obj->gradient_color   = UABB_Helper::uabb_colorpicker( $obj, 'gradient_color', true );
+	/**
+	 * Function to render Circle Progree Bar Content
+	 *
+	 * @method render_circle_progress_bar
+	 * @param object $obj gets the object for the content.
+	 */
+	public function render_circle_progress_bar( $obj ) {
 
-        $stroke_thickness = ( $this->settings->stroke_thickness != '' ) ? $this->settings->stroke_thickness : '10';
-        $width = !empty( $this->settings->circular_thickness ) ? $this->settings->circular_thickness : 300;
-        $pos = ( $width / 2 );
-        //$radius = $pos - ( 2 * $stroke_thickness );
-        $radius = $pos - 10;
-        $dash = number_format( ( ( M_PI * 2 ) * $radius ), 2, '.', '');
+		$obj->background_color = UABB_Helper::uabb_colorpicker( $obj, 'background_color', true );
+		$obj->gradient_color   = UABB_Helper::uabb_colorpicker( $obj, 'gradient_color', true );
 
-        //$html = '<div class="svg-container">';
-        $html = '<svg class="svg" viewBox="0 0 '. $width .' '. $width .'" version="1.1" preserveAspectRatio="xMinYMin meet">
-            <circle class="uabb-bar-bg" r="'. $radius .'" cx="'. $pos .'" cy="'. $pos .'" fill=" ' . $obj->background_color . ' " stroke-dasharray="'. $dash .'" stroke-dashoffset="0"></circle>
-            <circle class="uabb-bar" r="'. $radius .'" cx="'. $pos .'" cy="'. $pos .'" fill="transparent" stroke-dasharray="'. $dash .'" stroke-dashoffset="'. $dash .'" transform="rotate(-90.1 '. $pos .' '. $pos .')"></circle>
+		$stroke_thickness = ( '' != $this->settings->stroke_thickness ) ? $this->settings->stroke_thickness : '10';
+		$width            = ! empty( $this->settings->circular_thickness ) ? $this->settings->circular_thickness : 300;
+		$pos              = ( $width / 2 );
+		$radius           = $pos - 10;
+		$dash             = number_format( ( ( M_PI * 2 ) * $radius ), 2, '.', '' );
+
+		$html = '<svg class="svg" viewBox="0 0 ' . $width . ' ' . $width . '" version="1.1" preserveAspectRatio="xMinYMin meet">
+            <circle class="uabb-bar-bg" r="' . $radius . '" cx="' . $pos . '" cy="' . $pos . '" fill=" ' . $obj->background_color . ' " stroke-dasharray="' . $dash . '" stroke-dashoffset="0"></circle>
+            <circle class="uabb-bar" r="' . $radius . '" cx="' . $pos . '" cy="' . $pos . '" fill="transparent" stroke-dasharray="' . $dash . '" stroke-dashoffset="' . $dash . '" transform="rotate(-90.1 ' . $pos . ' ' . $pos . ')"></circle>
         </svg>';
-        //$html .= '</div>';
-        
-        $txt = '<svg class="svg" viewBox="0 0 '. $width .' '. $width .'" version="1.1" preserveAspectRatio="xMinYMin meet">
-            <circle class="uabb-bar-bg" r="'. $radius .'" cx="'. $pos .'" cy="'. $pos .'" fill=" ' . $obj->background_color . ' " stroke-dasharray="'. $dash .'" stroke-dashoffset="0" ></circle>
-            <circle class="uabb-bar" r="'. $radius .'" cx="'. $pos .'" cy="'. $pos .'" fill="transparent" stroke-dasharray="'. $dash .'" stroke-dashoffset="'. $dash .'" transform="rotate(-90.1 '. $pos .' '. $pos .')"></circle>
+		$txt  = '<svg class="svg" viewBox="0 0 ' . $width . ' ' . $width . '" version="1.1" preserveAspectRatio="xMinYMin meet">
+            <circle class="uabb-bar-bg" r="' . $radius . '" cx="' . $pos . '" cy="' . $pos . '" fill=" ' . $obj->background_color . ' " stroke-dasharray="' . $dash . '" stroke-dashoffset="0" ></circle>
+            <circle class="uabb-bar" r="' . $radius . '" cx="' . $pos . '" cy="' . $pos . '" fill="transparent" stroke-dasharray="' . $dash . '" stroke-dashoffset="' . $dash . '"></circle>
         </svg>';
 
-        echo $html;
-    }
+		echo $html;
+	}
 
+	/**
+	 * Function to render Semi Circle Progree Bar Content
+	 *
+	 * @method render_semi_circle_progress_bar
+	 * @param object $obj gets the object for the content.
+	 */
+	public function render_semi_circle_progress_bar( $obj ) {
+
+		$obj->background_color = UABB_Helper::uabb_colorpicker( $obj, 'background_color', true );
+		$obj->gradient_color   = UABB_Helper::uabb_colorpicker( $obj, 'gradient_color', true );
+
+		$stroke_thickness = ( '' != $this->settings->stroke_thickness ) ? $this->settings->stroke_thickness : '10';
+		$width            = ! empty( $this->settings->circular_thickness ) ? $this->settings->circular_thickness : 300;
+		$pos              = ( $width / 2 );
+		$radius           = $pos - ( $stroke_thickness / 2 );
+		$dash             = number_format( ( ( M_PI * 2 ) * $radius ), 2, '.', '' );
+
+		$html = '<svg class="svg" viewBox="0 0 ' . $width . ' ' . $pos . '" version="1.1" preserveAspectRatio="xMinYMin meet">
+            <circle class="uabb-bar-bg" r="' . $radius . '" cx="' . $pos . '" cy="' . $pos . '" fill=" ' . $obj->background_color . ' " stroke-dasharray="' . $dash . '" stroke-dashoffset="0"></circle>
+            <circle class="uabb-bar" r="' . $radius . '" cx="' . $pos . '" cy="' . $pos . '" fill="transparent" stroke-dasharray="' . $dash . '" stroke-dashoffset="' . $dash . '" transform="rotate(-180 ' . $pos . ' ' . $pos . ')"></circle>
+        </svg>';
+		echo $html;
+	}
 }
 
-
-
-/**
- * Register the module and its form settings.
+/*
+ * Condition to verify Beaver Builder version.
+ * And accordingly render the required form settings file.
+ *
  */
-FLBuilder::register_module('ProgressBarModule', array(
-    'elements'       => array( // Tab
-        'title'         => __('General', 'uabb'), // Tab title
-        'sections'      => array( // Tab Sections
-            'items' => array(
-                'title' => __('', 'uabb'), // Section Title
-                'fields' => array(
-                    'layout'    => array(
-                        'type'          => 'select',
-                        'label'         => __('Bar Appearance', 'uabb'),
-                        'default'       => 'horizontal',
-                        'help'          => __( 'Select different layouts for Progress Bar', 'uabb'),
-                        'options'       => array(
-                            'horizontal'         => __('Horizontal', 'uabb'),
-                            'vertical'          => __('Vertical', 'uabb'),
-                            'circular'          => __( 'Circular', 'uabb' ),
-                        ),
-                        'toggle'        => array(
-                            'horizontal'         => array(
-                                'sections'      => array( 'horizontal', 'text_typography', 'border' ),
-                                'fields' => array( 'stripped' )
-                            ),
-                            'vertical'          => array(
-                                'sections'      => array( 'vertical', 'text_typography', 'border' ),
-                                'fields' => array( 'stripped', 'overall_alignment' )
-                            ),
-                            'circular'  => array(
-                                'sections' => array( 'circular', 'before_after_typography' ),
-                                'fields' => array( 'overall_alignment' )
-                            )
-                        )
-                    ),
-                )
-            ),
-            'circular_layout' => array(
-                'title' => __('Progress Bar Items', 'uabb'),
-                'fields' => array(
-                    'horizontal'   => array(
-                        'type'         => 'form',
-                        'label'        => __('Progress Bar Item', 'uabb'),
-                        'form'         => 'progress_bar_horizontal_item_form',
-                        'preview_text' => 'horizontal_number',
-                        'multiple'     => true
-                    ),
-                )
-            ),
-        )
-    ),
-    'general'       => array( // Tab
-        'title'         => __('Style', 'uabb'), // Tab title
-        'sections'      => array( // Tab Sections
-            'spacing_options'       => array(
-                'title'         => '',
-                'fields'        => array(
-                    'overall_alignment'          => array(
-                        'type'          => 'select',
-                        'label'         => __('Overall Alignment', 'uabb'),
-                        'default'       => 'center',
-                        'options'       => array(
-                            'center'         => __('Center', 'uabb'),
-                            'left'         => __('Left', 'uabb'),
-                            'right'         => __('Right', 'uabb'),
-                        ),
-                    ),
-                    'spacing'    => array(
-                        'type'          => 'text',
-                        'label'         => __( 'Spacing', 'uabb' ),
-                        'placeholder'       => '10',
-                        'size'          => '8',
-                        'help'          => __( 'Space between progress bars', 'uabb' ),
-                        'description'   => 'px',
-                    ),
-                    'stripped'     => array(
-                        'type'          => 'uabb-toggle-switch',
-                        'label'         => __( 'Striped Selector', 'uabb' ),
-                        'default'       => 'yes',
-                        'help'          => __( 'Enable to display stripes on progress, this option will only work if Progress type is color.', 'uabb' ),
-                        'options'       => array(
-                            'yes'       => __('Yes','uabb'),
-                            'no'        => __('No','uabb'),
-                        ),
-                    ),
-                )
-            ),
-            'horizontal'          => array(
-                'title'         => __('Horizontal Style', 'uabb'),
-                'fields'        => array(
-                    'horizontal_style'          => array(
-                        'type'          => 'select',
-                        'label'         => __('Style', 'uabb'),
-                        'default'       => 'style1',                        
-                        'help'          => __( 'Select the different positons to display Progress Value and Number', 'uabb' ),
-                        'options'       => array(
-                            'style1'         => __('Number and Text Above the Progress Bar', 'uabb'),
-                            'style2'         => __('Number and Text Below the Progress Bar', 'uabb'),
-                            'style3'         => __('Number and Text Inside the Progress Bar', 'uabb'),
-                            'style4'        => __( 'Number Inside and Text Outside the Progress Bar', 'uabb' ),
-                        ),
-                    ),
-                    'text_position'     => array(
-                        'type'          => 'uabb-toggle-switch',
-                        'label'         => __( 'Text Position', 'uabb' ),
-                        'default'       => 'above',
-                        'options'       => array(
-                            'above'      => __( 'Above', 'uabb' ),
-                            'below'        => __( 'Below', 'uabb' ),
-                        ),
-                    ),
-                    'horizontal_thickness'     => array(
-                        'type'          => 'text',
-                        'label'         => __('Thickness', 'uabb'),
-                        'size'          => '8',
-                        'placeholder'       => '20',
-                        'description'   => 'px',
-                        'help'          => __( 'This is basically the height', 'uabb'),
-                    ),
-                    'horizontal_space_above'     => array(
-                        'type'          => 'text',
-                        'label'         => __('Space above title', 'uabb'),
-                        'size'          => '8',
-                        'placeholder'       => '5',
-                        'description'   => 'px',
-                    ),
-                    'horizontal_space_below'     => array(
-                        'type'          => 'text',
-                        'label'         => __('Space below title', 'uabb'),
-                        'size'          => '8',
-                        'placeholder'       => '5',
-                        'description'   => 'px',
-                    ),
-                    'horizontal_vert_padding'     => array(
-                        'type'          => 'text',
-                        'label'         => __('Vertical Padding', 'uabb'),
-                        'size'          => '8',
-                        'placeholder'       => '5',
-                        'description'   => 'px',
-                    ),
-                    'horizontal_horz_padding'     => array(
-                        'type'          => 'text',
-                        'label'         => __('Horizontal Padding', 'uabb'),
-                        'size'          => '8',
-                        'placeholder'       => '10',
-                        'description'   => 'px',
-                    ),
-                )
-            ),
-            'vertical'          => array(
-                'title'         => __('Vertical Style', 'uabb'),
-                'fields'        => array(
-                    'vertical_style'          => array(
-                        'type'          => 'select',
-                        'label'         => __('Style', 'uabb'),
-                        'default'       => 'style1',                        
-                        'help'          => __( 'Select the different positons to display Progress Value and Number', 'uabb' ),
-                        'options'       => array(
-                            'style1'         => __('Number and Text Above the Progress Bar', 'uabb'),
-                            'style2'         => __('Number and Text Below the Progress Bar', 'uabb'),
-                            'style3'         => __('Number inside and Text below the Progress Bar', 'uabb'),
-                        ),
-                        'toggle' => array(
-                            'style3' => array(
-                                'fields' => array( 'title_alignment' )
-                            )
-                        )
-                    ),
-                    'title_alignment'          => array(
-                        'type'          => 'select',
-                        'label'         => __('Title Alignment', 'uabb'),
-                        'default'       => 'center',
-                        'options'       => array(
-                            'center'         => __('Center', 'uabb'),
-                            'left'         => __('Left', 'uabb'),
-                            'right'         => __('Right', 'uabb'),
-                        ),
-                    ),
-                    'vertical_thickness'     => array(
-                        'type'          => 'text',
-                        'label'         => __('Height', 'uabb'),
-                        'size'          => '8',
-                        'placeholder'   => '200',
-                        'description'   => 'px',
-                    ),
-                    'vertical_width'     => array(
-                        'type'          => 'text',
-                        'label'         => __('Width', 'uabb'),
-                        'size'          => '8',
-                        'placeholder'   => '300',
-                        'description'   => 'px',
-                    ),
-                    'vertical_responsive'     => array(
-                        'type'          => 'uabb-toggle-switch',
-                        'label'         => __( 'Responsive Size', 'uabb' ),
-                        'default'       => 'no',
-                        'help'          => __( 'Add responsive size for medium devices', 'uabb'),
-                        'options'       => array(
-                            'yes'       => __('Yes','uabb'),
-                            'no'        => __('No','uabb'),
-                        ),
-                        'toggle' => array(
-                            'yes' => array(
-                                'fields' => array( 'vertical_responsive_thickness', 'vertical_responsive_width' )
-                            ),
-                        ),
-                    ),
-                    'vertical_responsive_thickness'     => array(
-                        'type'          => 'text',
-                        'label'         => __('Vertical Responsive Height', 'uabb'),
-                        'size'          => '8',
-                        'placeholder'   => '200',
-                        'description'   => 'px',
-                    ),
-                    'vertical_responsive_width'     => array(
-                        'type'          => 'text',
-                        'label'         => __('Vertical Responsive Width', 'uabb'),
-                        'size'          => '8',
-                        'placeholder'   => '150',
-                        'description'   => 'px',
-                    ),
-                )
-            ),
-            'circular'          => array(
-                'title'         => __('Circular Style', 'uabb'),
-                'fields'        => array(
-                    'circular_thickness'     => array(
-                        'type'          => 'text',
-                        'label'         => __('Circle Width', 'uabb'),
-                        'size'          => '8',
-                        'placeholder'       => '300',
-                        'description'   => 'px',
-                    ),
-                    'stroke_thickness'     => array(
-                        'type'          => 'text',
-                        'label'         => __('Stroke Thickness', 'uabb'),
-                        'size'          => '8',
-                        'placeholder'       => '10',
-                        'description'   => 'px',
-                        'help'          => __( 'This is the thickness of stroke.', 'uabb'),
-                    ),
-                    'circular_responsive'     => array(
-                        'type'          => 'uabb-toggle-switch',
-                        'label'         => __( 'Responsive Size', 'uabb' ),
-                        'default'       => 'no',
-                        'help'          => __( 'Add responsive size for medium devices', 'uabb'),
-                        'options'       => array(
-                            'yes'       => __('Yes','uabb'),
-                            'no'        => __('No','uabb'),
-                        ),
-                        'toggle' => array(
-                            'yes' => array(
-                                'fields' => array( 'circular_responsive_width' )
-                            ),
-                        ),
-                    ),
-                    'circular_responsive_width'     => array(
-                        'type'          => 'text',
-                        'label'         => __('Circle Responsive Width', 'uabb'),
-                        'size'          => '8',
-                        'placeholder'   => '200',
-                        'description'   => 'px',
-                    ),
-                )
-            ),
-            'border'       => array( // Section
-                'title'         => __('Border', 'uabb'), // Section Title
-                'fields'        => array( // Section Fields
-                    'border_style'   => array(
-                        'type'          => 'select',
-                        'label'         => __('Border Style', 'uabb'),
-                        'default'       => 'none',
-                        'options'       => array(
-                            'none'      => __('None', 'uabb'),
-                            'solid'      => __('Solid', 'uabb'),
-                            'dashed'      => __('Dashed', 'uabb'),
-                            'dotted'      => __('Dotted', 'uabb'),
-                            'double'      => __('Double', 'uabb'),
-                        ),
-                        'toggle' => array(
-                            'none' => array(
-                                'fields' => array( 'border_radius' )
-                            ),
-                            'solid' => array(
-                                'fields' => array( 'border_size', 'border_color' )
-                            ),
-                            'dashed' => array(
-                                'fields' => array( 'border_size', 'border_color' )
-                            ),
-                            'dotted' => array(
-                                'fields' => array( 'border_size', 'border_color' )
-                            ),
-                            'double' => array(
-                                'fields' => array( 'border_size', 'border_color' )
-                            ),
-                        ),
-                    ),
-                    'border_size'    => array(
-                        'type'          => 'text',
-                        'label'         => __( 'Border Size', 'uabb' ),
-                        'placeholder'   => '1',
-                        'size'          => '8',
-                        'description'   => 'px',
-                    ),
-                    'border_color' => array( 
-                        'type'       => 'color',
-                        'label'      => __('Border Color', 'uabb'),
-                        'default'    => 'dbdbdb',
-                        'show_reset' => true,
-                    ),
-                    'border_radius'    => array(
-                        'type'          => 'text',
-                        'label'         => __( 'Border Radius', 'uabb' ),
-                        'size'          => '8',
-                        'description'   => 'px',
-                    ),
-                )
-            ),
-            'animation'       => array( // Section
-                'title'         => 'Animation', // Section Title
-                'fields'        => array( // Section Fields
-                    'animation_speed' => array(
-                        'type'          => 'text',
-                        'label'         => __('Animation Speed', 'uabb'),
-                        'size'          => '5',
-                        'placeholder'   => '1',
-                        'description'   => __( 'second(s)', 'uabb' ),
-                        'help'          => __( 'Number of seconds to complete the animation.', 'uabb' )
-                    ),
-                    'delay'          => array(
-                        'type'          => 'text',
-                        'label'         => __('Animation Delay', 'uabb'),
-                        'size'          => '5',
-                        'placeholder'   => '1',
-                        'description'   => __( 'second(s)', 'uabb' )
-                    ),
-                )
-            ),
-        )
-    ),
-    'typography'       => array( // Tab
-        'title'         => __('Typography', 'uabb'), // Tab title
-        'sections'      => array( // Tab Sections
-            'text_typography' => array(
-                'title' => __('Title', 'uabb' ),
-                'fields'    => array(
-                    'text_tag_selection'   => array(
-                        'type'          => 'select',
-                        'label'         => __('Tag', 'uabb'),
-                        'default'       => 'h4',
-                        'options'       => array(
-                            'h1'      => __('H1', 'uabb'),
-                            'h2'      => __('H2', 'uabb'),
-                            'h3'      => __('H3', 'uabb'),
-                            'h4'      => __('H4', 'uabb'),
-                            'h5'      => __('H5', 'uabb'),
-                            'h6'      => __('H6', 'uabb'),
-                            'div'     => __('Div', 'uabb'),
-                            'p'       => __('p', 'uabb'),
-                            'span'    => __('span', 'uabb'),
-                        )
-                    ),
-                    'text_font_family'       => array(
-                        'type'          => 'font',
-                        'label'         => __('Font Family', 'uabb'),
-                        'default'       => array(
-                            'family'        => 'Default',
-                            'weight'        => 'Default'
-                        ),
-                        'preview'         => array(
-                            'type'            => 'font',
-                            'selector'        => '.uabb-progress-title'
-                        )
-                    ),
-                    'text_font_size'     => array(
-                        'type'          => 'uabb-simplify',
-                        'label'         => __( 'Font Size', 'uabb' ),
-                        'default'       => array(
-                            'desktop'       => '',
-                            'medium'        => '',
-                            'small'         => '',
-                        ),
-                    ),
-                    'text_line_height'    => array(
-                        'type'          => 'uabb-simplify',
-                        'label'         => __( 'Line Height', 'uabb' ),
-                        'default'       => array(
-                            'desktop'       => '',
-                            'medium'        => '',
-                            'small'         => '',
-                        ),
-                    ),
-                    'text_color'        => array( 
-                        'type'       => 'color',
-                        'label'      => __('Color', 'uabb'),
-                        'default'    => '',
-                        'show_reset' => true,
-                    ),
-                )
-            ),
-            'before_after_typography' => array(
-                'title'     => __('Before/After Text', 'uabb' ),
-                'fields'    => array(
-                    'before_after_font_family'       => array(
-                        'type'          => 'font',
-                        'label'         => __('Font Family', 'uabb'),
-                        'default'       => array(
-                            'family'        => 'Default',
-                            'weight'        => 'Default'
-                        ),
-                        'preview'         => array(
-                            'type'            => 'font',
-                            'selector'        => '.uabb-ba-text'
-                        )
-                    ),
-                    'before_after_font_size'     => array(
-                        'type'          => 'uabb-simplify',
-                        'label'         => __( 'Font Size', 'uabb' ),
-                        'default'       => array(
-                            'desktop'       => '',
-                            'medium'        => '',
-                            'small'         => '',
-                        ),
-                    ),
-                    'before_after_line_height'    => array(
-                        'type'          => 'uabb-simplify',
-                        'label'         => __( 'Line Height', 'uabb' ),
-                        'default'       => array(
-                            'desktop'       => '',
-                            'medium'        => '',
-                            'small'         => '',
-                        ),
-                    ),
-                    'before_after_color'        => array( 
-                        'type'       => 'color',
-                        'label'      => __('Color', 'uabb'),
-                        'default'    => '',
-                        'show_reset' => true,
-                    ),
-                )
-            ),
-            'number_typography' => array(
-                'title' => __('Progress Value', 'uabb' ),
-                'fields'    => array(
-                    'number_font_family'       => array(
-                        'type'          => 'font',
-                        'label'         => __('Font Family', 'uabb'),
-                        'default'       => array(
-                            'family'        => 'Default',
-                            'weight'        => 'Default'
-                        ),
-                        'preview'         => array(
-                            'type'            => 'font',
-                            'selector'        => '.uabb-progress-value, .uabb-percent-counter'
-                        )
-                    ),
-                    'number_font_size'     => array(
-                        'type'          => 'uabb-simplify',
-                        'label'         => __( 'Font Size', 'uabb' ),
-                        'default'       => array(
-                            'desktop'       => '',
-                            'medium'        => '',
-                            'small'         => '',
-                        ),
-                    ),
-                    'number_line_height'    => array(
-                        'type'          => 'uabb-simplify',
-                        'label'         => __( 'Line Height', 'uabb' ),
-                        'default'       => array(
-                            'desktop'       => '',
-                            'medium'        => '',
-                            'small'         => '',
-                        ),
-                    ),
-                    'number_color'        => array( 
-                        'type'       => 'color',
-                        'label'      => __('Progress Color', 'uabb'),
-                        'default'    => '',
-                        'show_reset' => true,
-                    ),
-                )
-            ),
-        )
-    ),
-));
 
-/**
- * Register a settings form to use in the "form" field type above.
- */
-FLBuilder::register_settings_form('progress_bar_horizontal_item_form', array(
-    'title' => __('Add Progress Bar Item', 'uabb'),
-    'tabs'  => array(
-        'general'       => array( // Tab
-            'title'         => __('Layout', 'uabb'), // Tab title
-            'sections'      => array( // Tab Sections
-                'circular'          => array(
-                    'title'         => __('Progress Settings', 'uabb'),
-                    'fields'        => array(
-                        'horizontal_number'     => array(
-                            'type'          => 'text',
-                            'label'         => __('Progress Value', 'uabb'),
-                            'placeholder'       => '80',
-                            'size'          => '8',
-                            'description'   => '%'
-                        ),
-                        'circular_before_number'     => array(
-                            'type'          => 'text',
-                            'label'         => __('Text Before Number', 'uabb'),
-                            'default'       => __('Before Text', 'uabb'),
-                            'connections' => array( 'string', 'html' )
-                        ),
-                        'circular_after_number'     => array(
-                            'type'          => 'text',
-                            'label'         => __('Text After Number', 'uabb'),
-                            'default'       => __('After Text', 'uabb'),
-                            'connections' => array( 'string', 'html' )
-                        ),
-                        'horizontal_before_number'     => array(
-                            'type'          => 'text',
-                            'label'         => __('Title', 'uabb'),
-                            'default'       => __('Luck', 'uabb'),
-                            'connections' => array( 'string', 'html' )
-                        ),
-                    )
-                ),
-                'general'       => array( // Section
-                    'title'         => __('Style', 'uabb'), // Section Title
-                    'fields'        => array( // Section Fields
-                        'progress_bg_type' => array(
-                            'type'          => 'select',
-                            'label'         => __( 'Progress Type', 'uabb' ),
-                            'default'       => 'color',
-                            'help'          => __( 'You can select one of the three background types: Color: simple one color background, Gradient: two color background or Image: single image or pattern.', 'uabb'),
-                            'options'       => array(
-                                'color'         => __( 'Color', 'uabb' ),
-                                'gradient'         => __( 'Gradient', 'uabb' ),
-                                'image'         => __( 'Image', 'uabb' ),
-                            ),
-                            'toggle'    => array(
-                                'color'     => array(
-                                    'fields'    => array( 'gradient_color', 'gradient_color_opc' )
-                                ),
-                                'image' => array(
-                                    'fields'    => array( 'progress_bg_img', 'progress_bg_img_pos', 'progress_bg_img_size', 'progress_bg_img_repeat' )
-                                ),
-                                'gradient' => array(
-                                    'fields' => array( 'gradient_field' )
-                                )
-                            ),
-                        ),
-                        'gradient_field' => array(
-                            'type'          => 'uabb-gradient',
-                            'label'         => __('Gradient', 'uabb'),
-                            'default'       => array(
-                                'color_one' => '',
-                                'color_two' => '',
-                                'direction' => 'top_bottom',
-                                'angle'     => '0'
-                            ),
-                        ),
-                        'progress_bg_img'         => array(
-                            'type'          => 'photo',
-                            'label'         => __( 'Progress Image', 'uabb' ),
-                            'show_remove'   => true,
-                        ),
-                        'progress_bg_img_pos' => array(
-                                'type'          => 'select',
-                                'label'         => __( 'Progress Image Position', 'uabb' ),
-                                'default'       => 'center center',
-                                'options'       => array(
-                                    'left top'          => __( 'Left Top', 'uabb' ),
-                                    'left center'       => __( 'Left Center', 'uabb' ),
-                                    'left bottom'       => __( 'Left Bottom', 'uabb' ),
-                                    'center top'        => __( 'Center Top', 'uabb' ),
-                                    'center center'     => __( 'Center Center', 'uabb' ),
-                                    'center bottom'     => __( 'Center Bottom', 'uabb' ),
-                                    'right top'         => __( 'Right Top', 'uabb' ),
-                                    'right center'      => __( 'Right Center', 'uabb' ),
-                                    'right bottom'      => __( 'Right Bottom', 'uabb' ),
-                                ),
-                        ),
-                        'progress_bg_img_repeat' => array(
-                                'type'          => 'select',
-                                'label'         => __( 'Progress Image Repeat', 'uabb' ),
-                                'default'       => 'repeat',
-                                'options'       => array(
-                                    'no-repeat'     => __( 'No Repeat', 'uabb' ),
-                                    'repeat'        => __( 'Repeat', 'uabb' ),
-                                    'repeat-x'      => __( 'Repeat Horizontally', 'uabb' ),
-                                    'repeat-y'      => __( 'Repeat Vertically', 'uabb' ),
-                                ),
-                        ),
-                        'progress_bg_img_size' => array(
-                                'type'          => 'select',
-                                'label'         => __( 'Progress Image Size', 'uabb' ),
-                                'default'       => 'initial',
-                                'options'       => array(
-                                    'contain'   => __( 'Contain', 'uabb' ),
-                                    'cover'     => __( 'Cover', 'uabb' ),
-                                    'initial'   => __( 'Initial', 'uabb' ),
-                                    'inherit'   => __( 'Inherit', 'uabb' ),
-                                ),
-                        ),
-                        'gradient_color' => array( 
-                            'type'       => 'color',
-                            'label'      => __('Progress Color', 'uabb'),
-                            'default'    => '',
-                            'show_reset' => true,
-                            'help'       => __( 'This is the animated progress color, that animates above background color.', 'uabb'),
-                        ),
-                        'gradient_color_opc' => array( 
-                            'type'        => 'text',
-                            'label'       => __('Opacity', 'uabb'),
-                            'default'     => '',
-                            'description' => '%',
-                            'maxlength'   => '3',
-                            'size'        => '5',
-                        ),
-
-                        'background_color' => array( 
-                            'type'       => 'color',
-                            'label'      => __('Background Color', 'uabb'),
-                            'default'    => 'e5e5e5',
-                            'show_reset' => true,
-                            'help'       => __( 'This color goes behind the progress color', 'uabb' )
-                        ),
-                        'background_color_opc' => array( 
-                            'type'        => 'text',
-                            'label'       => __('Opacity', 'uabb'),
-                            'default'     => '',
-                            'description' => '%',
-                            'maxlength'   => '3',
-                            'size'        => '5',
-                        ),
-                    )
-                ),
-            )
-        ),
-    )
-));
-
+if ( UABB_Compatibility::check_bb_version() ) {
+	require_once BB_ULTIMATE_ADDON_DIR . 'modules/progress-bar/progress-bar-bb-2-2-compatibility.php';
+} else {
+	require_once BB_ULTIMATE_ADDON_DIR . 'modules/progress-bar/progress-bar-bb-less-than-2-2-compatibility.php';
+}

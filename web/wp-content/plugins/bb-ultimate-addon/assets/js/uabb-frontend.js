@@ -606,10 +606,16 @@
 
 jQuery(document).ready(function( $ ) {
 
-  var uabb_browser   = bowser.name,
-      uabb_browser_v = bowser.version,
-      uabb_browser_class = uabb_browser.replace(/\s+/g, '-').toLowerCase(),
-      uabb_browser_v_class = uabb_browser_class + parseInt( uabb_browser_v );
+    if( typeof bowser !== 'undefined' && bowser !== null ) {
 
-      $('html').addClass(uabb_browser_class).addClass(uabb_browser_v_class); 
+      var uabb_browser   = bowser.name,
+          uabb_browser_v = bowser.version,
+          uabb_browser_class = uabb_browser.replace(/\s+/g, '-').toLowerCase(),
+          uabb_browser_v_class = uabb_browser_class + parseInt( uabb_browser_v );
+      
+      $('html').addClass(uabb_browser_class).addClass(uabb_browser_v_class);
+      
+    }
+
+    $('.uabb-row-separator').parents('html').css('overflow-x', 'hidden');
 });

@@ -289,6 +289,7 @@ class WPForms_Entry_Handler extends WPForms_DB {
 			'offset'        => 0,
 			'form_id'       => 0,
 			'entry_id'      => 0,
+			'is_filtered'   => false,
 			'post_id'       => '',
 			'user_id'       => '',
 			'status'        => '',
@@ -340,8 +341,7 @@ class WPForms_Entry_Handler extends WPForms_DB {
 		foreach ( $keys as $key ) {
 			// Value `$args[ $key ]` can be a natural number and a numeric string.
 			// We should skip empty string values, but continue working with '0'.
-			// For sad reason using `==` makes various parts of the code work.
-			if ( '' == $args[ $key ] ) {
+			if ( ! is_array( $args[ $key ] ) && ! is_numeric( $args[ $key ] ) ) {
 				continue;
 			}
 
@@ -394,6 +394,11 @@ class WPForms_Entry_Handler extends WPForms_DB {
 					$where[ 'arg_' . $key . '_end' ]   = "`{$key}` <= '{$date_end}'";
 				}
 			}
+		}
+
+		// Remove filtering by id if it is not a filtered query.
+		if ( ! $args['is_filtered'] ) {
+			unset( $where['arg_entry_id'] );
 		}
 
 		// Give developers an ability to modify WHERE (unset clauses, add new, etc).

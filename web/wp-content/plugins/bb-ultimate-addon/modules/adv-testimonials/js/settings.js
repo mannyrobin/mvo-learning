@@ -42,8 +42,6 @@
 				testimonial_icon_style_noslider   = form.find('select[name=testimonial_icon_style_noslider]').val(),
 				image_type_noslider = form.find('select[name=image_type_noslider]').val();
 
-			// console.log(testimonial_icon_style_noslider);
-
 			if( image_type_noslider != 'icon' ) {
 				if( testimonial_icon_style_noslider != 'custom' ) {
 					form.find('#fl-field-testimonial_icon_bg_color_noslider').hide();
@@ -119,6 +117,9 @@
 				}else if ( navigation == "wide" ) {
 					$("#fl-builder-settings-section-slider_arrow").css({"display":"none"});
 					$("#fl-builder-settings-section-slider_dots").css({"display":"block"});
+				}else if ( navigation == "compact-wide" ) {
+					$("#fl-builder-settings-section-slider_arrow").css({"display":"block"});
+					$("#fl-builder-settings-section-slider_dots").css({"display":"block"});
 				}
 			}else{
 				$("#fl-builder-settings-section-slider_arrow").css({"display":"none"});
@@ -132,8 +133,6 @@
         init: function()
         {
             var form = $('.fl-builder-settings ');
-
-            //console.log(enable_rating_global);
 
             if( enable_rating_global == 'yes' ) {
             	form.find('#fl-field-slider_rating').show();

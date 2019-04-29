@@ -90,12 +90,12 @@
 }
 
 .uabb-adv-accordion-item-active .uabb-adv-push-out-right .uabb-adv-accordion-open-icon {
-    position: absolute;
+   position: absolute;
     height: 100%;
     width: 100%;
-    -webkit-transform: translate(0, -100%);;
-        -ms-transform: translate(0, -100%);;
-            transform: translate(0, -100%);;
+    -webkit-transform: translate(0, -100%);
+        -ms-transform: translate(0, -100%);
+            transform: translate(0, -100%);
 }
 
 /* Push out from Bottom */
@@ -112,7 +112,7 @@
 }
 
 .uabb-adv-accordion-item-active .uabb-adv-push-out-bottom .uabb-adv-accordion-open-icon {
-    position: absolute;
+   position: absolute;
     height: 100%;
     width: 100%;
     -webkit-transform: translate(0, -100%);

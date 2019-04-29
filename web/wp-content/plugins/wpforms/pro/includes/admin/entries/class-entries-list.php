@@ -459,6 +459,7 @@ class WPForms_Entries_List {
 	 * @return array Filtered arguments.
 	 */
 	public function get_filtered_entry_table_args( $args ) {
+		$this->filter['is_filtered'] = true;
 		return array_merge( $args, $this->filter );
 	}
 

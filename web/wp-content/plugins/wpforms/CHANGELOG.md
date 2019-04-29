@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file, formatted via [this recommendation](https://keepachangelog.com/).
 
+## [1.5.2.3] - 2019-04-23
+### Fixed
+- PHP error if checkbox field is empty when form is submitted.
+- Validate all :input fields (not only required) when navigating multi-page forms.
+- Conditional logic conflicts using checkboxes/dropdowns with options "false" or "0".
+- Use of JavaScript Array Prototype Constructor breaks conditional logic.
+
 ## [1.5.2.2] - 2019-04-15
 ### Fixed
 - PHP notice/warnings from undefined constant (typo).
