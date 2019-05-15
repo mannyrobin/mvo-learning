@@ -20,6 +20,12 @@ if ( 'justified' != $settings->gallery_layout ) {
 	$photo_columns_mobile = ( 100 - $space_mobile ) / $mobile_col;
 ?>
 
+.fancybox-<?php echo $id; ?> button.fancybox-button {
+	padding: 10px;
+	border-radius: 0;
+    box-shadow: none;
+}
+
 .fl-node-<?php echo $id; ?> .pp-photo-gallery-item {
 	width: <?php echo $photo_columns_desktop;?>%;
 	<?php if ( 'grid' == $settings->gallery_layout ) { ?>

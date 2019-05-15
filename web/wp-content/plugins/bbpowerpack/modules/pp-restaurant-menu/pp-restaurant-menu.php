@@ -405,6 +405,32 @@ FLBuilder::register_module('PPRestaurantMenuModule', array(
 	'restaurant_menu_style'		=> array(
 		'title'         =>  __('Items Style', 'bb-powerpack'),
 		'sections'      => array(
+			'card_tabindex'	=> array(
+				'title'			=> '',
+				'fields'		=> array(
+					'card_tabindex'	=> array(
+						'type'			=> 'pp-switch',
+						'label'			=> __('Enable Tab Index', 'bb-powerpack'),
+						'default'		=> 'no',
+						'options'		=> array(
+							'yes'			=> __('Yes', 'bb-powerpack'),
+							'no'			=> __('No', 'bb-powerpack'),
+						),
+						'toggle'	=> array(
+							'yes'		=> array(
+								'fields'	=> 'card_custom_tabindex'
+							)
+						)
+					),
+					'card_custom_tabindex'	=> array(
+						'type'			=> 'unit',
+						'label'			=> __('Custom Tab Index', 'bb-powerpack'),
+						'default'		=> '',
+						'responsive'	=> false,
+						'help'			=> __('Leave blank for default tabindex i.e. 0', 'bb-powerpack')
+					)
+				)
+			),
 			'card_style'  => array(
 				'title'         => __('Background', 'bb-powerpack'),
 				'fields'        => array(

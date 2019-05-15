@@ -44,11 +44,6 @@ FLBuilderCSS::typography_field_rule( array(
 	'selector' 		=> ".fl-node-$id .pp-button-wrap a.pp-button, .fl-node-$id .pp-button-wrap a.pp-button:visited",
 ) );
 
-// Default background hover color
-if ( ! empty( $settings->bg_color ) && empty( $settings->bg_hover_color ) ) {
-	$settings->bg_hover_color = $settings->bg_color;
-}
-
 // Default background color for gradient styles.
 if ( empty( $settings->bg_color_primary ) && 'gradient' === $settings->style ) {
 	$settings->bg_color_primary = 'a3a3a3';
@@ -82,8 +77,8 @@ if ( empty( $settings->bg_color_primary ) && 'gradient' === $settings->style ) {
 .fl-node-<?php echo $id; ?> .pp-button-wrap a.pp-button:focus {
 	text-decoration: none;
 
-	<?php if ( 'gradient' != $settings->style && ! empty( $settings->bg_hover_color ) ) { ?>
-		background: <?php echo pp_get_color_value( $settings->bg_hover_color ); ?>;
+	<?php if ( 'gradient' != $settings->style ) { ?>
+		background: <?php echo ! empty( $settings->bg_hover_color ) ? pp_get_color_value( $settings->bg_hover_color ) : 'rgba(255, 255, 255, 0)'; ?>;
 	<?php } ?>
 
 	<?php if ( 'gradient' == $settings->style ) { // Gradient ?>

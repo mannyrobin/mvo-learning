@@ -56,6 +56,9 @@ class PPSmartButtonModule extends FLBuilderModule {
 			$settings->button_effect = 'none';
 			if ( isset( $settings->bg_color_transparent ) ) {
 				$settings->bg_hover_color = $settings->bg_color_transparent;
+				if ( empty( $settings->bg_hover_color ) ) {
+					$settings->bg_hover_color = $settings->bg_color;
+				}
 				unset( $settings->bg_color_transparent );
 			}
 		}

@@ -87,7 +87,6 @@ div.mfp-wrap.mfp-<?php echo $id; ?> .mfp-bottom-bar {
 	<?php } else { ?>
 		margin-bottom: <?php echo $settings->photo_spacing; ?>%;
 	<?php } ?>
-	visibility: hidden;
 }
 <?php
 	// Photo - Border

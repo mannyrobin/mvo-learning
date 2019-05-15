@@ -725,6 +725,12 @@ FLBuilder::register_module('PPImageModule', array(
                             'property'  	=> 'border',
                         ),
 					),
+					'box_border_hover_color'	=> array(
+						'type'				=> 'color',
+						'label'				=> __('Border Hover Color', 'bb-powerpack'),
+						'default'			=> '',
+						'show_reset'		=> true
+					)
 				),
 			),
 			'image_border'		=> array(

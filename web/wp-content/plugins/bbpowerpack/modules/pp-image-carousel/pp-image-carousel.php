@@ -441,6 +441,15 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 							'medium'		=> __('Medium', 'bb-powerpack'),
 							'large'			=> __('Large', 'bb-powerpack'),
 						)
+					),
+					'thumb_position'	=> array(
+						'type'				=> 'select',
+						'label'				=> __('Position', 'bb-powerpack'),
+						'default'			=> 'below',
+						'options'			=> array(
+							'above'				=> __('Above', 'bb-powerpack'),
+							'below'				=> __('Below', 'bb-powerpack'),
+						)
 					)
 				)
 			)

@@ -3,7 +3,7 @@
  * Plugin Name: PowerPack for Beaver Builder
  * Plugin URI: https://wpbeaveraddons.com
  * Description: A set of custom, creative, unique modules for Beaver Builder to speed up your web design and development process.
- * Version: 2.6.9.8
+ * Version: 2.7.0
  * Author: IdeaBox Creations
  * Author URI: https://ideaboxcreations.com
  * Copyright: (c) 2016 IdeaBox Creations
@@ -80,6 +80,7 @@ final class BB_PowerPack {
 		require_once 'classes/class-pp-ajax.php';
 		require_once 'classes/class-admin-settings.php';
 		require_once 'classes/class-pp-templates-library.php';
+		require_once 'classes/class-pp-maintenance-mode.php';
 		require_once 'classes/class-media-fields.php';
 		require_once 'classes/class-wpml-compatibility.php';
 
@@ -116,7 +117,7 @@ final class BB_PowerPack {
 	 */
 	private function define_constants()
 	{
-		define( 'BB_POWERPACK_VER', '2.6.9.8' );
+		define( 'BB_POWERPACK_VER', '2.7.0' );
 		define( 'BB_POWERPACK_DIR', plugin_dir_path( __FILE__ ) );
 		define( 'BB_POWERPACK_URL', plugins_url( '/', __FILE__ ) );
 		define( 'BB_POWERPACK_PATH', plugin_basename( __FILE__ ) );
@@ -238,6 +239,8 @@ final class BB_PowerPack {
 		wp_register_style( 'jquery-slick', BB_POWERPACK_URL . 'assets/css/slick.css', array(), '1.6.0' );
 		wp_register_style( 'jquery-slick-theme', BB_POWERPACK_URL . 'assets/css/slick-theme.css', array('jquery-slick'), '1.6.0' );
 		wp_register_style( 'tablesaw', BB_POWERPACK_URL . 'assets/css/tablesaw.css', array(), '2.0.1' );
+		wp_register_style( 'twentytwenty', BB_POWERPACK_URL . 'assets/css/twentytwenty.css', array() );
+		wp_register_style( 'tooltipster', BB_POWERPACK_URL . 'assets/css/tooltipster.bundle.min.css', array() );
 
 		wp_register_script( 'pp-facebook-sdk', pp_get_fb_sdk_url(), array(), '2.12', true );
 		wp_register_script( 'pp-twitter-widgets', BB_POWERPACK_URL . 'assets/js/twitter-widgets.js', array(), BB_POWERPACK_VER, true );
@@ -251,9 +254,12 @@ final class BB_PowerPack {
 		wp_register_script( 'jquery-justifiedgallery', BB_POWERPACK_URL . 'assets/js/jquery.justifiedGallery.min.js', array('jquery'), '3.7.0', true );
 		wp_register_script( 'jquery-swiper', BB_POWERPACK_URL . 'assets/js/swiper.jquery.min.js', array('jquery'), '4.4.6', true );
 		wp_register_script( 'jquery-slick', BB_POWERPACK_URL . 'assets/js/slick.min.js', array('jquery'), '1.6.0', true );
-		wp_register_script( 'modernizr-custom', BB_POWERPACK_URL . 'assets/js/modernizr.custom.53451.js', array(), '2.0.6', true );
+		wp_register_script( 'modernizr-custom', BB_POWERPACK_URL . 'assets/js/modernizr.custom.53451.js', array(), '3.6.0', true );
 		wp_register_script( 'owl-carousel', BB_POWERPACK_URL . 'assets/js/owl.carousel.min.js', array('jquery'), BB_POWERPACK_VER, true );
 		wp_register_script( 'tablesaw', BB_POWERPACK_URL . 'assets/js/tablesaw.js', array('jquery'), '2.0.1', true );
+		wp_register_script( 'twentytwenty', BB_POWERPACK_URL . 'assets/js/jquery.twentytwenty.js', array('jquery'), '', true );
+		wp_register_script( 'jquery-event-move', BB_POWERPACK_URL . 'assets/js/jquery.event.move.js', array('jquery'), '2.0.0', true );
+		wp_register_script( 'tooltipster', BB_POWERPACK_URL . 'assets/js/tooltipster.main.js', array('jquery'), '', true );
 	}
 
 	/**

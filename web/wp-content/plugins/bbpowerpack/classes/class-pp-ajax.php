@@ -10,7 +10,7 @@ class BB_PowerPack_Ajax {
      */
     static public function init()
     {
-		add_action( 'wp', 										__CLASS__ . '::get_ajax_posts' );
+		add_action( 'wp', 										__CLASS__ . '::handle_ajax' );
 		//add_action( 'pp_post_grid_ajax_before_query', 			__CLASS__ . '::loop_fake_actions' );
         add_action( 'wp_ajax_pp_get_taxonomies', 				__CLASS__ . '::get_post_taxonomies' );
 		add_action( 'wp_ajax_nopriv_pp_get_taxonomies', 		__CLASS__ . '::get_post_taxonomies' );
@@ -38,21 +38,59 @@ class BB_PowerPack_Ajax {
 		remove_action( 'loop_end', __CLASS__ . '::fake_loop_false' );
 	}
 
-    static public function get_ajax_posts()
-    {
-		$is_error = false;
-
-		if ( ! isset( $_POST['pp_action'] ) || 'get_ajax_posts' != $_POST['pp_action'] ) {
+	static public function handle_ajax()
+	{
+		if ( ! isset( $_POST['pp_action'] ) || empty( $_POST['pp_action'] ) ) {
 			return;
 		}
 
-		if ( ! isset( $_POST['settings'] ) || empty( $_POST['settings'] ) ) {
+		if ( ! method_exists( __CLASS__, $_POST['pp_action'] ) ) {
 			return;
 		}
 
 		// Tell WordPress this is an AJAX request.
 		if ( ! defined( 'DOING_AJAX' ) ) {
 			define( 'DOING_AJAX', true );
+		}
+
+		$method = $_POST['pp_action'];
+
+		self::$method();
+	}
+
+	static public function table_csv_upload()
+	{
+		if ( ! isset( $_FILES['file'] ) ) {
+			wp_send_json_error( __('Please provide CSV file.', 'bb-powerpack') );
+		}
+
+		$file = $_FILES['file'];
+		$upload_dir = BB_PowerPack::$upload_dir;
+
+		$source_path = $file['tmp_name'];
+		$target_path = $upload_dir['path'] . $file['name'];
+
+		if ( file_exists( $target_path ) ) {
+			unlink( $target_path );
+		}
+		
+		if ( move_uploaded_file( $source_path, $target_path ) ) {
+			wp_send_json_success( array(
+				'filename' 		=> $file['name'],
+				'filepath'		=> $target_path,
+				'upload_time'	=> isset( $_POST['time'] ) ? $_POST['time'] : current_time('timestamp')
+			) );
+		}
+
+		wp_send_json_error( __('Error uploading file.', 'bb-powerpack') );
+	}
+
+    static public function get_ajax_posts()
+    {
+		$is_error = false;
+
+		if ( ! isset( $_POST['settings'] ) || empty( $_POST['settings'] ) ) {
+			return;
 		}
 
         $settings = (object)$_POST['settings'];

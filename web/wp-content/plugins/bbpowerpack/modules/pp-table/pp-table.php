@@ -28,6 +28,7 @@ class PPTableModule extends FLBuilderModule {
         $this->add_css( 'tablesaw' );
 		$this->add_js( 'tablesaw' );
 	}
+	
 	public function filter_settings( $settings, $helper ) {
 		// Header old padding field.
 		$settings = PP_Module_Fields::handle_multitext_field( $settings, 'header_padding', 'padding', 'header_padding' );
@@ -66,6 +67,7 @@ class PPTableModule extends FLBuilderModule {
 				'type'			=> 'text_transform',
 			),
 		), 'row_typography' );
+		
 		return $settings;
 	}
 }
@@ -74,20 +76,41 @@ class PPTableModule extends FLBuilderModule {
  * Register the module and its form settings.
  */
 FLBuilder::register_module('PPTableModule', array(
-	'header'		=> array(
-        'title'         => __('Table Headers', 'bb-powerpack'),
-        'sections'      => array(
-            'headers'       => array(
-                'title'         => __('Column Headers', 'bb-powerpack'),
-                'fields'        => array( // Section Fields
-                    'header'     => array(
-                        'type'          => 'text',
-                        'label'         => __('Header', 'bb-powerpack'),
-                        'multiple'       => true,
-                    ),
-                )
-            ),
-            'sort'       => array(
+	'general'		=> array(
+		'title'			=> __('General', 'bb-powerpack'),
+		'sections'		=> array(
+			'general'		=> array(
+				'title'			=> '',
+				'fields'		=> array(
+					'source'		=> array(
+						'type'			=> 'select',
+						'label'			=> __('Source', 'bb-powerpack'),
+						'default'		=> 'manual',
+						'options'		=> array(
+							'manual'		=> __('Manual', 'bb-powerpack'),
+							'csv_import'	=> __('CSV Import', 'bb-powerpack')
+						),
+						'toggle'		=> array(
+							'manual'		=> array(
+								'tabs'			=> array('header', 'row')
+							),
+							'csv_import'	=> array(
+								'fields'		=> array('csv_import')
+							)
+						)
+					),
+					'csv_import'	=> array(
+						'type'			=> 'pp-file',
+						'label'			=> __('Upload CSV', 'bb-powerpack'),
+						'default'		=> '',
+						'accept'		=> '.csv',
+						'preview'		=> array(
+							'type'			=> 'none'
+						)
+					),
+				)
+			),
+			'sort'       	=> array(
                 'title'         => __('Sortable Table', 'bb-powerpack'),
                 'fields'        => array( // Section Fields
                     'sortable'     => array(
@@ -128,6 +151,21 @@ FLBuilder::register_module('PPTableModule', array(
                     )
                 )
             ),
+		)
+	),
+	'header'		=> array(
+        'title'         => __('Table Headers', 'bb-powerpack'),
+        'sections'      => array(
+            'headers'       => array(
+                'title'         => __('Column Headers', 'bb-powerpack'),
+                'fields'        => array( // Section Fields
+                    'header'     => array(
+                        'type'          => 'text',
+                        'label'         => __('Header', 'bb-powerpack'),
+                        'multiple'       => true,
+                    ),
+                )
+            ),
         )
     ),
 	'row'			=> array(
@@ -138,7 +176,7 @@ FLBuilder::register_module('PPTableModule', array(
                 'fields'        => array( // Section Fields
                     'rows'     => array(
                         'type'          => 'form',
-                        'label'        => __('Rows', 'bb-powerpack'),
+                        'label'        => __('Row', 'bb-powerpack'),
                         'form'          => 'pp_content_table_row',
                         'preview_text'  => 'label',
                         'multiple'      => true

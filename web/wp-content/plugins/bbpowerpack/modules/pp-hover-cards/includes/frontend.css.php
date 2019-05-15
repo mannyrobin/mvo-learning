@@ -6,12 +6,28 @@ $hover_card_columns_desktop = ( 100 - $space_desktop ) / $settings->hover_card_c
 $hover_card_columns_tablet = ( 100 - $space_tablet ) / $settings->hover_card_columns_medium;
 $hover_card_columns_mobile = ( 100 - $space_mobile ) / $settings->hover_card_columns_responsive; ?>
 
-.fl-node-<?php echo $id; ?> .pp-hover-card-container {
-	width: <?php echo $hover_card_columns_desktop; ?>%;
-    margin-right: <?php echo $settings->hover_card_spacing; ?>%;
-    margin-bottom: <?php echo $settings->hover_card_spacing; ?>%;
-	float: left;
-}
+<?php
+FLBuilderCSS::rule( array(
+    'selector'  => ".fl-node-$id .pp-hover-card-container",
+    'props'     => array(
+        'width'     => array(
+            'value'     => $hover_card_columns_desktop,
+            'unit'      => '%'
+        ),
+        'margin-right'  => array(
+            'value'         => $settings->hover_card_spacing,
+            'unit'          => '%'
+        ),
+        'margin-bottom' => array(
+            'value'         => $settings->hover_card_spacing,
+            'unit'          => '%'
+        ),
+        'float'     => array(
+            'value'     => 'left'
+        )
+    )
+) );
+?>
 
 <?php
 // Card - Height
