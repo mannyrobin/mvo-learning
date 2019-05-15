@@ -24,14 +24,8 @@ class PPTestimonialsModule extends FLBuilderModule {
             'enabled'       => true, // Defaults to true and can be omitted.,
         ));
 
-        /**
-         * Use these methods to enqueue css and js already
-         * registered or to register and enqueue your own.
-         */
-        // Already registered
-        $this->add_css('jquery-bxslider');
 		$this->add_css(BB_POWERPACK()->fa_css);
-		$this->add_css('pp-testimonials-form', BB_POWERPACK_URL . 'modules/pp-testimonials/css/fields.css');
+        $this->add_css('jquery-bxslider');
 		$this->add_js('jquery-bxslider');
     }
 

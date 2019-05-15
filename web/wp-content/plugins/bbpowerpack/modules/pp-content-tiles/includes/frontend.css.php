@@ -50,7 +50,7 @@ if ( $settings->layout > 1 ) {
 FLBuilderCSS::typography_field_rule( array(
 	'settings'		=> $settings,
 	'setting_name'	=> 'title_typography',
-	'selector'		=> ".fl-node-$id .pp-post-tile-post .pp-post-tile-title"
+	'selector'		=> ".fl-node-$id .pp-post-tile-post .pp-post-tile-title a"
 ) );
 ?>
 .fl-node-<?php echo $id; ?> .pp-post-tile-post .pp-post-tile-title {

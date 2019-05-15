@@ -1246,39 +1246,8 @@ FLBuilder::register_module('PPGravityFormModule', array(
                             'selector'  => '.gform_wrapper .gfield .gfield_label, .gform_wrapper table.gfield_list thead th, .gform_wrapper span.ginput_product_price_label, .gform_wrapper span.ginput_quantity_label, .gform_wrapper .gfield_html',
                             'property'  => 'color'
                         )
-                    ),
-                )
-			),
-            'input_typography'       => array( // Section
-				'title'         => __('Input', 'bb-powerpack'), // Section Title
-				'collapsed'		=> true,
-				'fields'        => array( // Section Fields
-                    'input_font_family' => array(
-                        'type'          => 'font',
-                        'default'		=> array(
-                            'family'		=> 'Default',
-                            'weight'		=> 300
-                        ),
-                        'label'         => __('Font', 'bb-powerpack'),
-                        'preview'         => array(
-                            'type'            => 'font',
-                            'selector'        => '.gform_wrapper .gfield input, .gform_wrapper .gfield select, .gform_wrapper .gfield textarea'
-                        )
-                    ),
-                    'input_font_size'   => array(
-                        'type'          => 'unit',
-                        'label'         => __('Font Size', 'bb-powerpack'),
-                        'units' 	  	=> array('px'),
-                        'slider'         => true,
-                        'default'       => '',
-                        'preview'       => array(
-                            'type'      => 'css',
-                            'selector'  => '.gform_wrapper .gfield input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .gform_wrapper .gfield select, .gform_wrapper .gfield textarea',
-                            'property'  => 'font-size',
-                            'unit'      => 'px'
-                        )
-                    ),
-                    'input_desc_font_size'    => array(
+					),
+					'input_desc_font_size'    => array(
                         'type'              => 'unit',
                         'label'             => __('Description Font Size', 'bb-powerpack'),
                         'units'       		=> array('px'),
@@ -1312,6 +1281,37 @@ FLBuilder::register_module('PPGravityFormModule', array(
                             'type'          => 'css',
                             'selector'      => '.gform_wrapper .gfield .gfield_description',
                             'property'      => 'line-height',
+                        )
+                    ),
+                )
+			),
+            'input_typography'       => array( // Section
+				'title'         => __('Input', 'bb-powerpack'), // Section Title
+				'collapsed'		=> true,
+				'fields'        => array( // Section Fields
+                    'input_font_family' => array(
+                        'type'          => 'font',
+                        'default'		=> array(
+                            'family'		=> 'Default',
+                            'weight'		=> 300
+                        ),
+                        'label'         => __('Font', 'bb-powerpack'),
+                        'preview'         => array(
+                            'type'            => 'font',
+                            'selector'        => '.gform_wrapper .gfield input, .gform_wrapper .gfield select, .gform_wrapper .gfield textarea'
+                        )
+                    ),
+                    'input_font_size'   => array(
+                        'type'          => 'unit',
+                        'label'         => __('Font Size', 'bb-powerpack'),
+                        'units' 	  	=> array('px'),
+                        'slider'         => true,
+                        'default'       => '',
+                        'preview'       => array(
+                            'type'      => 'css',
+                            'selector'  => '.gform_wrapper .gfield input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]), .gform_wrapper .gfield select, .gform_wrapper .gfield textarea',
+                            'property'  => 'font-size',
+                            'unit'      => 'px'
                         )
                     ),
                 )

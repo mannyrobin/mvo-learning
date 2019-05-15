@@ -36,8 +36,9 @@ class PPAccordionModule extends FLBuilderModule {
 
 		switch ( $settings->content_type ) {
 			case 'content':
+				global $wp_embed;
 				$html = '<div itemprop="text">';
-				$html .= $settings->content;
+				$html .= wpautop( $wp_embed->autoembed( $settings->content ) );
 				$html .= '</div>';
 				break;
 			case 'photo':

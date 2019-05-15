@@ -600,31 +600,6 @@ FLBuilder::register_module('PPContentGridModule', array(
 							'max'			=> '20',
 							'step'			=> '1'
 						),
-						'preview'   => array(
-							'type'	=> 'css',
-							'rules'		=> array(
-								array(
-									'selector'  => '.pp-content-grid-post',
-		                            'property'  => 'margin-right',
-		                            'unit'      => '%',
-								),
-								array(
-									'selector'  => '.pp-content-grid-post',
-		                            'property'  => 'margin-bottom',
-		                            'unit'      => '%',
-								),
-								array(
-									'selector'  => '.pp-content-carousel-post',
-		                            'property'  => 'margin-right',
-		                            'unit'      => '%',
-								),
-								array(
-									'selector'  => '.pp-content-carousel-post',
-		                            'property'  => 'margin-left',
-		                            'unit'      => '%',
-								)
-							)
-                        )
 					),
 				)
 			),

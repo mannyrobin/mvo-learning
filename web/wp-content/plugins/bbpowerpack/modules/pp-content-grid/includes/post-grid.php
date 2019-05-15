@@ -165,7 +165,7 @@ if ( $settings->post_type == 'product' ) {
 
 			<?php do_action( 'pp_cg_before_post_content', $post_id ); ?>
 
-			<?php if($settings->show_content == 'yes') : ?>
+			<?php if($settings->show_content == 'yes' || $settings->show_content == 'custom') : ?>
 				<?php include $module_dir . 'includes/templates/post-content.php'; ?>
 			<?php endif; ?>
 

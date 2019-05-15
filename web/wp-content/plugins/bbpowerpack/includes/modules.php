@@ -58,6 +58,10 @@ $modules = array(
     'modules/pp-twitter-timeline/pp-twitter-timeline.php',
     'modules/pp-twitter-buttons/pp-twitter-buttons.php',
     'modules/pp-countdown/pp-countdown.php',
+    'modules/pp-search-form/pp-search-form.php',
+    'modules/pp-image-comparison/pp-image-comparison.php',
+    'modules/pp-hotspot/pp-hotspot.php',
+    'modules/pp-image-scroll/pp-image-scroll.php',
 );
 
 /* Custom Grid */

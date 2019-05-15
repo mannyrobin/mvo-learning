@@ -302,7 +302,7 @@ class PPFilterableGalleryModule extends FLBuilderModule {
 
 
 			// Only use photos who have the sizes object.
-			if(isset($photo->sizes)) {
+			if (isset($photo->sizes)) {
 
 				$data = new stdClass();
 
@@ -316,41 +316,21 @@ class PPFilterableGalleryModule extends FLBuilderModule {
 				$image_size = $this->settings->photo_size;
 
 				// Collage photo src
-				if($this->settings->gallery_layout == 'masonry') {
-
-					if($this->settings->photo_size == 'thumbnail' && isset($photo->sizes->thumbnail)) {
-						$data->src = $photo->sizes->thumbnail->url;
-					}
-					elseif($this->settings->photo_size == 'medium' && isset($photo->sizes->medium)) {
-						$data->src = $photo->sizes->medium->url;
-					}
-					elseif( isset( $photo->sizes->{$image_size} ) ) {
-						$data->src = $photo->sizes->{$image_size}->url;
-					}
-					else {
-						$data->src = $photo->sizes->full->url;
-					}
+				if ( $this->settings->photo_size == 'thumbnail' && isset( $photo->sizes->thumbnail ) ) {
+					$data->src = $photo->sizes->thumbnail->url;
 				}
-
-				// Grid photo src
+				elseif ( $this->settings->photo_size == 'medium' && isset( $photo->sizes->medium ) ) {
+					$data->src = $photo->sizes->medium->url;
+				}
+				elseif ( isset( $photo->sizes->{$image_size} ) ) {
+					$data->src = $photo->sizes->{$image_size}->url;
+				}
 				else {
-
-					if($this->settings->photo_size == 'thumbnail' && isset($photo->sizes->thumbnail)) {
-						$data->src = $photo->sizes->thumbnail->url;
-					}
-					elseif($this->settings->photo_size == 'medium' && isset($photo->sizes->medium)) {
-						$data->src = $photo->sizes->medium->url;
-					}
-					elseif( isset( $photo->sizes->{$image_size} ) ) {
-						$data->src = $photo->sizes->{$image_size}->url;
-					}
-					else {
-						$data->src = $photo->sizes->full->url;
-					}
+					$data->src = $photo->sizes->full->url;
 				}
 
 				// Photo Link
-				if(isset($photo->sizes->large)) {
+				if (isset($photo->sizes->large)) {
 					$data->link = $photo->sizes->large->url;
 				}
 				else {
@@ -559,6 +539,7 @@ FLBuilder::register_module('PPFilterableGalleryModule', array(
 						'type'          => 'text',
 						'label'         => __('Custom Text', 'bb-powerpack'),
 						'default'       => '',
+						'connections'	=> array('string'),
 						'preview'         => array(
                             'type'            => 'text',
                             'selector'        => '.pp-gallery-filters li.all',
@@ -569,6 +550,7 @@ FLBuilder::register_module('PPFilterableGalleryModule', array(
 						'label'				=> __('Custom ID Prefix', 'bb-powerpack'),
 						'default'			=> '',
 						'placeholder'		=> __('mygallery', 'bb-powerpack'),
+						'connections'		=> array('string'),
 						'help'				=> __('To filter the gallery using URL parameters, a prefix that will be applied to ID attribute of filter button in HTML. For example, prefix "mygallery" will be applied as "mygallery-1", "mygallery-2" in ID attribute of filter button 1 and filter button 2 respectively. It should only contain dashes, underscores, letters or numbers. No spaces and no other special characters.', 'bb-powerpack')
 					),
 					'active_filter'	=> array(

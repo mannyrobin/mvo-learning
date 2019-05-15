@@ -90,6 +90,23 @@ class PPLogosGridModule extends FLBuilderModule {
 
 		return $settings;
 	}
+
+	/**
+	 * Returns button link rel based on settings
+	 * @since 2.6.10
+	 */
+	public function get_rel() {
+		$rel = array();
+		if ( '_blank' == $this->settings->upload_logo_link_target ) {
+			$rel[] = 'noopener';
+		}
+		
+		$rel = implode( ' ', $rel );
+		if ( $rel ) {
+			$rel = ' rel="' . $rel . '" ';
+		}
+		return $rel;
+	}
 }
 
 /**
@@ -248,10 +265,10 @@ FLBuilder::register_module('PPLogosGridModule', array(
                         'default'       => '250',
                     ),
                     'logo_carousel_minimum_grid'   => array(
-                        'type'          => 'text',
+                        'type'          => 'unit',
                         'label'         => __('Number of Items', 'bb-powerpack'),
-                        'class'         => 'pp-logo-grid-input input-small',
-                        'default'       => '4',
+						'default'       => '4',
+						'responsive'	=> true
 					),
 					'logo_carousel_move_slide'	=> array(
 						'type'			=> 'text',
@@ -273,8 +290,8 @@ FLBuilder::register_module('PPLogosGridModule', array(
 						'label'         => __('Pause on Hover', 'bb-powerpack'),
 						'default'       => 'false',
 						'options'       => array(
-                            'true'             => __('Yes', 'bb-powerpack'),
 							'false'             => __('No', 'bb-powerpack'),
+                            'true'             => __('Yes', 'bb-powerpack'),
 						)
 					),
 					'logo_slider_pause'         => array(

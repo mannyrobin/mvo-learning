@@ -3,10 +3,12 @@
     PPImageCarousel = function (settings) {
         this.id = settings.id;
         this.nodeClass = '.fl-node-' + settings.id;
-        this.wrapperClass = this.nodeClass + ' .pp-image-carousel';
+		this.wrapperClass = this.nodeClass + ' .pp-image-carousel';
+		this.elements = '';
         this.slidesPerView = settings.slidesPerView;
         this.slidesToScroll = settings.slidesToScroll;
 		this.settings = settings;
+		this.swipers = {};
 
         if (this._isSlideshow()) {
             this.slidesPerView = settings.slideshow_slidesPerView;

@@ -2,6 +2,7 @@
 	PPGallery = function(settings)
 	{
 		this.settings       = settings;
+		this.id				= settings.id;
 		this.nodeClass      = '.fl-node-' + settings.id;
 		this.wrapperClass   = this.nodeClass + ' .pp-photo-gallery';
 		this.itemClass      = this.wrapperClass + ' .pp-photo-gallery-item';

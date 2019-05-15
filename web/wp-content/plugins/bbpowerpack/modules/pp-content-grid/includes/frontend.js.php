@@ -7,6 +7,10 @@ $speed          = !empty( $settings->transition_speed ) ? $settings->transition_
 $slide_speed    = ( isset( $settings->slides_speed ) && ! empty( $settings->slides_speed ) ) ? $settings->slides_speed * 1000 : 'false';
 $page_arg	 	= is_front_page() ? 'page' : 'paged';
 $paged 			= get_query_var( $page_arg, 1 );
+$breakpoints		= array(
+	'mobile'		=> empty( $global_settings->responsive_breakpoint ) ? '768' : $global_settings->responsive_breakpoint,
+	'tablet'		=> empty( $global_settings->medium_breakpoint ) ? '980' : $global_settings->medium_breakpoint,
+);
 ?>
 
 var ppcg_<?php echo $id; ?> = '';
@@ -49,10 +53,10 @@ var ppcg_<?php echo $id; ?> = '';
 					0: {
 						items: <?php echo $settings->post_grid_count['mobile']; ?>,
 					},
-					768: {
+					<?php echo $breakpoints['mobile']; ?>: {
 						items: <?php echo $settings->post_grid_count['tablet']; ?>,
 					},
-					980: {
+					<?php echo $breakpoints['tablet']; ?>: {
 						items: <?php echo $settings->post_grid_count['desktop']; ?>,
 					},
 					1199: {

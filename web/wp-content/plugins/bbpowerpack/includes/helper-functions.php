@@ -393,10 +393,10 @@ function pp_get_modules_categories( $cat = '' )
 	$admin_label = pp_get_admin_label();
 
 	$cats = array(
-		'creative'		=> sprintf(__('Creative Modules - %s', 'bb-powerpack'), $admin_label),
-		'content'		=> sprintf(__('Content Modules - %s', 'bb-powerpack'), $admin_label),
-		'lead_gen'		=> sprintf(__('Lead Generation Modules - %s', 'bb-powerpack'), $admin_label),
-		'form_style'	=> sprintf(__('Form Styler Modules - %s', 'bb-powerpack'), $admin_label),
+		'creative'		=> sprintf( __('Creative Modules%s', 'bb-powerpack'), ' - ' . $admin_label ),
+		'content'		=> sprintf( __('Content Modules%s', 'bb-powerpack'), ' - ' . $admin_label ),
+		'lead_gen'		=> sprintf( __('Lead Generation Modules%s', 'bb-powerpack'), ' - ' . $admin_label ),
+		'form_style'	=> sprintf( __('Form Styler Modules%s', 'bb-powerpack'), ' - ' . $admin_label ),
 	);
 
 	if ( empty( $cat ) ) {
@@ -443,6 +443,12 @@ function pp_get_admin_label()
  */
 function pp_get_modules_group()
 {
+	$list_with_standard = BB_PowerPack_Admin_Settings::get_option( 'ppwl_list_modules_with_standard' );
+
+	if ( $list_with_standard ) {
+		return '';
+	}
+
 	$group_name = BB_PowerPack_Admin_Settings::get_option( 'ppwl_builder_label' );
 	$group_name = trim( $group_name ) !== '' ? trim( $group_name ) : 'PowerPack ' . __('Modules', 'bb-powerpack');
 

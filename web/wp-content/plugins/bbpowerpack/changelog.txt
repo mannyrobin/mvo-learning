@@ -1,3 +1,44 @@
+== 2.7.0 ==
+Release date: May 14, 2019
+* New: Image Hotspot module
+* New: Image Scroll module
+* New: Image Comparison module
+* New: Maintenance Mode feature
+* Enhancement: Table - Added CSV import feature
+* Enhancement: Content Grid - Added CSS classes on post terms elements
+* Enhancement: Image Carousel - Added support for BB's Tabs module
+* Fix: Advanced Accordion - Content was rendering without line breaks when using field connection
+* Fix: Hover Cards - Renamed clearfix class to prevent theme overrides
+* Fix: Hover Cards 2 - Renamed clearfix class to prevent theme overrides
+* Fix: Image - Removed default caption overlay background color
+* Fix: Content Grid - Carousel breakpoints were different than set in global settings
+* Fix: Smart Button - Forced background hover color to transparent if it is empty
+* Fix: Content Tiles - Some typography settings were not applying on the title
+* Fix: Logos Grid & Carousel - Grid layout was not appearing properly in Safari browser
+* Fix: Core - Added condition to prevent Modernizer JS conflicts
+* Fix: Core - Responsive unit field was not rataining value
+
+== 2.6.10 ==
+Release date: May 1, 2019
+* New: Search Form module
+* Enhancement: Logos Grid & Carousel - Added responsive options for Number of Items field
+* Enhancement: Image Panels - Added lightbox option as link type
+* Enhancement: Image Carousel - Added option to position slideshow thumbnail above or below
+* Enhancement: Info Box - Added new layout option "Icon below Title"
+* Enhancement: Image - Added container border hover color option
+* Enhancement: Restaurant/Services Menu - Added tabindex option for menu items
+* Enhancement: Content Grid - Added "Custom" as option to display custom content from post meta by field connection or shortcode
+* Fix: Custom Grid - Post terms alignment related issue
+* Fix: Content Grid - Carousel overflow box shadow cut-off issue
+* Fix: Content Grid - Spacing was not working for Style-9 in carousel mode
+* Fix: Table - PHP notice in CSS
+* Fix: Advance Tabs - PHP notice in CSS
+* Fix: Logos Grid & Carousel - PHP notice in CSS
+* Fix: Hover Cards - Height field was not retaining values for medium and responsive breakpoint
+* Fix: Advanced Menu - Off-canvas menu sluggish scroll issue in iOS
+* Fix: Fancy Headings - Text clip was not working in Firefox browser
+* Fix: Filterable Gallery - Added missing field connections
+
 == 2.6.9.8 ==
 Release date: April 18, 2019
 * Enhancement: Photo Gallery - Added scroll pagination option
