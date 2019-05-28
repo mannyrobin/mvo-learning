@@ -60,13 +60,13 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						),
 						'toggle'		=> array(
 							'classic'		=> array(
-								'sections'		=> array('button', 'button_style', 'button_typography'),
+								'sections'		=> array('size', 'button', 'button_style', 'button_typography'),
 							),
 							'minimal'		=> array(
-								'fields'		=> array('input_icon_size')
+								'fields'		=> array('size', 'input_icon_size')
 							),
 							'full_screen'	=> array(
-								'sections'		=> array('toggle', 'toggle_style', 'overlay')
+								'sections'		=> array('toggle_size', 'toggle', 'toggle_style', 'overlay')
 							)
 						)
 					),
@@ -76,9 +76,15 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'default'		=> __('Search', 'bb-powerpack'),
 						'connections'	=> array('string'),
 					),
+					'toggle_size'		=> array(
+						'type'			=> 'unit',
+						'label'			=> __('Toggle Size', 'bb-powerpack'),
+						'default'		=> '50',
+						'slider'		=> true,
+					),
 					'size'			=> array(
 						'type'			=> 'unit',
-						'label'			=> __('Size', 'bb-powerpack'),
+						'label'			=> __('Form Height', 'bb-powerpack'),
 						'default'		=> '50',
 						'slider'		=> true,
 					),
@@ -164,6 +170,13 @@ FLBuilder::register_module('PPSearchFormModule', array(
 							'property'		=> 'font-size',
 							'unit'			=> 'px'
 						)
+					),
+					'input_height'		=> array(
+						'type'			=> 'unit',
+						'label'			=> __('Input Height', 'bb-powerpack'),
+						'default'		=> '50',
+						'slider'		=> true,
+						'responsive'	=> true,
 					),
 					'input_bg_color'	=> array(
 						'type'			=> 'color',

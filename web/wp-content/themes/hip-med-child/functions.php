@@ -109,3 +109,22 @@ function child_theme_settings_styles()
 	return ob_get_flush();
 }
 add_action('wp_head', 'child_theme_settings_styles');
+
+
+
+
+/******* fix issues with fvm cache directory and url ********/
+add_action('init',function(){
+	$uploadDirectory = wp_upload_dir();
+	$fvmDir = $uploadDirectory['basedir'].'/fvm';
+	$fvmUrl = $uploadDirectory['baseurl'].'/fvm';
+	$currentFvmDir = get_option('fastvelocity_min_change_cache_path');
+	$currentFvmUrl = get_option('fastvelocity_min_change_cache_base_url');
+	if($fvmDir != $currentFvmDir){
+		update_option('fastvelocity_min_change_cache_path',$fvmDir);
+	}
+	if($fvmUrl != $currentFvmUrl){
+		update_option('fastvelocity_min_change_cache_base_url',$fvmUrl);
+	}
+});
+

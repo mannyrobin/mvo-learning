@@ -82,6 +82,21 @@ FLBuilderCSS::dimension_field_rule( array(
 	background-color: transparent;
 }
 
+<?php if ( ! empty( $settings->submenu_background_color ) ) { ?>
+.fl-node-<?php echo $id; ?> .pp-advanced-menu.off-canvas .sub-menu > li > a,
+.fl-node-<?php echo $id; ?> .pp-advanced-menu.off-canvas .sub-menu > li > .pp-has-submenu-container > a {
+	background-color: <?php echo pp_get_color_value( $settings->submenu_background_color ); ?>;
+}
+<?php } ?>
+<?php if ( ! empty( $settings->submenu_background_hover_color ) ) { ?>
+.fl-node-<?php echo $id; ?> .pp-advanced-menu.off-canvas .sub-menu > li > a:hover,
+.fl-node-<?php echo $id; ?> .pp-advanced-menu.off-canvas .sub-menu > li > a:focus,
+.fl-node-<?php echo $id; ?> .pp-advanced-menu.off-canvas .sub-menu > li > .pp-has-submenu-container > a:hover,
+.fl-node-<?php echo $id; ?> .pp-advanced-menu.off-canvas .sub-menu > li > .pp-has-submenu-container > a:focus {
+	background-color: <?php echo pp_get_color_value( $settings->submenu_background_hover_color ); ?>;
+}
+<?php } ?>
+
 .fl-node-<?php echo $id; ?> .pp-advanced-menu.off-canvas .menu li a,
 .fl-node-<?php echo $id; ?> .pp-advanced-menu.off-canvas .menu li .pp-has-submenu-container a {
 	<?php if( $settings->responsive_link_bg_color ) { ?>background-color: #<?php echo $settings->responsive_link_bg_color; ?>;<?php } ?>

@@ -114,6 +114,7 @@ FLBuilder::register_module('PPInstagramFeedModule', array(
 					'feed_by_tags'  => array(
 						'type'          => 'pp-switch',
 						'label'         => __( 'Filter the feed by Hashtag', 'bb-powerpack' ),
+						'description'	=> __('<storng style="display: block; color: red;">This option is deprecated by Instagram.</strong>', 'bb-powerpack'),
 						'default'       => 'no',
 						'options'       => array(
 							'yes'			=> __( 'Yes', 'bb-powerpack' ),
@@ -825,7 +826,7 @@ FLBuilder::register_module('PPInstagramFeedModule', array(
 								'fields'    => array( 'image_hover_overlay_color', 'image_hover_overlay_opacity' ),
 							),
 							'gradient' => array(
-								'fields'    => array( 'image_hover_overlay_angle', 'image_hover_overlay_color', 'image_hover_overlay_secondary_color', 'image_hover_overlay_gradient_type', 'image_hover_overlay_opacity' ),
+								'fields'    => array( 'image_hover_overlay_color', 'image_hover_overlay_secondary_color', 'image_hover_overlay_gradient_type', 'image_hover_overlay_opacity' ),
 							),
 						),
 					),

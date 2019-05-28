@@ -109,6 +109,14 @@ final class BB_PowerPack_Maintenance_Mode {
 		// Remove Beaver Themer header and footer layouts.
 		add_filter( 'fl_theme_builder_current_page_layouts', __CLASS__ . '::remove_themer_layouts', 10, 1 );
 
+		// Remove Astra header / footer / post nav markup.
+		remove_action( 'astra_header', 'astra_header_markup' );
+        remove_action( 'astra_footer', 'astra_footer_markup' );
+		remove_action( 'astra_entry_after', 'astra_single_post_navigation_markup' );
+		
+		// Custom action to hook any configuration before render.
+		do_action( 'pp_maintenance_mode_before_render' );
+
 		// Priority = 11 that is *after* WP default filter `redirect_canonical` in order to avoid redirection loop.
 		add_action( 'template_redirect', __CLASS__ . '::template_redirect', 11 );
 	}

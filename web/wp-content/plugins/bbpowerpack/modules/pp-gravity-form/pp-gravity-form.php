@@ -933,7 +933,14 @@ FLBuilder::register_module('PPGravityFormModule', array(
                                 'fields'    => array('button_width_size', 'button_alignment')
                             )
                         )
-                    ),
+					),
+					'button_custom_width'	=> array(
+						'type'		=> 'unit',
+						'label'		=> __('Custom Width', 'bb-powerpack'),
+						'default'	=> '',
+						'slider'	=> true,
+						'units'		=> array('px')
+					),
                     'button_alignment'  => array(
                         'type'          => 'align',
                         'label'         => __('Button Alignment', 'bb-powerpack'),
