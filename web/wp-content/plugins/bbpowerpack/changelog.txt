@@ -1,3 +1,14 @@
+== 2.7.0.1 ==
+Release date: May 17, 2019
+* Enhancement: Search Form - Added separate option for Toggle Size and Input Height for full screen layout
+* Enhancement: Gravity Forms - Added button Custom Width option
+* Enhancement: Maintenance Mode - Added compatibility for Astra theme
+* Enhancement: Maintenance Mode - Added hook pp_maintenance_mode_before_render to trigger custom actions before rendering maintenance page
+* Fix: Advanced Menu - Submenu link background and background hover color was not working in off-canvas menu
+* Fix: Instagram Feed - Greyscale effect was not working properly
+* Fix: Content Grid - PHP warning on pagination due to empty offset value
+* Fix: Image Carousel - Module stopped working in Advanced Tabs module after last update of PowerPack
+
 == 2.7.0 ==
 Release date: May 14, 2019
 * New: Image Hotspot module
@@ -16,7 +27,7 @@ Release date: May 14, 2019
 * Fix: Content Tiles - Some typography settings were not applying on the title
 * Fix: Logos Grid & Carousel - Grid layout was not appearing properly in Safari browser
 * Fix: Core - Added condition to prevent Modernizer JS conflicts
-* Fix: Core - Responsive unit field was not rataining value
+* Fix: Core - Responsive unit field was not retaining value
 
 == 2.6.10 ==
 Release date: May 1, 2019

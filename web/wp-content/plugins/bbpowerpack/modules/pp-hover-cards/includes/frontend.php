@@ -5,14 +5,12 @@ $hover_card_class = 'pp-hover-card-wrap';
 ?>
 <div class="<?php echo $hover_card_class; ?> pp-clearfix">
 	<?php
-	$number_cards = count($settings->card_content);
-	for($i = 0; $i < $number_cards; $i++) {
-		if(!is_object($settings->card_content[$i])) {
+	$number_cards = count( $settings->card_content );
+	for ( $i = 0; $i < $number_cards; $i++ ) {
+		if ( ! is_object( $settings->card_content[ $i ] ) ) {
 			continue;
 		}
 		$cards = $settings->card_content[$i];
-
-		//print_r($cards->card_box_border);
 	?>
 		<div class="pp-hover-card-container pp-clearfix hover-card-<?php echo $i; ?> <?php echo $settings->style_type; ?>" onclick="">
 			<?php if( $cards->hover_card_link_type == 'box' ) { ?>

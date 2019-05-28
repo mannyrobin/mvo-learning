@@ -41,6 +41,15 @@
 		),
 	) );
 
+	// Full screen - input height
+	FLBuilderCSS::responsive_rule( array(
+		'settings'     	=> $settings,
+		'setting_name' 	=> 'input_height',
+		'selector'     	=> ".fl-node-$id input[type='search'].pp-search-form__input",
+		'prop'         	=> 'min-height',
+		'unit'			=> 'px'
+	) );
+
 	// Border
 	FLBuilderCSS::border_field_rule( array(
 		'settings'		=> $settings,
@@ -96,7 +105,7 @@
 <?php
 // Input min and max height
 FLBuilderCSS::rule( array(
-	'selector'     => ".fl-node-$id .pp-search-form__input",
+	'selector'     => ".fl-node-$id .pp-search-form-wrap:not(.pp-search-form--style-full_screen) .pp-search-form__input",
 	'props'        => array(
 		'min-height'	=> array(
 			'value'			=> $settings->size,
@@ -218,10 +227,10 @@ FLBuilderCSS::rule( array(
 	<?php if ( $settings->toggle_icon_size >= 0 ) { ?>
 		--toggle-icon-size: calc( <?php echo $settings->toggle_icon_size; ?>em / 100 );
 	<?php } ?>
-	<?php if ( $settings->size >= 0 ) { ?>
-		font-size:  <?php echo $settings->size; ?>px;
-		width:  <?php echo $settings->size; ?>px;
-		height:  <?php echo $settings->size; ?>px;
+	<?php if ( isset( $settings->toggle_size ) && $settings->toggle_size >= 0 ) { ?>
+		font-size:  <?php echo $settings->toggle_size; ?>px;
+		width:  <?php echo $settings->toggle_size; ?>px;
+		height:  <?php echo $settings->toggle_size; ?>px;
 	<?php } ?>
 	<?php if ( ! empty( $settings->toggle_icon_color ) ) { ?>
 		color: #<?php echo $settings->toggle_icon_color; ?>;

@@ -82,7 +82,7 @@ var carousel_<?php echo $id; ?> = '';
 	carousel_<?php echo $id; ?> = new PPImageCarousel(settings);
 
 	function updateCarousel() {
-		setTimout(function() {
+		setTimeout(function() {
 			if ( 'number' !== typeof carousel_<?php echo $id; ?>.swipers.main.length ) {
 				carousel_<?php echo $id; ?>.swipers.main.update();
 			} else {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f238b456dfdca9f1ae9661ed691161c0",
+    "content-hash": "38e2492139f415b14fbcf7a03ca5ad6f",
     "packages": [
         {
             "name": "a5hleyrich/wp-background-processing",
@@ -144,10 +144,10 @@
         },
         {
             "name": "deliciousbrains-plugin/wp-migrate-db-pro",
-            "version": "1.9.7",
+            "version": "1.9.8",
             "dist": {
                 "type": "zip",
-                "url": "https://composer.deliciousbrains.com/?wc-api=delicious-brains&request=composer_download&package=wp-migrate-db-pro&version=1.9.7&composer_key=7EF044F879F5B9A2EBAE334D29EFA943"
+                "url": "https://composer.deliciousbrains.com/?wc-api=delicious-brains&request=composer_download&package=wp-migrate-db-pro&version=1.9.8&composer_key=7EF044F879F5B9A2EBAE334D29EFA943"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -214,27 +214,27 @@
         },
         {
             "name": "google/apiclient",
-            "version": "v2.2.2",
+            "version": "v2.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client.git",
-                "reference": "4e0fd83510e579043e10e565528b323b7c2b3c81"
+                "reference": "4bfd3edc21cceaf45fc216a4196e1993cf7a89eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client/zipball/4e0fd83510e579043e10e565528b323b7c2b3c81",
-                "reference": "4e0fd83510e579043e10e565528b323b7c2b3c81",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client/zipball/4bfd3edc21cceaf45fc216a4196e1993cf7a89eb",
+                "reference": "4bfd3edc21cceaf45fc216a4196e1993cf7a89eb",
                 "shasum": ""
             },
             "require": {
-                "firebase/php-jwt": "~2.0|~3.0|~4.0|~5.0",
+                "firebase/php-jwt": "~2.0||~3.0||~4.0||~5.0",
                 "google/apiclient-services": "~0.13",
                 "google/auth": "^1.0",
-                "guzzlehttp/guzzle": "~5.3.1|~6.0",
+                "guzzlehttp/guzzle": "~5.3.1||~6.0",
                 "guzzlehttp/psr7": "^1.2",
                 "monolog/monolog": "^1.17",
                 "php": ">=5.4",
-                "phpseclib/phpseclib": "~0.3.10|~2.0"
+                "phpseclib/phpseclib": "~0.3.10||~2.0"
             },
             "require-dev": {
                 "cache/filesystem-adapter": "^0.3.2",
@@ -269,20 +269,20 @@
             "keywords": [
                 "google"
             ],
-            "time": "2018-06-20T15:52:20+00:00"
+            "time": "2019-05-21T18:06:55+00:00"
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.98",
+            "version": "v0.100",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "541fc4a4031fc762be4e0902e5dec6e99933c353"
+                "reference": "bd43c24a828a9f6325abba173c7aec1cd8ed7c10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/541fc4a4031fc762be4e0902e5dec6e99933c353",
-                "reference": "541fc4a4031fc762be4e0902e5dec6e99933c353",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/bd43c24a828a9f6325abba173c7aec1cd8ed7c10",
+                "reference": "bd43c24a828a9f6325abba173c7aec1cd8ed7c10",
                 "shasum": ""
             },
             "require": {
@@ -306,7 +306,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2019-05-11T00:23:08+00:00"
+            "time": "2019-05-27T00:23:13+00:00"
         },
         {
             "name": "google/auth",
@@ -862,16 +862,16 @@
         },
         {
             "name": "hipdevteam/video-collection",
-            "version": "1.6.3",
+            "version": "1.6.5",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/video-collection.git",
-                "reference": "3fb82c690b58fc6b43d7c0c4b0c44f385456727b"
+                "reference": "42eaa3209dfd0c7c1cc00420fae7dc4d57194920"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fvideo-collection/repository/archive.zip?sha=3fb82c690b58fc6b43d7c0c4b0c44f385456727b",
-                "reference": "3fb82c690b58fc6b43d7c0c4b0c44f385456727b",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fvideo-collection/repository/archive.zip?sha=42eaa3209dfd0c7c1cc00420fae7dc4d57194920",
+                "reference": "42eaa3209dfd0c7c1cc00420fae7dc4d57194920",
                 "shasum": ""
             },
             "require": {
@@ -883,7 +883,7 @@
             },
             "type": "wordpress-plugin",
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2019-04-18T06:11:48+00:00"
+            "time": "2019-05-23T20:53:16+00:00"
         },
         {
             "name": "hipdevteam/video-lightbox",
@@ -990,22 +990,22 @@
         },
         {
             "name": "johnpbloch/wordpress",
-            "version": "5.2.0",
+            "version": "5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnpbloch/wordpress.git",
-                "reference": "cefa3fa89a0e21fdbb9612b561725eed5d50c294"
+                "reference": "32750c64c9d1878a7c958094554644de63030323"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnpbloch/wordpress/zipball/cefa3fa89a0e21fdbb9612b561725eed5d50c294",
-                "reference": "cefa3fa89a0e21fdbb9612b561725eed5d50c294",
+                "url": "https://api.github.com/repos/johnpbloch/wordpress/zipball/32750c64c9d1878a7c958094554644de63030323",
+                "reference": "32750c64c9d1878a7c958094554644de63030323",
                 "shasum": ""
             },
             "require": {
-                "johnpbloch/wordpress-core": "5.2.0",
+                "johnpbloch/wordpress-core": "5.2.1",
                 "johnpbloch/wordpress-core-installer": "^1.0",
-                "php": ">=5.3.2"
+                "php": ">=5.6.20"
             },
             "type": "package",
             "notification-url": "https://packagist.org/downloads/",
@@ -1025,27 +1025,27 @@
                 "cms",
                 "wordpress"
             ],
-            "time": "2019-05-07T20:42:21+00:00"
+            "time": "2019-05-22T17:56:53+00:00"
         },
         {
             "name": "johnpbloch/wordpress-core",
-            "version": "5.2.0",
+            "version": "5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnpbloch/wordpress-core.git",
-                "reference": "9d9c5f36166e7d31f1c90784e71dad3996d28a95"
+                "reference": "7555561027211f295e1d6a77d06ab47f605608cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnpbloch/wordpress-core/zipball/9d9c5f36166e7d31f1c90784e71dad3996d28a95",
-                "reference": "9d9c5f36166e7d31f1c90784e71dad3996d28a95",
+                "url": "https://api.github.com/repos/johnpbloch/wordpress-core/zipball/7555561027211f295e1d6a77d06ab47f605608cd",
+                "reference": "7555561027211f295e1d6a77d06ab47f605608cd",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
             },
             "provide": {
-                "wordpress/core-implementation": "5.2.0"
+                "wordpress/core-implementation": "5.2.1"
             },
             "type": "wordpress-core",
             "notification-url": "https://packagist.org/downloads/",
@@ -1065,7 +1065,7 @@
                 "cms",
                 "wordpress"
             ],
-            "time": "2019-05-07T20:42:17+00:00"
+            "time": "2019-05-21T18:27:33+00:00"
         },
         {
             "name": "johnpbloch/wordpress-core-installer",
@@ -1284,16 +1284,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.15",
+            "version": "2.0.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "11cf67cf78dc4acb18dc9149a57be4aee5036ce0"
+                "reference": "3ca5b88d582c69178c8d01fd9d02b94e15042bb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/11cf67cf78dc4acb18dc9149a57be4aee5036ce0",
-                "reference": "11cf67cf78dc4acb18dc9149a57be4aee5036ce0",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/3ca5b88d582c69178c8d01fd9d02b94e15042bb8",
+                "reference": "3ca5b88d582c69178c8d01fd9d02b94e15042bb8",
                 "shasum": ""
             },
             "require": {
@@ -1372,7 +1372,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2019-03-10T16:53:45+00:00"
+            "time": "2019-05-26T20:38:34+00:00"
         },
         {
             "name": "pimple/pimple",
@@ -1930,6 +1930,24 @@
             "time": "2019-01-29T11:11:52+00:00"
         },
         {
+            "name": "wpackagist-plugin/a3-lazy-load",
+            "version": "1.9.2",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/a3-lazy-load/",
+                "reference": "tags/1.9.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/a3-lazy-load.1.9.2.zip"
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/a3-lazy-load/"
+        },
+        {
             "name": "wpackagist-plugin/addfunc-head-footer-code",
             "version": "2.2",
             "source": {
@@ -2020,6 +2038,24 @@
             "homepage": "https://wordpress.org/plugins/duracelltomi-google-tag-manager/"
         },
         {
+            "name": "wpackagist-plugin/fast-velocity-minify",
+            "version": "2.6.5",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/fast-velocity-minify/",
+                "reference": "tags/2.6.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/fast-velocity-minify.2.6.5.zip"
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/fast-velocity-minify/"
+        },
+        {
             "name": "wpackagist-plugin/fatal-error-notify",
             "version": "1.4",
             "source": {
@@ -2057,15 +2093,15 @@
         },
         {
             "name": "wpackagist-plugin/meta-box",
-            "version": "4.18.0",
+            "version": "4.18.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/meta-box/",
-                "reference": "tags/4.18.0"
+                "reference": "tags/4.18.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/meta-box.4.18.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/meta-box.4.18.1.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2075,7 +2111,7 @@
         },
         {
             "name": "wpackagist-plugin/optinmonster",
-            "version": "1.6.5",
+            "version": "1.6.8",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/optinmonster/",
@@ -2083,7 +2119,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/optinmonster.zip?timestamp=1557851080"
+                "url": "https://downloads.wordpress.org/plugin/optinmonster.zip?timestamp=1558555382"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2147,15 +2183,15 @@
         },
         {
             "name": "wpackagist-plugin/query-monitor",
-            "version": "3.3.5",
+            "version": "3.3.6",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/query-monitor/",
-                "reference": "tags/3.3.5"
+                "reference": "tags/3.3.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/query-monitor.3.3.5.zip"
+                "url": "https://downloads.wordpress.org/plugin/query-monitor.3.3.6.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2219,15 +2255,15 @@
         },
         {
             "name": "wpackagist-plugin/schema-app-structured-data-for-schemaorg",
-            "version": "1.12.0",
+            "version": "1.12.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/schema-app-structured-data-for-schemaorg/",
-                "reference": "tags/1.12.0"
+                "reference": "tags/1.12.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/schema-app-structured-data-for-schemaorg.1.12.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/schema-app-structured-data-for-schemaorg.1.12.1.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2327,15 +2363,15 @@
         },
         {
             "name": "wpackagist-plugin/wp-security-audit-log",
-            "version": "3.4.0.1",
+            "version": "3.4.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wp-security-audit-log/",
-                "reference": "tags/3.4.0.1"
+                "reference": "tags/3.4.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wp-security-audit-log.3.4.0.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/wp-security-audit-log.3.4.1.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2605,16 +2641,16 @@
         },
         {
             "name": "composer/xdebug-handler",
-            "version": "1.3.2",
+            "version": "1.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/xdebug-handler.git",
-                "reference": "d17708133b6c276d6e42ef887a877866b909d892"
+                "reference": "46867cbf8ca9fb8d60c506895449eb799db1184f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/d17708133b6c276d6e42ef887a877866b909d892",
-                "reference": "d17708133b6c276d6e42ef887a877866b909d892",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/46867cbf8ca9fb8d60c506895449eb799db1184f",
+                "reference": "46867cbf8ca9fb8d60c506895449eb799db1184f",
                 "shasum": ""
             },
             "require": {
@@ -2645,7 +2681,7 @@
                 "Xdebug",
                 "performance"
             ],
-            "time": "2019-01-28T20:25:53+00:00"
+            "time": "2019-05-27T17:52:04+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
