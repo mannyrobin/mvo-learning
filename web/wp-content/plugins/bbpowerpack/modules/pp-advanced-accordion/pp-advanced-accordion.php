@@ -242,6 +242,7 @@ FLBuilder::register_module('PPAccordionModule', array(
 						'type'          => 'color',
 						'label'         => __('Color', 'bb-powerpack'),
 						'default'       => '666666',
+						'connections'	=> array('color'),
 						'preview'	=> array(
 							'type'	=> 'css',
 							'selector'	=> '.pp-accordion-item .pp-accordion-button-icon',
@@ -334,6 +335,7 @@ FLBuilder::register_module('PPAccordionModule', array(
 						'default'		=> 'dddddd',
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'selector'		=> '.pp-accordion-item .pp-accordion-button',
@@ -346,12 +348,14 @@ FLBuilder::register_module('PPAccordionModule', array(
 						'default'		=> '',
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 					),
 					'label_text_color_default'	=> array(
 						'type'			=> 'color',
 						'label'			=> __('Text Color - Default', 'bb-powerpack'),
 						'default'		=> '666666',
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'selector'		=> '.pp-accordion-item .pp-accordion-button',
@@ -362,6 +366,7 @@ FLBuilder::register_module('PPAccordionModule', array(
 						'type'			=> 'color',
 						'label'			=> __('Text Color - Active', 'bb-powerpack'),
 						'default'		=> '777777',
+						'connections'	=> array('color'),
 						'show_reset'	=> true
 					),
 					'label_border'		=> array(
@@ -399,20 +404,22 @@ FLBuilder::register_module('PPAccordionModule', array(
 						'default'       => 'eeeeee',
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
-						'preview'	=> array(
-							'type'	=> 'css',
-							'selector'	=> '.pp-accordion-item .pp-accordion-content',
-							'property'	=> 'background-color'
+						'connections'	=> array('color'),
+						'preview'		=> array(
+							'type'			=> 'css',
+							'selector'		=> '.pp-accordion-item .pp-accordion-content',
+							'property'		=> 'background-color'
 						)
 					),
 					'content_text_color'  => array(
 						'type'          => 'color',
 						'label'         => __('Text Color', 'bb-powerpack'),
 						'default'       => '333333',
-						'preview'	=> array(
-							'type'	=> 'css',
-							'selector'	=> '.pp-accordion-item .pp-accordion-content',
-							'property'	=> 'color'
+						'connections'	=> array('color'),
+						'preview'		=> array(
+							'type'			=> 'css',
+							'selector'		=> '.pp-accordion-item .pp-accordion-content',
+							'property'		=> 'color'
 						)
 					),
 					'content_border'	=> array(

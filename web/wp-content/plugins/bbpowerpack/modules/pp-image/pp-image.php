@@ -708,6 +708,7 @@ FLBuilder::register_module('PPImageModule', array(
 						'label'			=> __('Background Color', 'bb-powerpack'),
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'help'			=> __('Background color will be visible between the image and outside edge of the container when you increase the padding.', 'bb-powerpack'),
 						'preview'		=> array(
 							'type'			=> 'css',
@@ -729,7 +730,8 @@ FLBuilder::register_module('PPImageModule', array(
 						'type'				=> 'color',
 						'label'				=> __('Border Hover Color', 'bb-powerpack'),
 						'default'			=> '',
-						'show_reset'		=> true
+						'show_reset'		=> true,
+						'connections'		=> array('color'),
 					)
 				),
 			),
@@ -795,10 +797,11 @@ FLBuilder::register_module('PPImageModule', array(
 						)
 					),
 					'image_border_color'	=> array(
-						'type'		=> 'color',
-						'label'		=> __('Border Color', 'bb-powerpack'),
+						'type'			=> 'color',
+						'label'			=> __('Border Color', 'bb-powerpack'),
 						'show_reset'	=> true,
-						'default'	=> '000000',
+						'default'		=> '000000',
+						'connections'	=> array('color'),
 						'preview'	=> array(
 							'type'	=> 'css',
 							'rules'	=> array(
@@ -840,6 +843,7 @@ FLBuilder::register_module('PPImageModule', array(
 						'type'              => 'color',
 						'label'             => __('Text Color', 'bb-powerpack'),
 						'default'           => '000000',
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'selector'			=> '.pp-photo-caption',
@@ -852,6 +856,7 @@ FLBuilder::register_module('PPImageModule', array(
 						'default'           => 'dddddd',
 						'show_reset'		=> true,
 						'show_alpha'		=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'selector'			=> '.pp-photo-caption',

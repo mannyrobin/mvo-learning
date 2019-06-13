@@ -1,3 +1,7 @@
+Version 1.17.1 - Tuesday, 28th May 2019
+- Fixed: Gravity Form Styler - Resolved Checkbox Background color issue when the Background color is set to RGB
+- Fixed: Particle Backgrounds - Resolved JavaScript error on IE browser
+
 Version 1.17.0 - Monday, 20th May 2019
 - New: Introduced Column Particle Backgrounds
 - New: Introduced Row Particle Backgrounds

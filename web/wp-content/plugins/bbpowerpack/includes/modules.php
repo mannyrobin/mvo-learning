@@ -62,6 +62,7 @@ $modules = array(
     'modules/pp-image-comparison/pp-image-comparison.php',
     'modules/pp-hotspot/pp-hotspot.php',
     'modules/pp-image-scroll/pp-image-scroll.php',
+    'modules/pp-login-form/pp-login-form.php',
 );
 
 /* Custom Grid */

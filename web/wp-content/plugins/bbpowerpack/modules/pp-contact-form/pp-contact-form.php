@@ -645,6 +645,7 @@ FLBuilder::register_module('PPContactFormModule', array(
 	                    'default'       => 'ffffff',
 						'show_reset'    => true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 	                    'preview'       => array(
 	                        'type'      => 'css',
 	                        'selector'  => '.pp-contact-form',
@@ -805,7 +806,8 @@ FLBuilder::register_module('PPContactFormModule', array(
                     'input_field_text_color'    => array(
                         'type'                  => 'color',
                         'label'                 => __('Text Color', 'bb-powerpack'),
-                        'default'               => '333333',
+						'default'               => '333333',
+						'connections'			=> array('color'),
                         'preview'               => array(
                             'type'                  => 'css',
                             'selector'              => '.pp-contact-form textarea, .pp-contact-form input[type=text], .pp-contact-form input[type=tel], .pp-contact-form input[type=email]',
@@ -818,6 +820,7 @@ FLBuilder::register_module('PPContactFormModule', array(
                         'default'               => 'ffffff',
 						'show_reset'            => true,
 						'show_alpha'			=> true,
+						'connections'			=> array('color'),
                         'preview'               => array(
                             'type'              => 'css',
                             'selector'          => '.pp-contact-form textarea, .pp-contact-form input[type=text], .pp-contact-form input[type=tel], .pp-contact-form input[type=email]',
@@ -834,7 +837,8 @@ FLBuilder::register_module('PPContactFormModule', array(
                         'type'                  => 'color',
                         'label'                 => __('Border Color', 'bb-powerpack'),
                         'default'               => 'eeeeee',
-                        'show_reset'            => true,
+						'show_reset'            => true,
+						'connections'			=> array('color'),
                         'preview'               => array(
                             'type'              => 'css',
                             'selector'          => '.pp-contact-form textarea, .pp-contact-form input[type=text], .pp-contact-form input[type=tel], .pp-contact-form input[type=email]',
@@ -900,7 +904,8 @@ FLBuilder::register_module('PPContactFormModule', array(
                         'type'                  => 'color',
                         'label'                 => __('Focus Border Color', 'bb-powerpack'),
                         'default'               => '719ece',
-                        'show_reset'            => true,
+						'show_reset'            => true,
+						'connections'			=> array('color'),
                         'preview'               => array(
                             'type'              => 'css',
                             'selector'          => '.pp-contact-form textarea:focus, .pp-contact-form input[type=text]:focus, .pp-contact-form input[type=tel]:focus, .pp-contact-form input[type=email]:focus',
@@ -975,7 +980,8 @@ FLBuilder::register_module('PPContactFormModule', array(
                     'input_shadow_color'      => array(
                         'type'          => 'color',
                         'label'         => __('Shadow Color', 'bb-powerpack'),
-                        'show_reset'    => true,
+						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'      => 'css',
                             'selector'  => '.pp-contact-form textarea, .pp-contact-form input[type=text], .pp-contact-form input[type=tel], .pp-contact-form input[type=email]',
@@ -1041,7 +1047,8 @@ FLBuilder::register_module('PPContactFormModule', array(
                         'type'                  => 'color',
                         'label'                 => __('Color', 'bb-powerpack'),
                         'default'               => 'eeeeee',
-                        'show_reset'            => true,
+						'show_reset'            => true,
+						'connections'			=> array('color'),
                         'preview'               => array(
                             'type'              => 'css',
                             'selector'          => '.pp-contact-form input[type=text]::-webkit-input-placeholder, .pp-contact-form input[type=tel]::-webkit-input-placeholder, .pp-contact-form input[type=email]::-webkit-input-placeholder, .pp-contact-form textarea::-webkit-input-placeholder',
@@ -1097,12 +1104,14 @@ FLBuilder::register_module('PPContactFormModule', array(
 						'label'         => __( 'Background Color', 'bb-powerpack' ),
 						'default'       => '',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 					),
 					'btn_bg_hover_color' => array(
 						'type'          => 'color',
 						'label'         => __( 'Background Hover Color', 'bb-powerpack' ),
 						'default'       => '',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'none'
 						)
@@ -1111,13 +1120,15 @@ FLBuilder::register_module('PPContactFormModule', array(
 						'type'          => 'color',
 						'label'         => __( 'Text Color', 'bb-powerpack' ),
 						'default'       => '',
-						'show_reset'    => true
+						'show_reset'    => true,
+						'connections'	=> array('color'),
 					),
 					'btn_text_hover_color' => array(
 						'type'          => 'color',
 						'label'         => __( 'Text Hover Color', 'bb-powerpack' ),
 						'default'       => '',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'none'
 						)
@@ -1206,13 +1217,15 @@ FLBuilder::register_module('PPContactFormModule', array(
 						'type'				=> 'color',
 						'label'				=> __('Border Color', 'bb-powerpack'),
 						'default'			=> '',
-						'show_reset'		=> true
+						'show_reset'		=> true,
+						'connections'	=> array('color'),
 					),
 					'btn_border_hover_color'	=> array(
 						'type'				=> 'color',
 						'label'				=> __('Border Hover Color', 'bb-powerpack'),
 						'default'			=> '',
-						'show_reset'		=> true
+						'show_reset'		=> true,
+						'connections'	=> array('color'),
 					),
 				)
 			),
@@ -1274,7 +1287,8 @@ FLBuilder::register_module('PPContactFormModule', array(
                     'validation_message_color'    => array(
                         'type'                    => 'color',
                         'label'                   => __('Error Field Message Color', 'bb-powerpack'),
-                        'default'                 => 'dd4420',
+						'default'                 => 'dd4420',
+						'connections'				=> array('color'),
                         'preview'                 => array(
                             'type'                => 'css',
                             'selector'            => '.pp-contact-form .pp-contact-error',
@@ -1285,7 +1299,8 @@ FLBuilder::register_module('PPContactFormModule', array(
                         'type'                         => 'color',
                         'label'                        => __('Error Field Border Color', 'bb-powerpack'),
                         'default'                      => 'dd4420',
-                        'show_reset'                   => true,
+						'show_reset'                   => true,
+						'connections'					=> array('color'),
                         'preview'                      => array(
                             'type'                     => 'css',
                             'selector'                 => '.pp-contact-form .pp-error textarea, .pp-contact-form .pp-error input[type=text], .pp-contact-form .pp-error input[type=tel], .pp-contact-form .pp-error input[type=email]',
@@ -1301,7 +1316,8 @@ FLBuilder::register_module('PPContactFormModule', array(
                     'success_message_color'    => array(
                         'type'                         => 'color',
                         'label'                        => __('Color', 'bb-powerpack'),
-                        'default'                      => '29bb41',
+						'default'                      => '29bb41',
+						'connections'					=> array('color'),
                         'preview'                      => array(
                             'type'                     => 'css',
                             'selector'                 => '.pp-contact-form .pp-success-msg',
@@ -1331,7 +1347,8 @@ FLBuilder::register_module('PPContactFormModule', array(
                         'type'          => 'color',
                         'label'         => __('Color', 'bb-powerpack'),
                         'default'       => '',
-                        'show_reset'    => true,
+						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'      => 'css',
                             'selector'  => '.pp-contact-form .pp-form-title',
@@ -1357,7 +1374,8 @@ FLBuilder::register_module('PPContactFormModule', array(
                         'type'          => 'color',
                         'label'         => __('Color', 'bb-powerpack'),
                         'default'       => '',
-                        'show_reset'    => true,
+						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'      => 'css',
                             'selector'  => '.pp-contact-form .pp-form-description',
@@ -1423,7 +1441,8 @@ FLBuilder::register_module('PPContactFormModule', array(
                         'type'          => 'color',
                         'label'         => __('Color', 'bb-powerpack'),
                         'default'       => '',
-                        'show_reset'    => true,
+						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'      => 'css',
                             'selector'  => '.pp-contact-form label',
@@ -1464,7 +1483,8 @@ FLBuilder::register_module('PPContactFormModule', array(
                         'type'          	=> 'color',
                         'label'         	=> __('Color', 'bb-powerpack'),
                         'default'       	=> '',
-                        'show_reset'    	=> true,
+						'show_reset'    	=> true,
+						'connections'		=> array('color'),
                         'preview'       	=> array(
                             'type'      		=> 'css',
                             'selector'  		=> '.pp-contact-form .pp-checkbox label',

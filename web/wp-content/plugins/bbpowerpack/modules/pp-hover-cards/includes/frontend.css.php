@@ -248,7 +248,7 @@ FLBuilderCSS::typography_field_rule( array(
 ?>
 
 @media only screen and (max-width: <?php echo $global_settings->medium_breakpoint; ?>px) {
-    .fl-node-<?php echo $id; ?> .pp-hover-card-container {
+    div.fl-node-<?php echo $id; ?> .pp-hover-card-container {
         <?php if( $settings->hover_card_columns_medium >= 0 ) { ?>
         width: <?php echo $hover_card_columns_tablet; ?>%;
         <?php } ?>
@@ -268,21 +268,21 @@ FLBuilderCSS::typography_field_rule( array(
 }
 
 @media only screen and (max-width: <?php echo $global_settings->responsive_breakpoint; ?>px) {
-    .fl-node-<?php echo $id; ?> .pp-hover-card-container {
+    div.fl-node-<?php echo $id; ?> .pp-hover-card-container {
         <?php if( $settings->hover_card_columns_responsive >= 0 ) { ?>
         width: <?php echo $hover_card_columns_mobile; ?>%;
         <?php } ?>
     }
     .fl-node-<?php echo $id; ?> .pp-hover-card-container:nth-of-type(<?php echo $settings->hover_card_columns_medium; ?>n+1) {
-            clear: none;
+        clear: none;
     }
     .fl-node-<?php echo $id; ?> .pp-hover-card-container:nth-of-type(<?php echo $settings->hover_card_columns_responsive; ?>n+1) {
-            clear: left;
+        clear: left;
     }
     .fl-node-<?php echo $id; ?> .pp-hover-card-container:nth-of-type(<?php echo $settings->hover_card_columns_medium; ?>n) {
-            margin-right: <?php echo $settings->hover_card_spacing; ?>%;
+        margin-right: <?php echo $settings->hover_card_spacing; ?>%;
     }
     .fl-node-<?php echo $id; ?> .pp-hover-card-container:nth-of-type(<?php echo $settings->hover_card_columns_responsive; ?>n) {
-            margin-right: 0;
+        margin-right: 0;
     }
 }

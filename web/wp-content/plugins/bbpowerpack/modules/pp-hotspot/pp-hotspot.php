@@ -427,6 +427,7 @@ FLBuilder::register_module('PPHotspotModule', array(
 						'label'         			=> __('Marker Color', 'bb-powerpack'),
 						'default'					=> '000',
 						'show_reset'            	=> true,
+						'connections'				=> array('color'),
 					),
 					'common_marker_bg_color'	=> array(
 						'type'          			=> 'color',
@@ -434,6 +435,7 @@ FLBuilder::register_module('PPHotspotModule', array(
 						'default'					=> 'a0a0a0',
 						'show_reset'            	=> true,
 						'show_alpha'            	=> true,
+						'connections'				=> array('color'),
 					),
 					'marker_border'				=> array(
 						'type'						=> 'border',
@@ -475,6 +477,7 @@ FLBuilder::register_module('PPHotspotModule', array(
 						'label'         		=> __('Text Color', 'bb-powerpack'),
 						'default'				=> 'ffffff',
 						'show_reset'       		=> true,
+						'connections'			=> array('color'),
 						'preview'				=> array(
 							'type'					=> 'css',
 							'selector'				=> '.pp-hotspot-overlay-button',
@@ -486,6 +489,7 @@ FLBuilder::register_module('PPHotspotModule', array(
 						'label'         		=> __('Text Color on Hover', 'bb-powerpack'),
 						'default'				=> '000000',
 						'show_reset'       		=> true,
+						'connections'			=> array('color'),
 					),
 					'button_bg_color'			=> array(
 						'type'          		=> 'color',
@@ -493,6 +497,7 @@ FLBuilder::register_module('PPHotspotModule', array(
 						'default'				=> '428bca',
 						'show_reset'			=> true,
 						'show_alpha'			=> true,
+						'connections'			=> array('color'),
 						'preview'				=> array(
 							'type'					=> 'css',
 							'selector'				=> '.pp-hotspot-overlay-button',
@@ -505,6 +510,7 @@ FLBuilder::register_module('PPHotspotModule', array(
 						'default'				=> 'ffffff',
 						'show_reset'			=> true,
 						'show_alpha'			=> true,
+						'connections'			=> array('color'),
 					),
 					'button_border'				=> array(
 						'type'					=> 'border',
@@ -520,6 +526,7 @@ FLBuilder::register_module('PPHotspotModule', array(
 						'label'         		=> __('Border Color on Hover', 'bb-powerpack'),
 						'default'				=> '',
 						'show_reset'			=> true,
+						'connections'			=> array('color'),
 					),
 					'button_padding'			=> array(
 						'type'						=> 'dimension',
@@ -565,6 +572,7 @@ FLBuilder::register_module('PPHotspotModule', array(
 						'label'         		=> __('Text Color', 'bb-powerpack'),
 						'default'				=> 'fff',
 						'show_reset'            => true,
+						'connections'			=> array('color'),
 					),
 					'tooltip_bg_color'		=> array(
 						'type'          		=> 'color',
@@ -572,6 +580,7 @@ FLBuilder::register_module('PPHotspotModule', array(
 						'default'				=> '000',
 						'show_reset'            => true,
 						'show_alpha'            => true,
+						'connections'			=> array('color'),
 					),
 					'tooltip_padding'		=> array(
 						'type'					=> 'dimension',
@@ -593,18 +602,21 @@ FLBuilder::register_module('PPHotspotModule', array(
 						'label'         		=> __('Previous Button Color', 'bb-powerpack'),
 						'default'				=> 'fff',
 						'show_reset'            => true,
+						'connections'			=> array('color'),
 					),
 					'tooltip_nxt_color'		=> array(
 						'type'          		=> 'color',
 						'label'         		=> __('Next Button Color', 'bb-powerpack'),
 						'default'				=> 'fff',
 						'show_reset'            => true,
+						'connections'			=> array('color'),
 					),
 					'tooltip_end_color'		=> array(
 						'type'          		=> 'color',
 						'label'         		=> __('End Tour Button Color', 'bb-powerpack'),
 						'default'				=> 'fff',
 						'show_reset'            => true,
+						'connections'			=> array('color'),
 					),
 					'tooltip_typography'	=> array(
 						'type'					=> 'typography',
@@ -684,21 +696,24 @@ FLBuilder::register_settings_form('pp_marker_form', array(
 							'units'			=> array('%'),
 							'slider'		=> true,
 						),
-						'marker_color'					=> array(
+						'marker_color'		=> array(
 							'type'          	=> 'color',
 							'label'         	=> __('Marker Color', 'bb-powerpack'),
 							'show_reset'		=> true,
+							'connections'		=> array('color'),
 						),
-						'marker_bg_color'				=> array(
+						'marker_bg_color'	=> array(
 							'type'          	=> 'color',
 							'label'         	=> __('Marker Background Color', 'bb-powerpack'),
 							'show_reset'		=> true,
 							'show_alpha'		=> true,
+							'connections'		=> array('color'),
 						),
 						'marker_border_single_color'	=> array(
 							'type'          	=> 'color',
 							'label'         	=> __('Marker Border Color', 'bb-powerpack'),
 							'show_reset'		=> true,
+							'connections'		=> array('color'),
 						),
 						'marker_text_typography'		=> array(
 							'type'							=> 'typography',

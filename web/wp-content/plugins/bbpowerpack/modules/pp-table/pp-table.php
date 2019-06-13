@@ -199,6 +199,7 @@ FLBuilder::register_module('PPTableModule', array(
                         'help'          => __('Change the table header background color', 'bb-powerpack'),
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'	=> array(
 							'type'		=> 'css',
 							'selector'	=> '.pp-table-content thead',
@@ -211,6 +212,7 @@ FLBuilder::register_module('PPTableModule', array(
                         'label'         => __('Border Color', 'bb-powerpack'),
                         'help'          => __('Change the table header border color', 'bb-powerpack'),
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'selector'		=> '.pp-table-content thead tr:first-child th',
@@ -260,6 +262,7 @@ FLBuilder::register_module('PPTableModule', array(
                         'help'          => __('Change the table row background color', 'bb-powerpack'),
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'	=> array(
 							'type'		=> 'css',
 							'selector'	=> '.pp-table-content tbody tr',
@@ -273,6 +276,7 @@ FLBuilder::register_module('PPTableModule', array(
                         'help'          => __('Change the tables even rows background color', 'bb-powerpack'),
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'	=> array(
 							'type'		=> 'css',
 							'selector'	=> '.pp-table-content .even',
@@ -342,6 +346,7 @@ FLBuilder::register_module('PPTableModule', array(
                         'label'         => __('Border Color', 'bb-powerpack'),
                         'help'          => __('Change the table row border color', 'bb-powerpack'),
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'	=> array(
 							'type'		=> 'css',
 							'rules'		=> array(
@@ -387,8 +392,9 @@ FLBuilder::register_module('PPTableModule', array(
 					),
                     'header_font_color'     => array(
                         'type'          => 'color',
-                        'default'          => 'ffffff',
-                        'label'         => __('Text Color', 'bb-powerpack'),
+                        'default'       => 'ffffff',
+						'label'         => __('Text Color', 'bb-powerpack'),
+						'connections'	=> array('color'),
                         'help'          => __('Change the table header font color', 'bb-powerpack'),
 						'preview'	=> array(
 							'type'		=> 'css',
@@ -419,6 +425,7 @@ FLBuilder::register_module('PPTableModule', array(
                         'label'         => __('Text Color', 'bb-powerpack'),
                         'help'          => __('Change the table row text color', 'bb-powerpack'),
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'	=> array(
 							'type'		=> 'css',
 							'selector'	=> '.pp-table-content tbody tr td',
@@ -431,6 +438,7 @@ FLBuilder::register_module('PPTableModule', array(
                         'label'         => __('Even Rows Text Color', 'bb-powerpack'),
                         'help'          => __('Change the tables even rows text color', 'bb-powerpack'),
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'	=> array(
 							'type'		=> 'css',
 							'selector'	=> '.pp-table-content .even td',
@@ -440,7 +448,8 @@ FLBuilder::register_module('PPTableModule', array(
                     'rows_font_odd'     => array(
                         'type'          => 'color',
                         'default'       => '',
-                        'label'         => __('Odd Rows Text Color', 'bb-powerpack'),
+						'label'         => __('Odd Rows Text Color', 'bb-powerpack'),
+						'connections'	=> array('color'),
                         'help'          => __('Change the tables odd rows text color', 'bb-powerpack'),
 						'show_reset'	=> true,
 						'preview'	=> array(

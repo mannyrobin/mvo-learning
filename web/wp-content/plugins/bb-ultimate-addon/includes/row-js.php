@@ -298,8 +298,14 @@ function uabb_particle_row_dependency_js( $js, $nodes, $global_settings ) {
 
 						if ( 'yes' === enable_particles ){
 							if ( 'custom' === particles_style ) {
-							particlesJS( 'uabb-particle-' + row_id, <?php echo $json_particles_custom; ?> );
-							} else {
+							<?php
+							if ( '' !== $json_particles_custom ) {
+								?>
+								particlesJS( 'uabb-particle-' + row_id, <?php echo $json_particles_custom; ?> );
+								<?php
+							}
+							?>
+						} else {
 								var number_value = 150,
 									shape_type = 'circle',
 									shape_nb_sides = 5,

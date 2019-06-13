@@ -287,14 +287,16 @@ FLBuilder::register_settings_form('pp_image_panels_form', array(
 							'type'			=> 'color',
 							'label'			=> __( 'Text Color', 'bb-powerpack' ),
 							'default'		=> '000000',
-							'show_reset'	=> true
+							'show_reset'	=> true,
+							'connections'	=> array('color'),
 						),
 						'title_bg_color'	=> array(
 							'type'			=> 'color',
 							'label'			=> __( 'Background Color', 'bb-powerpack' ),
 							'default'		=> 'dddddd',
 							'show_alpha'	=> true,
-							'show_reset'	=> true
+							'show_reset'	=> true,
+							'connections'	=> array('color'),
 						),
                     ),
                 ),

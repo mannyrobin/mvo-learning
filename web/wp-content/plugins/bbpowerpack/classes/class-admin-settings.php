@@ -1,10 +1,14 @@
 <?php
-
 /**
  * Handles logic for the admin settings page.
  *
  * @since 1.1.5
  */
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 final class BB_PowerPack_Admin_Settings {
     /**
@@ -54,7 +58,7 @@ final class BB_PowerPack_Admin_Settings {
         add_action( 'network_admin_menu',   __CLASS__ . '::menu' );
 		add_filter( 'all_plugins',          __CLASS__ . '::update_branding' );
 
-		if ( isset( $_REQUEST['page'] ) && 'ppbb-settings' == $_REQUEST['page'] ) {
+		if ( isset( $_GET['page'] ) && 'ppbb-settings' == $_GET['page'] ) {
             add_action( 'admin_enqueue_scripts', __CLASS__ . '::styles_scripts' );
 			self::save();
 		}

@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+
+fail() {
+  URL="https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/issues"
+  
+  BODY="{
+    \"id\": ${CI_PROJECT_ID},
+    \"title\": \"Failed to complete weekly update\",
+    \"description\": \"There was an error attempting automated updates: ${1}\",
+    \"assignee_ids\": [${MAINTAINER_ID}]
+  }";
+  
+  curl -X POST $URL \
+    --header "PRIVATE-TOKEN:${GIT_CI_PASS}" \
+    --header "Content-Type: application/json" \
+    --data "${BODY}"; 
+    
+  exit $1
+}
+
+success() {
+  HOST="https://gitlab.com/api/v4/projects/"
+  BODY="{
+      \"id\": ${CI_PROJECT_ID},
+      \"source_branch\": \"update\",
+      \"target_branch\": \"master\",
+      \"remove_source_branch\": true,
+      \"title\": \"Update composer dependencies.\",
+      \"description\": \"Please review and merge this automated update. You can preview deployed changes at https://update-${TERMINUS_SITE}.pantheonsite.io.\",
+      \"assignee_id\":\"${MAINTAINER_ID}\"
+  }";
+  
+  curl -X POST "${HOST}${CI_PROJECT_ID}/merge_requests" \
+    --header "PRIVATE-TOKEN:${GIT_CI_PASS}" \
+    --header "Content-Type: application/json" \
+    --data "${BODY}";
+
+  echo "All Good"
+}
+
+git branch -d update || echo "No update branch. All Good!"
+git push origin --delete update || echo "No Update branch. All Good!"
+
+{
+  ## Create and checkout "update" branch
+  git checkout -b update
+  
+  composer install
+
+  ## Bootstrap Database
+  export DB_NAME=wordpress
+  export DB_USER=root
+  export DB_PASSWORD=wordpress
+  export DB_HOST=mariadb
+  export WP_ENV=development
+  export WP_HOME=http://wp.localhost
+  export WP_SITEURL=http://wp.localhost/wp
+  
+  wp core install --url=http://wp.localhost --title="WordPress on Gitlab CI" --admin_user=admin --admin_password=admin --admin_email=zach@hipcreativeinc.com --allow-root
+  
+  # Make sure plugins below exist
+  composer require deliciousbrains-plugin/wp-migrate-db-pro
+  composer require deliciousbrains-plugin/wp-migrate-db-pro-media-files
+  composer require deliciousbrains-plugin/wp-migrate-db-pro-cli
+
+  # Activate MigrateDB Pro, Media, and CLI
+  wp plugin activate wp-migrate-db-pro --allow-root
+  wp plugin activate wp-migrate-db-pro-cli --allow-root
+  wp plugin activate wp-migrate-db-pro-media-files --allow-root
+
+  # Migrate DB from site
+  wp migratedb pull ${MIGRATEDB_SETTINGS} --allow-root
+
+  ## Composer Updates
+  composer update
+
+  ## Update Non-composer plugins (Change these based on the plugins that are installed on the site)
+  wp plugin list --allow-root
+  wp plugin update bb-plugin --allow-root
+  wp plugin update bb-theme-builder --allow-root
+  wp plugin update social-warfare-pro --allow-root
+  wp plugin update wpforms --allow-root
+  wp plugin update wpforms-surveys-polls --allow-root
+  wp plugin update wpforms-zapier --allow-root
+  wp plugin update bbpowerpack --allow-root
+  wp plugin update the-seo-framework-extension-manager --allow-root
+  wp plugin update bb-ultimate-addon --allow-root
+  wp plugin update bb-fast-filesystem --allow-root
+
+  wp plugin list --allow-root
+
+  ## Commit and Push Changes
+  git add .
+  git commit -m 'update wp core and plugins'
+  git push origin update
+} || fail $?
+
+## If Successful, open a merge request
+success

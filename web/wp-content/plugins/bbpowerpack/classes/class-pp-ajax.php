@@ -1,4 +1,8 @@
 <?php
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class BB_PowerPack_Ajax {
 
@@ -60,11 +64,25 @@ class BB_PowerPack_Ajax {
 
 	static public function table_csv_upload()
 	{
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( __('Error uploading file.', 'bb-powerpack') );
+		}
+
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'pp_table_csv' ) ) {
+			wp_send_json_error( __('Invalid request.', 'bb-powerpack') );
+		}
+
 		if ( ! isset( $_FILES['file'] ) ) {
 			wp_send_json_error( __('Please provide CSV file.', 'bb-powerpack') );
 		}
 
 		$file = $_FILES['file'];
+
+		// validate file type.
+		if ( 'csv' !== strtolower( pathinfo( $file['name'], PATHINFO_EXTENSION ) ) ) {
+			wp_send_json_error( __('Invalid file type. Please provide CSV file.', 'bb-powerpack') );
+		}
+
 		$upload_dir = BB_PowerPack::$upload_dir;
 
 		$source_path = $file['tmp_name'];

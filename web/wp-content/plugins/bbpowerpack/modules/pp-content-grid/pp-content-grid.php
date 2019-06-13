@@ -710,12 +710,14 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'label'			=> __('Arrow Color', 'bb-powerpack'),
 						'default'		=> '000000',
 						'show_reset'	=> true,
+						'connections'	=> array('color')
 					),
 					'arrow_hover_color'	=> array(
 						'type'			=> 'color',
 						'label'			=> __('Arrow Hover Color', 'bb-powerpack'),
 						'default'		=> 'eeeeee',
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'none'
 						)
@@ -726,6 +728,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'		=> '',
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 					),
 					'arrow_bg_hover_color'	=> array(
 						'type'			=> 'color',
@@ -733,6 +736,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'		=> '',
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 					),
 					'arrow_border'	=> array(
 						'type'			=> 'border',
@@ -748,6 +752,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'label'			=> __('Border Hover Color', 'bb-powerpack'),
 						'default'		=> '',
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'none'
 						)
@@ -770,6 +775,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'label'         => __('Background Color', 'bb-powerpack'),
 						'default'       => '666666',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'css',
                             'selector'        => '.pp-content-post-carousel .owl-theme .owl-dots .owl-dot span',
@@ -781,6 +787,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'label'         => __('Active Color', 'bb-powerpack'),
 						'default'       => '000000',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 						'preview'       => array(
                             'type'          => 'css',
                             'selector'        => '.pp-content-post-carousel .owl-theme .owl-dots .owl-dot.active span',
@@ -842,6 +849,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'		=> 'f7f7f7',
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'selector'		=> '.pp-content-post',
@@ -854,6 +862,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'		=> 'eeeeee',
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'none'
 						)
@@ -910,6 +919,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'type'      => 'color',
                         'label'     => __('Color', 'bb-powerpack'),
 						'default'		=> '333333',
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post .pp-post-title-divider',
@@ -928,6 +938,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'		=> '000000',
 						'show_reset' 	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post .pp-post-image .pp-content-category-list',
@@ -939,6 +950,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'label'     => __('Text Color', 'bb-powerpack'),
 						'default'		=> 'ffffff',
 						'show_reset' 	=> true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post .pp-post-image .pp-content-category-list a, .pp-content-post .pp-post-image .pp-content-category-list',
@@ -965,6 +977,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'label'     => __('Overlay Color', 'bb-powerpack'),
 						'default'		=> '000000',
 						'show_reset' 	=> true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post .pp-post-image .pp-post-title',
@@ -996,6 +1009,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'		=> 'f9f9f9',
 						'show_reset' 	=> true,
 						'show_alpha' 	=> true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post.pp-grid-style-5 .pp-content-post-date span.pp-post-day',
@@ -1007,6 +1021,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'label'     => __('Day Text Color', 'bb-powerpack'),
 						'default'		=> '888888',
 						'show_reset' 	=> true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post.pp-grid-style-5 .pp-content-post-date span.pp-post-day',
@@ -1019,6 +1034,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'		=> '000000',
 						'show_reset' 	=> true,
 						'show_alpha' 	=> true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post.pp-grid-style-5 .pp-content-post-date span.pp-post-month',
@@ -1030,6 +1046,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'label'     => __('Month Text Color', 'bb-powerpack'),
 						'default'		=> 'ffffff',
 						'show_reset' 	=> true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post.pp-grid-style-5 .pp-content-post-date span.pp-post-month',
@@ -1042,6 +1059,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'		=> '000000',
 						'show_reset' 	=> true,
 						'show_alpha' 	=> true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post.pp-grid-style-6 .pp-post-image .pp-content-post-date',
@@ -1053,6 +1071,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                         'label'     => __('Color', 'bb-powerpack'),
 						'default'		=> 'ffffff',
 						'show_reset' 	=> true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'      => 'css',
 							'selector'	=>'.pp-content-post.pp-grid-style-6 .pp-post-image .pp-content-post-date',
@@ -1103,6 +1122,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'label'         => __('Rating Color', 'bb-powerpack'),
 						'default'       => '000000',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'css',
                             'selector'        => '.pp-content-post .star-rating:before, .pp-content-post .star-rating span:before',
@@ -1114,6 +1134,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'label'         => __('Price Color', 'bb-powerpack'),
 						'default'       => '000000',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'css',
                             'selector'        => '.pp-content-post .pp-product-price',
@@ -1141,6 +1162,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'			=> '666666',
 						'show_reset'		=> true,
 						'show_alpha'		=> true,
+						'connections'		=> array('color'),
 					),
 					'button_bg_hover_color'	=> array(
 						'type'				=> 'color',
@@ -1148,6 +1170,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'			=> '000000',
 						'show_reset'		=> true,
 						'show_alpha'		=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'none'
 						)
@@ -1157,12 +1180,14 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'label'				=> __('Text Color', 'bb-powerpack'),
 						'default'			=> 'ffffff',
 						'show_reset'		=> true,
+						'connections'		=> array('color'),
 					),
 					'button_text_hover_color'	=> array(
 						'type'				=> 'color',
 						'label'				=> __('Text Hover Color', 'bb-powerpack'),
 						'default'			=> '',
 						'show_reset'		=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'none'
 						)
@@ -1180,7 +1205,8 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'type'			=> 'color',
 						'label'			=> __('Border Hover Color', 'bb-powerpack'),
 						'default'		=> 'eeeeee',
-						'show_reset'	=> true
+						'show_reset'	=> true,
+						'connections'	=> array('color'),
 					),
 					'button_padding'	=> array(
 						'type'				=> 'dimension',
@@ -1207,7 +1233,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                     	'options' 		=> array(
                     		'top' 			=> array(
                                 'maxlength' 	=> 3,
-                                'placeholder'   =>  __('Top', 'bb-powerpack'),
+                                'placeholder'   => __('Top', 'bb-powerpack'),
                                 'tooltip'       => __('Top', 'bb-powerpack'),
                     			'icon'			=> 'fa-long-arrow-up',
 								'preview'       => array(
@@ -1218,7 +1244,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                     		),
                             'bottom' 		=> array(
                                 'maxlength' 	=> 3,
-                                'placeholder'   =>  __('Bottom', 'bb-powerpack'),
+                                'placeholder'   => __('Bottom', 'bb-powerpack'),
                                 'tooltip'       => __('Bottom', 'bb-powerpack'),
                     			'icon'			=> 'fa-long-arrow-down',
 								'preview'       => array(
@@ -1284,6 +1310,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
 						'default'		=> '',
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'selector'		=> 'ul.pp-post-filters li',
@@ -1296,6 +1323,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
 						'default'		=> '',
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'none'
 						)
@@ -1305,6 +1333,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'label'			=> __('Text Color', 'bb-powerpack'),
 						'default'		=> '333333',
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'selector'		=> 'ul.pp-post-filters li',
@@ -1316,6 +1345,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'label'			=> __('Text Active Color', 'bb-powerpack'),
 						'default'		=> '000000',
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'none',
 						)
@@ -1341,6 +1371,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'label'			=> __('Border Hover Color', 'bb-powerpack'),
 						'default'		=> '',
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css'
 						)
@@ -1370,6 +1401,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'			=> 'ffffff',
 						'show_reset'		=> true,
 						'show_alpha'		=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'selector'			=> '.pp-post-filters-toggle',
@@ -1381,6 +1413,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'label'				=> __('Text Color', 'bb-powerpack'),
 						'default'			=> '444444',
 						'show_reset'		=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'selector'			=> '.pp-post-filters-toggle',
@@ -1545,6 +1578,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'		=> 'ffffff',
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'			=> 'css',
 							'selector'		=> '.pp-content-grid-pagination li a.page-numbers, .pp-content-grid-pagination li span.page-numbers, .pp-content-grid-load-more a',
@@ -1557,6 +1591,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'		=> 'eeeeee',
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'			=> 'none',
 						)
@@ -1567,6 +1602,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'		=> '000000',
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'			=> 'css',
 							'selector'		=> '.pp-content-grid-pagination li a.page-numbers, .pp-content-grid-pagination li span.page-numbers, .pp-content-grid-load-more a',
@@ -1579,6 +1615,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'		=> '',
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'			=> 'none',
 						)
@@ -1639,6 +1676,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'type'			=> 'color',
 						'label'			=> __('Text Color', 'bb-powerpack'),
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'		=> 'css',
 							'rules'           => array(
@@ -1664,7 +1702,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                     	'options' 		=> array(
                     		'top' 			=> array(
                                 'maxlength' 	=> 3,
-                                'placeholder'   =>  __('Top', 'bb-powerpack'),
+                                'placeholder'   => __('Top', 'bb-powerpack'),
                                 'tooltip'       => __('Top', 'bb-powerpack'),
                     			'icon'			=> 'fa-long-arrow-up',
 								'preview'       => array(
@@ -1675,7 +1713,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                     		),
                             'bottom' 		=> array(
                                 'maxlength' 	=> 3,
-                                'placeholder'   =>  __('Bottom', 'bb-powerpack'),
+                                'placeholder'   => __('Bottom', 'bb-powerpack'),
                                 'tooltip'       => __('Bottom', 'bb-powerpack'),
                     			'icon'			=> 'fa-long-arrow-down',
 								'preview'       => array(
@@ -1705,6 +1743,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'type'			=> 'color',
 						'label'			=> __('Text Color', 'bb-powerpack'),
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'			=> 'css',
 							'selector'      => '.pp-content-post .pp-post-content',
@@ -1722,7 +1761,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                     	'options' 		=> array(
                     		'top' 			=> array(
                                 'maxlength' 	=> 3,
-                                'placeholder'   =>  __('Top', 'bb-powerpack'),
+                                'placeholder'   => __('Top', 'bb-powerpack'),
                                 'tooltip'       => __('Top', 'bb-powerpack'),
                     			'icon'			=> 'fa-long-arrow-up',
 								'preview'       => array(
@@ -1733,7 +1772,7 @@ FLBuilder::register_module('PPContentGridModule', array(
                     		),
                             'bottom' 		=> array(
                                 'maxlength' 	=> 3,
-                                'placeholder'   =>  __('Bottom', 'bb-powerpack'),
+                                'placeholder'   => __('Bottom', 'bb-powerpack'),
                                 'tooltip'       => __('Bottom', 'bb-powerpack'),
                     			'icon'			=> 'fa-long-arrow-down',
 								'preview'       => array(
@@ -1764,6 +1803,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'label'			=> __('Text Color', 'bb-powerpack'),
 						'default'		=> '606060',
 						'show_reset' 	=> true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'		=> 'css',
 							'rules'			  => array(
@@ -1784,6 +1824,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'default'		=> '333',
 						'show_reset' 	=> true,
 						'show_alpha' 	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'selector'		=> '.pp-content-post .pp-post-meta span',
@@ -1801,6 +1842,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'label'				=> __('Date Color', 'bb-powerpack'),
 						'default'			=> '',
 						'show_reset'		=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'selector'			=> '.pp-post-event-calendar-date, .pp-post-event-calendar-date span',
@@ -1830,6 +1872,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'label'				=> __('Venue Color', 'bb-powerpack'),
 						'default'			=> '',
 						'show_reset'		=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'selector'			=> '.pp-post-event-calendar-venue, .pp-post-event-calendar-venue span.tribe-address',
@@ -1844,6 +1887,7 @@ FLBuilder::register_module('PPContentGridModule', array(
 						'label'				=> __('Cost Color', 'bb-powerpack'),
 						'default'			=> '',
 						'show_reset'		=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'selector'			=> '.pp-post-event-calendar-cost, .pp-post-event-calendar-cost span.ticket-cost',

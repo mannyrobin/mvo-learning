@@ -2,7 +2,7 @@
 	<form class="pp-search-form" role="search" action="<?php echo home_url(); ?>" method="get">
 		<?php if ( 'full_screen' === $settings->style ) : ?>
 			<div class="pp-search-form__toggle">
-				<i class="fa fa-search" aria-hidden="true"></i>
+				<i class="<?php echo empty( $settings->toggle_icon ) ? 'fa fa-search' : $settings->toggle_icon; ?>" aria-hidden="true"></i>
 				<span class="pp-screen-reader-text"><?php esc_html_e( 'Search', 'bb-powerpack' ); ?></span>
 			</div>
 		<?php endif; ?>

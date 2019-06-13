@@ -365,7 +365,8 @@ FLBuilder::register_module('PPLogosGridModule', array(
                         'type'         => 'color',
                         'label'        => __('Background Color', 'bb-powerpack'),
                         'default'      => '',
-                        'show_reset'   => true,
+						'show_reset'   => true,
+						'connections'	=> array('color'),
                         'preview'      => array(
                             'type'     => 'css',
                             'selector' => '.pp-logos-content .pp-logo',
@@ -376,7 +377,8 @@ FLBuilder::register_module('PPLogosGridModule', array(
                         'type'         => 'color',
                         'label'        => __('Background Color Hover', 'bb-powerpack'),
                         'default'      => '',
-                        'show_reset'   => true,
+						'show_reset'   => true,
+						'connections'	=> array('color'),
                         'preview'      => array(
                             'type'     => 'css',
                             'selector' => '.pp-logos-content .pp-logo:hover',
@@ -501,7 +503,8 @@ FLBuilder::register_module('PPLogosGridModule', array(
                         'type'          => 'color',
                         'label'         => __('Border Color', 'bb-powerpack'),
                         'default'       => '',
-                        'show_reset'    => true,
+						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'         => array(
                             'type'            => 'css',
                             'selector'        => '.pp-logos-content .pp-logo img',
@@ -512,7 +515,8 @@ FLBuilder::register_module('PPLogosGridModule', array(
                         'type'          => 'color',
                         'label'         => __('Border Color Hover', 'bb-powerpack'),
                         'default'       => '',
-                        'show_reset'    => true,
+						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'         => array(
                             'type'            => 'css',
                             'selector'        => '.pp-logos-content .pp-logo:hover img',
@@ -557,6 +561,7 @@ FLBuilder::register_module('PPLogosGridModule', array(
 						'default'       => '000000',
 						'show_reset'    => true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'css',
 							'selector'      => '.pp-logos-content .fa',
@@ -568,6 +573,7 @@ FLBuilder::register_module('PPLogosGridModule', array(
 						'label'         => __('Arrow Color', 'bb-powerpack'),
 						'default'       => 'ffffff',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'css',
 							'selector'      => '.pp-logos-content .fa',
@@ -579,6 +585,7 @@ FLBuilder::register_module('PPLogosGridModule', array(
 						'label'         => __('Arrow Color Hover', 'bb-powerpack'),
 						'default'       => '999999',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'css',
 							'selector'      => '.pp-logos-content .fa:hover',
@@ -591,6 +598,7 @@ FLBuilder::register_module('PPLogosGridModule', array(
 						'default'       => '',
 						'show_reset'    => true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'css',
 							'selector'      => '.pp-logos-content .fa:hover',
@@ -625,7 +633,8 @@ FLBuilder::register_module('PPLogosGridModule', array(
                         'type'          => 'color',
                         'label'         => __('Border Color Hover', 'bb-powerpack'),
                         'default'       => '',
-                        'show_reset'    => true,
+						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'         => array(
                             'type'            => 'css',
                             'selector'        => '.pp-logos-content .fa:hover',
@@ -657,6 +666,7 @@ FLBuilder::register_module('PPLogosGridModule', array(
 						'default'       => 'f5f5f5',
 						'show_reset'    => true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'css',
                             'selector'        => '.pp-logos-content .bx-wrapper .bx-pager.bx-default-pager a',
@@ -669,6 +679,7 @@ FLBuilder::register_module('PPLogosGridModule', array(
 						'default'       => '999999',
 						'show_reset'    => true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'       => array(
                             'type'          => 'css',
                             'selector'        => '.pp-logos-content .bx-wrapper .bx-pager.bx-default-pager a:active',
@@ -733,7 +744,8 @@ FLBuilder::register_module('PPLogosGridModule', array(
                         'type'          => 'color',
                         'label'         => __('Color', 'bb-powerpack'),
                         'default'       => '000000',
-                        'show_reset'    => true,
+						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'         => array(
                             'type'            => 'css',
                             'selector'        => '.pp-logos-content .pp-logo div.title-wrapper p.logo-title',
@@ -744,7 +756,8 @@ FLBuilder::register_module('PPLogosGridModule', array(
                         'type'          => 'color',
                         'label'         => __('Color Hover', 'bb-powerpack'),
                         'default'       => '666666',
-                        'show_reset'    => true,
+						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'         => array(
                             'type'            => 'css',
                             'selector'        => '.pp-logos-content .pp-logo:hover div.title-wrapper p.logo-title',

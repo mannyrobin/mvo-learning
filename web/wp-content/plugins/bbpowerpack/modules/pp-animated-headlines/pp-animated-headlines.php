@@ -192,6 +192,7 @@ FLBuilder::register_module('PPAnimatedHeadlinesModule', array(
 						'label'			=> __('Color', 'bb-powerpack'),
 						'default'		=> '',
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'            => 'css',
 							'selector'        => '.pp-headline-dynamic-wrapper path',
@@ -251,7 +252,8 @@ FLBuilder::register_module('PPAnimatedHeadlinesModule', array(
                         'type'       	=> 'color',
                         'label'      	=> __('Color', 'bb-powerpack'),
                         'default'    	=> '',
-                        'show_reset' 	=> true,
+						'show_reset' 	=> true,
+						'connections'	=> array('color'),
                     	'preview'		=> array(
                             'type'			=> 'css',
                             'selector'		=> '.pp-headline',
@@ -276,7 +278,8 @@ FLBuilder::register_module('PPAnimatedHeadlinesModule', array(
                         'type'       => 'color',
                         'label'      => __('Color', 'bb-powerpack'),
                         'default'    => '',
-                        'show_reset' => true,
+						'show_reset' => true,
+						'connections'	=> array('color'),
                     	'preview'	=> array(
                             'type'		=> 'css',
                             'selector'	=> '.pp-headline-dynamic-wrapper',
@@ -289,6 +292,7 @@ FLBuilder::register_module('PPAnimatedHeadlinesModule', array(
                         'default'    	=> '',
 						'show_reset' 	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
                     	'preview'		=> array(
                             'type'			=> 'css',
                             'selector'		=> '.pp-headline-animation-type-typing .pp-headline-dynamic-wrapper.pp-headline-typing-selected',
@@ -300,7 +304,8 @@ FLBuilder::register_module('PPAnimatedHeadlinesModule', array(
                         'type'       	=> 'color',
                         'label'      	=> __('Selection Text Color', 'bb-powerpack'),
                         'default'    	=> '',
-                        'show_reset' 	=> true,
+						'show_reset' 	=> true,
+						'connections'	=> array('color'),
                     	'preview'		=> array(
                             'type'			=> 'css',
                             'selector'		=> '.pp-headline-animation-type-typing .pp-headline-dynamic-wrapper.pp-headline-typing-selected .pp-headline-dynamic-text',
