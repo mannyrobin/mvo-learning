@@ -682,6 +682,7 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 						'default'	=> '',
 						'show_reset' => true,
 						'preview'	=> 'none',
+						'connections'	=> array('color'),
 					),
 					'overlay_primary_color' => array(
 						'type'       => 'color',
@@ -689,6 +690,7 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 						'default'	=> '',
 						'show_reset' => true,
 						'preview'	=> 'none',
+						'connections'	=> array('color'),
 					),
 					'overlay_secondary_color' => array(
 						'type'       => 'color',
@@ -696,6 +698,7 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 						'default'	=> '',
 						'show_reset' => true,
 						'preview'	=> 'none',
+						'connections'	=> array('color'),
 					),
 					'overlay_color_opacity'    => array(
 						'type'        => 'text',
@@ -718,6 +721,7 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 						'default'	=> '',
 						'show_reset' => true,
 						'preview'	=> 'none',
+						'connections'	=> array('color'),
 					),
 					'overlay_spacing'    => array(
 						'type'        => 'unit',
@@ -750,6 +754,7 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 						'default'    	=> '',
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'	=> array(
 							'type'		=> 'css',
 							'selector'	=> '.pp-image-overlay .pp-overlay-icon span',
@@ -761,6 +766,7 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 						'label'     	=> __('Color', 'bb-powerpack'),
 						'default'    	=> '',
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'		=> 'css',
 							'selector'	=> '.pp-image-overlay .pp-overlay-icon span',
@@ -816,26 +822,30 @@ FLBuilder::register_module('PPImageCarouselModule', array(
                         'label'     	=> __( 'Background Color', 'bb-powerpack' ),
 						'show_reset' 	=> true,
 						'show_alpha'	=> true,
-                        'default'   	=> 'eaeaea',
+						'default'   	=> 'eaeaea',
+						'connections'	=> array('color'),
 					),
                     'arrow_bg_hover'       => array(
 						'type'      => 'color',
                         'label'     => __( 'Background Hover Color', 'bb-powerpack' ),
 						'show_reset' => true,
 						'show_alpha'	=> true,
-                        'default'   => '4c4c4c'
+						'default'   => '4c4c4c',
+						'connections'	=> array('color'),
 					),
 					'arrow_color'       => array(
 						'type'      => 'color',
 						'label'     => __( 'Arrow Color', 'bb-powerpack' ),
 						'show_reset' => true,
-						'default'   => '000000'
+						'default'   => '000000',
+						'connections'	=> array('color'),
 					),
 					'arrow_color_hover'       => array(
 						'type'      => 'color',
 						'label'     => __( 'Arrow Hover Color', 'bb-powerpack' ),
 						'show_reset' => true,
-						'default'   => 'eeeeee'
+						'default'   => 'eeeeee',
+						'connections'	=> array('color'),
 					),
                     'arrow_border'	=> array(
 						'type'          => 'border',
@@ -851,7 +861,8 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 						'type'      => 'color',
                         'label'     => __( 'Border Hover Color', 'bb-powerpack' ),
 						'show_reset' => true,
-                        'default'   => '',
+						'default'   => '',
+						'connections'	=> array('color'),
 					),
 					'arrow_horizontal_padding' 	=> array(
                     	'type'          => 'unit',
@@ -917,6 +928,7 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 						'default'       => '999999',
 						'show_reset'    => true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'css',
                             'selector'        => '.pp-image-carousel .swiper-pagination-bullet, .pp-image-carousel.swiper-container-horizontal>.swiper-pagination-progress',
@@ -929,6 +941,7 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 						'default'       => '000000',
 						'show_reset'    => true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'       => array(
                             'type'          => 'css',
                             'selector'        => '.pp-image-carousel .swiper-pagination-bullet:hover, .pp-image-carousel .swiper-pagination-bullet-active, .pp-image-carousel .swiper-pagination-progress .swiper-pagination-progressbar',
@@ -992,7 +1005,8 @@ FLBuilder::register_module('PPImageCarouselModule', array(
 			        'caption_color'        => array(
 			            'type'       => 'color',
 			            'label'      => __( 'Color', 'bb-powerpack' ),
-			            'default'    => '',
+						'default'    => '',
+						'connections'	=> array('color'),
 						'preview'	=> array(
 							'type'		=> 'css',
 							'selector'	=> '.pp-image-carousel-caption, .pp-image-overlay .pp-caption',

@@ -1,0 +1,41 @@
+image: composer
+
+variables:
+  TERMINUS_SITE: mvo-learning 
+
+stages:
+  - deploy
+
+before_script:
+  - eval $(ssh-agent -s) && ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - mkdir -p $HOME/.ssh && echo "StrictHostKeyChecking no" >> "$HOME/.ssh/config"
+  - git config --global user.email "$GITLAB_USER_EMAIL"
+  - git config --global user.name "Gitlab CI"
+  - /usr/bin/env COMPOSER_BIN_DIR=$HOME/bin composer --working-dir=$HOME require pantheon-systems/terminus "^1"
+  - export PATH=$HOME/bin:$HOME/terminus/bin:$PATH
+  - mkdir -p ~/.terminus/plugins
+  - composer create-project -d ~/.terminus/plugins pantheon-systems/terminus-build-tools-plugin:~1
+  - terminus auth:login --machine-token="$TERMINUS_TOKEN"
+
+deploy_to_test:
+  stage: deploy
+  environment:
+    name: test
+    url: https://test-$TERMINUS_SITE.pantheonsite.io
+  only:
+    - master
+  script:
+    - composer build-assets
+    - terminus build-env:push-code $TERMINUS_SITE.dev -n -y
+    - terminus env:deploy $TERMINUS_SITE.test --cc --sync-content -n -y
+
+deploy_to_multidev:
+  stage: deploy
+  environment:
+    name: $CI_COMMIT_REF_NAME
+  except:
+    - master
+  script: 
+    - composer build-assets
+    - chmod +x ./scripts/deploy-to-multidev
+    - ./scripts/deploy-to-multidev

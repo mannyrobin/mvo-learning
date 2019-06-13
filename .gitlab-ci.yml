@@ -1,29 +1,46 @@
 image: composer
 
+services: 
+    - mariadb
+
 variables:
-  TERMINUS_SITE: mvo-learning 
+  # This can be found by running: (terminus site:list) and grabbing the name field
+  TERMINUS_SITE: mvo-learning
+  MYSQL_DATABASE: wordpress
+  MYSQL_ROOT_PASSWORD: wordpress
+  # This can be found at https://gitlab.com/profile?nav_source=navbar under User ID
+  MAINTAINER_ID: 2828826
+  # Grab this setting from the Admin area of each site under tools -> migrateDB -> settings
+  MIGRATEDB_SETTINGS: https://ministryvillageelc.org/wp 4CIos3ctUitZMt8iZ2S/73KDQeJbNe4Job3a/Ukq
 
 stages:
+  - update
   - deploy
 
 before_script:
+  - docker-php-ext-install mysqli pdo pdo_mysql
   - eval $(ssh-agent -s) && ssh-add <(echo "$SSH_PRIVATE_KEY")
   - mkdir -p $HOME/.ssh && echo "StrictHostKeyChecking no" >> "$HOME/.ssh/config"
+  - git remote set-url origin https://hipcreative:$GIT_CI_PASS@gitlab.com/$CI_PROJECT_PATH.git
   - git config --global user.email "$GITLAB_USER_EMAIL"
   - git config --global user.name "Gitlab CI"
-  - /usr/bin/env COMPOSER_BIN_DIR=$HOME/bin composer --working-dir=$HOME require pantheon-systems/terminus "^1"
   - export PATH=$HOME/bin:$HOME/terminus/bin:$PATH
+  - /usr/bin/env COMPOSER_BIN_DIR=$HOME/bin composer --working-dir=$HOME require pantheon-systems/terminus "^1"
   - mkdir -p ~/.terminus/plugins
   - composer create-project -d ~/.terminus/plugins pantheon-systems/terminus-build-tools-plugin:~1
   - terminus auth:login --machine-token="$TERMINUS_TOKEN"
+  - curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+  - chmod +x wp-cli.phar
+  - mv wp-cli.phar ~/bin/wp
 
 deploy_to_test:
   stage: deploy
   environment:
-    name: test
-    url: https://test-$TERMINUS_SITE.pantheonsite.io
+    name: dev
   only:
     - master
+  except:
+    - schedules
   script:
     - composer build-assets
     - terminus build-env:push-code $TERMINUS_SITE.dev -n -y
@@ -33,9 +50,20 @@ deploy_to_multidev:
   stage: deploy
   environment:
     name: $CI_COMMIT_REF_NAME
+    url: http://$CI_ENVIRONMENT_SLUG-$TERMINUS_SITE.pantheonsite.io/
   except:
     - master
   script: 
     - composer build-assets
     - chmod +x ./scripts/deploy-to-multidev
     - ./scripts/deploy-to-multidev
+    
+weekly_update:
+  stage: update
+  environment:
+    name: update
+  only:
+    - schedules
+  script:
+    - chmod +x ./scripts/weekly-update
+    - ./scripts/weekly-update

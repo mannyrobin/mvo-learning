@@ -19,5 +19,6 @@ if ! TERMINUS_DOES_MULTIDEV_EXIST ${MULTIDEV_PREFIX}
 then
     terminus multidev:create $TERMINUS_SITE.live $MULTIDEV_PREFIX -n -y
 else 
+    terminus env:clone-content $TERMINUS_SITE.live $MULTIDEV_PREFIX -n -y
     terminus build-env:push-code $TERMINUS_SITE.$MULTIDEV_PREFIX -n -y
 fi

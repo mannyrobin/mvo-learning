@@ -440,6 +440,7 @@ FLBuilder::register_module('PPSmartButtonModule', array(
 						'default'		=> 'd6d6d6',
 						'show_reset'    => true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'		=> 'css',
 							'selector'	=> '.pp-button-wrap a.pp-button',
@@ -452,6 +453,7 @@ FLBuilder::register_module('PPSmartButtonModule', array(
 						'default'		=> '333333',
 						'show_reset'    => true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'		=> 'none',
 						),
@@ -460,11 +462,13 @@ FLBuilder::register_module('PPSmartButtonModule', array(
 						'type'          => 'color',
 						'label'         => __('Gradient Color Primary', 'bb-powerpack'),
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 					),
 					'bg_color_secondary'	=> array(
 						'type'          => 'color',
 						'label'         => __('Gradient Color Secondary', 'bb-powerpack'),
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 					),
 					'gradient_hover'	=> array(
 						'type'			=> 'select',
@@ -481,6 +485,7 @@ FLBuilder::register_module('PPSmartButtonModule', array(
 						'label'         => __('Text Color', 'bb-powerpack'),
 						'default'		=> '000000',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'		=> 'css',
 							'selector'	=> '.pp-button-wrap a.pp-button span',
@@ -492,6 +497,7 @@ FLBuilder::register_module('PPSmartButtonModule', array(
 						'label'         => __('Text Hover Color', 'bb-powerpack'),
 						'default'		=> 'dddddd',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'none',
 						),
@@ -579,6 +585,7 @@ FLBuilder::register_module('PPSmartButtonModule', array(
 						'default'       => '',
 						'show_reset'    => true,
 						'show_alpha'    => true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'none',
 						),

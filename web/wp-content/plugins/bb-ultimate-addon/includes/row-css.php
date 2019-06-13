@@ -43,6 +43,9 @@ function uabb_row_particle_css( $css, $nodes, $global_settings ) {
 			.fl-row-content-wrap .uabb-row-particles-background {
 				z-index: 1;
 			}
+			.fl-node-<?php echo $row->node; ?> .fl-row-content {
+				position: inherit;
+			}
 		<?php
 		}
 		$css .= ob_get_clean();

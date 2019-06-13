@@ -161,6 +161,7 @@ FLBuilder::register_module('PPImageComparisonModule', array(
 						'default'				=> 'rgba(0,0,0,0.5)',
 						'show_reset'    		=> true,
 						'show_alpha'    		=> true,
+						'connections'			=> array('color'),
 					),
 					'overlay_bg_color_hover'=> array(
 						'type'					=> 'color',
@@ -168,6 +169,7 @@ FLBuilder::register_module('PPImageComparisonModule', array(
 						'default'				=> '',
 						'show_reset'    		=> true,
 						'show_alpha'    		=> true,
+						'connections'			=> array('color'),
 					),
 				),
 			),
@@ -180,12 +182,14 @@ FLBuilder::register_module('PPImageComparisonModule', array(
 						'label'					=> __('Icon Color'),
 						'default'				=> 'fff',
 						'show_reset'    		=> true,
+						'connections'			=> array('color'),
 					),
 					'icon_color_hover'		=> array(
 						'type'					=> 'color',
 						'label'					=> __('Icon Hover Color'),
 						'default'				=> '000',
 						'show_reset'    		=> true,
+						'connections'			=> array('color'),
 					),
 					'icon_bg_color'			=> array(
 						'type'					=> 'color',
@@ -193,6 +197,7 @@ FLBuilder::register_module('PPImageComparisonModule', array(
 						'default'				=> '',
 						'show_reset'    		=> true,
 						'show_alpha'    		=> true,
+						'connections'			=> array('color'),
 					),
 					'icon_bg_color_hover'	=> array(
 						'type'					=> 'color',
@@ -200,6 +205,7 @@ FLBuilder::register_module('PPImageComparisonModule', array(
 						'default'				=> '',
 						'show_reset'    		=> true,
 						'show_alpha'    		=> true,
+						'connections'			=> array('color'),
 					),
 					'icon_border'			=> array(
 						'type'					=> 'border',
@@ -211,6 +217,7 @@ FLBuilder::register_module('PPImageComparisonModule', array(
 						'label'					=> __('Border Hover Color'),
 						'default'				=> '000',
 						'show_reset'    		=> true,
+						'connections'			=> array('color'),
 					),
 				),
 			),
@@ -223,12 +230,14 @@ FLBuilder::register_module('PPImageComparisonModule', array(
 						'label'					=> __('Color'),
 						'default'				=> 'fff',
 						'show_reset'    		=> true,
+						'connections'			=> array('color'),
 					),
 					'divider_color_hover'	=> array(
 						'type'					=> 'color',
 						'label'					=> __('Color on Hover'),
 						'default'				=> '000',
 						'show_reset'    		=> true,
+						'connections'			=> array('color'),
 					),
 					'divider_width'			=> array(
 						'type'					=> 'unit',
@@ -273,6 +282,7 @@ FLBuilder::register_module('PPImageComparisonModule', array(
 						'label'					=> __('Text Color'),
 						'default'				=> 'fff',
 						'show_reset'    		=> true,
+						'connections'			=> array('color'),
 					),
 					'before_bg_color'	=> array(
 						'type'					=> 'color',
@@ -280,6 +290,7 @@ FLBuilder::register_module('PPImageComparisonModule', array(
 						'default'				=> '',
 						'show_reset'    		=> true,
 						'show_alpha'    		=> true,
+						'connections'			=> array('color'),
 					),
 					'before_border'		=> array(
 						'type'					=> 'border',
@@ -339,6 +350,7 @@ FLBuilder::register_module('PPImageComparisonModule', array(
 						'label'					=> __('Text Color'),
 						'default'				=> 'fff',
 						'show_reset'    		=> true,
+						'connections'			=> array('color'),
 					),
 					'after_bg_color'	=> array(
 						'type'					=> 'color',
@@ -346,6 +358,7 @@ FLBuilder::register_module('PPImageComparisonModule', array(
 						'default'				=> '',
 						'show_reset'    		=> true,
 						'show_alpha'    		=> true,
+						'connections'			=> array('color'),
 					),
 					'after_border'		=> array(
 						'type'					=> 'border',

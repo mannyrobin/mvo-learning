@@ -314,6 +314,7 @@ FLBuilder::register_module('PPRestaurantMenuModule', array(
 						'default'       => 'ffffff',
 						'show_reset'    => false,
 						'show_alpha'    => false,
+						'connections'	=> array('color'),
 					),
 				)
 			),
@@ -453,6 +454,7 @@ FLBuilder::register_module('PPRestaurantMenuModule', array(
 						'label'         => __('Background Color', 'bb-powerpack'),
 						'show_reset'    => false,
 						'show_alpha'    => false,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'css',
 							'selector'      => '.pp-menu-item',
@@ -529,7 +531,8 @@ FLBuilder::register_module('PPRestaurantMenuModule', array(
 						'type'          => 'color',
 						'label'         => __('Color', 'bb-powerpack'),
 						'default'       => '333333',
-						'show_reset'    => true
+						'show_reset'    => true,
+						'connections'	=> array('color'),
 					),
 				)
 			),
@@ -551,6 +554,7 @@ FLBuilder::register_module('PPRestaurantMenuModule', array(
 						'label'         => __('Color', 'bb-powerpack'),
 						'default'       => '333333',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'css',
 							'property'      => 'color',
@@ -577,6 +581,7 @@ FLBuilder::register_module('PPRestaurantMenuModule', array(
 						'label'         => __('Color', 'bb-powerpack'),
 						'default'       => '333333',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'css',
 							'property'      => 'color',
@@ -603,6 +608,7 @@ FLBuilder::register_module('PPRestaurantMenuModule', array(
 						'label'             => __('Color', 'bb-powerpack'),
 						'default'           => 'aaaaaa',
 						'show_reset'        => true,
+						'connections'	=> array('color'),
 						'preview'           => array(
 							'type'              => 'css',
 							'property'          => 'color',

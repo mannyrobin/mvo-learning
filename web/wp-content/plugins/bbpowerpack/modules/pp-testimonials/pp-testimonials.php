@@ -324,6 +324,7 @@ FLBuilder::register_module('PPTestimonialsModule', array(
 						'label'         => __('Arrow Color', 'bb-powerpack'),
 						'default'       => '999999',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'css',
 							'selector'      => '.pp-testimonials-wrap .fa',
@@ -364,6 +365,7 @@ FLBuilder::register_module('PPTestimonialsModule', array(
 						'label'         => __('Dot Color', 'bb-powerpack'),
 						'default'       => '999999',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
 							'type'          => 'css',
 							'selector'      => '.pp-testimonials-wrap .bx-wrapper .bx-pager a',
@@ -375,6 +377,7 @@ FLBuilder::register_module('PPTestimonialsModule', array(
 						'label'         => __('Active Dot Color', 'bb-powerpack'),
 						'default'       => '999999',
 						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
 							'type'          => 'css',
 							'selector'      => '.pp-testimonials-wrap .bx-wrapper .bx-pager a.active',
@@ -433,7 +436,8 @@ FLBuilder::register_module('PPTestimonialsModule', array(
 					'layout_4_content_bg'    => array(
                         'type'      => 'color',
                         'label'     => __('Background Color', 'bb-powerpack'),
-                        'show_reset'    => true,
+						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'          => 'css',
                             'rules'     => array(
@@ -536,6 +540,7 @@ FLBuilder::register_module('PPTestimonialsModule', array(
 						'type'          => 'color',
 						'label'         => __('Color', 'bb-powerpack'),
 						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-testimonials-heading',
@@ -560,6 +565,7 @@ FLBuilder::register_module('PPTestimonialsModule', array(
 						'type'          => 'color',
 						'label'         => __('Color', 'bb-powerpack'),
 						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-testimonials-title',
@@ -615,6 +621,7 @@ FLBuilder::register_module('PPTestimonialsModule', array(
 						'type'          => 'color',
 						'label'         => __('Color', 'bb-powerpack'),
 						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-testimonials-subtitle',
@@ -670,6 +677,7 @@ FLBuilder::register_module('PPTestimonialsModule', array(
 						'type'          => 'color',
 						'label'         => __('Color', 'bb-powerpack'),
 						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-testimonials-content',

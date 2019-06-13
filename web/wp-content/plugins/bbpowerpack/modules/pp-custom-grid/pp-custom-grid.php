@@ -609,6 +609,7 @@ FLBuilder::register_module('PPCustomGridModule', array(
 						'label'         => __('Background Color', 'bb-powerpack'),
 						'show_alpha'	=> true,
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'selector'		=> '.pp-custom-grid-post',
@@ -636,6 +637,7 @@ FLBuilder::register_module('PPCustomGridModule', array(
 						'default'				=> '',
 						'show_alpha'			=> true,
 						'show_reset'    		=> true,
+						'connections'			=> array('color'),
 						'preview'				=> array(
 							'type'					=> 'css',
 							'selector'				=> '.pp-custom-grid-pagination li a.page-numbers, .pp-custom-grid-pagination li span.page-numbers',
@@ -648,6 +650,7 @@ FLBuilder::register_module('PPCustomGridModule', array(
 						'default'				=> '',
 						'show_alpha'			=> true,
 						'show_reset'    		=> true,
+						'connections'			=> array('color'),
 						'preview'				=> array(
 							'type'					=> 'none',
 						)
@@ -657,6 +660,7 @@ FLBuilder::register_module('PPCustomGridModule', array(
 						'label'					=> __('Text Color', 'bb-powerpack'),
 						'default'				=> '',
 						'show_reset'    		=> true,
+						'connections'			=> array('color'),
 						'preview'				=> array(
 							'type'					=> 'css',
 							'selector'				=> '.pp-custom-grid-pagination li a.page-numbers, .pp-custom-grid-pagination li span.page-numbers',
@@ -667,7 +671,8 @@ FLBuilder::register_module('PPCustomGridModule', array(
 						'type'						=> 'color',
 						'label'						=> __('Text Hover Color', 'bb-powerpack'),
 						'default'					=> '',
-						'show_reset'    		=> true,
+						'show_reset'    			=> true,
+						'connections'				=> array('color'),
 						'preview'					=> array(
 							'type'						=> 'none',
 						)

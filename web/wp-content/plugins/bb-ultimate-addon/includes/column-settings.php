@@ -543,7 +543,7 @@ function uabb_output_before_module( $modules, $col_id ) {
 
 	<?php } ?>
 	<?php
-	if ( FLBuilderModel::is_builder_active() ) {
+	if ( FLBuilderModel::is_builder_active() && isset( $column->settings->enable_particles_col ) && 'yes' === $column->settings->enable_particles_col ) {
 		?>
 		<script>
 			var url ='<?php echo BB_ULTIMATE_ADDON_URL . 'assets/js/particles.min.js'; ?>';
@@ -594,7 +594,13 @@ function uabb_output_before_module( $modules, $col_id ) {
 					if ( 'yes' === enable_particles ) {
 
 						if ( 'custom' === particles_style ) {
-							particlesJS( 'uabb-particle-' + row_id, <?php echo $json_custom_particles; ?> );
+							<?php
+							if ( '' !== $json_particles_custom ) {
+								?>
+								particlesJS( 'uabb-particle-' + row_id, <?php echo $json_custom_particles; ?> );
+								<?php
+							}
+							?>
 						} else {
 							var number_value = 150,
 								shape_type = 'circle',

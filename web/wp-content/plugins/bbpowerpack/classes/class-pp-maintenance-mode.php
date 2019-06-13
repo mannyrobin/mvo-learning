@@ -4,6 +4,12 @@
  *
  * @since 2.6.10
  */
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 final class BB_PowerPack_Maintenance_Mode {
 	/**
 	 * Holds the value of setting field Template.
@@ -109,10 +115,39 @@ final class BB_PowerPack_Maintenance_Mode {
 		// Remove Beaver Themer header and footer layouts.
 		add_filter( 'fl_theme_builder_current_page_layouts', __CLASS__ . '::remove_themer_layouts', 10, 1 );
 
+		// Remove BB theme's header / footer.
+		add_filter( 'fl_topbar_enabled', '__return_false' );
+		add_filter( 'fl_fixed_header_enabled', '__return_false' );
+		add_filter( 'fl_header_enabled', '__return_false' );
+		add_filter( 'fl_footer_enabled', '__return_false' );
+
 		// Remove Astra header / footer / post nav markup.
 		remove_action( 'astra_header', 'astra_header_markup' );
         remove_action( 'astra_footer', 'astra_footer_markup' );
 		remove_action( 'astra_entry_after', 'astra_single_post_navigation_markup' );
+
+		// Remove Page Builder Framework theme's header / footer.
+		remove_action( 'wpbf_header', 'wpbf_do_header' );
+        remove_action( 'wpbf_footer', 'wpbf_do_footer' );
+		remove_action( 'wpbf_before_footer', 'wpbf_custom_footer' );
+		
+		// Remove GeneratePress header / footer.
+		remove_action( 'generate_header', 'generate_construct_header' );
+		remove_action( 'generate_after_header', 'generate_add_navigation_after_header', 5 );
+		remove_action( 'generate_footer', 'generate_construct_footer_widgets', 5 );
+		remove_action( 'generate_footer', 'generate_construct_footer' );
+
+		// Remove Genesis header / footer.
+		remove_action( 'genesis_header', 'genesis_header_markup_open', 5 );
+		remove_action( 'genesis_header', 'genesis_do_header' );
+		remove_action( 'genesis_header', 'genesis_header_markup_close', 15 );
+		remove_action( 'genesis_footer', 'genesis_footer_markup_open', 5 );
+		remove_action( 'genesis_footer', 'genesis_do_footer' );
+		remove_action( 'genesis_footer', 'genesis_footer_markup_close', 15 );
+
+		// Remove Storefront theme's header / footer.
+		remove_all_actions( 'storefront_header' );
+		remove_all_actions( 'storefront_footer' );
 		
 		// Custom action to hook any configuration before render.
 		do_action( 'pp_maintenance_mode_before_render' );
@@ -187,6 +222,7 @@ final class BB_PowerPack_Maintenance_Mode {
 	{
 		$args = array(
 			'post_type' 		=> 'page',
+			'post_status'		=> 'publish',
 			'orderby' 			=> 'title',
 			'order' 			=> 'ASC',
 			'posts_per_page' 	=> '-1',
@@ -313,6 +349,11 @@ final class BB_PowerPack_Maintenance_Mode {
 		update_option( 'bb_powerpack_maintenance_mode_access', $access );
 		update_option( 'bb_powerpack_maintenance_mode_access_roles', $roles );
 		update_option( 'bb_powerpack_maintenance_mode_template', $template );
+
+		// Clear BB's assets cache.
+		if ( class_exists( 'FLBuilderModel' ) && method_exists( 'FLBuilderModel', 'delete_asset_cache_for_all_posts' ) ) {
+			FLBuilderModel::delete_asset_cache_for_all_posts();
+		}
 	}
 }
 

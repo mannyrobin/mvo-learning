@@ -1,3 +1,33 @@
+== 2.7.1 ==
+Release date: June 11, 2019
+* New: Added Login Form module
+* New: Added option in PowerPack's admin settings to create custom Header / Footer for entire site
+* Enhancement: Info Box - Added media buttons to content field
+* Enhancement: Info Box - Added HTML tag selection for title prefix
+* Enhancement: Content Grid - Added hook pp_cg_after_post_filters
+* Enhancement: Pricing Table - Added option to adjust bottom spacing of dual pricing switch control
+* Enhancement: Facebook Page - Added None as layout option to do not render any layout tabs in embedded page
+* Enhancement: Maintenance Mode - Added compatibility for BB theme, GeneratePress, Genesis, Page Builder Framework, and Storefront theme
+* Enhancement: Maintenance Mode - Added logic to clear BB's cache once enabling/disabling maintenance mode
+* Enhancement: Core - Added admin notice if PowerPack detects Beaver Builder version less than 2.2
+* Enhancement: Core - Added color field connections in all modules
+* Fix: Info List - Title typography was not working for tags other than h3
+* Fix: Smart Headings - Removed default colors to inherit them from active theme
+* Fix: Modal Box - Added support for Image Carousel module
+* Fix: Row templates were showing directly in UI panel without Row Templates group if white label setting field is empty
+
+== 2.7.0.2 ==
+Release date: June 3, 2019
+* Fix: Info Box - Module was showing against the visibility settings when using equal height columns
+* Fix: Hover Cards - Responsive width was not working
+* Fix: Search Form - Toggle icon was not working for full screen search
+* Fix: Info List - Title color was not working for HTML tags other than h3
+* Fix: Announcement Bar - Close icon was not appearing
+* Fix: Content Tiles - Responsive size and spacing issue
+* Fix: Gallery - Pagination was not working with ACF field connection
+* Fix: Core - Updated templates data URLs
+* Development: Content Grid - Added $settings variable as another parameter to pp_cg_before_post_content and pp_cg_after_post_content hooks
+
 == 2.7.0.1 ==
 Release date: May 17, 2019
 * Enhancement: Search Form - Added separate option for Toggle Size and Input Height for full screen layout

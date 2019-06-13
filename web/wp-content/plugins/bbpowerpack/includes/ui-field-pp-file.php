@@ -2,7 +2,7 @@
 
 var field = data.field,
     name = data.name,
-    value = JSON.stringify( data.value );
+    value = '' !== data.value ? JSON.stringify( data.value ) : '';
 	accept = '';
 	button_text = '<?php echo 'Upload'; ?>';
 
@@ -14,7 +14,8 @@ var field = data.field,
 	}
 #>
 <input type="file" class="pp-field-file" name="{{name}}_file"{{accept}} />
-<input type="hidden" name="{{name}}" value="{{value}}" />
+<input type="hidden" class="pp-field-file-name" name="{{name}}" value="{{value}}" />
+<input type="hidden" class="pp-field-file-nonce" name="{{name}}_nonce" value="<?php echo wp_create_nonce( 'pp_table_csv' ); ?>" />
 <a href="javascript:void(0)" class="pp-field-file-upload">{{{button_text}}}</a>
 <# if ( '' !== data.value ) { #>
 <div class="pp-field-file-msg"><?php _e(' Currently showing data from <strong>{{data.value.filename}}</strong>' ); ?></div>

@@ -4,6 +4,13 @@
  *
  * @since 2.6.0
  */
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 final class BB_PowerPack_Templates_Lib {
     /**
      * Holds the templates count.
@@ -101,6 +108,7 @@ final class BB_PowerPack_Templates_Lib {
 
 			if ( is_array( $row_templates ) && method_exists( 'FLBuilder', 'register_templates' ) ) {
 				$row_group = BB_PowerPack_Admin_Settings::get_option( 'ppwl_rt_label' );
+				$row_group = ( ! $row_group || '' == trim( $row_group ) ) ? sprintf( __( '%s Row Templates', 'bb-powerpack' ), pp_get_admin_label() ) : $row_group;
 
 				foreach ( $row_templates as $template ) {
 					if ( file_exists( self::$upload_dir['path'] . $template . '.dat' ) ) {
@@ -165,8 +173,8 @@ final class BB_PowerPack_Templates_Lib {
      */
 	static public function refresh_templates_data()
 	{
-		if ( isset( $_REQUEST['page'] ) && 'ppbb-settings' == $_REQUEST['page'] ) {
-            if ( isset( $_REQUEST['refresh'] ) ) {
+		if ( isset( $_GET['page'] ) && 'ppbb-settings' == $_GET['page'] ) {
+            if ( isset( $_GET['refresh'] ) ) {
                 self::download_templates_data( 'new' );
             } else {
                 self::download_templates_data();
@@ -205,6 +213,13 @@ final class BB_PowerPack_Templates_Lib {
 			return $downloaded;
 		}
 
+		// Additional check for JSON filename.
+		if ( 'page-templates.json' !== $filename ) {
+			if ( 'row-templates.json' !== $filename ) {
+				return $downloaded;
+			}
+		}
+
 		$path = $path . $filename;
 
 		// Delete the file if is already exists.
@@ -213,7 +228,7 @@ final class BB_PowerPack_Templates_Lib {
 		}
 
 		// Retrieve templates data.
-		$response = wp_remote_get( $url, array(
+		$response = wp_safe_remote_get( $url, array(
 			'timeout' => 30,
 		) );
 
@@ -256,9 +271,20 @@ final class BB_PowerPack_Templates_Lib {
 	 */
 	static private function download_template( $url, $path )
 	{
+		// get file name from URL.
+		$file_name 	= basename( $url );
+
+		// check file extension.
+		if ( 'dat' !== strtolower( pathinfo( $file_name, PATHINFO_EXTENSION ) ) ) {
+			$response['message'] = sprintf( __('Invalid template file: %s', 'bb-powerpack'), $file_name );
+			$response['success'] = false;
+
+			return $response;
+		}
+
 		// download file to temp dir.
-		$tmp_file 	= download_url( $url, 300 );
-		$path 		= $path . basename( $url );
+		$tmp_file 	= download_url( $url, 300, true );
+		$path 		= $path . $file_name;
 		$response 	= array(
 			'message'	=> __('Template has downloaded successfully!', 'bb-powerpack'),
 			'success' 	=> true
@@ -288,11 +314,15 @@ final class BB_PowerPack_Templates_Lib {
 	 */
     static public function activate_template()
     {
-        if ( ! isset( $_REQUEST['pp_template_cat'] ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'pp-activate-template' ) ) {
+			return;
+		}
+
+        if ( ! isset( $_POST['pp_template_cat'] ) ) {
             return;
         }
 
-        if ( ! isset( $_REQUEST['pp_template_type'] ) ) {
+        if ( ! isset( $_POST['pp_template_type'] ) ) {
             return;
         }
 
@@ -301,10 +331,10 @@ final class BB_PowerPack_Templates_Lib {
         }
 
         // Get the template category.
-        $cat = $_REQUEST['pp_template_cat'];
+        $cat = sanitize_text_field( $_POST['pp_template_cat'] );
 
         // Get the template type.
-        $type = $_REQUEST['pp_template_type'];
+        $type = sanitize_text_field( $_POST['pp_template_type'] );
 
         // Get the template URL.
         $url = pp_templates_src( $type, $cat );
@@ -340,7 +370,7 @@ final class BB_PowerPack_Templates_Lib {
 
         BB_PowerPack_Admin_Settings::update_option( $key, $enabled_templates, false );
 
-        if ( !defined( 'WP_NETWORK_ADMIN' ) && is_multisite() ) {
+        if ( ! defined( 'WP_NETWORK_ADMIN' ) && is_multisite() ) {
             update_option( 'bb_powerpack_override_ms', 1 );
         }
 
@@ -354,7 +384,11 @@ final class BB_PowerPack_Templates_Lib {
      */
     static public function deactivate_template()
     {
-        if ( ! isset( $_REQUEST['pp_template_cat'] ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'pp-deactivate-template' ) ) {
+			return;
+		}
+
+        if ( ! isset( $_POST['pp_template_cat'] ) ) {
             return;
         }
 
@@ -363,10 +397,10 @@ final class BB_PowerPack_Templates_Lib {
         }
 
         // Get the template category.
-        $cat = $_REQUEST['pp_template_cat'];
+        $cat = sanitize_text_field( $_POST['pp_template_cat'] );
 
         // Get the template type.
-        $type = $_REQUEST['pp_template_type'];
+        $type = sanitize_text_field( $_POST['pp_template_type'] );
 
         $enabled_templates = self::get_enabled_templates( $type );
 
@@ -388,7 +422,7 @@ final class BB_PowerPack_Templates_Lib {
 
         BB_PowerPack_Admin_Settings::update_option( $key, $enabled_templates, false );
 
-        if ( !defined( 'WP_NETWORK_ADMIN' ) && is_multisite() ) {
+        if ( ! defined( 'WP_NETWORK_ADMIN' ) && is_multisite() ) {
             update_option( 'bb_powerpack_override_ms', 1 );
         }
 

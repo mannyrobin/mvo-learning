@@ -412,11 +412,11 @@ FLBuilder::register_module('PPInfoBoxModule', array(
                 'title'     => __('Description', 'bb-powerpack'),
                 'fields'    => array(
                     'description'     => array(
-                        'type'      => 'editor',
-                        'label'     => '',
-                        'default'     => '',
-                        'media_buttons' => false,
-                        'rows'      => 4,
+                        'type'      	=> 'editor',
+                        'label'     	=> '',
+                        'default'     	=> '',
+                        'media_buttons' => true,
+                        'rows'      	=> 4,
                         'connections'   => array( 'string', 'html', 'url' ),
                         'preview'       => array(
 							'type'          => 'text',
@@ -499,6 +499,7 @@ FLBuilder::register_module('PPInfoBoxModule', array(
                         'default'   => '',
 						'show_reset'    => true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
                         'preview'   => array(
                             'type'      => 'css',
                             'selector'  => '.pp-infobox .pp-more-link',
@@ -511,6 +512,7 @@ FLBuilder::register_module('PPInfoBoxModule', array(
                         'default'   => '',
 						'show_reset'    => true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
                         'preview'   => array(
                             'type'      => 'none',
                         ),
@@ -523,7 +525,8 @@ FLBuilder::register_module('PPInfoBoxModule', array(
                         'type'      => 'color',
                         'label'     => __('Text Color', 'bb-powerpack'),
                         'default'   => '',
-                        'show_reset'    => true,
+						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'   => array(
                             'type'  => 'css',
                             'selector'  => '.pp-infobox .pp-more-link',
@@ -534,7 +537,8 @@ FLBuilder::register_module('PPInfoBoxModule', array(
                         'type'      => 'color',
                         'label'     => __('Text Hover Color', 'bb-powerpack'),
                         'default'   => '',
-                        'show_reset'    => true,
+						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'   => array(
                             'type'  => 'css',
                             'selector'  => '.pp-infobox .pp-more-link:hover',
@@ -626,6 +630,7 @@ FLBuilder::register_module('PPInfoBoxModule', array(
                         'type'          => 'color',
                         'label'         => __('Border Hover Color', 'bb-powerpack'),
 						'show_reset'    => true,
+						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'none',
 						),
@@ -647,6 +652,7 @@ FLBuilder::register_module('PPInfoBoxModule', array(
                         'default'           => 'ffffff',
 						'show_reset'        => true,
 						'show_alpha'    	=> true,
+						'connections'		=> array('color'),
                         'preview'           => array(
                             'type'              => 'css',
                             'selector'          => '.pp-infobox',
@@ -658,7 +664,8 @@ FLBuilder::register_module('PPInfoBoxModule', array(
                         'label'     => __('Background Hover Color', 'bb-powerpack'),
                         'default'   => '',
                         'show_reset'    => true,
-                        'show_alpha'    => true,
+						'show_alpha'    => true,
+						'connections'	=> array('color'),
                         'preview'   => array(
                             'type'  => 'css',
                             'selector'  => '.pp-infobox:hover',
@@ -735,6 +742,7 @@ FLBuilder::register_module('PPInfoBoxModule', array(
 						'type'          => 'color',
 						'label'         => __('Color', 'bb-powerpack'),
 						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-infobox-title-prefix',
@@ -782,6 +790,7 @@ FLBuilder::register_module('PPInfoBoxModule', array(
 						'type'          => 'color',
 						'label'         => __('Color', 'bb-powerpack'),
 						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-infobox-title-wrapper .pp-infobox-title',
@@ -792,6 +801,7 @@ FLBuilder::register_module('PPInfoBoxModule', array(
 						'type'          => 'color',
 						'label'         => __('Hover Color', 'bb-powerpack'),
 						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'          => 'none',
                         )
@@ -837,6 +847,7 @@ FLBuilder::register_module('PPInfoBoxModule', array(
 						'type'          => 'color',
 						'label'         => __('Color', 'bb-powerpack'),
 						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-infobox-description .pp-description-wrap',
@@ -847,6 +858,7 @@ FLBuilder::register_module('PPInfoBoxModule', array(
 						'type'          => 'color',
 						'label'         => __('Hover Color', 'bb-powerpack'),
 						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'          => 'none',
                         )
@@ -992,7 +1004,8 @@ FLBuilder::register_module('PPInfoBoxModule', array(
                     'icon_color'    => array(
                         'type'          => 'color',
                         'label'         => __('Color', 'bb-powerpack'),
-                        'show_reset'    => true,
+						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-infobox-icon-inner',
@@ -1002,7 +1015,8 @@ FLBuilder::register_module('PPInfoBoxModule', array(
                     'icon_color_hover'    => array(
                         'type'          => 'color',
                         'label'         => __('Hover Color', 'bb-powerpack'),
-                        'show_reset'    => true,
+						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-infobox-icon:hover-inner',
@@ -1014,6 +1028,7 @@ FLBuilder::register_module('PPInfoBoxModule', array(
                         'label'         => __('Background', 'bb-powerpack'),
 						'show_reset'    => true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-infobox-icon-inner',
@@ -1025,6 +1040,7 @@ FLBuilder::register_module('PPInfoBoxModule', array(
                         'label'         => __('Background Hover Color', 'bb-powerpack'),
 						'show_reset'    => true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'          => 'css',
                             'selector'      => '.pp-infobox-icon-inner:hover',
@@ -1046,6 +1062,7 @@ FLBuilder::register_module('PPInfoBoxModule', array(
 						'type'          => 'color',
 						'label'         => __('Border Hover Color', 'bb-powerpack'),
 						'show_reset'    => true,
+						'connections'	=> array('color'),
                         'preview'       => array(
                             'type'          => 'css',
                             'rules'     => array(
@@ -1094,6 +1111,21 @@ FLBuilder::register_module('PPInfoBoxModule', array(
 				'collapsed'	=> false,
                 'title'     => __('Title Prefix', 'bb-powerpack'),
                 'fields'    => array(
+					'title_prefix_tag' => array(
+                        'type'      => 'select',
+                        'label'     => __('HTML Tag', 'bb-powerpack'),
+                        'default'   => 'span',
+                        'options'   => array(
+                            'h1'        => 'H1',
+                            'h2'        => 'H2',
+                            'h3'        => 'H3',
+                            'h4'        => 'H4',
+                            'h5'        => 'H5',
+                            'h6'        => 'H6',
+                            'p'         => 'p',
+                            'span'      => 'span'
+                        )
+					),
 					'title_prefix_typography'		=> array(
 						'type'					=> 'typography',
 						'label'					=> __('Typography', 'bb-powerpack'),

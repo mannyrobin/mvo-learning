@@ -3,7 +3,7 @@
  * Plugin Name: PowerPack for Beaver Builder
  * Plugin URI: https://wpbeaveraddons.com
  * Description: A set of custom, creative, unique modules for Beaver Builder to speed up your web design and development process.
- * Version: 2.7.0.1
+ * Version: 2.7.1
  * Author: IdeaBox Creations
  * Author URI: https://ideaboxcreations.com
  * Copyright: (c) 2016 IdeaBox Creations
@@ -80,6 +80,7 @@ final class BB_PowerPack {
 		require_once 'classes/class-pp-ajax.php';
 		require_once 'classes/class-admin-settings.php';
 		require_once 'classes/class-pp-templates-library.php';
+		require_once 'classes/class-pp-header-footer.php';
 		require_once 'classes/class-pp-maintenance-mode.php';
 		require_once 'classes/class-media-fields.php';
 		require_once 'classes/class-wpml-compatibility.php';
@@ -117,7 +118,7 @@ final class BB_PowerPack {
 	 */
 	private function define_constants()
 	{
-		define( 'BB_POWERPACK_VER', '2.7.0.1' );
+		define( 'BB_POWERPACK_VER', '2.7.1' );
 		define( 'BB_POWERPACK_DIR', plugin_dir_path( __FILE__ ) );
 		define( 'BB_POWERPACK_URL', plugins_url( '/', __FILE__ ) );
 		define( 'BB_POWERPACK_PATH', plugin_basename( __FILE__ ) );
@@ -260,6 +261,7 @@ final class BB_PowerPack {
 		wp_register_script( 'twentytwenty', BB_POWERPACK_URL . 'assets/js/jquery.twentytwenty.js', array('jquery'), '', true );
 		wp_register_script( 'jquery-event-move', BB_POWERPACK_URL . 'assets/js/jquery.event.move.js', array('jquery'), '2.0.0', true );
 		wp_register_script( 'tooltipster', BB_POWERPACK_URL . 'assets/js/tooltipster.main.js', array('jquery'), '', true );
+		wp_register_script( 'pp-jquery-carousel', BB_POWERPACK_URL . 'assets/js/jquery-carousel.js', array( 'jquery' ), '', true );
 	}
 
 	/**
@@ -327,19 +329,17 @@ final class BB_PowerPack {
 			// self::$errors[] = $_GET['message'];
 		}
 
-		if ( !class_exists( 'FLBuilder' ) ) {
-			?>
-				<div class="notice notice-error">
-					<p>
-						<?php
-							$bb_lite = '<a href="https://wordpress.org/plugins/beaver-builder-lite-version/" target="_blank">Beaver Builder Lite</a>';
-							$bb_pro = '<a href="https://www.wpbeaverbuilder.com/pricing/" target="_blank">Beaver Builder Pro / Agency</a>';
-							echo sprintf( esc_html__( 'Please install and activate %s or %s to use PowerPack add-on.', 'bb-powerpack' ), $bb_lite, $bb_pro ); ?>
-					</p>
-				</div>
-			<?php
+		if ( ! class_exists( 'FLBuilder' ) ) {
+			$bb_lite = '<a href="https://wordpress.org/plugins/beaver-builder-lite-version/" target="_blank">Beaver Builder Lite</a>';
+			$bb_pro = '<a href="https://www.wpbeaverbuilder.com/pricing/" target="_blank">Beaver Builder Pro / Agency</a>';
+			self::$errors[] = sprintf( esc_html__( 'Please install and activate %s or %s to use PowerPack add-on.', 'bb-powerpack' ), $bb_lite, $bb_pro );
 		}
-		else if ( count( self::$errors ) ) {
+
+		if ( defined( 'FL_BUILDER_VERSION' ) && version_compare( FL_BUILDER_VERSION, '2.2.0', '<' ) ) {
+			self::$errors[] = esc_html__( 'It seems Beaver Builder plugin is out dated. PowerPack requires Beaver Builder 2.2 or higher.', 'bb-powerpack' );
+		}
+
+		if ( count( self::$errors ) ) {
 			foreach ( self::$errors as $key => $msg ) {
 				?>
 				<div class="notice notice-error">

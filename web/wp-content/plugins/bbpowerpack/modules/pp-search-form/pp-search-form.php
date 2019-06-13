@@ -184,6 +184,7 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'default'		=> '',
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'selector'		=> '.pp-search-form-wrap:not(.pp-search-form--style-full_screen) .pp-search-form__container:not(.pp-search-form--lightbox)',
@@ -196,6 +197,7 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'default'		=> '',
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'selector'		=> '.pp-search-form-wrap:not(.pp-search-form--style-full_screen) .pp-search-form--focus .pp-search-form__container:not(.pp-search-form--lightbox)',
@@ -207,6 +209,7 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'label'			=> __('Placeholder Color', 'bb-powerpack'),
 						'default'		=> '',
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'none',
 						)
@@ -216,6 +219,7 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'label'			=> __('Text Color', 'bb-powerpack'),
 						'default'		=> '',
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'selector'		=> '.pp-search-form__input',
@@ -227,6 +231,7 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'label'			=> __('Text Focus Color', 'bb-powerpack'),
 						'default'		=> '',
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'selector'		=> '.pp-search-form__input:focus',
@@ -247,6 +252,7 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'default'		=> '',
 						'show_reset'	=> true,
 						'show_alpha'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'selector'		=> '.pp-search-form--focus .pp-search-form__container:not(.pp-search-form--lightbox)',
@@ -265,6 +271,7 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'default'			=> '',
 						'show_reset'		=> true,
 						'show_alpha'		=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'property'			=> 'background-color',
@@ -277,6 +284,7 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'default'			=> '',
 						'show_reset'		=> true,
 						'show_alpha'		=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'property'			=> 'background-color',
@@ -288,6 +296,7 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'label'			=> __('Text/Icon Color', 'bb-powerpack'),
 						'default'		=> '',
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'property'		=> 'color',
@@ -299,6 +308,7 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'label'			=> __('Text/Icon Hover Color', 'bb-powerpack'),
 						'default'		=> '',
 						'show_reset'	=> true,
+						'connections'	=> array('color'),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'property'		=> 'color',
@@ -341,6 +351,7 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'default'			=> '',
 						'show_reset'		=> true,
 						'show_alpha'		=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'selector'			=> '.pp-search-form__toggle i',
@@ -353,6 +364,7 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'default'			=> '',
 						'show_reset'		=> true,
 						'show_alpha'		=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'selector'			=> '.pp-search-form__toggle:hover i',
@@ -364,6 +376,7 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'label'				=> __('Color', 'bb-powerpack'),
 						'default'			=> '',
 						'show_reset'		=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'selector'			=> '.pp-search-form__toggle i',
@@ -375,6 +388,7 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'label'				=> __('Hover Color', 'bb-powerpack'),
 						'default'			=> '',
 						'show_reset'		=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'selector'			=> '.pp-search-form__toggle:hover i',
@@ -425,6 +439,7 @@ FLBuilder::register_module('PPSearchFormModule', array(
 						'default'			=> '',
 						'show_reset'		=> true,
 						'show_alpha'		=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'selector'			=> '.pp-search-form--style-full_screen .pp-search-form__container',

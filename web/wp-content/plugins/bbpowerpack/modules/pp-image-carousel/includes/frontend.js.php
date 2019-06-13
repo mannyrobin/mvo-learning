@@ -94,6 +94,13 @@ var carousel_<?php echo $id; ?> = '';
 			}
 		}, 10);
 	}
+
+	// Modal Box fix
+	$(document).on('pp_modal_box_rendered', function(e, selector) {
+		if ( selector.find('.fl-node-<?php echo $id; ?>').length > 0 ) {
+			updateCarousel();
+		}
+	});
 	
 	$(document).on('fl-builder.pp-accordion-toggle-complete', function(e) {
 		if ( $(e.target).find('.fl-node-<?php echo $id; ?>').length > 0 ) {

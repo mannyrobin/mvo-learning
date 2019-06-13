@@ -258,6 +258,7 @@ FLBuilder::register_module('PPImageScrollModule', array(
 						'default'			=> 'rgba(0,0,0,0.5)',
 						'show_reset'    	=> true,
 						'show_alpha'    	=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'selector'			=> '.pp-image-scroll-overlay',
@@ -282,6 +283,7 @@ FLBuilder::register_module('PPImageScrollModule', array(
 						'label'				=> __('Color'),
 						'default'			=> '000',
 						'show_reset'    	=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'selector'			=> '.pp-overlay-content',
@@ -294,6 +296,7 @@ FLBuilder::register_module('PPImageScrollModule', array(
 						'default'			=> 'a0a0a0',
 						'show_reset'    	=> true,
 						'show_alpha'    	=> true,
+						'connections'		=> array('color'),
 						'preview'			=> array(
 							'type'				=> 'css',
 							'selector'			=> '.pp-overlay-content',

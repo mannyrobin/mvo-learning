@@ -70,13 +70,24 @@ function pp_get_upload_dir()
 	);
 
 	// Create the upload dir if it doesn't exist.
-	if ( ! file_exists( $dir_info['path'] ) ) {
+	if ( function_exists( 'fl_builder_filesystem' ) ) {
+		if ( ! fl_builder_filesystem()->file_exists( $dir_info['path'] ) ) {
 
-		// Create the directory.
-		mkdir( $dir_info['path'] );
+			// Create the directory.
+			fl_builder_filesystem()->mkdir( $dir_info['path'] );
 
-		// Add an index file for security.
-		file_put_contents( $dir_info['path'] . 'index.html', '' );
+			// Add an index file for security.
+			fl_builder_filesystem()->file_put_contents( $dir_info['path'] . 'index.html', '' );
+		}
+	} else {
+		if ( ! file_exists( $dir_info['path'] ) ) {
+
+			// Create the directory.
+			mkdir( $dir_info['path'] );
+
+			// Add an index file for security.
+			file_put_contents( $dir_info['path'] . 'index.html', '' );
+		}
 	}
 
 	return $dir_info;
@@ -162,8 +173,12 @@ function pp_template_filters()
  */
 function pp_templates_src( $type = 'page', $category = '' )
 {
+	if ( ! is_admin() ) {
+		return;
+	}
+
 	$src = array();
-	$url = 'https://s3.amazonaws.com/ppbeaver/data/';
+	$url = 'https://ppbeaver.s3.amazonaws.com/data/';
 
 	if ( $type == 'row' ) {
 		$mode 	= 'color';
@@ -212,7 +227,7 @@ function pp_templates_preview_src( $type = 'page', $category = '' )
 
 function pp_get_template_screenshot_url( $type, $category, $mode = '' )
 {
-	$url = 'https://s3.amazonaws.com/ppbeaver/assets/400x400/';
+	$url = 'https://ppbeaver.s3.amazonaws.com/assets/400x400/';
 
 	return $url . $category . '.jpg';
 }
@@ -386,6 +401,22 @@ function pp_get_user_agent()
 	}
 
 	return;
+}
+
+function pp_get_client_details()
+{
+	$ip = $_SERVER['REMOTE_ADDR'];
+
+	if ( array_key_exists( 'HTTP_X_FORWARDED_FOR', $_SERVER ) ) {
+		$ip = array_pop( explode( ',', $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
+	}
+
+	$user_agent = pp_get_user_agent();
+
+	return array(
+		'ip'			=> $ip,
+		'user_agent'	=> $user_agent
+	);
 }
 
 function pp_get_modules_categories( $cat = '' )

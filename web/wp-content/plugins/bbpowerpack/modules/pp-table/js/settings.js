@@ -4,8 +4,9 @@
 		init: function() {
 			var form = $('.fl-builder-settings');
 			var uploadBtn = form.find('#fl-field-csv_import .pp-field-file-upload');
-			var fileInput = form.find('#fl-field-csv_import .pp-field-file');
-			var filenameInput = form.find('#fl-field-csv_import input[type="hidden"]');
+			var fileInput = form.find('#fl-field-csv_import input.pp-field-file');
+			var filenameInput = form.find('#fl-field-csv_import input.pp-field-file-name');
+			var nonce = form.find('#fl-field-csv_import input.pp-field-file-nonce').val();
 			var file = '';
 			var formData = new FormData();
 
@@ -39,6 +40,7 @@
 				}
 				formData.append('file', file);
 				formData.append('time', new Date().getTime());
+				formData.append('nonce', nonce);
 				formData.append('pp_action', 'table_csv_upload');
 
 				FLBuilder.preview.delayPreview(e);
