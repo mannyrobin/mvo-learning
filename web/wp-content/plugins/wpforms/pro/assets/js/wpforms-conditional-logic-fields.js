@@ -75,7 +75,7 @@
 					case 'checkbox':
 					case 'radio':
 						$( this ).closest( 'ul' ).find( 'li' ).removeClass( 'wpforms-selected' );
-						if ( $( this ).is( ':checked' ) ){
+						if ( $( this ).is( ':checked' ) ) {
 							$( this ).prop( 'checked', false ).trigger( 'change' );
 						}
 						break;
@@ -83,7 +83,7 @@
 							$( this ).find( 'option:selected' ).prop( 'selected', 'false' ).trigger( 'change' );
 						break;
 					default:
-						if ( $( this ).val() !== '') {
+						if ( $( this ).val() !== '' ) {
 							$( this ).val( '' ).trigger( 'input' );
 						}
 						break;
@@ -98,6 +98,8 @@
 		 *
 		 * @param {element} el Any element inside the targeted form.
 		 * @param {boolean} initial Initial run of processing.
+		 *
+		 * @returns {void}|{boolean}
 		 */
 		processConditionals: function( el, initial ) {
 
@@ -119,7 +121,7 @@
 				}
 
 				if ( window.location.hash && '#wpformsdebug' === window.location.hash ) {
-					console.log( 'Processing conditionals for Field #'+fieldID+'...' );
+					console.log( 'Processing conditionals for Field #' + fieldID + '...' );
 				}
 
 				var field  = fields[fieldID].logic,
@@ -160,20 +162,19 @@
 
 							rule.value = '';
 
-							if (
-								rule.type === 'radio' ||
-								rule.type === 'checkbox' ||
-								rule.type === 'payment-multiple' ||
-								rule.type === 'payment-checkbox' ||
-								rule.type === 'rating' ||
-								rule.type === 'net_promoter_score'
+							if ( [  'radio',
+									'checkbox',
+									'payment-multiple',
+									'payment-checkbox',
+									'rating',
+									'net_promoter_score' ].indexOf( rule.type ) > -1
 							) {
-								$check = $form.find( '#wpforms-'+formID+'-field_'+rule.field+'-container input:checked' );
+								$check = $form.find( '#wpforms-' + formID + '-field_' + rule.field + '-container input:checked' );
 								if ( $check.length ) {
 									val = true;
 								}
 							} else {
-								val = $form.find( '#wpforms-'+formID+'-field_'+rule.field ).val();
+								val = $form.find( '#wpforms-' + formID + '-field_' + rule.field ).val();
 								if ( ! val  ) {
 									val = '';
 								}
@@ -181,31 +182,31 @@
 
 						} else {
 
-							if (
-								rule.type === 'radio' ||
-								rule.type === 'checkbox' ||
-								rule.type === 'payment-multiple' ||
-								rule.type === 'payment-checkbox' ||
-								rule.type === 'rating' ||
-								rule.type === 'net_promoter_score'
+							if ( [  'radio',
+									'checkbox',
+									'payment-multiple',
+									'payment-checkbox',
+									'rating',
+									'net_promoter_score' ].indexOf( rule.type ) > -1
 							) {
-								$check = $form.find( '#wpforms-'+formID+'-field_'+rule.field+'-container input:checked' );
+								$check = $form.find( '#wpforms-' + formID + '-field_' + rule.field + '-container input:checked' );
 								if ( $check.length ) {
 									$.each( $check, function() {
 										var escapeVal = WPFormsConditionals.escapeText( $( this ).val() );
-										if ( rule.type === 'checkbox' ) {
+										if ( [ 'checkbox', 'payment-checkbox' ].indexOf( rule.type ) > -1 ) {
 											if ( rule.value === escapeVal ) {
 												val = escapeVal;
 											}
 										} else {
 											val = escapeVal;
 										}
-									});
+									} );
 								}
 							} else {
-								// text, textarea, number, select
-								val = $form.find( '#wpforms-'+formID+'-field_'+rule.field ).val();
-								if ( rule.type === 'select' || rule.type === 'payment-select' ) {
+
+								// text, textarea, number, select.
+								val = $form.find( '#wpforms-' + formID + '-field_' + rule.field ).val();
+								if ( [ 'select', 'payment-select' ].indexOf( rule.type ) > -1 ) {
 									val = WPFormsConditionals.escapeText( val );
 								}
 							}
@@ -295,7 +296,7 @@
 				}
 			}
 
-			$( document ).trigger( 'wpformsProcessConditionals', [$this, $form, formID] );
+			$( document ).trigger( 'wpformsProcessConditionals', [ $this, $form, formID ] );
 		},
 
 		/**
@@ -303,9 +304,9 @@
 		 *
 		 * @since 1.0.5
 		 *
-		 * @param {string} text
+		 * @param {string} text String to escape.
 		 *
-		 * @return string|null
+		 * @returns {string|boolean} Escaped text.
 		 */
 		escapeText: function( text ) {
 
@@ -330,8 +331,12 @@
 		 * Parse float. Returns 0 instead of NaN. Similar to PHP floatval().
 		 *
 		 * @since 1.4.7.1
+		 *
+		 * @param {mixed} mixedVar Probably string.
+		 *
+		 * @returns {float} parseFloat
 		 */
-		floatval: function ( mixedVar ) {
+		floatval: function( mixedVar ) {
 
 			return ( parseFloat( mixedVar ) || 0 );
 		},

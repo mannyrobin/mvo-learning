@@ -325,10 +325,14 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 		$form_id   = absint( $form_data['id'] );
 		$file_slug = 'wpforms_' . $form_data['id'] . '_' . $field_id;
 
+		if ( empty( $_FILES[ $file_slug ] ) ) {
+			return;
+		}
+
 		/*
 		 * If upload is not required and nothing is uploaded, don't process.
 		 */
-		if ( empty( $field['required'] ) && 4 == $_FILES[ $file_slug ]['error'] ) {
+		if ( empty( $field['required'] ) && 4 === $_FILES[ $file_slug ]['error'] ) {
 			return;
 		}
 
@@ -453,13 +457,13 @@ class WPForms_Field_File_Upload extends WPForms_Field {
 		$field     = $form_data['fields'][ $field_id ];
 		$form_id   = absint( $form_data['id'] );
 		$file_slug = sprintf( 'wpforms_%d_%d', $form_id, $field_id );
-		$file      = $_FILES[ $file_slug ];
+		$file      = ! empty( $_FILES[ $file_slug ] ) ? $_FILES[ $file_slug ] : false; // phpcs:ignore
 		$visible   = isset( wpforms()->process->fields[ $field_id ]['visible'] ) ? wpforms()->process->fields[ $field_id ]['visible'] : false;
 
 		// If there was no file uploaded or if this field has conditional logic
 		// rules active, stop here before we continue with the
 		// upload process.
-		if ( 0 !== $file['error'] || in_array( $field_id, $form_data['conditional_fields'] ) ) {
+		if ( ! $file || 0 !== $file['error'] || in_array( $field_id, $form_data['conditional_fields'], true ) ) {
 
 			wpforms()->process->fields[ $field_id ] = array(
 				'name'          => sanitize_text_field( $name ),

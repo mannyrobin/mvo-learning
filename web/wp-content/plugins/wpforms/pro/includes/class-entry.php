@@ -341,7 +341,7 @@ class WPForms_Entry_Handler extends WPForms_DB {
 		foreach ( $keys as $key ) {
 			// Value `$args[ $key ]` can be a natural number and a numeric string.
 			// We should skip empty string values, but continue working with '0'.
-			if ( ! is_array( $args[ $key ] ) && ! is_numeric( $args[ $key ] ) ) {
+			if ( ! is_array( $args[ $key ] ) && ( ! is_numeric( $args[ $key ] ) || 0 === $args[ $key ] ) ) {
 				continue;
 			}
 

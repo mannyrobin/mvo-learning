@@ -70,7 +70,7 @@ class WPForms_Field_Payment_Single extends WPForms_Field {
 
 		// Price.
 		$field_value                                      = ! empty( $field['price'] ) ? wpforms_sanitize_amount( $field['price'] ) : '';
-		$properties['inputs']['primary']['attr']['value'] = ! empty( $field_value ) ? wpforms_format_amount( $field_value ) : '';
+		$properties['inputs']['primary']['attr']['value'] = ! empty( $field_value ) ? wpforms_format_amount( $field_value, true ) : '';
 
 		// Single item and hidden format should hide the input field.
 		if ( ! empty( $field['format'] ) && 'hidden' === $field['format'] ) {
@@ -236,7 +236,7 @@ class WPForms_Field_Payment_Single extends WPForms_Field {
 					printf(
 						/* translators: %s - price amount. */
 						esc_html__( 'Price: %s', 'wpforms' ),
-						'<span class="wpforms-price">' . esc_html( wpforms_format_amount( $primary['attr']['value'], true ) ) . '</span>'
+						'<span class="wpforms-price">' . esc_html( wpforms_format_amount( wpforms_sanitize_amount( $field['price'] ), true ) ) . '</span>'
 					);
 					echo '</div>';
 				}
