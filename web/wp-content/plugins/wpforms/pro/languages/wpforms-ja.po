@@ -5,9 +5,9 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: WPForms 1.5.0.4\n"
+"Project-Id-Version: WPForms 1.5.1.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpforms\n"
-"POT-Creation-Date: 2019-01-23T21:47:57+00:00\n"
+"POT-Creation-Date: 2019-03-14T11:38:16+00:00\n"
 "PO-Revision-Date: 2018-12-07 13:53+0000\n"
 "Last-Translator: Ali Darwich <b.a.darwich@gmail.com>, 2019\n"
 "Language-Team: Japanese (https://www.transifex.com/wp-translations/teams/64435/ja/)\n"
@@ -2010,8 +2010,9 @@ msgstr "%sフィールド"
 
 #. translators: %s - addon name
 #: src/Pro/Admin/Builder/Education.php:250
-#: src/Pro/Admin/Builder/Education.php:322
-#: src/Pro/Admin/Builder/Education.php:399
-#: src/Pro/Admin/Builder/Education.php:449
+#: src/Pro/Admin/Builder/Education.php:328
+#: src/Pro/Admin/Builder/Education.php:405
+#: src/Pro/Admin/Builder/Education.php:455
+#: src/Lite/Admin/Builder/Education.php:377
 msgid "%s addon"
 msgstr "%s アドオン "

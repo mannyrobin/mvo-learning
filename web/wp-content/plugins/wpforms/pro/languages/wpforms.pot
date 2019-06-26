@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WPForms 1.5.2.3\n"
+"Project-Id-Version: WPForms 1.5.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpforms\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-04-23T13:57:21+00:00\n"
+"POT-Creation-Date: 2019-06-17T15:02:49+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: wpforms\n"
@@ -41,9 +41,9 @@ msgid "File Extension"
 msgstr ""
 
 #: pro/wpforms-pro.php:205
-#: pro/includes/fields/class-file-upload.php:401
-#: pro/includes/fields/class-file-upload.php:417
-#: pro/includes/fields/class-file-upload.php:435
+#: pro/includes/fields/class-file-upload.php:405
+#: pro/includes/fields/class-file-upload.php:421
+#: pro/includes/fields/class-file-upload.php:439
 msgid "File type is not allowed."
 msgstr ""
 
@@ -1700,44 +1700,44 @@ msgstr ""
 msgid "Check this option to store the final uploaded file in the WordPress Media Library"
 msgstr ""
 
-#: pro/includes/fields/class-file-upload.php:342
+#: pro/includes/fields/class-file-upload.php:346
 msgid "The uploaded file exceeds the upload_max_filesize directive in php.ini."
 msgstr ""
 
-#: pro/includes/fields/class-file-upload.php:343
+#: pro/includes/fields/class-file-upload.php:347
 msgid "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form."
 msgstr ""
 
-#: pro/includes/fields/class-file-upload.php:344
+#: pro/includes/fields/class-file-upload.php:348
 msgid "The uploaded file was only partially uploaded."
 msgstr ""
 
-#: pro/includes/fields/class-file-upload.php:345
+#: pro/includes/fields/class-file-upload.php:349
 msgid "No file was uploaded."
 msgstr ""
 
-#: pro/includes/fields/class-file-upload.php:347
+#: pro/includes/fields/class-file-upload.php:351
 msgid "Missing a temporary folder."
 msgstr ""
 
-#: pro/includes/fields/class-file-upload.php:348
+#: pro/includes/fields/class-file-upload.php:352
 msgid "Failed to write file to disk."
 msgstr ""
 
-#: pro/includes/fields/class-file-upload.php:349
+#: pro/includes/fields/class-file-upload.php:353
 msgid "File upload stopped by extension."
 msgstr ""
 
 #. translators: %s - error text.
-#: pro/includes/fields/class-file-upload.php:352
+#: pro/includes/fields/class-file-upload.php:356
 msgid "File upload error. %s"
 msgstr ""
 
-#: pro/includes/fields/class-file-upload.php:373
+#: pro/includes/fields/class-file-upload.php:377
 msgid "File exceeds max size allowed"
 msgstr ""
 
-#: pro/includes/fields/class-file-upload.php:390
+#: pro/includes/fields/class-file-upload.php:394
 msgid "File must have an extension."
 msgstr ""
 
@@ -1751,6 +1751,10 @@ msgstr ""
 
 #: pro/includes/class-conditional-logic-fields.php:421
 msgid "Entry Confirmation stopped by conditional logic."
+msgstr ""
+
+#: includes/admin/class-settings.php:553
+msgid "Check this if you would like to remove ALL WPForms data upon plugin deletion. All forms, entries, and uploaded files will be unrecoverable."
 msgstr ""
 
 #. translators: %1$s - source name; %2$s - type name.

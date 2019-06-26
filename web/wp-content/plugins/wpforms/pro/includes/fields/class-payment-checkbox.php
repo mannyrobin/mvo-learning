@@ -488,9 +488,12 @@ class WPForms_Field_Payment_Checkbox extends WPForms_Field {
 						continue;
 					}
 
+					$value = (float) wpforms_sanitize_amount( $choice['value'] );
+
 					// Increase total amount.
-					$amount      += wpforms_sanitize_amount( $choice['value'] );
-					$value        = wpforms_format_amount( $choice['value'], true );
+					$amount += $value;
+
+					$value        = wpforms_format_amount( $value, true );
 					$choice_label = '';
 
 					if ( ! empty( $choice['label'] ) ) {

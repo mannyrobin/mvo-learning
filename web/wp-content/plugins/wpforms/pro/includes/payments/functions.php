@@ -306,7 +306,7 @@ function wpforms_format_amount( $amount, $symbol = false, $currency = '' ) {
 	}
 
 	$decimals = apply_filters( 'wpforms_sanitize_amount_decimals', 2, $amount );
-	$number   = number_format( $amount, $decimals, $decimal_sep, $thousands_sep );
+	$number   = number_format( (float) $amount, $decimals, $decimal_sep, $thousands_sep );
 
 	if ( $symbol ) {
 		$symbol_padding = apply_filters( 'wpforms_currency_symbol_padding', ' ' );
