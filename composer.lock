@@ -285,16 +285,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.104",
+            "version": "v0.105",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "d41fea99f90d7935bd57cf654bf271072fe584f1"
+                "reference": "0f87a3d7ce90d7f7b92428c86239b828af92aba0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/d41fea99f90d7935bd57cf654bf271072fe584f1",
-                "reference": "d41fea99f90d7935bd57cf654bf271072fe584f1",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/0f87a3d7ce90d7f7b92428c86239b828af92aba0",
+                "reference": "0f87a3d7ce90d7f7b92428c86239b828af92aba0",
                 "shasum": ""
             },
             "require": {
@@ -318,7 +318,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2019-06-23T00:23:39+00:00"
+            "time": "2019-07-23T21:43:24+00:00"
         },
         {
             "name": "google/auth",
@@ -2055,15 +2055,15 @@
         },
         {
             "name": "wpackagist-plugin/fast-velocity-minify",
-            "version": "2.6.9",
+            "version": "2.7.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/fast-velocity-minify/",
-                "reference": "tags/2.6.9"
+                "reference": "tags/2.7.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/fast-velocity-minify.2.6.9.zip"
+                "url": "https://downloads.wordpress.org/plugin/fast-velocity-minify.2.7.0.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2289,15 +2289,15 @@
         },
         {
             "name": "wpackagist-plugin/shortpixel-image-optimiser",
-            "version": "4.14.2",
+            "version": "4.14.3",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/shortpixel-image-optimiser/",
-                "reference": "tags/4.14.2"
+                "reference": "tags/4.14.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/shortpixel-image-optimiser.4.14.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/shortpixel-image-optimiser.4.14.3.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
