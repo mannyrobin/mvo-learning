@@ -755,7 +755,7 @@ function fl_theme_builder_cat_archive_post_grid( $query ) {
 		return;
 	}
 
-	$args      = array(
+	$args       = array(
 		'post_type'   => 'fl-theme-layout',
 		'post_status' => 'publish',
 		'fields'      => 'ids',
@@ -778,8 +778,9 @@ function fl_theme_builder_cat_archive_post_grid( $query ) {
 			),
 		),
 	);
-	$post_grid = null;
-	$object    = null;
+	$post_grid  = null;
+	$object     = null;
+	$exclusions = array();
 
 	if ( $query->get( 'cat' ) ) {
 		$term = get_term( $query->get( 'cat' ), 'category' );
@@ -804,9 +805,7 @@ function fl_theme_builder_cat_archive_post_grid( $query ) {
 			$exclusions = FLThemeBuilderRulesLocation::get_saved_exclusions( $post_id );
 			$exclude    = false;
 
-			if ( empty( $exclusions ) ) {
-				continue;
-			} elseif ( $object && in_array( $object, $exclusions ) ) {
+			if ( $object && in_array( $object, $exclusions ) ) {
 				$exclude = true;
 			} elseif ( in_array( 'taxonomy:category', $exclusions ) ) {
 				$exclude = true;

@@ -570,10 +570,10 @@ FLBuilder::register_module('FLPostGridModule', array(
 				'title'  => __( 'Posts', 'fl-builder' ),
 				'fields' => array(
 					'match_height'             => array(
-						'type'    => 'select',
-						'label'   => __( 'Equal Heights', 'fl-builder' ),
-						'default' => '0',
-						'options' => array(
+						'type'       => 'select',
+						'label'      => __( 'Equal Heights', 'fl-builder' ),
+						'default'    => '0',
+						'options'    => array(
 							'1' => __( 'Yes', 'fl-builder' ),
 							'0' => __( 'No', 'fl-builder' ),
 						),

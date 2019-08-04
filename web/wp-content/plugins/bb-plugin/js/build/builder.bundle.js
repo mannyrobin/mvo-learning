@@ -21009,8 +21009,8 @@ var InlineEditor = function (_Component) {
 	}, {
 		key: 'fixURLs',
 		value: function fixURLs(html) {
-			html = html.replace(/<a href="[^http]/g, '<a href="' + FLBuilderConfig.homeUrl + '/');
-			html = html.replace(/<a href="(\.\.\/){1,2}/g, '<a href="' + FLBuilderConfig.homeUrl + '/');
+			html = html.replace(/href="[^http#]/g, 'href="' + FLBuilderConfig.homeUrl + '/');
+			html = html.replace(/href="(\.\.\/){1,2}/g, 'href="' + FLBuilderConfig.homeUrl + '/');
 
 			html = html.replace(/src="(\.\.\/){1,2}/g, 'src="' + FLBuilderConfig.homeUrl + '/');
 			html = html.replace(/src="[^http]/g, 'src="' + FLBuilderConfig.homeUrl + '/');
