@@ -285,16 +285,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.109",
+            "version": "v0.110",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "1e1e05ed1320573f9c3c364ea87302abba748874"
+                "reference": "9d9e0a4e180cf09a52ab04535ca4f669031f8c54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/1e1e05ed1320573f9c3c364ea87302abba748874",
-                "reference": "1e1e05ed1320573f9c3c364ea87302abba748874",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/9d9e0a4e180cf09a52ab04535ca4f669031f8c54",
+                "reference": "9d9e0a4e180cf09a52ab04535ca4f669031f8c54",
                 "shasum": ""
             },
             "require": {
@@ -318,20 +318,20 @@
             "keywords": [
                 "google"
             ],
-            "time": "2019-08-10T00:23:38+00:00"
+            "time": "2019-08-17T00:23:23+00:00"
         },
         {
             "name": "google/auth",
-            "version": "v1.5.1",
+            "version": "v1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-auth-library-php.git",
-                "reference": "0f75e20e7392e863f5550ed2c2d3d50af21710fb"
+                "reference": "2ee962e5df3e9427fda859f1b0515d6d62c4afa5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/0f75e20e7392e863f5550ed2c2d3d50af21710fb",
-                "reference": "0f75e20e7392e863f5550ed2c2d3d50af21710fb",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/2ee962e5df3e9427fda859f1b0515d6d62c4afa5",
+                "reference": "2ee962e5df3e9427fda859f1b0515d6d62c4afa5",
                 "shasum": ""
             },
             "require": {
@@ -369,7 +369,7 @@
                 "google",
                 "oauth2"
             ],
-            "time": "2019-04-16T18:48:28+00:00"
+            "time": "2019-07-22T21:01:31+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -2055,15 +2055,15 @@
         },
         {
             "name": "wpackagist-plugin/fast-velocity-minify",
-            "version": "2.7.3",
+            "version": "2.7.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/fast-velocity-minify/",
-                "reference": "tags/2.7.3"
+                "reference": "tags/2.7.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/fast-velocity-minify.2.7.3.zip"
+                "url": "https://downloads.wordpress.org/plugin/fast-velocity-minify.2.7.4.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2289,15 +2289,15 @@
         },
         {
             "name": "wpackagist-plugin/shortpixel-image-optimiser",
-            "version": "4.14.3",
+            "version": "4.14.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/shortpixel-image-optimiser/",
-                "reference": "tags/4.14.3"
+                "reference": "tags/4.14.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/shortpixel-image-optimiser.4.14.3.zip"
+                "url": "https://downloads.wordpress.org/plugin/shortpixel-image-optimiser.4.14.4.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
