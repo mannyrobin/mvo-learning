@@ -313,6 +313,7 @@
     -webkit-flex-wrap: wrap;
     	-ms-flex-wrap: wrap;
     		flex-wrap: wrap;
+			    width: 100%;
 }
 .fl-col-group-equal-height.fl-col-group-has-child-loading {
     -webkit-flex-wrap: nowrap;
