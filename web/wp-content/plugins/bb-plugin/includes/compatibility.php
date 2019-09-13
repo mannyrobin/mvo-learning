@@ -865,7 +865,7 @@ function fl_builder_admin_edit_sort_blocklist_edd( $blocklist ) {
 add_action( 'pre_get_posts', 'fl_gute_links_fix' );
 function fl_gute_links_fix( $query ) {
 	if ( defined( 'REST_REQUEST' ) && $query->is_search() ) {
-		$types = $query->get( 'post_type' );
+		$types = (array) $query->get( 'post_type' );
 		$key   = array_search( 'fl-builder-template', $types, true );
 		if ( $key ) {
 			unset( $types[ $key ] );
