@@ -2004,6 +2004,10 @@ final class FLBuilder {
 			if ( isset( $row->settings->content_alignment ) ) {
 				$attrs['class'][] = 'fl-row-align-' . $row->settings->content_alignment;
 			}
+
+			if ( isset( $row->settings->margin_top ) && (int) $row->settings->margin_top < 0 ) {
+				$attrs['class'][] = 'fl-row-overlap-top';
+			}
 		}
 		if ( ! empty( $row->settings->full_height ) && 'custom' == $row->settings->full_height ) {
 
@@ -2011,6 +2015,10 @@ final class FLBuilder {
 
 			if ( isset( $row->settings->content_alignment ) ) {
 				$attrs['class'][] = 'fl-row-align-' . $row->settings->content_alignment;
+			}
+
+			if ( isset( $row->settings->margin_top ) && (int) $row->settings->margin_top < 0 ) {
+				$attrs['class'][] = 'fl-row-overlap-top';
 			}
 		}
 		if ( in_array( $row->settings->bg_type, $overlay_bgs ) ) {
