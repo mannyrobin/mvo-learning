@@ -287,16 +287,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.117",
+            "version": "v0.118",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "ae2f0f6f626db67d83ea0a0cd15100b9d083874b"
+                "reference": "3db3c3097dcfb2e2cd578053f28be20fe4ad8e01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/ae2f0f6f626db67d83ea0a0cd15100b9d083874b",
-                "reference": "ae2f0f6f626db67d83ea0a0cd15100b9d083874b",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/3db3c3097dcfb2e2cd578053f28be20fe4ad8e01",
+                "reference": "3db3c3097dcfb2e2cd578053f28be20fe4ad8e01",
                 "shasum": ""
             },
             "require": {
@@ -320,7 +320,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2019-10-07T00:23:24+00:00"
+            "time": "2019-10-14T00:24:06+00:00"
         },
         {
             "name": "google/auth",
@@ -880,16 +880,16 @@
         },
         {
             "name": "hipdevteam/video-collection",
-            "version": "1.6.9",
+            "version": "1.6.11",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/video-collection.git",
-                "reference": "8d17c10a555221d3468a928b6fd85770ca27b64a"
+                "reference": "4fb30b99d2ddeb3935d82b1baf00bf42f9953b1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fvideo-collection/repository/archive.zip?sha=8d17c10a555221d3468a928b6fd85770ca27b64a",
-                "reference": "8d17c10a555221d3468a928b6fd85770ca27b64a",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fvideo-collection/repository/archive.zip?sha=4fb30b99d2ddeb3935d82b1baf00bf42f9953b1a",
+                "reference": "4fb30b99d2ddeb3935d82b1baf00bf42f9953b1a",
                 "shasum": ""
             },
             "require": {
@@ -901,7 +901,7 @@
             },
             "type": "wordpress-plugin",
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2019-10-09T17:59:59+00:00"
+            "time": "2019-10-14T16:34:05+00:00"
         },
         {
             "name": "hipdevteam/video-lightbox",
@@ -1008,20 +1008,20 @@
         },
         {
             "name": "johnpbloch/wordpress",
-            "version": "5.2.3",
+            "version": "5.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnpbloch/wordpress.git",
-                "reference": "e39361341439df042ace80ba9445b3e0acb87215"
+                "reference": "33fca34d16818a8d893d374eecd5c8c46cab6e88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnpbloch/wordpress/zipball/e39361341439df042ace80ba9445b3e0acb87215",
-                "reference": "e39361341439df042ace80ba9445b3e0acb87215",
+                "url": "https://api.github.com/repos/johnpbloch/wordpress/zipball/33fca34d16818a8d893d374eecd5c8c46cab6e88",
+                "reference": "33fca34d16818a8d893d374eecd5c8c46cab6e88",
                 "shasum": ""
             },
             "require": {
-                "johnpbloch/wordpress-core": "5.2.3",
+                "johnpbloch/wordpress-core": "5.2.4",
                 "johnpbloch/wordpress-core-installer": "^1.0",
                 "php": ">=5.6.20"
             },
@@ -1043,27 +1043,27 @@
                 "cms",
                 "wordpress"
             ],
-            "time": "2019-09-05T01:17:14+00:00"
+            "time": "2019-10-14T20:47:31+00:00"
         },
         {
             "name": "johnpbloch/wordpress-core",
-            "version": "5.2.3",
+            "version": "5.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnpbloch/wordpress-core.git",
-                "reference": "455a884ce96b042602d1eb04fdf2b8e003be0eef"
+                "reference": "01530fea56649a4040971fc614baa546273d964c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnpbloch/wordpress-core/zipball/455a884ce96b042602d1eb04fdf2b8e003be0eef",
-                "reference": "455a884ce96b042602d1eb04fdf2b8e003be0eef",
+                "url": "https://api.github.com/repos/johnpbloch/wordpress-core/zipball/01530fea56649a4040971fc614baa546273d964c",
+                "reference": "01530fea56649a4040971fc614baa546273d964c",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.6.20"
             },
             "provide": {
-                "wordpress/core-implementation": "5.2.3"
+                "wordpress/core-implementation": "5.2.4"
             },
             "type": "wordpress-core",
             "notification-url": "https://packagist.org/downloads/",
@@ -1083,7 +1083,7 @@
                 "cms",
                 "wordpress"
             ],
-            "time": "2019-09-05T01:17:09+00:00"
+            "time": "2019-10-14T20:47:26+00:00"
         },
         {
             "name": "johnpbloch/wordpress-core-installer",
@@ -1988,15 +1988,15 @@
         },
         {
             "name": "wpackagist-plugin/autodescription",
-            "version": "4.0.1",
+            "version": "4.0.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/autodescription/",
-                "reference": "trunk"
+                "reference": "tags/4.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/autodescription.zip?timestamp=1568206460"
+                "url": "https://downloads.wordpress.org/plugin/autodescription.4.0.2.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2060,15 +2060,15 @@
         },
         {
             "name": "wpackagist-plugin/fast-velocity-minify",
-            "version": "2.7.6",
+            "version": "2.7.7",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/fast-velocity-minify/",
-                "reference": "tags/2.7.6"
+                "reference": "tags/2.7.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/fast-velocity-minify.2.7.6.zip"
+                "url": "https://downloads.wordpress.org/plugin/fast-velocity-minify.2.7.7.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2706,23 +2706,23 @@
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "5.2.8",
+            "version": "5.2.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/justinrainbow/json-schema.git",
-                "reference": "dcb6e1006bb5fd1e392b4daa68932880f37550d4"
+                "reference": "44c6787311242a979fa15c704327c20e7221a0e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/dcb6e1006bb5fd1e392b4daa68932880f37550d4",
-                "reference": "dcb6e1006bb5fd1e392b4daa68932880f37550d4",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/44c6787311242a979fa15c704327c20e7221a0e4",
+                "reference": "44c6787311242a979fa15c704327c20e7221a0e4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "~2.2.20",
+                "friendsofphp/php-cs-fixer": "~2.2.20||~2.15.1",
                 "json-schema/json-schema-test-suite": "1.2.0",
                 "phpunit/phpunit": "^4.8.35"
             },
@@ -2768,7 +2768,7 @@
                 "json",
                 "schema"
             ],
-            "time": "2019-01-14T23:55:14+00:00"
+            "time": "2019-09-25T14:49:45+00:00"
         },
         {
             "name": "mustache/mustache",
@@ -3047,16 +3047,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.5.0",
+            "version": "3.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "0afebf16a2e7f1e434920fa976253576151effe9"
+                "reference": "82cd0f854ceca17731d6d019c7098e3755c45060"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/0afebf16a2e7f1e434920fa976253576151effe9",
-                "reference": "0afebf16a2e7f1e434920fa976253576151effe9",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/82cd0f854ceca17731d6d019c7098e3755c45060",
+                "reference": "82cd0f854ceca17731d6d019c7098e3755c45060",
                 "shasum": ""
             },
             "require": {
@@ -3094,7 +3094,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2019-09-26T23:12:26+00:00"
+            "time": "2019-10-16T21:14:26+00:00"
         },
         {
             "name": "symfony/config",
