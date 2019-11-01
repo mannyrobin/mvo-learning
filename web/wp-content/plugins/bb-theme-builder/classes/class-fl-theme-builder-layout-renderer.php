@@ -228,7 +228,7 @@ final class FLThemeBuilderLayoutRenderer {
 			$url  = $cache_dir['url'] . $key . '-layout-bundle.css';
 
 			if ( ! file_exists( $path ) ) {
-				file_put_contents( $path, $css );
+				fl_builder_filesystem()->file_put_contents( $path, $css );
 			}
 
 			wp_enqueue_style( 'fl-builder-layout-bundle-' . $key, $url, array(), $version );
@@ -242,7 +242,7 @@ final class FLThemeBuilderLayoutRenderer {
 			$url  = $cache_dir['url'] . $key . '-layout-bundle.js';
 
 			if ( ! file_exists( $path ) ) {
-				file_put_contents( $path, $js );
+				fl_builder_filesystem()->file_put_contents( $path, $js );
 			}
 
 			wp_enqueue_script( 'fl-builder-layout-bundle-' . $key, $url, array( 'jquery' ), $version, true );

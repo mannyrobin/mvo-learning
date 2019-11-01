@@ -1,3 +1,10 @@
+<h4>1.2.4.4 - 10/30/2019</h4>
+<p><strong>Hot Fix</strong></p>
+<ul>
+	<li>Fixed possible fatal error when editing WooCommerce pages in wp-admin.</li>
+	<li>Fixed file permission issues with created bundle css/js files.</li>
+</ul>
+
 <h4>1.2.4.3 - 10/22/2019</h4>
 <p><strong>Bug Fixes</strong></p>
 <ul>
