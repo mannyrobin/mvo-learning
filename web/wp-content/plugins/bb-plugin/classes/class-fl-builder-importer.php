@@ -250,9 +250,9 @@ final class FLBuilderImporterDataFix {
 			return $data;
 		}
 
-		$data = preg_replace_callback('!s:(\d+):"(.*?)";!', function( $m ) {
-			return 's:' . strlen( $m[2] ) . ':"' . $m[2] . '";';
-		}, self::sanitize_from_word( $data ) );
+		if ( is_serialized( $data ) ) {
+			$data = self::sanitize_from_word( $data );
+		}
 
 		$data = maybe_unserialize( $data );
 
@@ -283,8 +283,15 @@ final class FLBuilderImporterDataFix {
 			$content = str_replace( $k, $v, $content );
 		}
 
-		// Remove any non-ascii character
-		$content = preg_replace( '/[^\x20-\x7E]*/', '', $content );
+		/**
+		 * Optional strip all illegal chars, defaults to false
+		 * @see fl_import_strip_all
+		 * @since 2.3
+		 */
+		if ( true === apply_filters( 'fl_import_strip_all', false ) ) {
+			// Remove any non-ascii character
+			$content = preg_replace( '/[^\x20-\x7E]*/', '', $content );
+		}
 		return $content;
 	}
 
