@@ -59,7 +59,11 @@ class FLBuilderImportParserXML extends WXR_Parser_XML {
 				if ( ! empty( $this->sub_data ) ) {
 					if ( stristr( $this->sub_data['key'], '_fl_builder_' ) ) {
 						$this->set_pcre_limit( apply_filters( 'fl_builder_importer_pcre', '23001337' ) );
-						$this->sub_data['value'] = FLBuilderImporterDataFix::run( serialize( $this->sub_data['value'] ) );
+						$data = FLBuilderImporterDataFix::run( $this->sub_data['value'] );
+						if ( is_object( $data ) || is_array( $data ) ) {
+							$data = serialize( $data );
+						}
+						$this->sub_data['value'] = $data;
 					}
 					$this->data['postmeta'][] = $this->sub_data;
 				}
@@ -197,7 +201,11 @@ class FLBuilderImportParserRegex extends WXR_Parser_Regex {
 				}
 				foreach ( $post['postmeta'] as $postmeta_index => $postmeta ) {
 					if ( stristr( $postmeta['key'], '_fl_builder_' ) ) {
-						$this->posts[ $post_index ]['postmeta'][ $postmeta_index ]['value'] = FLBuilderImporterDataFix::run( $postmeta['value'] );
+						$data = FLBuilderImporterDataFix::run( $postmeta['value'] );
+						if ( is_object( $data ) || is_array( $data ) ) {
+							$data = serialize( $data );
+						}
+						$this->posts[ $post_index ]['postmeta'][ $postmeta_index ]['value'] = $data;
 					}
 				}
 			}
@@ -250,9 +258,17 @@ final class FLBuilderImporterDataFix {
 			return $data;
 		}
 
-		if ( is_serialized( $data ) ) {
-			$data = self::sanitize_from_word( $data );
+		if ( is_object( $data ) || is_array( $data ) ) {
+			return $data;
 		}
+
+		if ( ! is_serialized( $data ) ) {
+			return $data;
+		}
+
+		$data = preg_replace_callback('!s:(\d+):"(.*?)";!', function( $m ) {
+			return 's:' . strlen( $m[2] ) . ':"' . $m[2] . '";';
+		}, self::sanitize_from_word( $data ) );
 
 		$data = maybe_unserialize( $data );
 
@@ -270,13 +286,14 @@ final class FLBuilderImporterDataFix {
 	public static function sanitize_from_word( $content ) {
 		// Convert microsoft special characters
 		$replace = array(
-			'‘' => "\'",
-			'’' => "\'",
-			'”' => '\"',
-			'“' => '\"',
-			'–' => '-',
-			'—' => '-',
-			'…' => '&#8230;',
+			'‘'  => "\'",
+			'’'  => "\'",
+			'”'  => '\"',
+			'“'  => '\"',
+			'–'  => '-',
+			'—'  => '-',
+			'…'  => '&#8230;',
+			"\n" => '<br />',
 		);
 
 		foreach ( $replace as $k => $v ) {
@@ -292,6 +309,7 @@ final class FLBuilderImporterDataFix {
 			// Remove any non-ascii character
 			$content = preg_replace( '/[^\x20-\x7E]*/', '', $content );
 		}
+
 		return $content;
 	}
 
