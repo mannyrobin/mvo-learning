@@ -99,7 +99,6 @@ class UABB_Init {
 		require_once BB_ULTIMATE_ADDON_DIR . 'classes/class-uabb-admin-settings-multisite.php';
 		require_once BB_ULTIMATE_ADDON_DIR . 'classes/class-uabb-template-ajax.php';
 		require_once BB_ULTIMATE_ADDON_DIR . 'classes/uabb-global-functions.php';
-
 		// Attachment Fields.
 		require_once BB_ULTIMATE_ADDON_DIR . 'classes/class-uabb-attachment.php';
 		require_once BB_ULTIMATE_ADDON_DIR . 'classes/class-uabb-blog-posts.php';
@@ -121,6 +120,9 @@ class UABB_Init {
 		require_once BB_ULTIMATE_ADDON_DIR . 'classes/class-ui-panel.php';
 		require_once BB_ULTIMATE_ADDON_DIR . 'includes/row.php';
 		require_once BB_ULTIMATE_ADDON_DIR . 'includes/column.php';
+
+		require_once BB_ULTIMATE_ADDON_DIR . 'classes/batch-process/class-uabb-batch-process.php';
+		require_once BB_ULTIMATE_ADDON_DIR . 'lib/notices/class-astra-notices.php';
 
 		// Load the appropriate text-domain.
 		$this->load_plugin_textdomain();
@@ -506,3 +508,5 @@ function init_uabb() {
 }
 
 add_action( 'plugins_loaded', 'init_uabb' );
+
+
