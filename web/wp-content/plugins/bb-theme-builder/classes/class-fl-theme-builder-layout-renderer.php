@@ -365,13 +365,14 @@ final class FLThemeBuilderLayoutRenderer {
 		$settings = FLThemeBuilderLayoutData::get_settings( $ids[0] );
 
 		FLBuilder::render_content_by_id( $ids[0], $tag, array(
-			'itemscope'       => 'itemscope',
-			'itemtype'        => 'http://schema.org/WPHeader',
-			'data-type'       => 'header',
-			'data-sticky'     => $settings['sticky'],
-			'data-shrink'     => $settings['shrink'],
-			'data-overlay'    => $settings['overlay'],
-			'data-overlay-bg' => $settings['overlay_bg'],
+			'itemscope'              => 'itemscope',
+			'itemtype'               => 'http://schema.org/WPHeader',
+			'data-type'              => 'header',
+			'data-sticky'            => $settings['sticky'],
+			'data-sticky-breakpoint' => apply_filters( 'fl_theme_builder_sticky_header_breakpoint', 'medium' ),
+			'data-shrink'            => $settings['shrink'],
+			'data-overlay'           => $settings['overlay'],
+			'data-overlay-bg'        => $settings['overlay_bg'],
 		) );
 
 		do_action( 'fl_theme_builder_after_render_header', $ids[0] );
