@@ -375,8 +375,8 @@ final class FLThemeBuilderFieldConnections {
 		global $wp_the_query;
 		global $post;
 
-		$repeater  = array();
-		$nested    = array();
+		$repeater = array();
+		$nested   = array();
 
 		// Get the connection cache key.
 		if ( is_object( $wp_the_query->post ) && 'fl-theme-layout' === $wp_the_query->post->post_type ) {
