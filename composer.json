@@ -70,7 +70,8 @@
     "wpackagist-plugin/classic-editor":"*",
 	"wpackagist-plugin/a3-lazy-load":"^1.9.2",
 	"wpackagist-plugin/fast-velocity-minify":"^2.6.5",
-    "deliciousbrains-plugin/wp-migrate-db-pro-cli": "^1.3"
+    "deliciousbrains-plugin/wp-migrate-db-pro-cli": "^1.3",
+	"wpackagist-plugin/cleantalk-spam-protect": "^5.130"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "3.*",
