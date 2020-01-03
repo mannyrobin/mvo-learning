@@ -379,7 +379,20 @@ final class FLUpdater {
 				/* translators: %s: link to license tab */
 				$text = sprintf( __( 'Please enter a valid license key to enable automatic updates. %s', 'fl-builder' ), $link );
 			} else {
-				$link = sprintf( '<a href="%s" target="_blank" style="color: #fff; text-decoration: underline;">%s &raquo;</a>', $plugin_data['PluginURI'], __( 'Subscribe Now', 'fl-builder' ) );
+				if ( 'bb-theme-builder/bb-theme-builder.php' === $plugin_data['plugin'] ) {
+					$subscribe_link = FLBuilderModel::get_store_url( 'beaver-themer', array(
+						'utm_medium'   => 'bb-theme-builder',
+						'utm_source'   => 'plugins-admin-page',
+						'utm_campaign' => 'subscribe',
+					) );
+				} else {
+					$subscribe_link = FLBuilderModel::get_store_url( '', array(
+						'utm_medium'   => 'bb',
+						'utm_source'   => 'plugins-admin-page',
+						'utm_campaign' => 'subscribe',
+					) );
+				}
+				$link = sprintf( '<a href="%s" target="_blank" style="color: #fff; text-decoration: underline;">%s &raquo;</a>', $subscribe_link, __( 'Subscribe Now', 'fl-builder' ) );
 				/* translators: %s: subscribe link */
 				$text = sprintf( __( 'Please subscribe to enable automatic updates for this plugin. %s', 'fl-builder' ), $link );
 			}

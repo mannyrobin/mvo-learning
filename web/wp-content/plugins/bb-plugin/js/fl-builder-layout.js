@@ -283,6 +283,18 @@
 				body.addClass('fl-builder-mobile');
 			}
 
+			if ( $(window).width() < FLBuilderLayoutConfig.breakpoints.small ) {
+				body.addClass( 'fl-builder-breakpoint-small' );
+			}
+
+			if ( $(window).width() > FLBuilderLayoutConfig.breakpoints.small && $(window).width() < FLBuilderLayoutConfig.breakpoints.medium ) {
+				body.addClass( 'fl-builder-breakpoint-medium' );
+			}
+
+			if ( $(window).width() > FLBuilderLayoutConfig.breakpoints.medium ) {
+				body.addClass( 'fl-builder-breakpoint-large' );
+			}
+
 			// IE11 body class.
 			if ( ua.indexOf( 'Trident/7.0' ) > -1 && ua.indexOf( 'rv:11.0' ) > -1 ) {
 				body.addClass( 'fl-builder-ie-11' );
