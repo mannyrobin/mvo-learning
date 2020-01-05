@@ -85,6 +85,20 @@ foreach ( $settings->icons as $i => $icon ) :
 		background: <?php echo FLBuilderColor::hex_or_rgb( $icon->bg_hover_color ); ?>;
 	}
 	<?php endif; ?>
+
+	<?php if ( $icon->duo_color1 && false !== strpos( $icon->icon, 'fad fa' ) ) : ?>
+	.fl-node-<?php echo $id; ?> .fl-module-content .fl-icon:nth-child(<?php echo $index; ?>) i:before {
+		color: <?php echo FLBuilderColor::hex_or_rgb( $icon->duo_color1 ); ?>;
+	}
+	<?php endif; ?>
+
+	<?php if ( $icon->duo_color2 && false !== strpos( $icon->icon, 'fad fa' ) ) : ?>
+	.fl-node-<?php echo $id; ?> .fl-module-content .fl-icon:nth-child(<?php echo $index; ?>) i:after {
+		color: <?php echo FLBuilderColor::hex_or_rgb( $icon->duo_color2 ); ?>;
+		opacity: 1;
+	}
+	<?php endif; ?>
+
 <?php endforeach; ?>
 
 /* Left */

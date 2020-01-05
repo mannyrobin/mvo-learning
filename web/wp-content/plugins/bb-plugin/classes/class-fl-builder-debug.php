@@ -201,6 +201,27 @@ final class FL_Debug {
 		);
 		self::register( 'active_theme', $args );
 
+		if ( 'bb-theme' === $theme->get( 'Template' ) ) {
+			if ( is_dir( trailingslashit( get_stylesheet_directory() ) . 'includes' ) ) {
+				$args = array(
+					'name' => 'Child Theme includes folder detected.',
+					'data' => trailingslashit( get_stylesheet_directory() ) . 'includes/',
+				);
+				self::register( 'child_includes', $args );
+			}
+
+			if ( is_dir( trailingslashit( get_stylesheet_directory() ) . 'fl-builder/modules' ) ) {
+				$modules = glob( trailingslashit( get_stylesheet_directory() ) . 'fl-builder/modules/*' );
+				if ( ! empty( $modules ) ) {
+					$args = array(
+						'name' => 'Child Theme builder modules folder detected.',
+						'data' => implode( '<br>', $modules ),
+					);
+					self::register( 'child_bb_modules', $args );
+				}
+			}
+		}
+
 		$args = array(
 			'name' => 'Plugins',
 			'data' => self::divider(),

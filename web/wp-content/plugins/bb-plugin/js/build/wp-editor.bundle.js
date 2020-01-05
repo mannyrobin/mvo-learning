@@ -60,26 +60,26 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 35);
+/******/ 	return __webpack_require__(__webpack_require__.s = 28);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 35:
+/***/ 28:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(36);
+__webpack_require__(29);
 
-__webpack_require__(37);
+__webpack_require__(30);
 
-__webpack_require__(39);
+__webpack_require__(32);
 
 /***/ }),
 
-/***/ 36:
+/***/ 29:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -126,7 +126,7 @@ registerStore('fl-builder', {
 
 /***/ }),
 
-/***/ 37:
+/***/ 30:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -134,7 +134,7 @@ registerStore('fl-builder', {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-__webpack_require__(38);
+__webpack_require__(31);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -156,7 +156,6 @@ var _wp$components = wp.components,
     Spinner = _wp$components.Spinner;
 var compose = wp.compose.compose;
 var _wp$data = wp.data,
-    subscribe = _wp$data.subscribe,
     withDispatch = _wp$data.withDispatch,
     withSelect = _wp$data.withSelect;
 var _wp$element = wp.element,
@@ -173,25 +172,10 @@ var LayoutBlockEdit = function (_Component) {
 	function LayoutBlockEdit() {
 		_classCallCheck(this, LayoutBlockEdit);
 
-		var _this = _possibleConstructorReturn(this, (LayoutBlockEdit.__proto__ || Object.getPrototypeOf(LayoutBlockEdit)).apply(this, arguments));
-
-		_this.unsubscribe = subscribe(_this.storeDidUpdate.bind(_this));
-		return _this;
+		return _possibleConstructorReturn(this, (LayoutBlockEdit.__proto__ || Object.getPrototypeOf(LayoutBlockEdit)).apply(this, arguments));
 	}
 
 	_createClass(LayoutBlockEdit, [{
-		key: 'storeDidUpdate',
-		value: function storeDidUpdate() {
-			var _props = this.props,
-			    isLaunching = _props.isLaunching,
-			    isSavingPost = _props.isSavingPost;
-
-			if (isLaunching && !isSavingPost) {
-				this.unsubscribe();
-				this.redirectToBuilder();
-			}
-		}
-	}, {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
 			var blockCount = this.props.blockCount;
@@ -203,16 +187,15 @@ var LayoutBlockEdit = function (_Component) {
 	}, {
 		key: 'componentWillUnmount',
 		value: function componentWillUnmount() {
-			this.unsubscribe();
 			this.toggleEditor('enable');
 		}
 	}, {
 		key: 'render',
 		value: function render() {
-			var _props2 = this.props,
-			    blockCount = _props2.blockCount,
-			    onReplace = _props2.onReplace,
-			    isLaunching = _props2.isLaunching;
+			var _props = this.props,
+			    blockCount = _props.blockCount,
+			    onReplace = _props.onReplace,
+			    isLaunching = _props.isLaunching;
 
 			var label = void 0,
 			    callback = void 0,
@@ -282,28 +265,25 @@ var LayoutBlockEdit = function (_Component) {
 			}
 		}
 	}, {
-		key: 'redirectToBuilder',
-		value: function redirectToBuilder() {
-			window.location.href = builder.access ? urls.edit : urls.view;
-		}
-	}, {
 		key: 'launchBuilder',
 		value: function launchBuilder() {
-			var _props3 = this.props,
-			    savePost = _props3.savePost,
-			    setLaunching = _props3.setLaunching;
+			var _props2 = this.props,
+			    savePost = _props2.savePost,
+			    setLaunching = _props2.setLaunching;
 
 			setLaunching(true);
-			savePost();
+			savePost().then(function () {
+				window.location.href = builder.access ? urls.edit : urls.view;
+			});
 		}
 	}, {
 		key: 'convertToBuilder',
 		value: function convertToBuilder() {
-			var _props4 = this.props,
-			    clientId = _props4.clientId,
-			    blocks = _props4.blocks,
-			    setAttributes = _props4.setAttributes,
-			    removeBlocks = _props4.removeBlocks;
+			var _props3 = this.props,
+			    clientId = _props3.clientId,
+			    blocks = _props3.blocks,
+			    setAttributes = _props3.setAttributes,
+			    removeBlocks = _props3.removeBlocks;
 
 			var content = serialize(blocks);
 			var clientIds = blocks.map(function (block) {
@@ -319,11 +299,11 @@ var LayoutBlockEdit = function (_Component) {
 	}, {
 		key: 'convertToBlocks',
 		value: function convertToBlocks() {
-			var _props5 = this.props,
-			    attributes = _props5.attributes,
-			    clientId = _props5.clientId,
-			    replaceBlocks = _props5.replaceBlocks,
-			    onReplace = _props5.onReplace;
+			var _props4 = this.props,
+			    attributes = _props4.attributes,
+			    clientId = _props4.clientId,
+			    replaceBlocks = _props4.replaceBlocks,
+			    onReplace = _props4.onReplace;
 
 
 			if (attributes.content && !confirm(strings.warning)) {
@@ -348,21 +328,22 @@ var LayoutBlockEdit = function (_Component) {
 
 
 var LayoutBlockEditConnected = compose(withDispatch(function (dispatch, ownProps) {
+	var blockEditor = dispatch('core/block-editor');
 	var editor = dispatch('core/editor');
 	var builder = dispatch('fl-builder');
 	return {
+		removeBlocks: blockEditor.removeBlocks,
+		replaceBlocks: blockEditor.replaceBlocks,
 		savePost: editor.savePost,
-		removeBlocks: editor.removeBlocks,
-		replaceBlocks: editor.replaceBlocks,
 		setLaunching: builder.setLaunching
 	};
 }), withSelect(function (select) {
+	var blockEditor = select('core/block-editor');
 	var editor = select('core/editor');
 	var builder = select('fl-builder');
 	return {
-		blockCount: editor.getBlockCount(),
-		blocks: editor.getBlocks(),
-		isSavingPost: editor.isSavingPost(),
+		blockCount: blockEditor.getBlockCount(),
+		blocks: blockEditor.getBlocks(),
 		isLaunching: builder.isLaunching()
 	};
 }))(LayoutBlockEdit);
@@ -403,22 +384,20 @@ if (builder.access && builder.unrestricted || builder.enabled) {
 
 /***/ }),
 
-/***/ 38:
+/***/ 31:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 39:
+/***/ 32:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-__webpack_require__(40);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -427,7 +406,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _FLBuilderConfig = FLBuilderConfig,
-    strings = _FLBuilderConfig.strings;
+    builder = _FLBuilderConfig.builder,
+    strings = _FLBuilderConfig.strings,
+    urls = _FLBuilderConfig.urls;
 var _wp$blocks = wp.blocks,
     createBlock = _wp$blocks.createBlock,
     serialize = _wp$blocks.serialize;
@@ -436,17 +417,12 @@ var compose = wp.compose.compose;
 var _wp$data = wp.data,
     withDispatch = _wp$data.withDispatch,
     withSelect = _wp$data.withSelect;
-var PluginSidebarMoreMenuItem = wp.editPost.PluginSidebarMoreMenuItem;
+var PluginMoreMenuItem = wp.editPost.PluginMoreMenuItem;
 var Component = wp.element.Component;
 var registerPlugin = wp.plugins.registerPlugin;
 
 /**
  * Builder menu item for the more menu.
- *
- * More menu items currently only support opening a sidebar.
- * However, we need a click event. For now, that is done in a
- * hacky manner with an absolute div that contains the event.
- * This should be reworked in the future when API supports it.
  */
 
 var BuilderMoreMenuItem = function (_Component) {
@@ -462,11 +438,8 @@ var BuilderMoreMenuItem = function (_Component) {
 		key: 'render',
 		value: function render() {
 			return React.createElement(
-				PluginSidebarMoreMenuItem,
-				null,
-				React.createElement('div', {
-					className: 'fl-builder-plugin-sidebar-button',
-					onClick: this.menuItemClicked.bind(this) }),
+				PluginMoreMenuItem,
+				{ onClick: this.menuItemClicked.bind(this) },
 				this.hasBuilderBlock() ? strings.launch : strings.convert
 			);
 		}
@@ -484,17 +457,11 @@ var BuilderMoreMenuItem = function (_Component) {
 	}, {
 		key: 'menuItemClicked',
 		value: function menuItemClicked() {
-			var closeGeneralSidebar = this.props.closeGeneralSidebar;
-
-
 			if (this.hasBuilderBlock()) {
 				this.launchBuilder();
 			} else {
 				this.convertToBuilder();
 			}
-
-			// Another hack because we can't have click events yet :(
-			setTimeout(closeGeneralSidebar, 100);
 		}
 	}, {
 		key: 'convertToBuilder',
@@ -521,7 +488,9 @@ var BuilderMoreMenuItem = function (_Component) {
 			    setLaunching = _props2.setLaunching;
 
 			setLaunching(true);
-			savePost();
+			savePost().then(function () {
+				window.location.href = builder.access ? urls.edit : urls.view;
+			});
 		}
 	}]);
 
@@ -534,20 +503,19 @@ var BuilderMoreMenuItem = function (_Component) {
 
 
 var BuilderMoreMenuItemConnected = compose(withDispatch(function (dispatch, ownProps) {
+	var blockEditor = dispatch('core/block-editor');
 	var editor = dispatch('core/editor');
-	var editPost = dispatch('core/edit-post');
 	var builder = dispatch('fl-builder');
 	return {
+		insertBlock: blockEditor.insertBlock,
+		removeBlocks: blockEditor.removeBlocks,
 		savePost: editor.savePost,
-		insertBlock: editor.insertBlock,
-		removeBlocks: editor.removeBlocks,
-		closeGeneralSidebar: editPost.closeGeneralSidebar,
 		setLaunching: builder.setLaunching
 	};
 }), withSelect(function (select) {
-	var editor = select('core/editor');
+	var blockEditor = select('core/block-editor');
 	return {
-		blocks: editor.getBlocks()
+		blocks: blockEditor.getBlocks()
 	};
 }))(BuilderMoreMenuItem);
 
@@ -558,13 +526,6 @@ registerPlugin('fl-builder-plugin-sidebar', {
 	icon: 'welcome-widgets-menus',
 	render: BuilderMoreMenuItemConnected
 });
-
-/***/ }),
-
-/***/ 40:
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ })
 
