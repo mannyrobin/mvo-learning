@@ -8654,12 +8654,14 @@
 			var wrap   = $( this ),
 				value  = wrap.attr( 'data-value' ),
 				font   = wrap.find( '.fl-font-field-font' ),
-				weight = wrap.find( '.fl-font-field-weight' )
+				weight = wrap.find( '.fl-font-field-weight' );
 
-			font.select2({ width: '100%' })
-				.on('select2:open', function(e){
-					$('.select2-search__field').attr('placeholder', FLBuilderStrings.placeholderSelect2);
-				})
+			if ( FLBuilderConfig.select2Enabled ) {
+				font.select2({width:'100%'})
+					.on('select2:open', function(e){
+						$('.select2-search__field').attr('placeholder', FLBuilderStrings.placeholderSelect2);
+					})
+			}
 
 			font.on( 'change', function(){
 				FLBuilder._getFontWeights( font );

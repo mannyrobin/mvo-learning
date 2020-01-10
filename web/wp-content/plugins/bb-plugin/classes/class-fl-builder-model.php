@@ -1945,7 +1945,7 @@ final class FLBuilderModel {
 		}
 
 		// Cache background slideshow data.
-		if ( 'slideshow' == $new_settings->bg_type && 'wordpress' == $new_settings->ss_source ) {
+		if ( 'slideshow' == $new_settings->bg_type && 'wordpress' == $new_settings->ss_source && class_exists( 'FLSlideshowModule' ) ) {
 
 			// Make sure we have a photo data object.
 			if ( ! isset( $row->settings->ss_photo_data ) ) {
@@ -1962,6 +1962,7 @@ final class FLBuilderModel {
 
 		return $new_settings;
 	}
+
 
 	/**
 	 * Returns background data for a row.
@@ -5057,7 +5058,7 @@ final class FLBuilderModel {
 
 			$terms = wp_get_post_terms( $post->ID, 'fl-builder-template-type' );
 
-			$type = ( 0 === count( $terms ) ) ? 'layout' : $terms[0]->slug;
+			$type = ( is_wp_error( $terms ) || 0 === count( $terms ) ) ? 'layout' : $terms[0]->slug;
 
 			self::$node_template_types[ $template_id ] = $type;
 

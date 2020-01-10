@@ -65,6 +65,7 @@ echo 'FLBuilderConfig              = ' . FLBuilderUtils::json_encode( apply_filt
 	'FontWeights'                => FLBuilderFonts::get_font_weight_strings(),
 	'statsEnabled'               => get_site_option( 'fl_builder_usage_enabled', false ),
 	'rememberTab'                => apply_filters( 'fl_remember_settings_tabs_enabled', true ),
+	'select2Enabled'             => apply_filters( 'fl_select2_enabled', true ),
 ) ) ) . ';';
 
 /**

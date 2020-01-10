@@ -684,16 +684,16 @@
         },
         {
             "name": "hipdevteam/hip-bb-theme",
-            "version": "5.3.5",
+            "version": "5.3.6",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hipdevteam/hip-bb-theme.git",
-                "reference": "264d473bff5b6213b837a3c422984847fe701ec8"
+                "reference": "99a8cc3c249f515d834f947232e6e2de6e576307"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=264d473bff5b6213b837a3c422984847fe701ec8",
-                "reference": "264d473bff5b6213b837a3c422984847fe701ec8",
+                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Fhip-bb-theme/repository/archive.zip?sha=99a8cc3c249f515d834f947232e6e2de6e576307",
+                "reference": "99a8cc3c249f515d834f947232e6e2de6e576307",
                 "shasum": ""
             },
             "require": {
@@ -708,7 +708,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Beaver Builder enabled WordPress theme used for Hip client sites.",
-            "time": "2019-09-27T21:29:04+00:00"
+            "time": "2020-01-06T06:50:20+00:00"
         },
         {
             "name": "hipdevteam/hip-cta",
@@ -2242,7 +2242,7 @@
         },
         {
             "name": "wpackagist-plugin/redirection",
-            "version": "4.6.1",
+            "version": "4.6.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/redirection/",
@@ -2250,7 +2250,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/redirection.zip?timestamp=1577731089"
+                "url": "https://downloads.wordpress.org/plugin/redirection.zip?timestamp=1578293412"
             },
             "require": {
                 "composer/installers": "~1.0"
