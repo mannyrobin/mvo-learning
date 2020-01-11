@@ -273,7 +273,9 @@ var LayoutBlockEdit = function (_Component) {
 
 			setLaunching(true);
 			savePost().then(function () {
-				window.location.href = builder.access ? urls.edit : urls.view;
+				setTimeout(function () {
+					window.location.href = builder.access ? urls.edit : urls.view;
+				}, 2000);
 			});
 		}
 	}, {
@@ -489,7 +491,9 @@ var BuilderMoreMenuItem = function (_Component) {
 
 			setLaunching(true);
 			savePost().then(function () {
-				window.location.href = builder.access ? urls.edit : urls.view;
+				setTimeout(function () {
+					window.location.href = builder.access ? urls.edit : urls.view;
+				}, 2000);
 			});
 		}
 	}]);

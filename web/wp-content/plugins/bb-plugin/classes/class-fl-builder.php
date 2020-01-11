@@ -109,7 +109,9 @@ final class FLBuilder {
 	 */
 	static public function load_module_paths( $paths ) {
 
-		$enabled = array();
+		$enabled      = array();
+		$dependencies = self::_module_dependencies();
+		$protected    = array();
 
 		if ( is_admin() ) {
 			return $paths;
@@ -129,9 +131,21 @@ final class FLBuilder {
 			return $paths;
 		}
 
+		// setup reverse dependencies
 		foreach ( $paths as $k => $path ) {
 			$module = basename( $path );
-			if ( in_array( $module, $enabled_modules, true ) || 'woocommerce' === $module ) {
+			$deps   = isset( $dependencies[ $module ] ) ? $dependencies[ $module ] : array();
+			if ( count( $deps ) > 0 ) {
+				foreach ( $deps as $dep ) {
+					$protected[] = $dep;
+				}
+			}
+		}
+
+		foreach ( $paths as $k => $path ) {
+			$module = basename( $path );
+
+			if ( in_array( $module, $enabled_modules, true ) || in_array( $module, $protected, true ) ) {
 				$enabled[] = $path;
 			}
 		}
@@ -148,6 +162,54 @@ final class FLBuilder {
 		 * @see is_module_disable_enabled
 		 */
 		return apply_filters( 'is_module_disable_enabled', false );
+	}
+
+	/**
+	 * @since 2.3
+	 */
+	public static function _module_dependencies() {
+		$deps = array(
+			'post-carousel'  => array(
+				'post-grid',
+				'photo',
+			),
+			'post-gallery'   => array(
+				'post-grid',
+			),
+			'post-grid'      => array(
+				'button',
+			),
+			'post-slider'    => array(
+				'photo',
+			),
+			'subscribe-form' => array(
+				'button',
+			),
+			'callout'        => array(
+				'button',
+				'photo',
+				'icon',
+			),
+			'contact-form'   => array(
+				'button',
+			),
+			'content-slider' => array(
+				'button',
+			),
+			'cta'            => array(
+				'button',
+			),
+			'gallery'        => array(
+				'photo',
+			),
+			'icon-group'     => array(
+				'icon',
+			),
+			'pricing-table'  => array(
+				'button',
+			),
+		);
+		return apply_filters( 'fl_module_dependencies', $deps );
 	}
 
 
@@ -725,7 +787,9 @@ final class FLBuilder {
 			wp_enqueue_style( 'jquery-autosuggest', $css_url . 'jquery.autoSuggest.min.css', array(), $ver );
 			wp_enqueue_style( 'jquery-tiptip', $css_url . 'jquery.tiptip.css', array(), $ver );
 			wp_enqueue_style( 'bootstrap-tour', $css_url . 'bootstrap-tour-standalone.min.css', array(), $ver );
-			wp_enqueue_style( 'select2', $css_url . 'select2.min.css', array(), $ver );
+			if ( true === apply_filters( 'fl_select2_enabled', true ) ) {
+				wp_enqueue_style( 'select2', $css_url . 'select2.min.css', array(), $ver );
+			}
 
 			// Enqueue individual builder styles if WP_DEBUG is on.
 			if ( self::is_debug() ) {
@@ -791,7 +855,9 @@ final class FLBuilder {
 			wp_enqueue_script( 'ace', $js_url . 'ace/ace.js', array(), $ver );
 			wp_enqueue_script( 'ace-language-tools', $js_url . 'ace/ext-language_tools.js', array(), $ver );
 			wp_enqueue_script( 'mousetrap', $js_url . 'mousetrap-custom.js', array(), $ver );
-			wp_enqueue_script( 'select2', $js_url . 'select2.min.js', array(), $ver );
+			if ( true === apply_filters( 'fl_select2_enabled', true ) ) {
+				wp_enqueue_script( 'select2', $js_url . 'select2.min.js', array(), $ver );
+			}
 
 			// Enqueue individual builder scripts if WP_DEBUG is on.
 			if ( self::is_debug() ) {

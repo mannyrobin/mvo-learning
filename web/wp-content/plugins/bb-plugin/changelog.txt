@@ -1,3 +1,14 @@
+<h4>2.3.0.3 - 01/09/2020</h4>
+<strong>Hot Fix</strong>
+<ul>
+	<li>Fixed typography slider controls when using touch enabled devices.</li>
+	<li>Fixed fatal PHP error if using slideshow row background and slideshow module is disabled.</li>
+	<li>Fixed rare PHP error when determining template type. </li>
+	<li>Fixed Builder not opening issue when using Yoast and Block Editor.</li>
+	<li>Added dependency checks for disabled modules.</li>
+	<li>Added <code>fl_select2_enabled</code> filter to disable select2.</li>
+</ul>
+
 <h4>2.3.0.2 - 01/02/2020</h4>
 <strong>Hot Fix</strong>
 <ul>
