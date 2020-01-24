@@ -453,6 +453,13 @@ final class FL_Debug {
 				);
 				self::register( 'bb_sub_domain', $args );
 			}
+			if ( isset( $subscription->downloads ) && is_array( $subscription->downloads ) && ! empty( $subscription->downloads ) ) {
+				$args = array(
+					'name' => 'Available Downloads',
+					'data' => implode( "\n", $subscription->downloads ),
+				);
+				self::register( 'av_downloads', $args );
+			}
 		}
 
 		$args = array(

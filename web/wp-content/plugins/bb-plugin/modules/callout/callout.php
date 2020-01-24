@@ -201,6 +201,7 @@ class FLCalloutModule extends FLBuilderModule {
 	 */
 	public function get_icon_settings() {
 		$settings = array(
+			'id'              => $this->node,
 			'align'           => '',
 			'exclude_wrapper' => true,
 			'icon'            => $this->settings->icon,

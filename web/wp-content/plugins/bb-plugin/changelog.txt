@@ -1,3 +1,30 @@
+<h4>2.3.1.1 - 01/21/2020</h4>
+<strong>Hot Fix</strong>
+<ul>
+	<li>Fixed Icon Group spacing issue.</li>
+</ul>
+
+<h4>2.3.1 - 01/16/2020</h4>
+<strong>Enhancements</strong>
+<ul>
+	<li>Added responsive alignment controls to Icon Group.</li>
+	<li>Added available downloads to debug info.</li>
+	<li>Whe using Youtube video for row background, use fallback as start image then fade in when video loads.</li>
+	<li>Respect <code>fl_builder_render_admin_edit_ui</code> filter if using Block Editor.</li>
+</ul>
+<strong>Bug Fixes</strong>
+<ul>
+	<li>Fixed cache clearing on Kinsta.</li>
+	<li>Fixed Block Editor builder links broken in WP 5.0-5.2</li>
+	<li>Style hardening in Builder UI.</li>
+	<li>Fixed Font Awesome Pro multisite issue on subsites.</li>
+	<li>Added missing Node ID to the Callout Module's icon.</li>
+	<li>Fixed submenu toggle on mobile devices.</li>
+	<li>Fixed background-clip issue on row borders.</li>
+	<li>Fixed post slider thumbnails disappearing if you exclude a post.</li>
+	<li>Fixed safemode JS error FLBuilderLayout not defined.</li>
+</ul>
+
 <h4>2.3.0.3 - 01/09/2020</h4>
 <strong>Hot Fix</strong>
 <ul>

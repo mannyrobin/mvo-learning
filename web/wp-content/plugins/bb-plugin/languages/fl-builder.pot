@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bb-plugin\n"
 "Report-Msgid-Bugs-To: hello@wpbeaverbuilder.com\n"
-"POT-Creation-Date: 2020-01-09 19:10:11+00:00\n"
+"POT-Creation-Date: 2020-01-21 19:07:29+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -69,7 +69,7 @@ msgid "Icons"
 msgstr ""
 
 #: classes/class-fl-builder-admin-settings.php:237
-#: classes/class-fl-builder.php:1115
+#: classes/class-fl-builder.php:1119
 msgid "Tools"
 msgstr ""
 
@@ -164,7 +164,7 @@ msgstr ""
 msgid "Triangle"
 msgstr ""
 
-#: classes/class-fl-builder-art.php:75 modules/callout/callout.php:499
+#: classes/class-fl-builder-art.php:75 modules/callout/callout.php:500
 #: modules/content-slider/content-slider.php:445 modules/photo/photo.php:620
 #: modules/post-carousel/post-carousel.php:335
 #: modules/post-carousel/post-carousel.php:551
@@ -232,7 +232,7 @@ msgid "Shape"
 msgstr ""
 
 #: classes/class-fl-builder-art.php:378 includes/ui-field-typography.php:202
-#: modules/callout/callout.php:656 modules/icon/icon.php:113
+#: modules/callout/callout.php:657 modules/icon/icon.php:113
 #: modules/icon-group/icon-group.php:52
 #: modules/post-carousel/post-carousel.php:322
 #: modules/post-slider/post-slider.php:527
@@ -241,7 +241,7 @@ msgstr ""
 
 #: classes/class-fl-builder-art.php:439 includes/column-settings.php:14
 #: includes/row-settings.php:17 includes/ui-field-border.php:134
-#: modules/button/button.php:314 modules/callout/callout.php:504
+#: modules/button/button.php:314 modules/callout/callout.php:505
 #: modules/content-slider/content-slider.php:647 modules/photo/photo.php:625
 #: modules/separator/separator.php:101
 msgid "Width"
@@ -259,7 +259,7 @@ msgid "Y Offset"
 msgstr ""
 
 #: classes/class-fl-builder-art.php:452 includes/ui-field-typography.php:218
-#: modules/button/button.php:355 modules/callout/callout.php:527
+#: modules/button/button.php:355 modules/callout/callout.php:528
 #: modules/photo/photo.php:648 modules/separator/separator.php:125
 msgid "Align"
 msgstr ""
@@ -319,10 +319,10 @@ msgstr ""
 #: classes/class-fl-builder-art.php:510 includes/column-settings.php:86
 #: includes/column-settings.php:161 includes/column-settings.php:280
 #: includes/row-settings.php:621 includes/row-settings.php:662
-#: includes/ui-field-border.php:126 modules/callout/callout.php:603
+#: includes/ui-field-border.php:126 modules/callout/callout.php:604
 #: modules/content-slider/content-slider.php:497
 #: modules/heading/heading.php:198 modules/icon/icon.php:142
-#: modules/icon-group/icon-group.php:89 modules/icon-group/icon-group.php:199
+#: modules/icon-group/icon-group.php:92 modules/icon-group/icon-group.php:202
 #: modules/rich-text/rich-text.php:56 modules/separator/separator.php:73
 msgid "Color"
 msgstr ""
@@ -330,10 +330,10 @@ msgstr ""
 #: classes/class-fl-builder-art.php:523 includes/column-settings.php:175
 #: includes/column-settings.php:281 includes/row-settings.php:622
 #: includes/row-settings.php:677 modules/button/button.php:482
-#: modules/callout/callout.php:642 modules/callout/callout.php:938
+#: modules/callout/callout.php:643 modules/callout/callout.php:939
 #: modules/contact-form/contact-form.php:672
 #: modules/content-slider/content-slider.php:902 modules/cta/cta.php:491
-#: modules/icon/icon.php:210 modules/icon-group/icon-group.php:131
+#: modules/icon/icon.php:210 modules/icon-group/icon-group.php:134
 #: modules/post-grid/post-grid.php:1413
 #: modules/pricing-table/pricing-table.php:449
 #: modules/subscribe-form/subscribe-form.php:536
@@ -360,11 +360,11 @@ msgstr ""
 msgid "Clip Contents"
 msgstr ""
 
-#: classes/class-fl-builder-compatibility.php:537
+#: classes/class-fl-builder-compatibility.php:545
 msgid "SAFEMODE"
 msgstr ""
 
-#: classes/class-fl-builder-compatibility.php:537
+#: classes/class-fl-builder-compatibility.php:545
 msgid "module"
 msgstr ""
 
@@ -729,13 +729,13 @@ msgstr ""
 #: extensions/fl-builder-user-templates/includes/user-template-settings.php:7
 #: includes/global-settings.php:7 includes/ui-field-border.php:115
 #: modules/accordion/accordion.php:320 modules/audio/audio.php:73
-#: modules/button/button.php:177 modules/callout/callout.php:280
+#: modules/button/button.php:177 modules/callout/callout.php:281
 #: modules/contact-form/contact-form.php:293
 #: modules/content-slider/content-slider.php:474
 #: modules/countdown/countdown.php:96 modules/cta/cta.php:134
 #: modules/gallery/gallery.php:221 modules/heading/heading.php:145
 #: modules/html/html.php:27 modules/icon/icon.php:65
-#: modules/icon-group/icon-group.php:151 modules/map/map.php:27
+#: modules/icon-group/icon-group.php:154 modules/map/map.php:27
 #: modules/menu/menu.php:275 modules/numbers/numbers.php:98
 #: modules/photo/photo.php:469 modules/pricing-table/pricing-table.php:205
 #: modules/rich-text/rich-text.php:27 modules/separator/separator.php:65
@@ -1890,11 +1890,11 @@ msgid ""
 "within the builder."
 msgstr ""
 
-#: classes/class-fl-builder-wp-blocks.php:88
+#: classes/class-fl-builder-wp-blocks.php:90
 msgid "Use Standard Editor"
 msgstr ""
 
-#: classes/class-fl-builder-wp-blocks.php:94
+#: classes/class-fl-builder-wp-blocks.php:96
 msgid ""
 "Switching to the native WordPress editor will disable your Beaver Builder "
 "layout until it is enabled again. Any edits made in the WordPress editor "
@@ -1964,105 +1964,105 @@ msgstr ""
 msgid "Unable to find Themer, is it installed and activated?"
 msgstr ""
 
-#: classes/class-fl-builder.php:1107
+#: classes/class-fl-builder.php:1111
 msgid "Unnamed Menu"
 msgstr ""
 
-#: classes/class-fl-builder.php:1122
+#: classes/class-fl-builder.php:1126
 msgid "Publish Layout"
 msgstr ""
 
-#: classes/class-fl-builder.php:1134
+#: classes/class-fl-builder.php:1138
 #: extensions/fl-builder-user-templates/includes/user-template-settings.php:4
 #: includes/ui-js-config.php:171
 msgid "Save Template"
 msgstr ""
 
-#: classes/class-fl-builder.php:1142
+#: classes/class-fl-builder.php:1146
 msgid "Duplicate Layout"
 msgstr ""
 
-#: classes/class-fl-builder.php:1148
+#: classes/class-fl-builder.php:1152
 msgid "Preview Layout"
 msgstr ""
 
-#: classes/class-fl-builder.php:1155 includes/ui-js-templates.php:316
+#: classes/class-fl-builder.php:1159 includes/ui-js-templates.php:316
 msgid "Responsive Editing"
 msgstr ""
 
-#: classes/class-fl-builder.php:1166
+#: classes/class-fl-builder.php:1170
 msgid "Layout CSS & Javascript"
 msgstr ""
 
-#: classes/class-fl-builder.php:1173 includes/global-settings.php:4
+#: classes/class-fl-builder.php:1177 includes/global-settings.php:4
 #: includes/ui-js-config.php:116
 msgid "Global Settings"
 msgstr ""
 
-#: classes/class-fl-builder.php:1184
+#: classes/class-fl-builder.php:1188
 msgid "Change UI Brightness"
 msgstr ""
 
-#: classes/class-fl-builder.php:1191 classes/class-fl-builder.php:1214
+#: classes/class-fl-builder.php:1195 classes/class-fl-builder.php:1218
 msgid "WordPress Admin"
 msgstr ""
 
-#: classes/class-fl-builder.php:1198 classes/class-fl-builder.php:1268
+#: classes/class-fl-builder.php:1202 classes/class-fl-builder.php:1272
 msgid "Help"
 msgstr ""
 
-#: classes/class-fl-builder.php:1205
+#: classes/class-fl-builder.php:1209
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: classes/class-fl-builder.php:1243 includes/ui-js-config.php:130
+#: classes/class-fl-builder.php:1247 includes/ui-js-config.php:130
 msgid "Manage Templates"
 msgstr ""
 
-#: classes/class-fl-builder.php:1257
+#: classes/class-fl-builder.php:1261
 msgid "Customize Theme"
 msgstr ""
 
-#: classes/class-fl-builder.php:1287
+#: classes/class-fl-builder.php:1291
 msgid "Take A Tour"
 msgstr ""
 
-#: classes/class-fl-builder.php:1295
+#: classes/class-fl-builder.php:1299
 msgid "View Knowledge Base"
 msgstr ""
 
-#: classes/class-fl-builder.php:1303
+#: classes/class-fl-builder.php:1307
 #: extensions/fl-builder-white-label/includes/admin-settings-help-button.php:59
 #: includes/ui-js-config.php:212
 msgid "Contact Support"
 msgstr ""
 
-#: classes/class-fl-builder.php:1504
+#: classes/class-fl-builder.php:1508
 msgid "Dev Feedback"
 msgstr ""
 
-#: classes/class-fl-builder.php:1510
+#: classes/class-fl-builder.php:1514
 msgid "Alpha Feedback"
 msgstr ""
 
-#: classes/class-fl-builder.php:1513
+#: classes/class-fl-builder.php:1517
 msgid "Beta Feedback"
 msgstr ""
 
-#: classes/class-fl-builder.php:1529
+#: classes/class-fl-builder.php:1533
 msgid "Upgrade Today"
 msgstr ""
 
-#: classes/class-fl-builder.php:1533
+#: classes/class-fl-builder.php:1537
 msgid "Buy Now"
 msgstr ""
 
-#: classes/class-fl-builder.php:1537 includes/ui-js-config.php:110
+#: classes/class-fl-builder.php:1541 includes/ui-js-config.php:110
 #: includes/ui-js-templates.php:306
 msgid "Done"
 msgstr ""
 
-#: classes/class-fl-builder.php:3621
+#: classes/class-fl-builder.php:3626
 #. translators: %s: extension type
 msgid "The uploaded file is not a valid %s extension."
 msgstr ""
@@ -2119,7 +2119,7 @@ msgid "Edit Template"
 msgstr ""
 
 #: extensions/fl-builder-core-templates-admin/includes/admin-core-templates-edit.php:12
-#: modules/callout/callout.php:438 modules/post-carousel/post-carousel.php:308
+#: modules/callout/callout.php:439 modules/post-carousel/post-carousel.php:308
 #: modules/post-grid/post-grid.php:718 modules/post-slider/post-slider.php:510
 msgid "Image"
 msgstr ""
@@ -2127,7 +2127,7 @@ msgstr ""
 #: extensions/fl-builder-core-templates-admin/includes/admin-core-templates-edit.php:16
 #: extensions/fl-builder-core-templates-admin/includes/core-template-settings.php:23
 #: includes/column-settings.php:218 includes/row-settings.php:288
-#: modules/callout/callout.php:475 modules/callout/callout.php:558
+#: modules/callout/callout.php:476 modules/callout/callout.php:559
 #: modules/content-slider/content-slider.php:636
 #: modules/post-slider/post-slider.php:683
 #: modules/post-slider/post-slider.php:702
@@ -2149,7 +2149,7 @@ msgstr ""
 #: modules/audio/audio.php:193 modules/bigcommerce/bigcommerce.php:55
 #: modules/bigcommerce/bigcommerce.php:88
 #: modules/bigcommerce/bigcommerce.php:97
-#: modules/bigcommerce/bigcommerce.php:106 modules/callout/callout.php:645
+#: modules/bigcommerce/bigcommerce.php:106 modules/callout/callout.php:646
 #: modules/content-slider/content-slider.php:295
 #: modules/content-slider/content-slider.php:309
 #: modules/content-slider/content-slider.php:318
@@ -2159,7 +2159,7 @@ msgstr ""
 #: modules/content-slider/content-slider.php:390
 #: modules/content-slider/content-slider.php:685
 #: modules/countdown/countdown.php:343 modules/icon/icon.php:213
-#: modules/icon-group/icon-group.php:134 modules/menu/menu.php:328
+#: modules/icon-group/icon-group.php:137 modules/menu/menu.php:328
 #: modules/menu/menu.php:547 modules/menu/menu.php:592
 #: modules/photo/photo.php:516 modules/post-carousel/post-carousel.php:170
 #: modules/post-carousel/post-carousel.php:179
@@ -2208,7 +2208,7 @@ msgstr ""
 #: modules/audio/audio.php:194 modules/bigcommerce/bigcommerce.php:56
 #: modules/bigcommerce/bigcommerce.php:89
 #: modules/bigcommerce/bigcommerce.php:98
-#: modules/bigcommerce/bigcommerce.php:107 modules/callout/callout.php:646
+#: modules/bigcommerce/bigcommerce.php:107 modules/callout/callout.php:647
 #: modules/content-slider/content-slider.php:296
 #: modules/content-slider/content-slider.php:310
 #: modules/content-slider/content-slider.php:319
@@ -2218,7 +2218,7 @@ msgstr ""
 #: modules/content-slider/content-slider.php:391
 #: modules/content-slider/content-slider.php:686
 #: modules/countdown/countdown.php:344 modules/icon/icon.php:214
-#: modules/icon-group/icon-group.php:135 modules/menu/menu.php:327
+#: modules/icon-group/icon-group.php:138 modules/menu/menu.php:327
 #: modules/menu/menu.php:548 modules/menu/menu.php:593
 #: modules/photo/photo.php:517 modules/post-carousel/post-carousel.php:171
 #: modules/post-carousel/post-carousel.php:180
@@ -2268,7 +2268,7 @@ msgstr ""
 #: extensions/fl-builder-core-templates-admin/includes/admin-core-templates.php:6
 #: extensions/fl-builder-user-templates/includes/admin-add-new-form.php:22
 #: includes/column-settings.php:130 includes/row-settings.php:176
-#: modules/callout/callout.php:693
+#: modules/callout/callout.php:694
 #: modules/content-slider/content-slider.php:491
 #: modules/content-slider/content-slider.php:541
 #: modules/content-slider/content-slider.php:731
@@ -3184,13 +3184,13 @@ msgstr ""
 #: includes/column-settings.php:7 includes/row-settings.php:10
 #: includes/ui-field-border.php:120 includes/ui-field-typography.php:260
 #: modules/accordion/accordion.php:98 modules/audio/audio.php:146
-#: modules/button/button.php:307 modules/callout/callout.php:328
+#: modules/button/button.php:307 modules/callout/callout.php:329
 #: modules/content-slider/content-slider.php:399
 #: modules/content-slider/content-slider.php:590
 #: modules/countdown/countdown.php:156 modules/cta/cta.php:184
 #: modules/gallery/gallery.php:317 modules/heading/heading.php:188
 #: modules/icon/icon.php:106 modules/icon-group/icon-group.php:45
-#: modules/icon-group/icon-group.php:171 modules/menu/menu.php:425
+#: modules/icon-group/icon-group.php:174 modules/menu/menu.php:425
 #: modules/numbers/numbers.php:224 modules/photo/photo.php:605
 #: modules/post-carousel/post-carousel.php:455
 #: modules/post-grid/post-grid.php:964 modules/post-slider/post-slider.php:630
@@ -3221,8 +3221,8 @@ msgid "Vertical Alignment"
 msgstr ""
 
 #: includes/column-settings.php:81 modules/button/button.php:184
-#: modules/button/button.php:379 modules/callout/callout.php:310
-#: modules/callout/callout.php:410 modules/callout/callout.php:714
+#: modules/button/button.php:379 modules/callout/callout.php:311
+#: modules/callout/callout.php:411 modules/callout/callout.php:715
 #: modules/content-slider/content-slider.php:545
 #: modules/content-slider/content-slider.php:751 modules/cta/cta.php:165
 #: modules/cta/cta.php:287 modules/icon/icon.php:88 modules/icon/icon.php:220
@@ -3232,21 +3232,21 @@ msgid "Text"
 msgstr ""
 
 #: includes/column-settings.php:96 includes/row-settings.php:142
-#: modules/callout/callout.php:730 modules/menu/menu.php:463
+#: modules/callout/callout.php:731 modules/menu/menu.php:463
 #: modules/post-carousel/post-carousel.php:475
 #: modules/post-grid/post-grid.php:1074 modules/post-slider/post-slider.php:757
 msgid "Link Color"
 msgstr ""
 
 #: includes/column-settings.php:106 includes/row-settings.php:152
-#: modules/callout/callout.php:744 modules/menu/menu.php:483
+#: modules/callout/callout.php:745 modules/menu/menu.php:483
 #: modules/post-carousel/post-carousel.php:487
 #: modules/post-grid/post-grid.php:1086 modules/post-slider/post-slider.php:775
 msgid "Link Hover Color"
 msgstr ""
 
 #: includes/column-settings.php:116 includes/row-settings.php:162
-#: modules/callout/callout.php:389 modules/cta/cta.php:264
+#: modules/callout/callout.php:390 modules/cta/cta.php:264
 msgid "Heading Color"
 msgstr ""
 
@@ -3257,11 +3257,11 @@ msgstr ""
 
 #: includes/column-settings.php:156 includes/row-settings.php:658
 #: modules/accordion/accordion.php:169 modules/accordion/accordion.php:272
-#: modules/button/button.php:457 modules/callout/callout.php:336
-#: modules/callout/callout.php:626
+#: modules/button/button.php:457 modules/callout/callout.php:337
+#: modules/callout/callout.php:627
 #: modules/content-slider/content-slider.php:525 modules/cta/cta.php:209
-#: modules/icon/icon.php:194 modules/icon-group/icon-group.php:115
-#: modules/icon-group/icon-group.php:216 modules/tabs/tabs.php:66
+#: modules/icon/icon.php:194 modules/icon-group/icon-group.php:118
+#: modules/icon-group/icon-group.php:219 modules/tabs/tabs.php:66
 msgid "Background Color"
 msgstr ""
 
@@ -3275,8 +3275,8 @@ msgid "Background Photo"
 msgstr ""
 
 #: includes/column-settings.php:190 includes/row-settings.php:260
-#: includes/row-settings.php:591 modules/callout/callout.php:449
-#: modules/callout/callout.php:465 modules/callout/callout.php:470
+#: includes/row-settings.php:591 modules/callout/callout.php:450
+#: modules/callout/callout.php:466 modules/callout/callout.php:471
 #: modules/content-slider/content-slider.php:495
 #: modules/content-slider/content-slider.php:568
 #: modules/content-slider/content-slider.php:972 modules/photo/photo.php:24
@@ -3374,7 +3374,7 @@ msgstr ""
 #: includes/column-settings.php:316 includes/column-settings.php:320
 #: includes/row-settings.php:687 includes/row-settings.php:691
 #: modules/button/button.php:500 modules/button/button.php:504
-#: modules/callout/callout.php:348 modules/callout/callout.php:539
+#: modules/callout/callout.php:349 modules/callout/callout.php:540
 #: modules/cta/cta.php:221 modules/map/map.php:70 modules/photo/photo.php:660
 #: modules/post-grid/post-grid.php:993
 msgid "Border"
@@ -3397,7 +3397,7 @@ msgstr ""
 #: includes/column-settings.php:365 includes/global-settings.php:58
 #: includes/global-settings.php:135 includes/row-settings.php:738
 #: modules/accordion/accordion.php:180 modules/accordion/accordion.php:283
-#: modules/button/button.php:366 modules/callout/callout.php:366
+#: modules/button/button.php:366 modules/callout/callout.php:367
 #: modules/content-slider/content-slider.php:664 modules/cta/cta.php:241
 #: modules/tabs/tabs.php:134 modules/tabs/tabs.php:177
 msgid "Padding"
@@ -3587,7 +3587,7 @@ msgstr ""
 
 #: includes/global-settings.php:94 includes/global-settings.php:108
 #: includes/row-settings.php:21 includes/row-settings.php:39
-#: modules/button/button.php:318 modules/callout/callout.php:832
+#: modules/button/button.php:318 modules/callout/callout.php:833
 #: modules/contact-form/contact-form.php:566
 #: modules/post-grid/post-grid.php:1323
 #: modules/pricing-table/pricing-table.php:343
@@ -3748,7 +3748,7 @@ msgid ""
 "are at least as tall as the value entered."
 msgstr ""
 
-#: includes/row-settings.php:127 modules/icon-group/icon-group.php:174
+#: includes/row-settings.php:127 modules/icon-group/icon-group.php:177
 #: modules/post-carousel/post-carousel.php:458
 #: modules/post-slider/post-slider.php:735
 msgid "Colors"
@@ -3756,7 +3756,7 @@ msgstr ""
 
 #: includes/row-settings.php:132 modules/accordion/accordion.php:157
 #: modules/accordion/accordion.php:260 modules/button/button.php:384
-#: modules/callout/callout.php:415
+#: modules/callout/callout.php:416
 #: modules/content-slider/content-slider.php:675
 #: modules/content-slider/content-slider.php:982
 #: modules/countdown/countdown.php:200 modules/cta/cta.php:292
@@ -5040,35 +5040,35 @@ msgstr ""
 msgid "You submitted an invalid license. Non alphanumeric characters found."
 msgstr ""
 
-#: includes/updater/classes/class-fl-updater.php:370
+#: includes/updater/classes/class-fl-updater.php:371
 msgid "Please enter a valid license key to enable automatic updates."
 msgstr ""
 
-#: includes/updater/classes/class-fl-updater.php:373
+#: includes/updater/classes/class-fl-updater.php:374
 msgid "Please subscribe to enable automatic updates for this plugin."
 msgstr ""
 
-#: includes/updater/classes/class-fl-updater.php:378
+#: includes/updater/classes/class-fl-updater.php:379
 #: includes/updater/includes/form.php:72
 msgid "Enter License Key"
 msgstr ""
 
-#: includes/updater/classes/class-fl-updater.php:380
+#: includes/updater/classes/class-fl-updater.php:381
 #. translators: %s: link to license tab
 msgid "Please enter a valid license key to enable automatic updates. %s"
 msgstr ""
 
-#: includes/updater/classes/class-fl-updater.php:395
+#: includes/updater/classes/class-fl-updater.php:396
 #: includes/updater/includes/form.php:15
 msgid "Subscribe Now"
 msgstr ""
 
-#: includes/updater/classes/class-fl-updater.php:397
+#: includes/updater/classes/class-fl-updater.php:398
 #. translators: %s: subscribe link
 msgid "Please subscribe to enable automatic updates for this plugin. %s"
 msgstr ""
 
-#: includes/updater/classes/class-fl-updater.php:401
+#: includes/updater/classes/class-fl-updater.php:402
 msgid "<strong>UPDATE UNAVAILABLE!</strong>"
 msgstr ""
 
@@ -5195,11 +5195,11 @@ msgstr ""
 
 #: modules/accordion/accordion.php:207 modules/accordion/accordion.php:220
 #: modules/button/button.php:194 modules/button/button.php:421
-#: modules/callout/callout.php:450 modules/callout/callout.php:549
-#: modules/callout/callout.php:553 modules/icon/icon.php:13
+#: modules/callout/callout.php:451 modules/callout/callout.php:550
+#: modules/callout/callout.php:554 modules/icon/icon.php:13
 #: modules/icon/icon.php:72 modules/icon/icon.php:109
 #: modules/icon-group/icon-group.php:35 modules/icon-group/icon-group.php:48
-#: modules/icon-group/icon-group.php:158
+#: modules/icon-group/icon-group.php:161
 msgid "Icon"
 msgstr ""
 
@@ -5254,14 +5254,14 @@ msgstr ""
 
 #: modules/audio/audio.php:84 modules/audio/audio.php:109
 #: modules/button/button.php:232 modules/button/button.php:249
-#: modules/callout/callout.php:670 modules/callout/callout.php:677
-#: modules/callout/callout.php:697
+#: modules/callout/callout.php:671 modules/callout/callout.php:678
+#: modules/callout/callout.php:698
 #: modules/content-slider/content-slider.php:712
 #: modules/content-slider/content-slider.php:715
 #: modules/content-slider/content-slider.php:719
 #: modules/content-slider/content-slider.php:735
 #: modules/heading/heading.php:175 modules/icon/icon.php:80
-#: modules/icon-group/icon-group.php:162 modules/photo/photo.php:565
+#: modules/icon-group/icon-group.php:165 modules/photo/photo.php:565
 #: modules/slideshow/slideshow.php:343
 msgid "Link"
 msgstr ""
@@ -5341,7 +5341,7 @@ msgstr ""
 msgid "Show only recent products?"
 msgstr ""
 
-#: modules/button/button.php:13 modules/callout/callout.php:698
+#: modules/button/button.php:13 modules/callout/callout.php:699
 #: modules/contact-form/contact-form.php:484
 #: modules/content-slider/content-slider.php:736 modules/cta/cta.php:317
 #: modules/pricing-table/pricing-table.php:258
@@ -5357,7 +5357,7 @@ msgstr ""
 msgid "Click Here"
 msgstr ""
 
-#: modules/button/button.php:208 modules/callout/callout.php:808
+#: modules/button/button.php:208 modules/callout/callout.php:809
 #: modules/contact-form/contact-form.php:542
 #: modules/content-slider/content-slider.php:797 modules/cta/cta.php:386
 #: modules/post-grid/post-grid.php:1299
@@ -5366,7 +5366,7 @@ msgstr ""
 msgid "Before Text"
 msgstr ""
 
-#: modules/button/button.php:209 modules/callout/callout.php:809
+#: modules/button/button.php:209 modules/callout/callout.php:810
 #: modules/contact-form/contact-form.php:543
 #: modules/content-slider/content-slider.php:798 modules/cta/cta.php:387
 #: modules/post-grid/post-grid.php:1300
@@ -5379,7 +5379,7 @@ msgstr ""
 msgid "Icon Visibility"
 msgstr ""
 
-#: modules/button/button.php:220 modules/callout/callout.php:817
+#: modules/button/button.php:220 modules/callout/callout.php:818
 #: modules/contact-form/contact-form.php:551
 #: modules/content-slider/content-slider.php:806 modules/cta/cta.php:395
 #: modules/post-grid/post-grid.php:1308
@@ -5388,7 +5388,7 @@ msgstr ""
 msgid "Always Visible"
 msgstr ""
 
-#: modules/button/button.php:221 modules/callout/callout.php:818
+#: modules/button/button.php:221 modules/callout/callout.php:819
 #: modules/contact-form/contact-form.php:552
 #: modules/content-slider/content-slider.php:807 modules/cta/cta.php:396
 #: modules/post-grid/post-grid.php:1309
@@ -5446,9 +5446,9 @@ msgstr ""
 msgid "Text Hover Color"
 msgstr ""
 
-#: modules/button/button.php:468 modules/callout/callout.php:633
-#: modules/icon/icon.php:201 modules/icon-group/icon-group.php:122
-#: modules/icon-group/icon-group.php:223
+#: modules/button/button.php:468 modules/callout/callout.php:634
+#: modules/icon/icon.php:201 modules/icon-group/icon-group.php:125
+#: modules/icon-group/icon-group.php:226
 msgid "Background Hover Color"
 msgstr ""
 
@@ -5456,7 +5456,7 @@ msgstr ""
 msgid "Background Style"
 msgstr ""
 
-#: modules/button/button.php:481 modules/callout/callout.php:937
+#: modules/button/button.php:481 modules/callout/callout.php:938
 #: modules/contact-form/contact-form.php:671
 #: modules/content-slider/content-slider.php:901 modules/cta/cta.php:490
 #: modules/post-grid/post-grid.php:1412
@@ -5469,7 +5469,7 @@ msgstr ""
 msgid "Background Animation"
 msgstr ""
 
-#: modules/button/button.php:490 modules/callout/callout.php:946
+#: modules/button/button.php:490 modules/callout/callout.php:947
 #: modules/contact-form/contact-form.php:680
 #: modules/content-slider/content-slider.php:910 modules/cta/cta.php:499
 #: modules/post-grid/post-grid.php:1421
@@ -5478,7 +5478,7 @@ msgstr ""
 msgid "Disabled"
 msgstr ""
 
-#: modules/button/button.php:491 modules/callout/callout.php:947
+#: modules/button/button.php:491 modules/callout/callout.php:948
 #: modules/contact-form/contact-form.php:681
 #: modules/content-slider/content-slider.php:911 modules/cta/cta.php:500
 #: modules/post-grid/post-grid.php:1422
@@ -5499,7 +5499,7 @@ msgstr ""
 msgid "A heading and snippet of text with an optional link, icon and image."
 msgstr ""
 
-#: modules/callout/callout.php:287 modules/callout/callout.php:384
+#: modules/callout/callout.php:288 modules/callout/callout.php:385
 #: modules/content-slider/content-slider.php:577
 #: modules/content-slider/content-slider.php:593 modules/cta/cta.php:141
 #: modules/cta/cta.php:259 modules/heading/heading.php:14
@@ -5509,80 +5509,80 @@ msgstr ""
 msgid "Heading"
 msgstr ""
 
-#: modules/callout/callout.php:296
+#: modules/callout/callout.php:297
 #: modules/content-slider/content-slider.php:597 modules/cta/cta.php:151
 #: modules/post-slider/post-slider.php:637
 msgid "Heading Tag"
 msgstr ""
 
-#: modules/callout/callout.php:357 modules/cta/cta.php:230
+#: modules/callout/callout.php:358 modules/cta/cta.php:230
 #: modules/icon/icon.php:125 modules/icon-group/icon-group.php:75
 #: modules/social-buttons/social-buttons.php:94
 msgid "Alignment"
 msgstr ""
 
-#: modules/callout/callout.php:359
+#: modules/callout/callout.php:360
 msgid "The alignment that will apply to all elements within the callout."
 msgstr ""
 
-#: modules/callout/callout.php:400 modules/cta/cta.php:276
+#: modules/callout/callout.php:401 modules/cta/cta.php:276
 msgid "Heading Typography"
 msgstr ""
 
-#: modules/callout/callout.php:426 modules/cta/cta.php:305
+#: modules/callout/callout.php:427 modules/cta/cta.php:305
 #: modules/icon/icon.php:249 modules/testimonials/testimonials.php:185
 msgid "Text Typography"
 msgstr ""
 
-#: modules/callout/callout.php:445
+#: modules/callout/callout.php:446
 msgid "Image Type"
 msgstr ""
 
-#: modules/callout/callout.php:478 modules/callout/callout.php:561
+#: modules/callout/callout.php:479 modules/callout/callout.php:562
 msgid "Above Heading"
 msgstr ""
 
-#: modules/callout/callout.php:479 modules/callout/callout.php:562
+#: modules/callout/callout.php:480 modules/callout/callout.php:563
 msgid "Below Heading"
 msgstr ""
 
-#: modules/callout/callout.php:480 modules/callout/callout.php:565
+#: modules/callout/callout.php:481 modules/callout/callout.php:566
 msgid "Left of Text and Heading"
 msgstr ""
 
-#: modules/callout/callout.php:481 modules/callout/callout.php:566
+#: modules/callout/callout.php:482 modules/callout/callout.php:567
 msgid "Right of Text and Heading"
 msgstr ""
 
-#: modules/callout/callout.php:487
+#: modules/callout/callout.php:488
 msgid "Photo Style"
 msgstr ""
 
-#: modules/callout/callout.php:491 modules/photo/photo.php:612
+#: modules/callout/callout.php:492 modules/photo/photo.php:612
 #: modules/post-carousel/post-carousel.php:327
 #: modules/post-slider/post-slider.php:532 modules/slideshow/slideshow.php:312
 msgid "Crop"
 msgstr ""
 
-#: modules/callout/callout.php:495 modules/photo/photo.php:616
+#: modules/callout/callout.php:496 modules/photo/photo.php:616
 #: modules/post-carousel/post-carousel.php:331
 #: modules/post-slider/post-slider.php:536
 msgid "Landscape"
 msgstr ""
 
-#: modules/callout/callout.php:496 modules/photo/photo.php:617
+#: modules/callout/callout.php:497 modules/photo/photo.php:617
 #: modules/post-carousel/post-carousel.php:332
 #: modules/post-slider/post-slider.php:537
 msgid "Panorama"
 msgstr ""
 
-#: modules/callout/callout.php:497 modules/photo/photo.php:618
+#: modules/callout/callout.php:498 modules/photo/photo.php:618
 #: modules/post-carousel/post-carousel.php:333
 #: modules/post-slider/post-slider.php:538
 msgid "Portrait"
 msgstr ""
 
-#: modules/callout/callout.php:498
+#: modules/callout/callout.php:499
 #: modules/content-slider/content-slider.php:446 modules/photo/photo.php:619
 #: modules/post-carousel/post-carousel.php:334
 #: modules/post-carousel/post-carousel.php:552
@@ -5591,71 +5591,71 @@ msgstr ""
 msgid "Square"
 msgstr ""
 
-#: modules/callout/callout.php:563
+#: modules/callout/callout.php:564
 msgid "Left of Heading"
 msgstr ""
 
-#: modules/callout/callout.php:564
+#: modules/callout/callout.php:565
 msgid "Right of Heading"
 msgstr ""
 
-#: modules/callout/callout.php:572 modules/icon/icon.php:137
-#: modules/icon-group/icon-group.php:84
+#: modules/callout/callout.php:573 modules/icon/icon.php:137
+#: modules/icon-group/icon-group.php:87
 msgid "Icon Colors"
 msgstr ""
 
-#: modules/callout/callout.php:575 modules/callout/callout.php:778
+#: modules/callout/callout.php:576 modules/callout/callout.php:779
 #: modules/contact-form/contact-form.php:512
 #: modules/content-slider/content-slider.php:767 modules/cta/cta.php:356
-#: modules/icon-group/icon-group.php:177
+#: modules/icon-group/icon-group.php:180
 #: modules/pricing-table/pricing-table.php:289
 #: modules/subscribe-form/subscribe-form.php:401
 msgid "DuoTone Primary Color"
 msgstr ""
 
-#: modules/callout/callout.php:588 modules/callout/callout.php:791
+#: modules/callout/callout.php:589 modules/callout/callout.php:792
 #: modules/contact-form/contact-form.php:525
 #: modules/content-slider/content-slider.php:780 modules/cta/cta.php:369
-#: modules/icon-group/icon-group.php:187
+#: modules/icon-group/icon-group.php:190
 #: modules/pricing-table/pricing-table.php:302
 #: modules/subscribe-form/subscribe-form.php:414
 msgid "DuoTone Secondary Color"
 msgstr ""
 
-#: modules/callout/callout.php:616 modules/icon/icon.php:155
-#: modules/icon-group/icon-group.php:102 modules/icon-group/icon-group.php:206
+#: modules/callout/callout.php:617 modules/icon/icon.php:155
+#: modules/icon-group/icon-group.php:105 modules/icon-group/icon-group.php:209
 msgid "Hover Color"
 msgstr ""
 
-#: modules/callout/callout.php:652
+#: modules/callout/callout.php:653
 msgid "Icon Structure"
 msgstr ""
 
-#: modules/callout/callout.php:678
+#: modules/callout/callout.php:679
 msgid ""
 "The link applies to the entire module. If choosing a call to action type "
 "below, this link will also be used for the text or button."
 msgstr ""
 
-#: modules/callout/callout.php:689
+#: modules/callout/callout.php:690
 #: modules/content-slider/content-slider.php:727 modules/cta/cta.php:13
 msgid "Call to Action"
 msgstr ""
 
-#: modules/callout/callout.php:715 modules/post-carousel/post-carousel.php:448
+#: modules/callout/callout.php:716 modules/post-carousel/post-carousel.php:448
 #: modules/post-grid/post-grid.php:957 modules/post-slider/post-slider.php:622
 msgid "Read More"
 msgstr ""
 
-#: modules/callout/callout.php:725
+#: modules/callout/callout.php:726
 msgid "Link Text"
 msgstr ""
 
-#: modules/callout/callout.php:757 modules/menu/menu.php:518
+#: modules/callout/callout.php:758 modules/menu/menu.php:518
 msgid "Link Typography"
 msgstr ""
 
-#: modules/callout/callout.php:767 modules/callout/callout.php:771
+#: modules/callout/callout.php:768 modules/callout/callout.php:772
 #: modules/contact-form/contact-form.php:501
 #: modules/contact-form/contact-form.php:505
 #: modules/content-slider/content-slider.php:756
@@ -5669,7 +5669,7 @@ msgstr ""
 msgid "Button Icon"
 msgstr ""
 
-#: modules/callout/callout.php:805 modules/contact-form/contact-form.php:539
+#: modules/callout/callout.php:806 modules/contact-form/contact-form.php:539
 #: modules/content-slider/content-slider.php:794 modules/cta/cta.php:383
 #: modules/post-grid/post-grid.php:1296
 #: modules/pricing-table/pricing-table.php:316
@@ -5677,7 +5677,7 @@ msgstr ""
 msgid "Button Icon Position"
 msgstr ""
 
-#: modules/callout/callout.php:814 modules/contact-form/contact-form.php:548
+#: modules/callout/callout.php:815 modules/contact-form/contact-form.php:548
 #: modules/content-slider/content-slider.php:803 modules/cta/cta.php:392
 #: modules/post-grid/post-grid.php:1305
 #: modules/pricing-table/pricing-table.php:325
@@ -5685,7 +5685,7 @@ msgstr ""
 msgid "Button Icon Visibility"
 msgstr ""
 
-#: modules/callout/callout.php:824 modules/contact-form/contact-form.php:558
+#: modules/callout/callout.php:825 modules/contact-form/contact-form.php:558
 #: modules/content-slider/content-slider.php:813 modules/cta/cta.php:402
 #: modules/post-grid/post-grid.php:1315
 #: modules/pricing-table/pricing-table.php:335
@@ -5693,18 +5693,18 @@ msgstr ""
 msgid "Button Style"
 msgstr ""
 
-#: modules/callout/callout.php:828 modules/contact-form/contact-form.php:562
+#: modules/callout/callout.php:829 modules/contact-form/contact-form.php:562
 #: modules/post-grid/post-grid.php:1319
 #: modules/pricing-table/pricing-table.php:339
 msgid "Button Width"
 msgstr ""
 
-#: modules/callout/callout.php:842 modules/contact-form/contact-form.php:576
+#: modules/callout/callout.php:843 modules/contact-form/contact-form.php:576
 #: modules/pricing-table/pricing-table.php:353
 msgid "Button Align"
 msgstr ""
 
-#: modules/callout/callout.php:853 modules/contact-form/contact-form.php:587
+#: modules/callout/callout.php:854 modules/contact-form/contact-form.php:587
 #: modules/content-slider/content-slider.php:817 modules/cta/cta.php:406
 #: modules/post-grid/post-grid.php:1328
 #: modules/pricing-table/pricing-table.php:364
@@ -5712,7 +5712,7 @@ msgstr ""
 msgid "Button Padding"
 msgstr ""
 
-#: modules/callout/callout.php:866 modules/contact-form/contact-form.php:491
+#: modules/callout/callout.php:867 modules/contact-form/contact-form.php:491
 #: modules/contact-form/contact-form.php:600
 #: modules/content-slider/content-slider.php:830 modules/cta/cta.php:324
 #: modules/cta/cta.php:419 modules/post-grid/post-grid.php:1278
@@ -5724,7 +5724,7 @@ msgstr ""
 msgid "Button Text"
 msgstr ""
 
-#: modules/callout/callout.php:871 modules/contact-form/contact-form.php:605
+#: modules/callout/callout.php:872 modules/contact-form/contact-form.php:605
 #: modules/content-slider/content-slider.php:835 modules/cta/cta.php:424
 #: modules/post-grid/post-grid.php:1346
 #: modules/pricing-table/pricing-table.php:382
@@ -5732,7 +5732,7 @@ msgstr ""
 msgid "Button Text Color"
 msgstr ""
 
-#: modules/callout/callout.php:885 modules/contact-form/contact-form.php:619
+#: modules/callout/callout.php:886 modules/contact-form/contact-form.php:619
 #: modules/content-slider/content-slider.php:849 modules/cta/cta.php:438
 #: modules/post-grid/post-grid.php:1360
 #: modules/pricing-table/pricing-table.php:396
@@ -5740,7 +5740,7 @@ msgstr ""
 msgid "Button Text Hover Color"
 msgstr ""
 
-#: modules/callout/callout.php:898 modules/contact-form/contact-form.php:632
+#: modules/callout/callout.php:899 modules/contact-form/contact-form.php:632
 #: modules/content-slider/content-slider.php:862 modules/cta/cta.php:451
 #: modules/post-grid/post-grid.php:1373
 #: modules/pricing-table/pricing-table.php:409
@@ -5748,7 +5748,7 @@ msgstr ""
 msgid "Button Typography"
 msgstr ""
 
-#: modules/callout/callout.php:908 modules/contact-form/contact-form.php:642
+#: modules/callout/callout.php:909 modules/contact-form/contact-form.php:642
 #: modules/content-slider/content-slider.php:872 modules/cta/cta.php:461
 #: modules/post-grid/post-grid.php:1383
 #: modules/pricing-table/pricing-table.php:419
@@ -5756,7 +5756,7 @@ msgstr ""
 msgid "Button Background"
 msgstr ""
 
-#: modules/callout/callout.php:913 modules/contact-form/contact-form.php:647
+#: modules/callout/callout.php:914 modules/contact-form/contact-form.php:647
 #: modules/content-slider/content-slider.php:877 modules/cta/cta.php:466
 #: modules/post-grid/post-grid.php:1388
 #: modules/pricing-table/pricing-table.php:424
@@ -5764,7 +5764,7 @@ msgstr ""
 msgid "Button Background Color"
 msgstr ""
 
-#: modules/callout/callout.php:924 modules/contact-form/contact-form.php:658
+#: modules/callout/callout.php:925 modules/contact-form/contact-form.php:658
 #: modules/content-slider/content-slider.php:888 modules/cta/cta.php:477
 #: modules/post-grid/post-grid.php:1399
 #: modules/pricing-table/pricing-table.php:435
@@ -5772,7 +5772,7 @@ msgstr ""
 msgid "Button Background Hover Color"
 msgstr ""
 
-#: modules/callout/callout.php:934 modules/contact-form/contact-form.php:668
+#: modules/callout/callout.php:935 modules/contact-form/contact-form.php:668
 #: modules/content-slider/content-slider.php:898 modules/cta/cta.php:487
 #: modules/post-grid/post-grid.php:1409
 #: modules/pricing-table/pricing-table.php:445
@@ -5780,7 +5780,7 @@ msgstr ""
 msgid "Button Background Style"
 msgstr ""
 
-#: modules/callout/callout.php:943 modules/contact-form/contact-form.php:677
+#: modules/callout/callout.php:944 modules/contact-form/contact-form.php:677
 #: modules/content-slider/content-slider.php:907 modules/cta/cta.php:496
 #: modules/post-grid/post-grid.php:1418
 #: modules/pricing-table/pricing-table.php:454
@@ -5788,7 +5788,7 @@ msgstr ""
 msgid "Button Background Animation"
 msgstr ""
 
-#: modules/callout/callout.php:956 modules/callout/callout.php:960
+#: modules/callout/callout.php:957 modules/callout/callout.php:961
 #: modules/contact-form/contact-form.php:690
 #: modules/contact-form/contact-form.php:694
 #: modules/content-slider/content-slider.php:920
@@ -5802,7 +5802,7 @@ msgstr ""
 msgid "Button Border"
 msgstr ""
 
-#: modules/callout/callout.php:971 modules/contact-form/contact-form.php:705
+#: modules/callout/callout.php:972 modules/contact-form/contact-form.php:705
 #: modules/content-slider/content-slider.php:935 modules/cta/cta.php:524
 #: modules/post-grid/post-grid.php:1446
 #: modules/pricing-table/pricing-table.php:482
@@ -6624,7 +6624,7 @@ msgstr ""
 msgid "Display a group of linked Font Awesome icons."
 msgstr ""
 
-#: modules/icon-group/icon-group.php:148
+#: modules/icon-group/icon-group.php:151
 msgid "Add Icon"
 msgstr ""
 
@@ -8268,31 +8268,31 @@ msgctxt "Field name to add."
 msgid "Add %s"
 msgstr ""
 
-#: classes/class-fl-builder-wp-blocks.php:83
+#: classes/class-fl-builder-wp-blocks.php:85
 #. translators: 1: branded builder name: 2: post type name
 msgctxt "%1$s branded builder name. %2$s post type name."
 msgid "%1$s is currently active for this %2$s."
 msgstr ""
 
-#: classes/class-fl-builder-wp-blocks.php:85
+#: classes/class-fl-builder-wp-blocks.php:87
 #. translators: %s: post type name
 msgctxt "%s branded builder name."
 msgid "Convert to %s"
 msgstr ""
 
-#: classes/class-fl-builder-wp-blocks.php:87
+#: classes/class-fl-builder-wp-blocks.php:89
 #. translators: %s: branded builder name
 msgctxt "%s branded builder name."
 msgid "%s lets you drag and drop your layout on the frontend."
 msgstr ""
 
-#: classes/class-fl-builder-wp-blocks.php:90
+#: classes/class-fl-builder-wp-blocks.php:92
 #. translators: %s: branded builder name
 msgctxt "%s branded builder name."
 msgid "Launch %s"
 msgstr ""
 
-#: classes/class-fl-builder-wp-blocks.php:93
+#: classes/class-fl-builder-wp-blocks.php:95
 #. translators: %s: post type name
 msgctxt "%s post type name."
 msgid "View %s"
@@ -8310,97 +8310,97 @@ msgctxt "current blog name"
 msgid "Rebuilt the theme cache for blog %s"
 msgstr ""
 
-#: classes/class-fl-builder.php:1234
+#: classes/class-fl-builder.php:1238
 msgctxt "label for the WordPress Dashboard link"
 msgid "Dashboard"
 msgstr ""
 
-#: classes/class-fl-builder.php:1324
+#: classes/class-fl-builder.php:1328
 msgctxt "A keyboard shortcut with no label given"
 msgid "Untitled Shortcut"
 msgstr ""
 
-#: classes/class-fl-builder.php:1332
+#: classes/class-fl-builder.php:1336
 msgctxt "Keyboard action to show modules tab"
 msgid "Open Modules Tab"
 msgstr ""
 
-#: classes/class-fl-builder.php:1336
+#: classes/class-fl-builder.php:1340
 msgctxt "Keyboard action to show rows tab"
 msgid "Open Rows Tab"
 msgstr ""
 
-#: classes/class-fl-builder.php:1340
+#: classes/class-fl-builder.php:1344
 msgctxt "Keyboard action to show templates tab"
 msgid "Open Templates Tab"
 msgstr ""
 
-#: classes/class-fl-builder.php:1344
+#: classes/class-fl-builder.php:1348
 msgctxt "Keyboard action to show saved tab"
 msgid "Open Saved Tab"
 msgstr ""
 
-#: classes/class-fl-builder.php:1349
+#: classes/class-fl-builder.php:1353
 msgctxt "Keyboard action to open save template form"
 msgid "Save New Template"
 msgstr ""
 
-#: classes/class-fl-builder.php:1354
+#: classes/class-fl-builder.php:1358
 msgctxt "Keyboard action to toggle preview mode"
 msgid "Toggle Preview Mode"
 msgstr ""
 
-#: classes/class-fl-builder.php:1358
+#: classes/class-fl-builder.php:1362
 msgctxt "Keyboard action to toggle responsive editing"
 msgid "Toggle Responsive Editing Mode"
 msgstr ""
 
-#: classes/class-fl-builder.php:1362
+#: classes/class-fl-builder.php:1366
 msgctxt "Keyboard action to open the global settings panel"
 msgid "Open Global Settings"
 msgstr ""
 
-#: classes/class-fl-builder.php:1366
+#: classes/class-fl-builder.php:1370
 msgctxt "Keyboard action to open the layout settings panel"
 msgid "Open Layout Settings"
 msgstr ""
 
-#: classes/class-fl-builder.php:1370
+#: classes/class-fl-builder.php:1374
 msgctxt "Keyboard action to switch between light and dark UI brightness"
 msgid "Change UI Brightness"
 msgstr ""
 
-#: classes/class-fl-builder.php:1374
+#: classes/class-fl-builder.php:1378
 msgctxt "Keyboard action to open the module search panel"
 msgid "Display Module Search"
 msgstr ""
 
-#: classes/class-fl-builder.php:1379
+#: classes/class-fl-builder.php:1383
 msgctxt "Keyboard action to save changes"
 msgid "Save Layout"
 msgstr ""
 
-#: classes/class-fl-builder.php:1384
+#: classes/class-fl-builder.php:1388
 msgctxt "Keyboard action to publish any pending changes"
 msgid "Publish changes without leaving builder"
 msgstr ""
 
-#: classes/class-fl-builder.php:1389
+#: classes/class-fl-builder.php:1393
 msgctxt "Keyboard action to dismiss the current task or panel"
 msgid "Dismiss Active Panel"
 msgstr ""
 
-#: classes/class-fl-builder.php:1394
+#: classes/class-fl-builder.php:1398
 msgctxt "Keyboard action to undo changes"
 msgid "Undo"
 msgstr ""
 
-#: classes/class-fl-builder.php:1398
+#: classes/class-fl-builder.php:1402
 msgctxt "Keyboard action to redo changes"
 msgid "Redo"
 msgstr ""
 
-#: classes/class-fl-builder.php:1485
+#: classes/class-fl-builder.php:1489
 #. translators: %s: post label
 msgctxt "Currently editing message"
 msgid "Currently Editing %s"
@@ -9119,7 +9119,7 @@ msgctxt "Label size."
 msgid "Large"
 msgstr ""
 
-#: modules/button/button.php:317 modules/callout/callout.php:831
+#: modules/button/button.php:317 modules/callout/callout.php:832
 #: modules/contact-form/contact-form.php:565
 #: modules/post-grid/post-grid.php:1322
 #: modules/pricing-table/pricing-table.php:342
@@ -9127,19 +9127,19 @@ msgctxt "Width."
 msgid "Auto"
 msgstr ""
 
-#: modules/callout/callout.php:448
+#: modules/callout/callout.php:449
 msgctxt "Image type."
 msgid "None"
 msgstr ""
 
-#: modules/callout/callout.php:494 modules/photo/photo.php:615
+#: modules/callout/callout.php:495 modules/photo/photo.php:615
 #: modules/post-carousel/post-carousel.php:330
 #: modules/post-slider/post-slider.php:535
 msgctxt "Photo Crop."
 msgid "None"
 msgstr ""
 
-#: modules/callout/callout.php:696
+#: modules/callout/callout.php:697
 #: modules/content-slider/content-slider.php:734
 msgctxt "Call to action."
 msgid "None"

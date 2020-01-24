@@ -36,7 +36,6 @@
 
 			size.on( 'input', this._previewSize );
 			spacing.on( 'input', this._previewSpacing );
-			align.on( 'change', this._previewAlign );
 		},
 
 		_previewSize: function() {
@@ -94,20 +93,6 @@
 			}
 
 			icons.css( 'margin', margin );
-		},
-
-		_previewAlign: function() {
-			var node = FLBuilder.preview.elements.node.find( '.fl-icon-group' ),
-				form = $( '.fl-builder-settings' ),
-				spacing = form.find( 'input[name=spacing]' ),
-				align = form.find( 'input[name=align]' ).val();
-
-			node.removeClass( 'fl-icon-group-left' );
-			node.removeClass( 'fl-icon-group-center' );
-			node.removeClass( 'fl-icon-group-right' );
-			node.addClass( 'fl-icon-group-' + align );
-
-			spacing.trigger( 'input' );
 		},
 	});
 

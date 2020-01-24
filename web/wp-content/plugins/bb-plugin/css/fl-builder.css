@@ -261,6 +261,7 @@ body button[class*="fl-builder"]:focus {
 	text-indent: 0;
 	text-shadow: none;
 	text-transform: none;
+	letter-spacing: normal;
 }
 
 button.fl-builder-button,
@@ -390,6 +391,10 @@ body.fl-builder--layout-has-drafted-changes .fl-builder-done-button:active {
 
 .fl-builder-button svg {
 	max-width: none;
+}
+/* Prevent buttons in settings panels or media panel inside the UI from being affected */
+.fl-builder-settings-fields button, .fl-builder-edit .media-modal-content button {
+	letter-spacing: normal;
 }
 /* @endgroup Buttons */
 
@@ -3671,19 +3676,19 @@ body .fl-lightbox-has-tab-overflow .fl-builder-settings-tabs-more {
 /* Settings Tables
 ------------------------------------------------------ */
 
-.fl-form-table  {
+.fl-lightbox .fl-form-table  {
 	background: none transparent;
 	border: none;
 	width: calc(100% - 35px); /* extra 25px for field connections toggle) */
 }
-.fl-form-table tbody {
+.fl-lightbox .fl-form-table tbody {
 	border: none;
 }
-.fl-form-table tr,
+.fl-lightbox .fl-form-table tr,
 .fl-form-table tr:nth-child(even) {
 	background: transparent;
 }
-.fl-form-table th {
+.fl-lightbox .fl-form-table th {
 	border: none !important;
 	font-weight: normal !important;
 	padding: 10px 15px 10px 10px !important;
@@ -3693,21 +3698,21 @@ body .fl-lightbox-has-tab-overflow .fl-builder-settings-tabs-more {
 	width: 200px !important;
 	background:transparent !important;
 }
-.fl-form-table td:first-child {
+.fl-lightbox .fl-form-table td:first-child {
 	padding-left:30px !important;
 }
-.fl-form-table th label {
+.fl-lightbox .fl-form-table th label {
 	color: #333;
 	width: auto;
 	max-width: 100%;
 }
-.fl-form-table th label i {
+.fl-lightbox .fl-form-table th label i {
 	color: #808080;
 }
-.fl-form-table th label i:hover {
+.fl-lightbox .fl-form-table th label i:hover {
 	color: #555555;
 }
-.fl-form-table td {
+.fl-lightbox .fl-form-table td {
 	background: transparent !important;
 	border: none !important;
 	font-weight: normal !important;
