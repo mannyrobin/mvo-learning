@@ -74,8 +74,11 @@ FLBuilder::register_module('FLIconGroupModule', array(
 						'type'    => 'align',
 						'label'   => __( 'Alignment', 'fl-builder' ),
 						'default' => 'center',
-						'preview' => array(
-							'type' => 'none',
+						'responsive' => true,
+						'preview'    => array(
+							'type'     => 'css',
+							'selector' => '.fl-icon-group',
+							'property' => 'text-align',
 						),
 					),
 				),

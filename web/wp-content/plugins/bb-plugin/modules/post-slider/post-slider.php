@@ -109,7 +109,7 @@ class FLPostSliderModule extends FLBuilderModule {
 			$this->post_slides = array();
 
 			// check if we have selected posts
-			if ( empty( $this->settings->posts_post ) ) {
+			if ( ! isset( $this->settings->posts_post_matching ) || 1 !== $this->settings->posts_post_matching ) {
 
 				// get the current query object
 				$query = $this->get_query();

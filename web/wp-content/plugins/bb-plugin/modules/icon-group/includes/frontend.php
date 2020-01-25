@@ -1,4 +1,4 @@
-<div class="fl-icon-group fl-icon-group-<?php echo $settings->align; ?>">
+<div class="fl-icon-group">
 <?php
 
 foreach ( $settings->icons as $icon ) {

@@ -79,7 +79,7 @@ final class FLUpdater {
 		FLUpdater::$_responses[ $slug ] = FLUpdater::api_request( FLUpdater::$_updates_api_url, array(
 			'fl-api-method' => 'update_info',
 			'license'       => FLUpdater::get_subscription_license(),
-			'domain'        => network_home_url(),
+			'domain'        => FLUpdater::validate_domain( network_home_url() ),
 			'product'       => $this->settings['name'],
 			'slug'          => $this->settings['slug'],
 			'version'       => $this->settings['version'],
@@ -328,12 +328,13 @@ final class FLUpdater {
 		$response = FLUpdater::api_request(self::$_updates_api_url, array(
 			'fl-api-method' => 'activate_domain',
 			'license'       => $license,
-			'domain'        => network_home_url(),
+			'domain'        => FLUpdater::validate_domain( network_home_url() ),
 			'products'      => json_encode( self::$_products ),
 		));
 		update_site_option( 'fl_themes_subscription_email', $license );
 		return $response;
 	}
+
 
 	/**
 	 * Static method for retrieving the subscription info.
@@ -344,7 +345,7 @@ final class FLUpdater {
 	static public function get_subscription_info() {
 		return self::api_request(self::$_updates_api_url, array(
 			'fl-api-method' => 'subscription_info',
-			'domain'        => network_home_url(),
+			'domain'        => FLUpdater::validate_domain( network_home_url() ),
 			'license'       => FLUpdater::get_subscription_license(),
 		));
 	}
@@ -483,5 +484,15 @@ final class FLUpdater {
 		}
 
 		return $body_decoded;
+	}
+
+	/**
+	 * Validate domain and strip any query params
+	 * @since 2.3
+	 */
+	private static function validate_domain( $url ) {
+		$pos = strpos( $url, '?' );
+		$url = ( $pos ) ? untrailingslashit( substr( $url, 0, $pos ) ) : $url;
+		return $url;
 	}
 }

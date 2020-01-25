@@ -223,7 +223,7 @@ final class FLBuilderCSS {
 		if ( isset( $setting['style'] ) && ! empty( $setting['style'] ) ) {
 			$props['border-style']    = $setting['style'];
 			$props['border-width']    = '0'; // Default to zero.
-			$props['background-clip'] = 'padding-box';
+			$props['background-clip'] = 'border-box';
 		}
 		if ( isset( $setting['color'] ) && ! empty( $setting['color'] ) ) {
 			$props['border-color'] = $setting['color'];

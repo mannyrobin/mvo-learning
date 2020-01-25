@@ -3298,7 +3298,7 @@ final class FLBuilder {
 		$path            = $include_global ? $asset_info['js'] : $asset_info['js_partial'];
 
 		// Render the global js.
-		if ( $include_global && ! isset( $_GET['safemode'] ) ) {
+		if ( $include_global ) {
 			$js .= self::render_global_js();
 		}
 
@@ -3388,8 +3388,9 @@ final class FLBuilder {
 		$js .= fl_builder_filesystem()->file_get_contents( FL_BUILDER_DIR . 'js/fl-builder-layout.js' );
 
 		// Add the global settings JS.
-		$js .= self::js_comment( 'Global JS', self::maybe_do_shortcode( $global_settings->js ) );
-
+		if ( ! isset( $_GET['safemode'] ) ) {
+			$js .= self::js_comment( 'Global JS', self::maybe_do_shortcode( $global_settings->js ) );
+		}
 		return $js;
 	}
 
@@ -3686,7 +3687,25 @@ final class FLBuilder {
 		if ( $enabled ) {
 			return true;
 		}
-		return get_option( '_fl_builder_enable_fa_pro', false );
+
+		if ( is_multisite() && FLBuilderAdminSettings::multisite_support() ) {
+			// if switched...
+			if ( $GLOBALS['switched'] ) {
+				if ( get_blog_option( $GLOBALS['_wp_switched_stack'][0], '_fl_builder_enabled_templates' ) ) {
+					// overide enabled...
+					return get_blog_option( $GLOBALS['_wp_switched_stack'][0], '_fl_builder_enable_fa_pro' );
+				} else {
+					return get_option( '_fl_builder_enable_fa_pro' );
+				}
+			}
+
+			// were not switched...
+			if ( ! get_option( '_fl_builder_enabled_icons' ) ) {
+				$id = defined( 'BLOG_ID_CURRENT_SITE' ) ? BLOG_ID_CURRENT_SITE : 1;
+				return get_blog_option( $id, '_fl_builder_enable_fa_pro' );
+			}
+		}
+		return FLBuilderModel::get_admin_settings_option( '_fl_builder_enable_fa_pro' );
 	}
 
 	/**
