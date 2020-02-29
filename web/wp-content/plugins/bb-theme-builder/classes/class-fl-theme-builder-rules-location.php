@@ -381,7 +381,7 @@ final class FLThemeBuilderRulesLocation {
 		}
 
 		// make sure two of same type and location are not being edited.
-		if ( 'post:fl-theme-layout' === $location['location'] ) {
+		if ( 'post:fl-theme-layout' === $location['location'] && isset( $_GET['builder'] ) ) {
 			$id = str_replace( $location['location'] . ':', '', $location['object'] );
 			if ( is_numeric( $id ) && count( $posts ) > 1 && $posts[0]['id'] !== $id ) {
 				// loop through posts and move to top if not.
@@ -395,7 +395,7 @@ final class FLThemeBuilderRulesLocation {
 		}
 
 		// if we are editing the header or footer there should be just one location post
-		if ( isset( $posts[0] ) && count( $posts ) > 1 ) {
+		if ( isset( $posts[0] ) && count( $posts ) > 1 && isset( $_GET['builder'] ) ) {
 			if ( 'header' === $posts[0]['type'] || 'footer' === $posts[0]['type'] ) {
 				$posts = array_slice( $posts, 0, 1 );
 			}
