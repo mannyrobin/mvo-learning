@@ -144,10 +144,10 @@
         },
         {
             "name": "deliciousbrains-plugin/wp-migrate-db-pro",
-            "version": "1.9.9",
+            "version": "1.9.10",
             "dist": {
                 "type": "zip",
-                "url": "https://composer.deliciousbrains.com/?wc-api=delicious-brains&request=composer_download&package=wp-migrate-db-pro&version=1.9.9&composer_key=7EF044F879F5B9A2EBAE334D29EFA943"
+                "url": "https://composer.deliciousbrains.com/?wc-api=delicious-brains&request=composer_download&package=wp-migrate-db-pro&version=1.9.10&composer_key=7EF044F879F5B9A2EBAE334D29EFA943"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2025,15 +2025,15 @@
         },
         {
             "name": "wpackagist-plugin/cleantalk-spam-protect",
-            "version": "5.134",
+            "version": "5.135",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/cleantalk-spam-protect/",
-                "reference": "tags/5.134"
+                "reference": "tags/5.135"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/cleantalk-spam-protect.5.134.zip"
+                "url": "https://downloads.wordpress.org/plugin/cleantalk-spam-protect.5.135.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2061,15 +2061,15 @@
         },
         {
             "name": "wpackagist-plugin/duracelltomi-google-tag-manager",
-            "version": "1.11.3",
+            "version": "1.11.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/duracelltomi-google-tag-manager/",
-                "reference": "tags/1.11.3"
+                "reference": "tags/1.11.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/duracelltomi-google-tag-manager.1.11.3.zip"
+                "url": "https://downloads.wordpress.org/plugin/duracelltomi-google-tag-manager.1.11.4.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2079,15 +2079,15 @@
         },
         {
             "name": "wpackagist-plugin/fast-velocity-minify",
-            "version": "2.8.0",
+            "version": "2.8.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/fast-velocity-minify/",
-                "reference": "tags/2.8.0"
+                "reference": "tags/2.8.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/fast-velocity-minify.2.8.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/fast-velocity-minify.2.8.1.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2241,7 +2241,7 @@
         },
         {
             "name": "wpackagist-plugin/redirection",
-            "version": "4.7",
+            "version": "4.7.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/redirection/",
@@ -2249,7 +2249,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/redirection.zip?timestamp=1581750837"
+                "url": "https://downloads.wordpress.org/plugin/redirection.zip?timestamp=1584192505"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2295,15 +2295,15 @@
         },
         {
             "name": "wpackagist-plugin/schema-app-structured-data-for-schemaorg",
-            "version": "1.14.4",
+            "version": "1.15.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/schema-app-structured-data-for-schemaorg/",
-                "reference": "tags/1.14.4"
+                "reference": "tags/1.15.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/schema-app-structured-data-for-schemaorg.1.14.4.zip"
+                "url": "https://downloads.wordpress.org/plugin/schema-app-structured-data-for-schemaorg.1.15.0.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -2479,16 +2479,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "1.10.0",
+            "version": "1.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "472c917b2a083ec7d2fa25c55fd099d1300e2515"
+                "reference": "b912a45da3e2b22f5cb5a23e441b697a295ba011"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/472c917b2a083ec7d2fa25c55fd099d1300e2515",
-                "reference": "472c917b2a083ec7d2fa25c55fd099d1300e2515",
+                "url": "https://api.github.com/repos/composer/composer/zipball/b912a45da3e2b22f5cb5a23e441b697a295ba011",
+                "reference": "b912a45da3e2b22f5cb5a23e441b697a295ba011",
                 "shasum": ""
             },
             "require": {
@@ -2565,7 +2565,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-03-10T13:08:05+00:00"
+            "time": "2020-03-13T19:34:27+00:00"
         },
         {
             "name": "composer/semver",
