@@ -76,7 +76,6 @@ class Social_Warfare_Pro extends Social_Warfare_Addon {
 		 *
 		 */
 		if ( $this->is_registered && false == Social_Warfare::has_plugin_conflict() ) {
-
 			$this->instantiate_classes();
 
 
@@ -90,6 +89,77 @@ class Social_Warfare_Pro extends Social_Warfare_Addon {
 
 		}
 	}
+
+
+	/**
+	 * A Method to instantiate all the classes that were loaded above.
+	 *
+	 * @since  3.0.0 | 01 MAR 2018 | Created
+	 * @param  void
+	 * @return void
+	 *
+	 */
+	public function instantiate_classes() {
+		new SWP_Pro_Networks_Loader();
+		new SWP_Pro_Header_Output();
+		new SWP_Pro_Follow_Network_Loader();
+		new SWP_Pro_Follow_Widget();
+		new SWP_Pro_Link_Manager();
+
+		if( true == is_admin() ) {
+			new SWP_Meta_Box_Loader();
+			new SWP_Pro_Settings_Link();
+		}
+	}
+
+
+	/**
+	 * Instantiates the addon's deferred classes.
+	 *
+	 * @since  3.0.0 | 01 MAR 2018 | Created
+	 * @param  void
+	 * @return void
+	 *
+	 */
+	public function instantiate_deferred_classes() {
+		new SWP_Pro_Options_Page();
+		new SWP_Pro_Pinterest();
+		new SWP_Pro_Shortcodes();
+	}
+
+
+	/**
+	 * Loads an array of sibling files.
+	 *
+	 * @since  3.0.0 | 01 MAR 2018 | Created
+	 * @since  4.0.0 | 20 JUL 2019 | Implemented autoloading.
+	 * @param  string   $path  The relative path to the files home.
+	 * @param  array    $files The name of the files (classes), no vendor prefix.
+	 * @return none     The files are loaded into memory.
+	 *
+	 */
+	 private function load_files( $path, $files ) {
+
+ 		// Use Autoload to loadup out files and classes.
+ 		spl_autoload_register( function( $class_name ) use ($path) {
+ 			if( file_exists( SWPP_PLUGIN_DIR.$path.$class_name.'.php' ) ) {
+ 				include SWPP_PLUGIN_DIR.$path.$class_name.'.php';
+ 			}
+ 		});
+
+ 		// If autoloading fails, we'll loop and manually add all the files.
+ 		foreach( $files as $file ) {
+
+ 			// If the class exists, then autoloading is functional so bail out.
+ 			if( class_exists( 'SWP_' . $file ) ) {
+ 				return;
+ 			}
+
+ 			// Add our vendor prefix to the file name.
+ 			$file = 'SWP_' . $file;
+ 			require_once SWPP_PLUGIN_DIR . $path . $file . '.php';
+ 		}
+ 	}
 
 
 	/**
@@ -110,6 +180,7 @@ class Social_Warfare_Pro extends Social_Warfare_Addon {
 		 * them up. This is always why we are making sure this addon is registered
 		 * before loading them.
 		 *
+		 * @todo Extend this conditional to cover the follow widget files.
 		 */
 		 if ( true === $this->is_registered ) {
 			$social_networks = array(
@@ -122,9 +193,68 @@ class Social_Warfare_Pro extends Social_Warfare_Addon {
 				'Tumblr',
 				'Whatsapp',
 				'Yummly',
-				'Pro_Pinterest'
+				'Pro_Pinterest',
+				'Pro_Networks_Loader'
 			);
 			$this->load_files( '/lib/social-networks/', $social_networks);
+
+
+			/**
+			 * This section will load all of the files needed to process the
+			 * sharable URL's that will be used for the buttons. This includes
+			 * the link shortening processes and the UTM parameter processes.
+			 *
+			 */
+			$files = array(
+				'Pro_Bitly',
+				'Pro_Rebrandly',
+				'Pro_Link_Manager',
+				'Pro_UTM_Tracking',
+			);
+			$this->load_files( '/lib/url-management/', $files );
+
+
+			/**
+			 * This section will load all of the files needed to build out the
+			 * follow widget. It contains everything needed in both the backend
+			 * admin section and for the frontend display.
+			 *
+			 */
+			$files = array(
+				'Pro_Follow_Network',
+				'Pro_Follow_Network_Loader',
+				'Pro_Follow_Widget',
+				'Pro_Follow_Widget_Cache',
+				'Pro_Follow_Widget_Utility',
+			);
+			$this->load_files( '/lib/follow-widget/', $files );
+
+
+			/**
+			 * This will load up all of the available networks that are used for
+			 * building out the follow widget.
+			 *
+			 * We've prefixed all of these with SWP_FW to keep them separate from
+			 * the main SWP networks that are used on the buttons panels for sharing.
+			 *
+			 */
+			$follow_widget_networks = array(
+				'FW_Facebook',
+				'FW_Pinterest',
+				'FW_Twitter',
+				'FW_Tumblr',
+				'FW_Instagram',
+				'FW_Vimeo',
+				'FW_Reddit',
+				'FW_Linkedin',
+				'FW_Flickr',
+				'FW_Medium',
+				'FW_Ello',
+				'FW_Blogger',
+				'FW_Snapchat',
+				'FW_Periscope',
+			);
+			$this->load_files( '/lib/follow-widget/networks/', $follow_widget_networks );
 		}
 
 
@@ -166,7 +296,8 @@ class Social_Warfare_Pro extends Social_Warfare_Addon {
 		 *
 		 */
 		$frontend_output = array(
-			'Pro_Header_Output'
+			'Pro_Header_Output',
+			'Pro_Shortcodes'
 		);
 		$this->load_files( '/lib/frontend-output/', $frontend_output );
 
@@ -181,82 +312,5 @@ class Social_Warfare_Pro extends Social_Warfare_Addon {
 		 */
 		require_once SWPP_PLUGIN_DIR . '/lib/meta-box/meta-box.php';
 
-	}
-
-
-	/**
-	 * A Method to instantiate all the classes that were loaded above.
-	 *
-	 * @since  3.0.0 | 01 MAR 2018 | Created
-	 * @param  void
-	 * @return void
-	 *
-	 */
-	public function instantiate_classes() {
-
-
-		/**
-		 * Header Output
-		 *
-		 * This is the class that extends the Header_Output class in the
-		 * core plugin. It controls the output of things like the Open
-		 * Graph tags, Twitter Card tags, and the dynamically generated
-		 * custom color CSS.
-		 *
-		 */
-		new SWP_Pro_Header_Output();
-
-		if( true == is_admin() ) {
-			/**
-			 * Meta Box Loader
-			 *
-			 * This is the class that loads up all of the "Social Warfare
-			 * Custom Options" fields on the post editor so that users have
-			 * a place to input their custom tweets, Pinterest images, etc.
-			 *
-			 */
-			new SWP_Meta_Box_Loader();
-
-
-			/**
-			 * This is the class that adds the the "settings" link to the
-			 * plugins listing page.
-			 *
-			 */
-			new SWP_Pro_Settings_link();
-		}
-
-	}
-
-
-	/**
-	 * Instantiates the addon's deferred classes.
-	 *
-	 * @since  3.0.0 | 01 MAR 2018 | Created
-	 * @param  void
-	 * @return void
-	 *
-	 */
-	public function instantiate_deferred_classes() {
-		new SWP_Pro_Options_Page();
-		new SWP_Pro_Pinterest();
-	}
-
-
-	/**
-	 * Loads an array of sibling files.
-	 *
-	 * @param  string   $path  The relative path to the files home.
-	 * @param  array    $files The name of the files (classes), no vendor prefix.
-	 * @return none     The files are loaded into memory.
-	 *
-	 */
-	private function load_files( $path, $files ) {
-		foreach( $files as $file ) {
-
-			//* Add our vendor prefix to the file name.
-			$file = "SWP_" . $file;
-			require_once SWPP_PLUGIN_DIR . $path . $file . '.php';
-		}
 	}
 }
