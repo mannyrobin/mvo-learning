@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -49,9 +50,9 @@ final class SecureOption extends Secure_Abstract {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $type Required. The instance type. Passed by reference.
+	 * @param string $type     Required. The instance type.
 	 * @param string $instance Required. The instance key. Passed by reference.
-	 * @param array $bits Required. The instance bits.
+	 * @param array  $bits     Required. The instance bits. Passed by reference.
 	 */
 	public static function initialize( $type = '', &$instance = '', &$bits = null ) {
 
@@ -62,17 +63,17 @@ final class SecureOption extends Secure_Abstract {
 		} else {
 
 			switch ( $type ) :
-				case 'update_option' :
-				case 'update_option_instance' :
+				case 'update_option':
+				case 'update_option_instance':
 					\tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or die;
 					self::set( '_type', $type );
 					break;
 
-				case 'reset' :
+				case 'reset':
 					self::reset();
 					break;
 
-				default :
+				default:
 					self::reset();
 					self::invoke_invalid_type( __METHOD__ );
 					break;
@@ -102,13 +103,12 @@ final class SecureOption extends Secure_Abstract {
 	public static function set_update_instance( $instance, $bits ) {
 
 		switch ( self::get_property( '_type' ) ) :
-			case 'update_option' :
-			case 'update_option_instance' :
+			case 'update_option':
+			case 'update_option_instance':
 				static::$_instance = [ $instance, $bits ];
 				return true;
-				break;
 
-			default :
+			default:
 				self::reset();
 				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct instance type.' );
 				break;
@@ -124,9 +124,9 @@ final class SecureOption extends Secure_Abstract {
 	 * @since 1.0.0
 	 * @since 1.5.0 This now returns the old value instead of executing wp_die();
 	 *
-	 * @param mixed $value The new, unserialized option value.
-	 * @param mixed $old_value The old option value.
-	 * @param string $option The option name.
+	 * @param mixed  $value     The new, unserialized option value.
+	 * @param mixed  $old_value The old option value.
+	 * @param string $option    The option name.
 	 * @return mixed $value on success.
 	 */
 	public static function verify_option_instance( $value, $old_value, $option ) {
@@ -164,7 +164,7 @@ final class SecureOption extends Secure_Abstract {
 					self::reset();
 					$verified = false;
 
-					if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+					if ( \wp_doing_ajax() ) {
 						$notice = \esc_html__(
 							"Options have been altered outside of this plugin's scope. Please deactivate your account and try again.",
 							'the-seo-framework-extension-manager'

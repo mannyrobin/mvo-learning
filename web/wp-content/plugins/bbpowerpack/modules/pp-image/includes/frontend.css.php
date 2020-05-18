@@ -53,6 +53,12 @@ FLBuilderCSS::responsive_rule( array(
 	'prop'			=> 'width',
 	'unit'			=> 'px',
 ) );
+
+// Image Effects
+if ( isset( $settings->show_image_effect ) && 'yes' === $settings->show_image_effect ){
+	echo pp_image_effect_render_style( $settings, ".fl-node-$id .pp-photo-container .pp-photo-content .pp-photo-content-inner img" );
+	echo pp_image_effect_render_style( $settings, ".fl-node-$id .pp-photo-container .pp-photo-content .pp-photo-content-inner:hover img", true );
+}
 ?>
 .fl-node-<?php echo $id; ?> .pp-photo-container .pp-photo-content .pp-photo-content-inner a {
     display: block;
@@ -78,7 +84,7 @@ FLBuilderCSS::responsive_rule( array(
 				border-bottom-left-radius: <?php echo $settings->box_border_group['radius']['bottom_left']; ?>px;
 				border-bottom-right-radius: <?php echo $settings->box_border_group['radius']['bottom_right']; ?>px;
 			<?php } ?>
-			z-index: 9999;
+			z-index: 99;
 			transition: all 0.3s ease;
         }
     <?php } else if( '' ==  $settings->link_type ) { ?>
@@ -100,7 +106,7 @@ FLBuilderCSS::responsive_rule( array(
 				border-bottom-left-radius: <?php echo $settings->box_border_group['radius']['bottom_left']; ?>px;
 				border-bottom-right-radius: <?php echo $settings->box_border_group['radius']['bottom_right']; ?>px;
 			<?php } ?>
-			z-index: 9999;
+			z-index: 99;
 			transition: all 0.3s ease;
         }
     <?php } ?>

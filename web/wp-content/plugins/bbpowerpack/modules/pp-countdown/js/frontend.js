@@ -144,6 +144,7 @@
 				} else if( this.fixed_timer_action == 'hide' ) {
 					if( parseInt(window.location.href.toLowerCase().indexOf("?fl_builder")) === parseInt(-1) ) {
 						$( this.timerid ).countdown('destroy');
+						$( this.nodeClass ).find('.pp-countdown-title').remove();
 					} else {
 						$( this.timerid ).countdown({
 							until: this.timer_date,
@@ -212,7 +213,7 @@
 						timezone: this.timezone,
 			    		labels1: this.timer_labels_singular.split(","),
 			        	expiryText: this.timer_exp_text,
-			        	onExpiry: this._destroyCounter
+			        	onExpiry: $.proxy( this._destroyCounter, this )
 					});
 
 				} else {
@@ -231,7 +232,8 @@
 
 		_destroyCounter: function() {
 			if( parseInt(window.location.href.toLowerCase().indexOf("?fl_builder")) === parseInt(-1) ) {
-				jQuery( this ).countdown('destroy');
+				$( this.timerid ).countdown('destroy');
+				$( this.nodeClass ).find('.pp-countdown-title').remove();
 			}
 		},
 
@@ -254,14 +256,14 @@
 
 				if( this.evergreen_timer_action == 'msg' ) {
 					if( parseInt(window.location.href.toLowerCase().indexOf("?fl_builder")) === parseInt(-1) ) {
-						$( this.timerid ).append($.cookie( "countdown-" + this.settings.id + "expiremsg" ));
+						$( this.timerid ).append(this.timer_exp_text);
 					} else {
 						$( this.timerid ).countdown({
 							until: this.timer_date,
 							format: this.timer_format,
 							layout: this.timer_layout,
 							labels: this.timer_labels.split(","),
-							timezone: this.timezone,
+							//timezone: this.timezone,
 				    		labels1: this.timer_labels_singular.split(","),
 				    		expiryText: $.cookie( "countdown-" + this.settings.id + "expiremsg" ),
 						});
@@ -277,7 +279,7 @@
 							format: this.timer_format,
 							layout: this.timer_layout,
 							labels: this.timer_labels.split(","),
-							timezone: this.timezone,
+							//timezone: this.timezone,
 				    		labels1: this.timer_labels_singular.split(","),
 				    		onExpiry: this._redirectCounter
 						});
@@ -286,15 +288,16 @@
 				} else if( this.evergreen_timer_action == 'hide' ) {
 					if( parseInt(window.location.href.toLowerCase().indexOf("?fl_builder")) === parseInt(-1) ) {
 						$( this.timerid ).countdown('destroy');
+						$( this.nodeClass ).find('.pp-countdown-title').remove();
 					} else {
 						$( this.timerid ).countdown({
 							until: this.timer_date,
 							format: this.timer_format,
 							layout: this.timer_layout,
 							labels: this.timer_labels.split(","),
-							timezone: this.timezone,
+							//timezone: this.timezone,
 				    		labels1: this.timer_labels_singular.split(","),
-				    		onExpiry: this._destroyCounter
+				    		onExpiry: $.proxy( this._destroyCounter, this )
 						});
 					}
 
@@ -305,7 +308,7 @@
 						format: this.timer_format,
 						layout: this.timer_layout,
 						labels: this.timer_labels.split(","),
-						timezone: this.timezone,
+						//timezone: this.timezone,
 			    		labels1: this.timer_labels_singular.split(","),
 			        	onExpiry: this._restartCountdown
 					});
@@ -316,7 +319,7 @@
 						format: this.timer_format,
 						layout: this.timer_layout,
 						labels: this.timer_labels.split(","),
-						timezone: this.timezone,
+						//timezone: this.timezone,
 			    		labels1: this.timer_labels_singular.split(","),
 					});
 				}
@@ -329,7 +332,7 @@
 							format: this.timer_format,
 							layout: this.timer_layout,
 							labels: this.timer_labels.split(","),
-							timezone: this.timezone,
+							//timezone: this.timezone,
 				    		labels1: this.timer_labels_singular.split(","),
 				        	expiryText: $.cookie( "countdown-" + this.settings.id + "expiremsg" ),
 						});
@@ -339,7 +342,7 @@
 							format: this.timer_format,
 							layout: this.timer_layout,
 							labels: this.timer_labels.split(","),
-							timezone: this.timezone,
+							//timezone: this.timezone,
 				    		labels1: this.timer_labels_singular.split(","),
 						});
 					}
@@ -351,7 +354,7 @@
 						format: this.timer_format,
 						layout: this.timer_layout,
 						labels: this.timer_labels.split(","),
-						timezone: this.timezone,
+						//timezone: this.timezone,
 			    		labels1: this.timer_labels_singular.split(","),
 			        	onExpiry: this._redirectCounter
 					});
@@ -363,9 +366,9 @@
 						format: this.timer_format,
 						layout: this.timer_layout,
 						labels: this.timer_labels.split(","),
-						timezone: this.timezone,
+						//timezone: this.timezone,
 			    		labels1: this.timer_labels_singular.split(","),
-			        	onExpiry: this._destroyCounter
+			        	onExpiry: $.proxy( this._destroyCounter, this )
 					});
 
 				} else if( this.evergreen_timer_action == 'reset' ) {
@@ -375,7 +378,7 @@
 						format: this.timer_format,
 						layout: this.timer_layout,
 						labels: this.timer_labels.split(","),
-						timezone: this.timezone,
+						//timezone: this.timezone,
 			    		labels1: this.timer_labels_singular.split(","),
 			        	onExpiry: this._restartCountdown
 					});
@@ -386,7 +389,7 @@
 						format: this.timer_format,
 						layout: this.timer_layout,
 						labels: this.timer_labels.split(","),
-						timezone: this.timezone,
+						//timezone: this.timezone,
 			    		labels1: this.timer_labels_singular.split(","),
 					});
 				}

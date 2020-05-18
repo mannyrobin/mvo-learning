@@ -11,7 +11,7 @@
 			echo wp_trim_words( get_the_content(), $settings->content_length, apply_filters( 'pp_cg_content_limit_more', $more ) );
 		endif;
 		if ( $settings->content_type == 'full' ) :
-			echo get_the_content();
+			echo wpautop( get_the_content() );
 		endif;
 	}
     ?>

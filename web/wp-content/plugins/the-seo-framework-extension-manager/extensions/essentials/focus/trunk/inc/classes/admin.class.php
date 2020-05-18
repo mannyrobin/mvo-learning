@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Focus\Classes
  */
+
 namespace TSF_Extension_Manager\Extension\Focus;
 
 defined( 'ABSPATH' ) or die;
@@ -11,7 +12,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Focus extension for The SEO Framework
- * Copyright (C) 2018-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -73,22 +74,6 @@ final class Admin extends Core {
 	}
 
 	/**
-	 * Checks whether we're using the new WordPress 5.0 editor.
-	 *
-	 * @since 1.2.0
-	 * @return bool
-	 */
-	private function is_gutenberg_page() {
-		if ( function_exists( '\\use_block_editor_for_post' ) )
-			return ! empty( $GLOBALS['post'] ) && \use_block_editor_for_post( $GLOBALS['post'] );
-
-		if ( function_exists( '\\is_gutenberg_page' ) )
-			return \is_gutenberg_page();
-
-		return false;
-	}
-
-	/**
 	 * Returns active focus elements.
 	 *
 	 * @since 1.0.0
@@ -112,6 +97,7 @@ final class Admin extends Core {
 		 * not visible, highlighting is ignored.
 		 *
 		 * Elements can also be added dynamically in JS, for Gutengerg block support.
+		 *
 		 * @see JavaScript tsfem_e_focus_inpost.updateFocusRegistry();
 		 *
 		 * The fields must be in order of importance when dominating.
@@ -126,31 +112,34 @@ final class Admin extends Core {
 		 *    'querySelector' => string 'append|dominate'.
 		 * }
 		 */
-		return \apply_filters_ref_array( 'the_seo_framework_focus_elements', [
+		return \apply_filters_ref_array(
+			'the_seo_framework_focus_elements',
 			[
-				'pageTitle'      => [
-					'#titlewrap > input'     => 'append',
-					'#tsfem-focus-gbc-title' => 'dominate',
-					// NOTE: Can't reliably fetch Gutenberg's from DOM.
+				[
+					'pageTitle'      => [
+						'#titlewrap > input'     => 'append',
+						'#tsfem-focus-gbc-title' => 'dominate',
+						// NOTE: Can't reliably fetch Gutenberg's from DOM.
+					],
+					'pageUrl'        => [
+						'#sample-permalink'     => 'dominate',
+						'#tsfem-focus-gbc-link' => 'dominate',
+						// NOTE: Can't reliably fetch Gutenberg's from DOM.
+					],
+					'pageContent'    => [
+						'#content'                 => 'append',
+						'#tsfem-focus-gbc-content' => 'append',
+						// NOTE: Can't reliably fetch Gutenberg's from DOM.
+					],
+					'seoTitle'       => [
+						'#tsf-title-reference' => 'dominate',
+					],
+					'seoDescription' => [
+						'#tsf-description-reference' => 'dominate',
+					],
 				],
-				'pageUrl'        => [
-					'#sample-permalink'     => 'dominate',
-					'#tsfem-focus-gbc-link' => 'dominate',
-					// NOTE: Can't reliably fetch Gutenberg's from DOM.
-				],
-				'pageContent'    => [
-					'#content'                 => 'append',
-					'#tsfem-focus-gbc-content' => 'append',
-					// NOTE: Can't reliably fetch Gutenberg's from DOM.
-				],
-				'seoTitle'       => [
-					'#tsf-title-reference' => 'dominate',
-				],
-				'seoDescription' => [
-					'#tsf-description-reference' => 'dominate',
-				],
-			],
-		] );
+			]
+		);
 	}
 
 	/**
@@ -173,7 +162,7 @@ final class Admin extends Core {
 	 * @uses \TSF_Extension_Manager\InpostGUI
 	 * Callback via \TSF_Extension_Manager\InpostGUI
 	 *
-	 * @param string Static class name: \TSF_Extension_Manager\InpostGUI $inpostgui
+	 * @param string $inpostgui Static class name: \TSF_Extension_Manager\InpostGUI $inpostgui
 	 */
 	public function _enqueue_inpost_scripts( $inpostgui ) {
 		$inpostgui::register_script( [
@@ -193,7 +182,7 @@ final class Admin extends Core {
 						'noExampleAvailable' => \__( 'No example available.', 'the-seo-framework-extension-manager' ),
 						'parseFailure'       => \__( 'A parsing failure occurred.', 'the-seo-framework-extension-manager' ),
 					],
-					'isGutenbergPage'    => $this->is_gutenberg_page(),
+					'isGutenbergPage'    => \the_seo_framework()->is_gutenberg_page(),
 					'scripts'            => [
 						'parserWorker' => $this->get_worker_file_location(),
 					],
@@ -292,33 +281,7 @@ final class Admin extends Core {
 	 */
 	public function _save_meta( $post, $data, $save_access_state ) {
 
-		if ( $save_access_state ^ 0b1111 )
-			return;
-
-		$this->process_meta( $post, $data );
-	}
-
-	/**
-	 * Saves or deletes post meta on AJAX callbacks.
-	 *
-	 * Unused!
-	 *
-	 * @since 1.0.0
-	 * @see \TSF_Extension_Manager\InpostGUI::_verify_nonce()
-	 * @see action 'tsfem_inpostgui_verified_nonce'
-	 *
-	 * @param \WP_Post      $post              The post object.
-	 * @param array|null    $data              The meta data.
-	 * @param int (bitwise) $save_access_state The state the save is in.
-	 */
-	public function _wp_ajax_save_meta( $post, $data, $save_access_state ) {
-
-		//= Nonce check failed. Show notice?
-		if ( ! $save_access_state )
-			return;
-
-		//= If doing more than just AJAX, stop.
-		if ( $save_access_state ^ 0b1111 ^ 0b0100 )
+		if ( ! \TSF_Extension_Manager\InpostGUI::is_state_safe( $save_access_state ) )
 			return;
 
 		$this->process_meta( $post, $data );
@@ -485,8 +448,8 @@ final class Admin extends Core {
 	 * @since 1.0.0
 	 *
 	 * @param string $view The file name.
-	 * @param array $args The arguments to be supplied within the file name.
-	 *        Each array key is converted to a variable with its value attached.
+	 * @param array  $args The arguments to be supplied within the file name.
+	 *                     Each array key is converted to a variable with its value attached.
 	 */
 	protected function get_view( $view, array $args = [] ) {
 

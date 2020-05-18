@@ -16,7 +16,7 @@ class PPAdvancedMenu extends FLBuilderModule {
             'name'          => __('Advanced Menu', 'bb-powerpack'),
             'description'   => __('A module for advanced menu.', 'bb-powerpack'),
 			'group'         => pp_get_modules_group(),
-			'category'      => pp_get_modules_cat( 'creative' ),
+			'category'      => pp_get_modules_cat( 'content' ),
             'dir'           => BB_POWERPACK_DIR . 'modules/pp-advanced-menu/',
             'url'           => BB_POWERPACK_URL . 'modules/pp-advanced-menu/',
             'editor_export' => true, // Defaults to true and can be omitted.
@@ -26,32 +26,29 @@ class PPAdvancedMenu extends FLBuilderModule {
     }
 
 	public static function _get_menus() {
-		$get_menus =  get_terms( 'nav_menu', array( 'hide_empty' => true ) );
-		$fields = array(
-		    'type'          => 'select',
-		    'label'         => __( 'Menu', 'bb-powerpack' ),
-		    'helper'		=> __( 'Select a WordPress menu that you created in the admin under Appearance > Menus.', 'bb-powerpack' )
-		);
+		if ( ! isset( $_GET['fl_builder'] ) ) {
+			return array();
+		}
 
-		if( $get_menus ) {
+		$get_menus =  get_terms( 'nav_menu', array( 'hide_empty' => true ) );
+		$options = array();
+
+		if ( $get_menus ) {
 
 			foreach( $get_menus as $key => $menu ) {
 
-				if( $key == 0 ) {
+				if ( $key == 0 ) {
 					$fields['default'] = $menu->name;
 				}
 
-				$menus[ $menu->slug ] = $menu->name;
+				$options[ $menu->slug ] = $menu->name;
 			}
 
-			$fields['options'] = $menus;
-
 		} else {
-			$fields['options'] = array( '' => __( 'No Menus Found', 'bb-powerpack' ) );
+			$options = array( '' => __( 'No Menus Found', 'bb-powerpack' ) );
 		}
 
-		return $fields;
-
+		return $options;
 	}
 
 	public function render_toggle_button() {
@@ -64,11 +61,11 @@ class PPAdvancedMenu extends FLBuilderModule {
 			if( in_array( $toggle, array( 'hamburger', 'hamburger-label' ) ) ) {
 
 				echo '<div class="pp-advanced-menu-mobile-toggle '. $toggle .'">';
-                    echo '<div class="pp-hamburger">';
-					echo '<div class="pp-hamburger-box">';
-					echo '<div class="pp-hamburger-inner"></div>';
-					echo '</div>';
-					echo '</div>';
+				echo '<div class="pp-hamburger">';
+				echo '<div class="pp-hamburger-box">';
+				echo '<div class="pp-hamburger-inner"></div>';
+				echo '</div>';
+				echo '</div>';
 
 				if( $toggle == 'hamburger-label' ) {
 					if( $menu_text ) {
@@ -231,14 +228,19 @@ class PPAdvancedMenu extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPAdvancedMenu', array(
+BB_PowerPack::register_module('PPAdvancedMenu', array(
     'general'       => array( // Tab
         'title'         => __('General', 'bb-powerpack'), // Tab title
         'sections'      => array( // Tab Sections
             'general'       => array( // Section
                 'title'         => '', // Section Title
                 'fields'        => array( // Section Fields
-					'wp_menu' => PPAdvancedMenu::_get_menus(),
+					'wp_menu' => array(
+						'type'          => 'select',
+						'label'         => __( 'Menu', 'bb-powerpack' ),
+						'helper'		=> __( 'Select a WordPress menu that you created in the admin under Appearance > Menus.', 'bb-powerpack' ),
+						'options'		=> PPAdvancedMenu::_get_menus(),
+					),
 					'menu_layout' => array(
 					    'type'          => 'pp-switch',
 					    'label'         => __( 'Layout', 'bb-powerpack' ),
@@ -318,7 +320,7 @@ FLBuilder::register_module('PPAdvancedMenu', array(
                         'type'				=> 'text',
                         'label'             => __('Custom Breakpoint', 'bb-powerpack'),
                         'default'       	=> '768',
-                        'description'       => __('px', 'bb-powerpack'),
+                        'description'       => 'px',
                         'size'              => 5
                     ),
 					'mobile_toggle' => array(
@@ -333,19 +335,16 @@ FLBuilder::register_module('PPAdvancedMenu', array(
 					    ),
 					    'toggle'		=> array(
 					    	'hamburger'	=> array(
-					    		'fields'		=> array( 'mobile_menu_type', 'mobile_breakpoint', 'mobile_toggle_size', 'mobile_toggle_thickness' ),
+					    		'fields'		=> array( 'mobile_menu_type', 'mobile_breakpoint', 'mobile_toggle_size', 'mobile_toggle_thickness', 'menu_position' ),
 								'sections'		=> array('mobile_toggle_typography', 'mobile_toggle_style'),
-								'tabs'		=> array( 'responsive_style' )
 					    	),
 					    	'hamburger-label'	=> array(
-					    		'fields'		=> array( 'mobile_menu_type', 'mobile_breakpoint', 'custom_menu_text', 'mobile_toggle_font', 'mobile_toggle_size', 'mobile_toggle_thickness' ),
+					    		'fields'		=> array( 'mobile_menu_type', 'mobile_breakpoint', 'custom_menu_text', 'mobile_toggle_font', 'mobile_toggle_size', 'mobile_toggle_thickness', 'menu_position' ),
 								'sections'		=> array('mobile_toggle_typography', 'mobile_toggle_style'),
-								'tabs'			=> array( 'responsive_style' )
 					    	),
 					    	'text'	=> array(
-					    		'fields'		=> array( 'mobile_menu_type', 'mobile_breakpoint', 'custom_menu_text', 'mobile_toggle_font' ),
+					    		'fields'		=> array( 'mobile_menu_type', 'mobile_breakpoint', 'custom_menu_text', 'mobile_toggle_font', 'menu_position' ),
 								'sections'		=> array('mobile_toggle_typography', 'mobile_toggle_style'),
-								'tabs'		=> array( 'responsive_style' )
 					    	),
 					    )
 					),
@@ -359,6 +358,15 @@ FLBuilder::register_module('PPAdvancedMenu', array(
 						),
 						'connections'		=> array('string')
 					),
+					'menu_position' => array(
+						'type'	=> 'pp-switch',
+						'label'	=> __( 'Menu Position', 'bb-powerpack' ),
+						'default' => 'below',
+						'options' => array(
+							'inline' => __( 'Inline', 'bb-powerpack' ),
+							'below'  => __( 'Below Row', 'bb-powerpack' ),
+						),
+					),
 					'mobile_menu_type'	=> array(
 						'type'          => 'select',
 					    'label'         => __( 'Menu Type', 'bb-powerpack' ),
@@ -371,7 +379,7 @@ FLBuilder::register_module('PPAdvancedMenu', array(
 						'toggle'	=> array(
 							'off-canvas'	=> array(
                                 'sections'      => array('menu_shadow', 'close_icon'),
-								'fields'	    => array( 'offcanvas_direction', 'animation_speed', 'responsive_overlay_bg_color', 'responsive_overlay_bg_opacity', 'responsive_overlay_padding', 'close_icon_size', 'close_icon_color', 'responsive_link_color', 'responsive_link_hover_color', 'responsive_link_border_color', 'responsive_alignment_vertical' )
+								'fields'	    => array( 'offcanvas_direction', 'offcanvas_width', 'animation_speed', 'responsive_overlay_bg_color', 'responsive_overlay_bg_opacity', 'responsive_overlay_padding', 'close_icon_size', 'close_icon_color', 'responsive_link_color', 'responsive_link_hover_color', 'responsive_link_border_color', 'responsive_alignment_vertical' )
 							),
 							'full-screen'	=> array(
 								'sections'	=> array('close_icon'),
@@ -381,7 +389,7 @@ FLBuilder::register_module('PPAdvancedMenu', array(
 					),
 					'full_screen_effects'	=> array(
 						'type'          => 'select',
-					    'label'         => __( 'Effects', 'bb-powerpack' ),
+					    'label'         => __( 'Full Screen Effects', 'bb-powerpack' ),
 					    'default'       => 'fade',
 					    'options'       => array(
 					    	'fade'			=> __( 'Fade', 'bb-powerpack' ),
@@ -393,12 +401,24 @@ FLBuilder::register_module('PPAdvancedMenu', array(
 					),
 					'offcanvas_direction'	=> array(
 						'type'          => 'select',
-					    'label'         => __( 'Direction', 'bb-powerpack' ),
+					    'label'         => __( 'Off Canvas Direction', 'bb-powerpack' ),
 					    'default'       => 'left',
 					    'options'       => array(
 					    	'left'			=> __( 'From Left', 'bb-powerpack' ),
 					    	'right'			=> __( 'From Right', 'bb-powerpack' ),
 					    ),
+					),
+					'offcanvas_width'	=> array(
+						'type'	=> 'unit',
+						'label'	=> __( 'Off Canvas Width', 'bb-powerpack' ),
+						'default' => '',
+						'units'	=> array('px'),
+						'slider'	=> array(
+							'min'		=> 100,
+							'max'		=> 500,
+							'step'		=> 10
+						),
+						'responsive' => true,
 					),
 					'animation_speed'   => array(
                         'type'              => 'text',
@@ -420,7 +440,8 @@ FLBuilder::register_module('PPAdvancedMenu', array(
                     'alignment'    => array(
                         'type'          => 'align',
                         'label'         => __('Alignment', 'bb-powerpack'),
-                        'default'       => 'center',
+						'default'       => 'center',
+						'responsive'	=> true,
                     ),
                     'spacing'    => array(
 						'type' 			=> 'unit',
@@ -436,21 +457,6 @@ FLBuilder::register_module('PPAdvancedMenu', array(
 								'responsive' => '',
 							),
 						),
-						'preview'         => array(
-							'type'          => 'css',
-							'rules'			=> array(
-								array(
-									'selector'        => '.pp-advanced-menu .menu > li',
-									'property'        => 'margin-left',
-									'unit'            => 'px'
-								),
-								array(
-									'selector'        => '.pp-advanced-menu .menu > li',
-									'property'        => 'margin-right',
-									'unit'            => 'px'
-								)
-							)
-						)
                     ),
                     'link_bottom_spacing'    => array(
 						'type' 			=> 'unit',
@@ -821,12 +827,12 @@ FLBuilder::register_module('PPAdvancedMenu', array(
 				'fields'	=> array(
 					'responsive_alignment'    => array(
                         'type'          => 'align',
-                        'label'         => __('Horizontal Alignment', 'bb-powerpack'),
+                        'label'         => __('Content Horizontal Alignment', 'bb-powerpack'),
                         'default'       => 'center',
                     ),
                     'responsive_alignment_vertical' => array(
                         'type'  => 'pp-switch',
-                        'label' => __('Vertical Alignment', 'bb-powerpack'),
+                        'label' => __('Content Vertical Alignment', 'bb-powerpack'),
                         'default'   => 'top',
                         'options'   => array(
                             'top'       => __('Top', 'bb-powerpack'),
@@ -933,6 +939,7 @@ FLBuilder::register_module('PPAdvancedMenu', array(
 						'label'      => __('Link Background Color', 'bb-powerpack'),
 						'default'    => '',
 						'show_reset' => true,
+						'show_alpha'	=> true,
 						'connections'	=> array('color'),
 						'preview'    => array(
 							'type'      => 'css',
@@ -945,6 +952,7 @@ FLBuilder::register_module('PPAdvancedMenu', array(
 						'label'      => __('Link Background Hover Color', 'bb-powerpack'),
 						'default'    => '',
 						'show_reset' => true,
+						'show_alpha'	=> true,
 						'connections'	=> array('color'),
 						'preview'       => array(
 							'type'          => 'none'
@@ -961,6 +969,17 @@ FLBuilder::register_module('PPAdvancedMenu', array(
 							'selector'      => '.pp-advanced-menu.full-screen .menu li a span.menu-item-text, .pp-advanced-menu.full-screen .menu li .pp-has-submenu-container a span.menu-item-text, .pp-advanced-menu.off-canvas .menu li a, .pp-advanced-menu.off-canvas .menu li .pp-has-submenu-container a',
 							'property'      => 'padding',
 							'unit'          => 'px'
+						)
+					),
+					'responsive_submenu_bg_color'  => array(
+						'type'       => 'color',
+						'label'      => __('Submenu Background Color', 'bb-powerpack'),
+						'default'    => '',
+						'show_reset' => true,
+						'show_alpha'	=> true,
+						'connections'	=> array('color'),
+						'preview'    => array(
+							'type'      => 'none',
 						)
 					),
 				)
@@ -1257,14 +1276,42 @@ class Advanced_Menu_Walker extends Walker_Nav_Menu {
         $submenu = $args->has_children ? ' pp-has-submenu' : '';
 
         $class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args, $depth ) );
-        $class_names = ' class="' . esc_attr( $class_names ) . $submenu . '"';
+		$class_names = ' class="' . esc_attr( $class_names ) . $submenu . '"';
+		
+		$item_id = apply_filters( 'pp_advanced_menu_item_id', 'menu-item-' . $item->ID, $item, $depth );
 
-        $output .= $indent . '<li id="menu-item-'. $item->ID . '"' . $value . $class_names . '>';
+        $output .= $indent . '<li id="'. $item_id . '"' . $value . $class_names . '>';
 
-        $attributes = ! empty( $item->attr_title ) ? ' title="' . esc_attr( $item->attr_title ) .'"' : '';
-        $attributes .= ! empty( $item->target ) ? ' target="' . esc_attr( $item->target ) .'"' : '';
-        $attributes .= ! empty( $item->xfn ) ? ' rel="' . esc_attr( $item->xfn ) .'"' : '';
-        $attributes .= ! empty( $item->url ) ? ' href="' . esc_attr( $item->url ) .'"' : '';
+		$atts = array();
+
+		$atts['title'] = ! empty( $item->attr_title ) ? esc_attr( $item->attr_title ) : '';
+		$atts['target'] = ! empty( $item->target ) ? esc_attr( $item->target ) : '';
+		
+		if ( '_blank' === $item->target && empty( $item->xfn ) ) {
+			$atts['rel'] = 'noopener noreferrer';
+		} else {
+			$atts['rel'] = $item->xfn;
+		}
+
+		$atts['href'] = ! empty( $item->url ) ? $item->url : '';
+		$atts['aria-current'] = $item->current ? 'page' : '';
+
+		/**
+		 * Filters the HTML attributes applied to a menu item's anchor element.
+		 */
+		$atts = apply_filters( 'nav_menu_link_attributes', $atts, $item, $args, $depth );
+
+		$atts['tabindex'] 	= '0';
+		$atts['role'] 		= 'link';
+
+		$attributes = '';
+
+		foreach ( $atts as $attr => $value ) {
+			if ( is_scalar( $value ) && '' !== $value && false !== $value ) {
+				$value 		 = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
+				$attributes .= ' ' . $attr . '="' . $value . '"';
+			}
+		}
 
         $item_output = $args->has_children ? '<div class="pp-has-submenu-container">' : '';
         $item_output .= $args->before;
@@ -1273,7 +1320,11 @@ class Advanced_Menu_Walker extends Walker_Nav_Menu {
 		if( $args->has_children ) {
 			$item_output .= '<span class="pp-menu-toggle"></span>';
 		}
-        $item_output .= '</span></a>';
+		$item_output .= '</span>';
+		if ( apply_filters( 'pp_advanced_menu_enable_item_description', false ) ) {
+			$item_output .= '<p class="menu-item-description">' . $item->description . '</p>';
+		}
+		$item_output .= '</a>';
 
 
         $item_output .= $args->after;

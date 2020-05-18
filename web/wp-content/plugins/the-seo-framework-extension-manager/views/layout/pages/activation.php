@@ -1,4 +1,5 @@
 <?php
+
 defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
 
 // Todo do something with network mode here. Remove backslashes (preventing POT generation).
@@ -17,19 +18,20 @@ if ( ! $this->is_auto_activated() ) :
 		</div>
 		<div class="tsfem-connect-action tsfem-flex">
 			<?php
-			//* TODO activation listener. Version 2.x
+			//* TODO activation listener. Version 3.x
 			// $this->get_view( 'forms/get', [ 'name' => $this->request_name['activate-external'], 'action' => $this->get_activation_url( 'get/' ), 'redirect' => 'activate', 'text' => \__( 'Get your API key', 'the-seo-framework-extension-manager' ), 'classes' => [ 'tsfem-button', 'tsfem-button-primary' ] ] );
 			// $this->get_view( 'forms/get', [ 'name' => $this->request_name['activate-external'], 'action' => $this->get_activation_url( 'get/' ), 'redirect' => 'connect', 'text' => \__( 'Connect', 'the-seo-framework-extension-manager' ), 'classes' => [ 'tsfem-button' ] ] );
 			// $this->get_remote_activation_listener();
 
-			//* Already escaped.
+			// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- get_link() escapes
 			echo $this->get_link( [
-				'url' => $this->get_activation_url( 'shop/' ),
-				'target' => '_blank',
-				'class' => 'tsfem-button-primary tsfem-button-flat',
-				'title' => '',
+				'url'     => $this->get_activation_url( 'shop/' ),
+				'target'  => '_blank',
+				'class'   => 'tsfem-button-primary tsfem-button-external',
+				'title'   => '',
 				'content' => \__( 'Get your API key', 'the-seo-framework-extension-manager' ),
 			] );
+			// phpcs:enable, WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 		</div>
 	</div>
@@ -47,18 +49,16 @@ if ( ! $this->is_auto_activated() ) :
 		<div class="tsfem-connect-action tsfem-flex">
 			<?php
 			$this->get_view( 'forms/key', [
-				'name' => $this->request_name['activate-key'],
-				'id' => 'input-activation',
-				'classes' => [
-					'tsfem-button',
+				'name'         => $this->request_name['activate-key'],
+				'id'           => 'input-activation',
+				'classes'      => [
 					'tsfem-button-primary',
-					'tsfem-button-flat',
 				],
 				'classes_form' => [
 					'tsfem-flex',
 					'tsfem-flex-nowrap',
 				],
-				'text' => \__( 'Use this key', 'the-seo-framework-extension-manager' ),
+				'text'         => \__( 'Use this key', 'the-seo-framework-extension-manager' ),
 			] );
 			?>
 		</div>

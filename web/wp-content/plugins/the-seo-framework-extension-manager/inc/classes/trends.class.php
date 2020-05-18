@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -44,7 +45,7 @@ final class Trends {
 	 *
 	 * @param string $type Determines what to get.
 	 * @param string $instance Required. The instance key.
-	 * @param int $bits Required. The instance bits.
+	 * @param int    $bits Required. The instance bits.
 	 * @return mixed The trends output.
 	 */
 	public static function get( $type, $instance, $bits ) {
@@ -54,17 +55,13 @@ final class Trends {
 		switch ( $type ) :
 			case 'feed':
 				return static::prototype_trends();
-				break;
 
 			case 'ajax_feed':
 				return static::prototype_trends( true );
-				break;
 
 			default:
-				break;
+				return '';
 		endswitch;
-
-		return '';
 	}
 
 	/**
@@ -87,7 +84,7 @@ final class Trends {
 			return -1;
 
 		$transient_name = 'tsfem_latest_seo_feed';
-		$output = \get_transient( $transient_name );
+		$output         = \get_transient( $transient_name );
 
 		//* Bypass cache on AJAX as multi-admin can interfere.
 		if ( false === $ajax && false !== $output )
@@ -114,9 +111,9 @@ final class Trends {
 		$xml = \wp_remote_retrieve_body( $request );
 		//* Add bitwise operators.
 		$options = LIBXML_NOCDATA | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NONET | LIBXML_NSCLEAN;
-		$xml = simplexml_load_string( $xml, 'SimpleXMLElement', $options );
+		$xml     = simplexml_load_string( $xml, 'SimpleXMLElement', $options );
 
-		if ( ! isset( $xml->entry ) || empty( $xml->entry ) ) {
+		if ( empty( $xml->entry ) ) {
 			//* Retry in half an hour when server is down.
 			\set_transient( $transient_name, '', HOUR_IN_SECONDS / 2 );
 			return '';
@@ -125,11 +122,11 @@ final class Trends {
 		$entry = $xml->entry;
 		unset( $xml );
 
-		$output = '';
+		$output   = '';
 		$a_output = [];
 
 		$max = 15;
-		$i = 0;
+		$i   = 0;
 		foreach ( $entry as $object ) :
 
 			if ( $i >= $max )
@@ -163,11 +160,11 @@ final class Trends {
 
 				$type = ! empty( $link_object['@attributes']['type'] ) ? $link_object['@attributes']['type'] : '';
 				if ( 'text/html' === $type ) {
-
 					$rel = ! empty( $link_object['@attributes']['rel'] ) ? $link_object['@attributes']['rel'] : '';
-					if ( 'replies' === $rel ) {
+					if ( in_array( $rel, [ 'self', 'alternate' ], true ) ) {
 
 						$link = ! empty( $link_object['@attributes']['href'] ) ? $link_object['@attributes']['href'] : '';
+
 						if ( $link )
 							$link = strtok( $link, '#' );
 
@@ -186,19 +183,20 @@ final class Trends {
 			$title = isset( $object->title ) ? $object->title->__toString() : '';
 			$title = $title ? \the_seo_framework()->escape_title( $title ) : '';
 
+			if ( ! $title )
+				continue;
+
 			$content = isset( $object->content ) ? $object->content->__toString() : '';
 			$content = $content ? \wp_strip_all_tags( $content ) : '';
 			unset( $object );
 
-			$length = 250;
-			//* Do not care for the current length. Always trim.
-			$content = \the_seo_framework()->trim_excerpt( $content, $length + 1, $length );
+			$content = \the_seo_framework()->trim_excerpt( $content, 0, 300 );
 			$content = \the_seo_framework()->escape_description( $content );
 
 			//* No need for translations, it's English only.
 			$title = sprintf(
 				'<h4><a href="%s" target="_blank" rel="nofollow noopener noreferrer" title="Read more...">%s</a></h4>',
-				\esc_url( $link, [ 'http', 'https' ] ),
+				\esc_url( $link, [ 'https', 'http' ] ),
 				$title
 			);
 

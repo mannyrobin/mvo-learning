@@ -2,16 +2,12 @@
 /**
  * Form front-end rendering.
  *
- * @package    WPForms
- * @author     WPForms
- * @since      1.0.0
- * @license    GPL-2.0+
- * @copyright  Copyright (c) 2016, WPForms LLC
+ * @since 1.0.0
  */
 class WPForms_Frontend {
 
 	/**
-	 * Contains form data to be referenced later.
+	 * Store form data to be referenced later.
 	 *
 	 * @since 1.0.0
 	 * @var array
@@ -19,7 +15,7 @@ class WPForms_Frontend {
 	public $forms;
 
 	/**
-	 * Contains information for multi-page forms.
+	 * Store information for multi-page forms.
 	 *
 	 * Forms that do not contain pages return false, otherwise returns an array
 	 * that contains the number of total pages and page counter used when
@@ -32,7 +28,7 @@ class WPForms_Frontend {
 	public $pages = false;
 
 	/**
-	 * Contains a form confirmation message.
+	 * Store a form confirmation message.
 	 *
 	 * @since 1.4.8
 	 * @todo Remove in favor of \WPForms_Process::$confirmation_message().
@@ -188,7 +184,7 @@ class WPForms_Frontend {
 			absint( wpforms()->process->form_data['id'] ) === $form_id
 		) {
 			do_action( 'wpforms_frontend_output_success', wpforms()->process->form_data, wpforms()->process->fields, wpforms()->process->entry_id );
-			wpforms_debug_data( $_POST );
+			wpforms_debug_data( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
 
@@ -200,7 +196,7 @@ class WPForms_Frontend {
 			absint( $_POST['wpforms']['id'] ) === $form_id
 		) {
 			do_action( 'wpforms_frontend_output_success', $form_data, false, false );
-			wpforms_debug_data( $_POST );
+			wpforms_debug_data( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
 
@@ -230,7 +226,7 @@ class WPForms_Frontend {
 
 		$form_classes = array( 'wpforms-validate', 'wpforms-form' );
 
-		if ( ! empty( $form_data['settings']['ajax_submit'] ) ) {
+		if ( ! empty( $form_data['settings']['ajax_submit'] ) && ! wpforms_is_amp() ) {
 			$form_classes[] = 'wpforms-ajax-form';
 		}
 
@@ -320,7 +316,7 @@ class WPForms_Frontend {
 		$this->forms[ $form_id ] = $form_data;
 
 		// Optional debug information if WPFORMS_DEBUG is defined.
-		wpforms_debug_data( $form_data );
+		wpforms_debug_data( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		// After output hook.
 		do_action( 'wpforms_frontend_output_after', $form_data, $form );
@@ -401,6 +397,12 @@ class WPForms_Frontend {
 				}
 
 			echo '</div>';
+		}
+
+		// Output <noscript> error message.
+		$noscript_msg = apply_filters( 'wpforms_frontend_noscript_error_message', __( 'Please enable JavaScript in your browser to complete this form.', 'wpforms-lite' ), $form_data );
+		if ( ! empty( $noscript_msg ) && ! empty( $form_data['fields'] ) && ! wpforms_is_amp() ) {
+			echo '<noscript class="wpforms-error-noscript">' . esc_html( $noscript_msg ) . '</noscript>';
 		}
 
 		// Output header errors if they exist.
@@ -575,15 +577,14 @@ class WPForms_Frontend {
 		}
 
 		// This filter is for backwards compatibility purposes.
-		$types = array( 'text', 'textarea', 'number', 'email', 'hidden', 'url', 'html', 'divider', 'password', 'phone', 'address', 'checkbox', 'radio' );
+		$types = array( 'text', 'textarea', 'name', 'number', 'email', 'hidden', 'url', 'html', 'divider', 'password', 'phone', 'address', 'select', 'checkbox', 'radio' );
 		if ( in_array( $field['type'], $types, true ) ) {
 			$field = apply_filters( "wpforms_{$field['type']}_field_display", $field, $attributes, $form_data );
 		} elseif ( 'credit-card' === $field['type'] ) {
 			$field = apply_filters( 'wpforms_creditcard_field_display', $field, $attributes, $form_data );
-		} elseif ( 'payment-multiple' === $field['type'] ) {
-			$field = apply_filters( 'wpforms_payment_multiple_field_display', $field, $attributes, $form_data );
-		} elseif ( 'payment-checkbox' === $field['type'] ) {
-			$field = apply_filters( 'wpforms_payment_checkbox_field_display', $field, $attributes, $form_data );
+		} elseif ( in_array( $field['type'], array( 'payment-multiple', 'payment-single', 'payment-checkbox' ), true ) ) {
+			$filter_field_type = str_replace( '-', '_', $field['type'] );
+			$field             = apply_filters( 'wpforms_' . $filter_field_type . '_field_display', $field, $attributes, $form_data );
 		}
 
 		$form_id  = absint( $form_data['id'] );
@@ -751,7 +752,7 @@ class WPForms_Frontend {
 
 		printf( '<div %s>%s</div>',
 			wpforms_html_attributes( $description['id'], $description['class'], $description['data'], $description['attr'] ),
-			$description['value']
+			do_shortcode( $description['value'] )
 		);
 	}
 
@@ -959,9 +960,9 @@ class WPForms_Frontend {
 					esc_html( $submit )
 				);
 
-				if ( ! empty( $settings['ajax_submit'] ) ) {
+				if ( ! empty( $settings['ajax_submit'] ) && ! wpforms_is_amp() ) {
 					printf(
-						'<img src="%s" class="wpforms-submit-spinner" style="display: none;">',
+						'<img src="%s" class="wpforms-submit-spinner" style="display: none;" width="26" height="26" alt="">',
 						esc_url(
 							apply_filters(
 								'wpforms_display_sumbit_spinner_src',
@@ -1032,7 +1033,10 @@ class WPForms_Frontend {
 
 		global $post;
 
-		if ( has_shortcode( $post->post_content, 'wpforms' ) ) {
+		if (
+			has_shortcode( $post->post_content, 'wpforms' ) ||
+			( function_exists( 'has_block' ) && has_block( 'wpforms/form-selector' ) )
+		) {
 			$this->assets_css();
 		}
 	}
@@ -1045,6 +1049,8 @@ class WPForms_Frontend {
 	public function assets_css() {
 
 		do_action( 'wpforms_frontend_css', $this->forms );
+
+		$min = wpforms_get_min_suffix();
 
 		// jQuery date/time library CSS.
 		if (
@@ -1061,7 +1067,7 @@ class WPForms_Frontend {
 				'wpforms-flatpickr',
 				WPFORMS_PLUGIN_URL . 'assets/css/flatpickr.min.css',
 				array(),
-				'4.5.5'
+				'4.6.3'
 			);
 		}
 
@@ -1077,7 +1083,7 @@ class WPForms_Frontend {
 		if ( wpforms_setting( 'disable-css', '1' ) == '2' ) {
 			wp_enqueue_style(
 				'wpforms-base',
-				WPFORMS_PLUGIN_URL . 'assets/css/wpforms-base.css',
+				WPFORMS_PLUGIN_URL . "assets/css/wpforms-base{$min}.css",
 				array(),
 				WPFORMS_VERSION
 			);
@@ -1114,7 +1120,7 @@ class WPForms_Frontend {
 				'wpforms-flatpickr',
 				WPFORMS_PLUGIN_URL . 'assets/js/flatpickr.min.js',
 				array( 'jquery' ),
-				'4.5.5',
+				'4.6.3',
 				true
 			);
 			wp_enqueue_script(
@@ -1209,7 +1215,7 @@ class WPForms_Frontend {
 				true
 			);
 			if ( 'v3' === $type ) {
-				$recaptch_inline  = 'grecaptcha.ready(function(){grecaptcha.execute("' . esc_html( $site_key ) . '",{action:"wpforms"}).then(function(token){var f=document.getElementsByName("wpforms[recaptcha]");for(var i=0;i<f.length;i++){f[i].value = token;}});});';
+				$recaptch_inline = 'var wpformsRecaptchaLoad = function(){grecaptcha.execute("' . esc_html( $site_key ) . '",{action:"wpforms"}).then(function(token){var f=document.getElementsByName("wpforms[recaptcha]");for(var i=0;i<f.length;i++){f[i].value = token;}});}; grecaptcha.ready(wpformsRecaptchaLoad);';
 			} elseif ( 'invisible' === $type ) {
 				$recaptch_inline  = 'var wpformsRecaptchaLoad = function(){jQuery(".g-recaptcha").each(function(index,el){var recaptchaID = grecaptcha.render(el,{callback:function(){wpformsRecaptchaCallback(el);}},true);jQuery(el).closest("form").find("button[type=submit]").get(0).recaptchaID = recaptchaID;});};';
 				$recaptch_inline .= 'var wpformsRecaptchaCallback = function(el){var $form = jQuery(el).closest("form");if(typeof wpforms.formSubmit === "function"){wpforms.formSubmit($form);}else{$form.find("button[type=submit]").get(0).recaptchaID = false;$form.submit();}};';
@@ -1270,21 +1276,13 @@ class WPForms_Frontend {
 	}
 
 	/**
-	 * Hook at fires at a later priority in wp_footer
+	 * Get strings to localize.
 	 *
-	 * @since 1.0.5
+	 * @since 1.6.0
+	 *
+	 * @return array Array of strings to localize.
 	 */
-	public function footer_end() {
-
-		if ( ( empty( $this->forms ) && ! $this->assets_global() ) || wpforms_is_amp() ) {
-			return;
-		}
-
-		/*
-		 * Below we do our own implementation of wp_localize_script in an effort
-		 * to be better compatible with caching plugins which were causing
-		 * conflicts.
-		 */
+	public function get_strings() {
 
 		// Define base strings.
 		$strings = array(
@@ -1296,14 +1294,16 @@ class WPForms_Frontend {
 			'val_number'                 => wpforms_setting( 'validation-number', esc_html__( 'Please enter a valid number.', 'wpforms-lite' ) ),
 			'val_confirm'                => wpforms_setting( 'validation-confirm', esc_html__( 'Field values do not match.', 'wpforms-lite' ) ),
 			'val_fileextension'          => wpforms_setting( 'validation-fileextension', esc_html__( 'File type is not allowed.', 'wpforms-lite' ) ),
-			'val_filesize'               => wpforms_setting( 'validation-filesize', esc_html__( 'File exceeds max size allowed.', 'wpforms-lite' ) ),
+			'val_filesize'               => wpforms_setting( 'validation-filesize', esc_html__( 'File exceeds max size allowed. File was not uploaded.', 'wpforms-lite' ) ),
 			'val_time12h'                => wpforms_setting( 'validation-time12h', esc_html__( 'Please enter time in 12-hour AM/PM format (eg 8:45 AM).', 'wpforms-lite' ) ),
 			'val_time24h'                => wpforms_setting( 'validation-time24h', esc_html__( 'Please enter time in 24-hour format (eg 22:45).', 'wpforms-lite' ) ),
 			'val_requiredpayment'        => wpforms_setting( 'validation-requiredpayment', esc_html__( 'Payment is required.', 'wpforms-lite' ) ),
 			'val_creditcard'             => wpforms_setting( 'validation-creditcard', esc_html__( 'Please enter a valid credit card number.', 'wpforms-lite' ) ),
-			'val_smart_phone'            => wpforms_setting( 'validation-smart-phone', esc_html__( 'Please enter a valid phone number.', 'wpforms-lite' ) ),
 			'val_post_max_size'          => wpforms_setting( 'validation-post_max_size', esc_html__( 'The total size of the selected files {totalSize} Mb exceeds the allowed limit {maxSize} Mb.', 'wpforms-lite' ) ),
 			'val_checklimit'             => wpforms_setting( 'validation-check-limit', esc_html__( 'You have exceeded the number of allowed selections: {#}.', 'wpforms-lite' ) ),
+			'val_limit_characters'       => esc_html__( '{count} of {limit} max characters.', 'wpforms-lite' ),
+			'val_limit_words'            => esc_html__( '{count} of {limit} max words.', 'wpforms-lite' ),
+			'val_recaptcha_fail_msg'     => wpforms_setting( 'recaptcha-fail-msg', esc_html__( 'Google reCAPTCHA verification failed, please try again later.', 'wpforms-lite' ) ),
 			'post_max_size'              => wpforms_size_to_bytes( ini_get( 'post_max_size' ) ),
 			'uuid_cookie'                => false,
 			'locale'                     => wpforms_get_language_code(),
@@ -1312,7 +1312,7 @@ class WPForms_Frontend {
 			'ajaxurl'                    => admin_url( 'admin-ajax.php' ),
 			'mailcheck_enabled'          => (bool) apply_filters( 'wpforms_mailcheck_enabled', true ),
 			'mailcheck_domains'          => array_map( 'sanitize_text_field', (array) apply_filters( 'wpforms_mailcheck_domains', array() ) ),
-			'mailcheck_toplevel_domains' => array_map( 'sanitize_text_field', (array) apply_filters( 'wpforms_mailcheck_toplevel_domains', array() ) ),
+			'mailcheck_toplevel_domains' => array_map( 'sanitize_text_field', (array) apply_filters( 'wpforms_mailcheck_toplevel_domains', array( 'dev' ) ) ),
 		);
 		// Include payment related strings if needed.
 		if ( function_exists( 'wpforms_get_currencies' ) ) {
@@ -1333,6 +1333,27 @@ class WPForms_Frontend {
 			$strings[ $key ] = html_entity_decode( (string) $value, ENT_QUOTES, 'UTF-8' );
 		}
 
+		return $strings;
+	}
+
+	/**
+	 * Hook at fires at a later priority in wp_footer
+	 *
+	 * @since 1.0.5
+	 */
+	public function footer_end() {
+
+		if ( ( empty( $this->forms ) && ! $this->assets_global() ) || wpforms_is_amp() ) {
+			return;
+		}
+
+		$strings = $this->get_strings();
+
+		/*
+		 * Below we do our own implementation of wp_localize_script in an effort
+		 * to be better compatible with caching plugins which were causing
+		 * conflicts.
+		 */
 		echo "<script type='text/javascript'>\n";
 		echo "/* <![CDATA[ */\n";
 		echo 'var wpforms_settings = ' . wp_json_encode( $strings ) . "\n";

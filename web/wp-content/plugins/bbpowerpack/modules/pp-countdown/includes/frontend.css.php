@@ -1,4 +1,36 @@
 <?php
+
+// Title Typography
+FLBuilderCSS::typography_field_rule( array(
+	'settings'		=> $settings,
+	'setting_name' 	=> 'title_typography',
+	'selector' 		=> ".fl-node-$id .pp-countdown-wrapper .pp-countdown-title",
+) );
+
+FLBuilderCSS::responsive_rule( array(
+	'settings'	=> $settings,
+	'setting_name'	=> 'title_margin_top',
+	'selector'	=> ".fl-node-$id .pp-countdown-wrapper .pp-countdown-title",
+	'prop'		=> 'margin-top',
+	'unit'		=> 'px',
+) );
+
+FLBuilderCSS::responsive_rule( array(
+	'settings'	=> $settings,
+	'setting_name'	=> 'title_margin_bottom',
+	'selector'	=> ".fl-node-$id .pp-countdown-wrapper .pp-countdown-title",
+	'prop'		=> 'margin-bottom',
+	'unit'		=> 'px',
+) );
+?>
+
+.fl-node-<?php echo $id; ?> .pp-countdown-wrapper .pp-countdown-title {
+	<?php if ( isset( $settings->title_color ) && '' != $settings->title_color ) : ?>
+		color: <?php echo '#' . $settings->title_color; ?>;
+	<?php endif; ?>
+}
+
+<?php
 $settings->block_bg_color_opc = ( '' != $settings->block_bg_color_opc ) ? $settings->block_bg_color_opc : 100;
 $block_spacing = ( isset( $settings->block_spacing ) && ! empty( $settings->block_spacing ) ) ? $settings->block_spacing : 10;
 ?>
@@ -296,6 +328,19 @@ FLBuilderCSS::typography_field_rule( array(
 			text-align: <?php echo $settings->counter_alignment_medium; ?>;
 		}
 	<?php } ?>
+
+	.fl-node-<?php echo $id;?> .pp-countdown-digit-wrapper.circle,
+	.fl-node-<?php echo $id;?> .pp-countdown-digit-wrapper.square {
+		width: <?php if ( isset( $settings->block_width_medium ) && '' != $settings->block_width_medium ) { echo $settings->block_width_medium; } ?>px;
+		height: <?php if ( isset( $settings->block_width_medium ) && '' != $settings->block_width_medium ) { echo $settings->block_width_medium; } ?>px;
+	}
+
+	.fl-node-<?php echo $id;?> .pp-countdown-digit-wrapper.circle {
+		padding: <?php if ( isset( $settings->block_width_medium ) && '' != $settings->block_width_medium ) { echo $settings->block_width_medium / 5; } ?>px;
+	}
+	.fl-node-<?php echo $id;?> .pp-countdown-digit-wrapper.square {
+		padding: <?php if ( isset( $settings->block_width_medium ) && '' != $settings->block_width_medium ) { echo $settings->block_width_medium / 4; } ?>px;
+	}
 }
 
 @media only screen and ( max-width: <?php echo $global_settings->responsive_breakpoint; ?>px ) {
@@ -318,4 +363,17 @@ FLBuilderCSS::typography_field_rule( array(
 			padding-right: <?php echo $settings->block_spacing; ?>px;
 		}
 	<?php } ?>
+
+	.fl-node-<?php echo $id;?> .pp-countdown-digit-wrapper.circle,
+	.fl-node-<?php echo $id;?> .pp-countdown-digit-wrapper.square {
+		width: <?php if ( isset( $settings->block_width_responsive ) && '' != $settings->block_width_responsive ) { echo $settings->block_width_responsive; } ?>px;
+		height: <?php if ( isset( $settings->block_width_responsive ) && '' != $settings->block_width_responsive ) { echo $settings->block_width_responsive; } ?>px;
+	}
+
+	.fl-node-<?php echo $id;?> .pp-countdown-digit-wrapper.circle {
+		padding: <?php if ( isset( $settings->block_width_responsive ) && '' != $settings->block_width_responsive ) { echo $settings->block_width_responsive / 5; } ?>px;
+	}
+	.fl-node-<?php echo $id;?> .pp-countdown-digit-wrapper.square {
+		padding: <?php if ( isset( $settings->block_width_responsive ) && '' != $settings->block_width_responsive ) { echo $settings->block_width_responsive / 4; } ?>px;
+	}
 }

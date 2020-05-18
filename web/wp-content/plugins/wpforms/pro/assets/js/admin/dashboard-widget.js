@@ -64,6 +64,7 @@ var WPFormsDashboardWidget = window.WPFormsDashboardWidget || ( function( docume
 				} ],
 			},
 			options: {
+				maintainAspectRatio        : false,
 				scales                     : {
 					xAxes: [ {
 						type        : 'time',
@@ -159,7 +160,7 @@ var WPFormsDashboardWidget = window.WPFormsDashboardWidget || ( function( docume
 
 			var data = {
 				_wpnonce: wpforms_dashboard_widget.nonce,
-				action  : 'wpforms_dash_widget_get_chart_data',
+				action  : 'wpforms_' + wpforms_dashboard_widget.slug + '_get_chart_data',
 				days    : days,
 				form_id : formId,
 			};
@@ -393,6 +394,7 @@ var WPFormsDashboardWidget = window.WPFormsDashboardWidget || ( function( docume
 
 			el.$chartResetBtn.click( function() {
 				chart.events.resetToGeneralView();
+				el.$formsListBlock.find( 'tr.wpforms-dash-widget-form-active' ).removeClass( 'wpforms-dash-widget-form-active' );
 			} );
 		},
 
@@ -408,7 +410,15 @@ var WPFormsDashboardWidget = window.WPFormsDashboardWidget || ( function( docume
 			} );
 
 			el.$widget.on( 'click', '.wpforms-dash-widget-single-chart-btn', function() {
-				chart.events.singleFormView( $( this ) );
+				var $t = $( this ),
+					$tr = $t.closest( 'tr' );
+				chart.events.singleFormView( $t );
+				$tr.closest( 'table' ).find( 'tr.wpforms-dash-widget-form-active' ).removeClass( 'wpforms-dash-widget-form-active' );
+				$tr.addClass( 'wpforms-dash-widget-form-active' );
+			} );
+
+			el.$formsListBlock.on( 'click', '.wpforms-dash-widget-reset-chart', function() {
+				el.$chartResetBtn.click();
 			} );
 
 			el.$widget.on( 'click', '#wpforms-dash-widget-forms-more', function() {
@@ -439,7 +449,7 @@ var WPFormsDashboardWidget = window.WPFormsDashboardWidget || ( function( docume
 
 			var data = {
 				_wpnonce: wpforms_dashboard_widget.nonce,
-				action  : 'wpforms_dash_widget_get_forms_list',
+				action  : 'wpforms_' + wpforms_dashboard_widget.slug + '_get_forms_list',
 				days    : days,
 			};
 
@@ -470,14 +480,14 @@ var WPFormsDashboardWidget = window.WPFormsDashboardWidget || ( function( docume
 		 *
 		 * @since 1.5.0
 		 *
-		 * @param {String} meta Meta name to save.
-		 * @param {Number} value Value to save.
+		 * @param {string} meta Meta name to save.
+		 * @param {number} value Value to save.
 		 */
 		saveWidgetMeta: function( meta, value ) {
 
 			var data = {
 				_wpnonce: wpforms_dashboard_widget.nonce,
-				action  : 'wpforms_dash_widget_save_widget_meta',
+				action  : 'wpforms_' + wpforms_dashboard_widget.slug + '_save_widget_meta',
 				meta    : meta,
 				value   : value,
 			};
@@ -490,7 +500,7 @@ var WPFormsDashboardWidget = window.WPFormsDashboardWidget || ( function( docume
 		 *
 		 * @since 1.5.0
 		 *
-		 * @param {Object} $el jQuery element inside a widget block.
+		 * @param {object} $el jQuery element inside a widget block.
 		 */
 		addOverlay: function( $el ) {
 

@@ -75,7 +75,7 @@ class PPTableModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPTableModule', array(
+BB_PowerPack::register_module('PPTableModule', array(
 	'general'		=> array(
 		'title'			=> __('General', 'bb-powerpack'),
 		'sections'		=> array(
@@ -95,7 +95,7 @@ FLBuilder::register_module('PPTableModule', array(
 								'tabs'			=> array('header', 'row')
 							),
 							'csv_import'	=> array(
-								'fields'		=> array('csv_import')
+								'fields'		=> array('csv_import', 'first_row_header')
 							)
 						)
 					),
@@ -107,6 +107,15 @@ FLBuilder::register_module('PPTableModule', array(
 						'preview'		=> array(
 							'type'			=> 'none'
 						)
+					),
+					'first_row_header'	=> array(
+						'type'				=> 'pp-switch',
+						'label'				=> __( 'Make first row as Header?', 'bb-powerpack' ),
+						'default'			=> 'yes',
+						'options'			=> array(
+							'yes'				=> __( 'Yes', 'bb-powerpack' ),
+							'no'				=> __( 'No', 'bb-powerpack' ),
+						),
 					),
 				)
 			),

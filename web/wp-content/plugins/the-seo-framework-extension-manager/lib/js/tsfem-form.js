@@ -9,7 +9,7 @@
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -23,34 +23,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-// ==ClosureCompiler==
-// @compilation_level SIMPLE_OPTIMIZATIONS
-// @debug false
-// @use_types_for_optimization false
-// @disable_property_renaming true
-// @extra_annotations access
-// @language ECMASCRIPT6_STRICT
-// @language_out ECMASCRIPT6_STRICT
-// @output_file_name tsfem-form.min.js
-// @externs_url https://raw.githubusercontent.com/google/closure-compiler/master/contrib/externs/jquery-1.9.js
-// @externs_url http://testmijnphp7.nl/wp-content/plugins/the-seo-framework-extension-manager/lib/js/externs/tsfem.externs.js
-// @externs_url http://testmijnphp7.nl/wp-content/plugins/the-seo-framework-extension-manager/lib/js/externs/tsfem-form.externs.js
-// ==/ClosureCompiler==
-// http://closure-compiler.appspot.com/home
-//
-// These don't work:
-// // @use_types_for_optimization false
-// // @disable_property_renaming true
-// // @extra_annotations access
-//
-// x.dataset properties are rewritten, and I have yet to find a way to bypass that.
-//
-// Therefore, this file is annotated with SIMPLE_OPTIMIZATIONS.
-// This means all "access private" methods are now "access public", regardless.
-//
-// We don't want to use homebrew closure-compiler (i.e. local command line) as it defeats the purpose of open source.
-// Because, that would mean that users can't replicate the file and test its integrity.
 
 'use strict';
 
@@ -68,14 +40,14 @@ window.tsfemForm = {
 	 * @access private
 	 * @type {String} nonce Ajax nonce
 	 */
-	nonce : tsfemFormL10n.nonce,
+	nonce: tsfemFormL10n.nonce,
 
 	/**
 	 * @since 1.3.0
 	 * @access private
 	 * @param {Object} i18n Localized strings
 	 */
-	i18n : tsfemFormL10n.i18n,
+	i18n: tsfemFormL10n.i18n,
 
 	/**
 	 * @since 1.3.0
@@ -83,7 +55,7 @@ window.tsfemForm = {
 	 * @TODO make multiple callee's possible? I.e. multiple iterable forms.
 	 * @type {String} callee Caller class for iterations
 	 */
-	callee : tsfemFormL10n.callee,
+	callee: tsfemFormL10n.callee,
 
 	/**
 	 * Returns element data. Tries to convert JSON if existent.
@@ -153,9 +125,9 @@ window.tsfemForm = {
 			return;
 
 		tsfemForm.prepareItItems( $items );
-		tsfemForm.prepareCollapseItems();
 
-		let itBuffer = 0, itTimeout = 3000,
+		let itBuffer = 0,
+			itTimeout = 1500,
 			vBar, vBarS, vBarTimeout, vBarWidth = 0, vBuffer = 0,
 			vBarSmoothness = 2,
 			vBarSuperSmooth = true,
@@ -198,8 +170,7 @@ window.tsfemForm = {
 			setTimeout( function() {
 				$items.prop( 'disabled', false );
 			}, 500 );
-			$items.off( 'input.fIt' );
-			$items.on( 'input.fIt', fIt );
+			$items.off( 'input.fIt' ).on( 'input.fIt', fIt );
 		}
 		const rebuildEvents = function() {
 			$items.off( 'input.fIt' );
@@ -339,7 +310,7 @@ window.tsfemForm = {
 
 		outputWrapper.style.willChange = 'contents';
 
-		let $window = jQuery( window ),
+		let $window   = jQuery( window ),
 			$toRemove = jQuery( outputWrapper ).children( '.tsfem-form-collapse' ).slice( target.value );
 
 		$window.trigger( 'tsfemForm.deiterationLoad', [ target, $toRemove ] );
@@ -487,7 +458,7 @@ window.tsfemForm = {
 			buttonWrap.dataset.geoApiIsButtonWrap = 1;
 			buttonWrap.style.opacity = 0;
 			let button = document.createElement( 'button' );
-			button.className = 'tsfem-button-primary tsfem-button-green tsfem-button-cloud';
+			button.className = 'tsfem-button-primary tsfem-button-primary-bright tsfem-button-cloud';
 			button.innerHTML = tsfemForm.i18n['validate'];
 			button.type = 'button';
 			buttonWrap.appendChild( button );
@@ -892,16 +863,14 @@ window.tsfemForm = {
 			}, tTimeout );
 		}
 
-		let $input = jQuery( 'input[data-geo-api="1"]' ),
+		let $input  = jQuery( 'input[data-geo-api="1"]' ),
 			$select = jQuery( 'select[data-geo-api="1"]' );
 
 		if ( $input ) {
-			$input.off( 'input.tsfemForm.addButtonIfValid' );
-			$input.on( 'input.tsfemForm.addButtonIfValid', addButtonIfValid );
+			$input.off( 'input.tsfemForm.addButtonIfValid' ).on( 'input.tsfemForm.addButtonIfValid', addButtonIfValid );
 		}
 		if ( $select ) {
-			$select.off( 'change.tsfemForm.addButtonIfValid' );
-			$select.on( 'change.tsfemForm.addButtonIfValid', addButtonIfValid );
+			$select.off( 'change.tsfemForm.addButtonIfValid' ).on( 'change.tsfemForm.addButtonIfValid', addButtonIfValid );
 		}
 	},
 
@@ -919,8 +888,7 @@ window.tsfemForm = {
 	 */
 	getGeoData: function( input, formId, completeData ) {
 
-		let form = document.getElementById( formId ),
-			output;
+		let form = document.getElementById( formId );
 
 		let $loader = jQuery( form ).closest( '.tsfem-pane-wrap' ).find( '.tsfem-pane-header .tsfem-ajax' ),
 			status = 0, loaderText = '';
@@ -996,10 +964,10 @@ window.tsfemForm = {
 			tsfemForm.prepareCollapseValidity( event );
 		}
 
-		let $buttons = jQuery( '.tsfem-form-collapse > input' );
-
-		$buttons.off( 'change.tsfemForm.prepareItems' );
-		$buttons.on( 'change.tsfemForm.prepareItems', prepareItems );
+		jQuery( '.tsfem-form-collapse > input' )
+			.off( 'change.tsfemForm.prepareItems' )
+			.on( 'change.tsfemForm.prepareItems', prepareItems )
+			.trigger( 'change.tsfemForm.prepareItems' );
 	},
 
 	/**
@@ -1028,6 +996,25 @@ window.tsfemForm = {
 
 			if ( val ) {
 				$title.text( prep + ' - ' + val );
+			} else {
+				$title.text( prep );
+			}
+		}
+		/**
+		 * Changes title based on single input.
+		 *
+		 * @param {event} event The target input field change.
+		 */
+		const doTitleChangeCheckbox = function( event ) {
+
+			let checked = event.target.checked || false;
+
+			let $label = jQuery( event.data._tsfemFormLabel ),
+				$title = $label.find( '.tsfem-form-collapse-title' ),
+				prep = $label.data( 'dyntitleprep' );
+
+			if ( checked ) {
+				$title.text( prep + ' - ' + $label.data( 'dyntitlechecked' ) );
 			} else {
 				$title.text( prep );
 			}
@@ -1065,28 +1052,43 @@ window.tsfemForm = {
 		const prepareTitleChange = function( event ) {
 
 			let $label = jQuery( event.target ).siblings( 'label' ),
-				type = $label.data( 'dyntitletype' ),
-				key = $label.data( 'dyntitleid' ) + '[' + $label.data( 'dyntitlekey' ) + ']';
+				type   = $label.data( 'dyntitletype' ),
+				key    = $label.data( 'dyntitleid' ) + '[' + $label.data( 'dyntitlekey' ) + ']',
+				action;
 
 			switch ( type ) {
 				case 'single':
+				case 'checkbox':
 					let el = document.getElementById( key );
 
-					if ( event.target.checked ) {
-						jQuery( el ).off( 'input.tsfemForm.doTitleChangeSingle' );
-					} else {
-						jQuery( el ).on( 'input.tsfemForm.doTitleChangeSingle', { '_tsfemFormLabel' : $label }, doTitleChangeSingle );
-					}
+					action = 'input.tsfemForm.doTitleChangeSingle';
+
+					jQuery( el )
+						.off( action )
+						.on(
+							action,
+							{ _tsfemFormLabel: $label },
+							'checkbox' === type ? doTitleChangeCheckbox : doTitleChangeSingle
+						)
+						.trigger( action );
 					break;
 
 				case 'plural':
 					let $things = jQuery( document.getElementById( key ) ).find( 'input[type=checkbox]' );
 
-					if ( event.target.checked ) {
-						$things.off( 'change.tsfemForm.doTitleChangePlural' );
-					} else {
-						$things.on( 'change.tsfemForm.doTitleChangePlural', { '_tsfemFormLabel' : $label, '_tsfemFormThings' : $things }, doTitleChangePlural );
-					}
+					action = 'input.tsfemForm.doTitleChangeSingle';;
+
+					$things
+						.off( action )
+						.on(
+							action,
+							{
+								_tsfemFormLabel: $label,
+								_tsfemFormThings: $things
+							},
+							doTitleChangePlural
+						)
+						.trigger( action );
 					break;
 			}
 		}
@@ -1117,9 +1119,9 @@ window.tsfemForm = {
 				goodClass = 'tsfem-form-collapse-header-good';
 
 			let iconSelector = '.tsfem-form-title-icon',
-				iconUnknown = 'tsfem-form-title-icon-unknown',
-				iconError = 'tsfem-form-title-icon-error',
-				iconGood = 'tsfem-form-title-icon-good';
+				iconUnknown  = 'tsfem-form-title-icon-unknown',
+				iconError    = 'tsfem-form-title-icon-error',
+				iconGood     = 'tsfem-form-title-icon-good';
 
 			if ( hasErrors > 0 ) {
 				$header.removeClass( goodClass ).addClass( errorClass );
@@ -1233,8 +1235,10 @@ window.tsfemForm = {
 			//= Reinitiate the event if the collapse header is expanded (unchecked).
 			if ( ! event.target.checked ) {
 				$items.on( 'change.tsfemForm.checkValidity', checkValidity );
-				doFirstCheck( event.target, $items );
+				// doFirstCheck( event.target, $items );
 			}
+
+			doFirstCheck( event.target, $items );
 		}
 		prepareChecks( event );
 
@@ -1308,19 +1312,13 @@ window.tsfemForm = {
 			removeCustomChecks();
 			addCustomChecks();
 
-			let $window = jQuery( window );
-
-			/**
-			 * Race conditions...
-			 */
-			//= Delegation resetters.
-			$window.off( 'tsfemForm.iterationLoad.customValidation' );
-			$window.off( 'tsfemForm.iterationFail.customValidation' );
-			$window.off( 'tsfemForm.iterationComplete.customValidation' );
-			//= Event resetter.
-			$window.on( 'tsfemForm.iterationLoad.customValidation', removeCustomChecks );
-			$window.on( 'tsfemForm.iterationFail.customValidation', addCustomChecks );
-			$window.on( 'tsfemForm.iterationComplete.customValidation', addCustomChecks );
+			jQuery( window )
+				.off( 'tsfemForm.iterationLoad.customValidation' )
+				.off( 'tsfemForm.iterationFail.customValidation' )
+				.off( 'tsfemForm.iterationComplete.customValidation' )
+				.on( 'tsfemForm.iterationLoad.customValidation', removeCustomChecks )
+				.on( 'tsfemForm.iterationFail.customValidation', addCustomChecks )
+				.on( 'tsfemForm.iterationComplete.customValidation', addCustomChecks );
 		}
 		prepareCustomChecks();
 	},
@@ -1384,11 +1382,9 @@ window.tsfemForm = {
 		 * Initializes deiteration check events.
 		 */
 		const prepareDeiterationChecks = function() {
-
-			let $window = jQuery( window );
-
-			$window.off( 'tsfemForm.deiterationLoad.disableAndValidate' );
-			$window.on( 'tsfemForm.deiterationLoad.disableAndValidate', disableAndValidate );
+			jQuery( window )
+				.off( 'tsfemForm.deiterationLoad.disableAndValidate' )
+				.on( 'tsfemForm.deiterationLoad.disableAndValidate', disableAndValidate );
 		}
 		prepareDeiterationChecks();
 	},
@@ -1581,7 +1577,11 @@ window.tsfemForm = {
 			//* Prevent additional runs on iteration.
 			event.target.dataset.typeInitTested = 1;
 
-			value = event.target.value;
+			if ( event.target.type.toLowerCase() === 'checkbox' ) {
+				value = event.target.checked ? event.target.value : '0';
+			} else {
+				value = event.target.value;
+			}
 
 			if ( ! value ) {
 				//= Value is empty. No need to loop.
@@ -1605,14 +1605,14 @@ window.tsfemForm = {
 		 * Finds type listeners and attaches change handlers.
 		 */
 		const find = function() {
-			let $fields = jQuery( '[data-is-type-listener="1"]' ),
-				$input, tested;
+			let $fields = jQuery( '[data-is-type-listener="1"]' );
 
 			$fields.each( function( index, element ) {
 				if ( ! element.dataset.typeInitTested ) {
-					$input = jQuery( element );
-					$input.on( 'change.tsfemForm.typeListener', setType );
-					$input.trigger( 'change.tsfemForm.typeListener' );
+					jQuery( element )
+						.off( 'change.tsfemForm.typeListener' )
+						.on( 'change.tsfemForm.typeListener', setType )
+						.trigger( 'change.tsfemForm.typeListener' );
 				}
 			} );
 		}
@@ -1639,14 +1639,14 @@ window.tsfemForm = {
 
 		let input = 'input, select, textarea';
 
-		let slideOps = {
-			'duration' : 250,
-			'easing' : 'linear',
-			'queue' : false,
-			'start' : function() {
-				this.style.willChange = 'height, margin, padding';
+		let fadeOps = {
+			duration: 150,
+			easing: 'linear',
+			queue: false,
+			start: function() {
+				this.style.willChange = 'opacity';
 			},
-			'done' : function() {
+			done: function() {
 				//= Prevent non-queue style-retain glitch on paint lag.
 				let display = this.style.display;
 
@@ -1662,8 +1662,7 @@ window.tsfemForm = {
 		 * @param {Element} element
 		 * @return {boolean} True if shown. False otherwise.
 		 */
-		const isShown = function( element ) {
-
+		const isShown = element => {
 			let _isShown = element.dataset.isShown || void 0,
 				_isShownO;
 
@@ -1690,7 +1689,7 @@ window.tsfemForm = {
 		 * @param {number} _i Whether to enable (1) or disable (-1).
 		 * @return {boolean} True if value has changed. False otherwise.
 		 */
-		const setShown = function( element, trigger, _i ) {
+		const setShown = ( element, trigger, _i ) => {
 
 			let _isShown = element.dataset.isShown || void 0,
 				_isShownO;
@@ -1719,10 +1718,8 @@ window.tsfemForm = {
 		 * @param {Element} element
 		 * @param {number} _i The number to add or subtract for element.
 		 */
-		const countDisabled = function( element, _i ) {
-
+		const countDisabled = ( element, _i ) => {
 			let count = element.dataset.disabledShowif;
-
 			return element.dataset.disabledShowif = count ? +count + _i : +_i;
 		}
 		/**
@@ -1731,28 +1728,26 @@ window.tsfemForm = {
 		 *
 		 * @param {Element} element
 		 * @param {string} trigger The trigger ID.
+		 * @return {jQuery.Deferred}
 		 */
-		const triggerHide = function( element, trigger ) {
+		const triggerHide = ( element, trigger ) => {
 
 			if ( ! setShown( element, trigger, -1 ) )
 				return;
 
-			let $el = jQuery( element ),
-				count;
+			let $el = jQuery( element );
 
 			//* Test is element is self (1), or a container (2).
 			if ( $el.is( input ) ) {
-				//= Hide then write.
-				$el.closest( '.tsfem-form-setting' ).slideUp( slideOps );
+				$el.closest( '.tsfem-form-setting' ).fadeOut( fadeOps );
 
 				element.disabled = true;
 				countDisabled( element, 1 );
 
 				tsfemForm.triggerCustomValidation( element );
 			} else {
-				//= Hide then write.
-				$el.slideUp( slideOps );
-				$el.find( input ).each( function( index, _element ) {
+				$el.fadeOut( fadeOps );
+				$el.find( input ).each( ( index, _element ) => {
 					_element.disabled = true;
 					countDisabled( _element, 1 );
 
@@ -1768,8 +1763,9 @@ window.tsfemForm = {
 		 *
 		 * @param {Element} element
 		 * @param {string} trigger The trigger ID.
+		 * @return {jQuery.Deferred}
 		 */
-		const triggerShow = function( element, trigger ) {
+		const triggerShow = ( element, trigger ) => {
 
 			if ( ! setShown( element, trigger, 1 ) )
 				return;
@@ -1783,14 +1779,14 @@ window.tsfemForm = {
 					element.disabled = false;
 					tsfemForm.triggerCustomValidation( element );
 
-					$el.closest( '.tsfem-form-setting' ).slideDown( slideOps );
+					$el.closest( '.tsfem-form-setting' ).fadeIn( fadeOps );
 				}
 			} else {
 				//= Write then show.
 				let _checkMore = $el.hasClass( 'tsfem-form-multi-setting' ),
 					_count;
 
-				$el.find( input ).each( function( index, _element ) {
+				$el.find( input ).each( ( index, _element ) => {
 					//= Always count.
 					_count = countDisabled( _element, -1 );
 
@@ -1806,7 +1802,7 @@ window.tsfemForm = {
 						jQuery( _element ).show();
 					}
 				} );
-				$el.slideDown( slideOps );
+				$el.fadeIn( fadeOps );
 			}
 		}
 		/**
@@ -1817,26 +1813,31 @@ window.tsfemForm = {
 		 * @param {jQuery.element} target The target to listen to for value.
 		 * @param {string} value The value the target must be, to show element.
 		 */
-		const attachHandler = function( element, target, value ) {
+		const attachHandler = ( element, target, value ) => {
 
 			let buffer = {};
 
 			//= See tsfemForm.setupTypeListener.setType
-			jQuery( target ).on( 'tsfemForm.typeIsSet', element, function( event ) {
+			jQuery( target )
+				.off( 'tsfemForm.typeIsSet', element )
+				.on( 'tsfemForm.typeIsSet', element, () => {
+					clearTimeout( buffer[ target.id ] );
 
-				clearTimeout( buffer[ target.id ] );
+					// This is a magic debouncer against a race condition that doesn't
+					// work under the fadeOps.duration since there are deferred objects inside.
+					// The +25ms works on fast computers. We can only hope the user doesn't enact
+					// within the submillisecond timeframe during processing (validation, etc.) of the form.
+					buffer[ target.id ] = setTimeout( () => {
+						if ( target.dataset.type === value ) {
+							triggerShow( element, target.id );
+						} else {
+							triggerHide( element, target.id );
+						}
+						delete buffer[ target.id ];
+					}, fadeOps.duration + 25 ); // debounce
+				} );
 
-				buffer[ target.id ] = setTimeout( function() {
-					if ( target.dataset.type === value ) {
-						triggerShow( element, target.id );
-					} else {
-						triggerHide( element, target.id );
-					}
-					delete buffer[ target.id ];
-				}, 250 );
-			} );
-
-			//= Initial run.
+			//= Initial run. Don't promise.
 			if ( target.dataset.type === value ) {
 				triggerShow( element, target.id );
 			} else {
@@ -1850,7 +1851,7 @@ window.tsfemForm = {
 		 * @param {Element} element The element that might be hidden or shown.
 		 * @return {(object|undefined)} Undefined if no target can be found.
 		 */
-		const findTarget = function( element ) {
+		const findTarget = ( element ) => {
 
 			let data = tsfemForm.parseElementData( element, 'showif' );
 
@@ -1858,8 +1859,12 @@ window.tsfemForm = {
 				return void 0;
 
 			let $target,
-				$collapse = jQuery( element ).closest( '.tsfem-form-collapse-content' ),
-				val;
+				val,
+				$group = jQuery( element ).closest( '.tsfem-form-collapse-content' );
+
+			if ( ! $group.length ) {
+				$group = jQuery( element ).closest( '.tsfem-form-multi-setting' );
+			}
 
 			// A single item. For now.
 			for ( val in data ) break;
@@ -1867,11 +1872,11 @@ window.tsfemForm = {
 			if ( ! val )
 				return void 0;
 
-			if ( $collapse ) {
-				//= Collapse.
-				$target = $collapse.find( '[data-showif-catcher="' + val + '"]' );
+			if ( $group ) {
+				//= Group.
+				$target = $group.find( '[data-showif-catcher="' + val + '"]' );
 			} else {
-				//= Non-Collapse.
+				//= No group, try anyway.
 				$target = jQuery( element.form ).find( '[data-showif-catcher="' + val + '"]' );
 			}
 
@@ -1879,8 +1884,8 @@ window.tsfemForm = {
 				return void 0;
 
 			return {
-				'target' : $target[0],
-				'value' : data[ val ]
+				target: $target[0],
+				value:  data[ val ]
 			};
 		}
 		/**
@@ -1889,10 +1894,8 @@ window.tsfemForm = {
 		 *
 		 * @param {Element} element The element that might be hidden or shown.
 		 */
-		const showIfInit = function( element ) {
-
+		const showIfInit = element => {
 			element.dataset.showIfIsInit = '1';
-
 			let data = findTarget( element );
 			if ( data )
 				attachHandler( element, data.target, data.value );
@@ -1901,12 +1904,17 @@ window.tsfemForm = {
 		 * Initializes showif functionality by getting fields.
 		 * It runs once per element, preventing duplication by adding data.
 		 */
-		const init = function() {
+		const init = () => {
 			let $fields = jQuery( '[data-is-showif-listener="1"]' );
 
-			$fields.each( function( index, element ) {
+			let fadeOpsDuration = fadeOps.duration;
+			fadeOps.duration = 0;
+
+			$fields.each( ( index, element ) => {
 				element.dataset.showIfIsInit || showIfInit( element );
 			} );
+
+			fadeOps.duration = fadeOpsDuration;
 		}
 		init();
 		jQuery( window ).on( 'tsfemForm.iterationComplete', init );
@@ -1928,7 +1936,7 @@ window.tsfemForm = {
 		let $forms = jQuery( 'form.tsfem-form' );
 
 		$forms.each( ( i, element ) => {
-			jQuery( document.querySelector( '[type=submit][form="' + element.id + '"]' ) ).attr( 'onclick', 'tsfemForm.saveInput( event )' );
+			jQuery( document.querySelectorAll( '[type=submit][form="' + element.id + '"]' ) ).attr( 'onclick', 'tsfemForm.saveInput( event )' );
 		} );
 	},
 
@@ -2010,22 +2018,27 @@ window.tsfemForm = {
 				$checkbox = $header.find( '.tsfem-form-collapse-checkbox' ).first();
 
 				let scrollToTimeout;
-				const scrollTo = function( $to, $wrap ) {
+				const scrollTo = function( $to ) {
 					//= Let the tooltip be painted first.
 					clearTimeout( scrollToTimeout );
 					scrollToTimeout = setTimeout( function() {
-						/**
-						 * We require the current scrollTop in this calculation
-						 * as the $to offset changes based on its position.
-						 *
-						 * We grab $wrap.position.top to create a nice relatable
-						 * offset. It isn't to be trusted, but in this context
-						 * it will always work.
-						 */
-						let _to = ( $to.offset().top + $wrap.prop( 'scrollTop' ) ) - $wrap.offset().top - $wrap.position().top;
+						let _scrollTop    = document.documentElement.scrollTop,
+							_clientHeight = document.documentElement.clientHeight,
+							_to           = $to.offset().top,
+							/* Most eyes focus on 1/3th top of screen */
+							_offSet       = jQuery( '.tsfem-sticky-top' ).height() + ( _clientHeight * 1/3 ),
+							_doScroll     = false;
 
-						if ( $wrap.prop( 'scrollHeight' ) > $wrap.prop( 'clientHeight' ) ) {
-							$wrap.animate( { 'scrollTop' : _to }, 500 );
+						if ( _to - _offSet < ( _scrollTop ) ) {
+							// Scroll up.
+							_doScroll = true;
+						} else if ( _to + _offSet > ( _clientHeight + _scrollTop ) ) {
+							// Scroll down.
+							_doScroll = true;
+						}
+
+						if ( _doScroll ) {
+							jQuery( document.documentElement ).animate( { 'scrollTop' : _to - _offSet }, 500 );
 						}
 					}, 50 );
 				}
@@ -2040,10 +2053,8 @@ window.tsfemForm = {
 
 				//= Create tooltip, scroll to it, add tooltip listeners.
 				tsfTT.doTooltip( void 0, $label, notification );
-				scrollTo( $label, $label.closest( '.tsfem-pane-inner-wrap' ) );
-				//scrollTo( tsfem.getTooltip( $label ), $label.closest( '.tsfem-pane-inner-wrap' ) );
-				$checkbox.off( 'change.tsfemForm.removeToolTip' );
-				$checkbox.on( 'change.tsfemForm.removeToolTip', removeToolTip );
+				scrollTo( $label );
+				$checkbox.off( 'change.tsfemForm.removeToolTip' ).on( 'change.tsfemForm.removeToolTip', removeToolTip );
 			}
 
 			if ( firstInvalid ) {
@@ -2068,6 +2079,8 @@ window.tsfemForm = {
 	 * @return {(undefined|boolean)} void If form isn't valid. True on AJAX completion.
 	 */
 	saveInput: function( event ) {
+		// TODO if we want to save all input, we need a new method, because 'let form, $loader' only handles one form and loader.
+		// Or, we could walk over the event, and grab multiple formIds
 
 		//* For sanity, prevent regular form submission.
 		tsfemForm.preventSubmit( event );
@@ -2091,8 +2104,9 @@ window.tsfemForm = {
 		}
 
 		//let buttonClassName = 'tsfem-button-disabled tsfem-button-loading'; // ES6
-		let $loader = jQuery( form ).closest( '.tsfem-pane-wrap' ).find( '.tsfem-pane-header .tsfem-ajax' ),
-			status = 0, loaderText = '';
+		let $loader    = jQuery( form ).closest( '.tsfem-pane-wrap' ).find( '.tsfem-pane-header .tsfem-ajax' ),
+			status     = 0,
+			loaderText = '';
 
 		//* Disable the submit button.
 		tsfemForm.disableButton( button );
@@ -2109,9 +2123,9 @@ window.tsfemForm = {
 			url: ajaxurl,
 			dataType: 'json',
 			data: {
-				'action' : 'tsfemForm_save',
-				'nonce' : tsfemForm.nonce,
-				'data' : jQuery( form ).serialize(),
+				action: 'tsfemForm_save',
+				nonce:  tsfemForm.nonce,
+				data:   jQuery( form ).serialize(),
 			},
 			processData: true,
 			timeout: 14000,
@@ -2129,16 +2143,17 @@ window.tsfemForm = {
 				//* Erroneous output.
 				loaderText = tsfem.i18n['InvalidResponse'];
 			} else {
-				let rCode = data.results && data.results.code || void 0;
+				let rCode  = data.results && data.results.code || void 0;
 
 				if ( rCode ) {
-					/**
-					 * status doesn't have to be 1. We actually need to
-					 * switch through the status codes to determine
-					 * it being 1 or 0.
-					 * @todo
-					 */
-					status = 1;
+					if ( data.data && data.data.failed && data.data.failed.length ) {
+						// Here, we should decipher which extension failed..
+						// TODO see message at top of function.
+						status = 0;
+						loaderText = tsfem.i18n['UnknownError'];
+					} else {
+						status = 1;
+					}
 					tsfem.setTopNotice( rCode );
 				} else {
 					//* Erroneous output.
@@ -2170,7 +2185,7 @@ window.tsfemForm = {
 	 * @param {jQuery.event} event jQuery event
 	 * @return {boolean} false
 	 */
-	preventSubmit : function( event ) {
+	preventSubmit: function( event ) {
 		event.preventDefault();
 		event.stopPropagation();
 		return false;
@@ -2278,6 +2293,9 @@ window.tsfemForm = {
 		//* Prepare show-if listeners.
 		tsfemForm.setupShowIfListener();
 
+		//* Prepares collapse items. Must run after show-if listeners because we validate the forms here.
+		tsfemForm.prepareCollapseItems();
+
 		//* Turn form submit into an AJAX pusher.
 		tsfemForm.adjustSubmit();
 	},
@@ -2285,6 +2303,7 @@ window.tsfemForm = {
 	/**
 	 * Initialises all aspects of the scripts.
 	 *
+	 * @TODO convert to function container for improved performance.
 	 * @since 1.3.0
 	 * @access private
 	 *

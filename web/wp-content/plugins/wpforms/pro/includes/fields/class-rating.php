@@ -3,11 +3,7 @@
 /**
  * Rating field.
  *
- * @package    WPForms
- * @author     WPForms
- * @since      1.4.4
- * @license    GPL-2.0+
- * @copyright  Copyright (c) 2018, WPForms LLC
+ * @since 1.4.4
  */
 class WPForms_Rating_Text extends WPForms_Field {
 
@@ -424,7 +420,7 @@ class WPForms_Rating_Text extends WPForms_Field {
 		$svg = str_replace( 'width=""', 'width="' . absint( $rating['size'] ) . '"', $svg );
 		$svg = str_replace( 'height=""', 'height="' . absint( $rating['size'] ) . '"', $svg );
 		$svg = str_replace( 'style=""', 'style="height:' . absint( $rating['size'] ) . 'px;width:' . absint( $rating['size'] ) . 'px;"', $svg );
-		$svg = str_replace( 'fill=""', 'fill="' . wpforms_sanitize_hex_color( $rating['color'] ) . '"', $svg );
+		$svg = str_replace( 'fill=""', 'fill="currentColor" color="' . wpforms_sanitize_hex_color( $rating['color'] ) . '"', $svg );
 
 		echo '<div class="wpforms-field-rating-items">';
 
@@ -491,7 +487,7 @@ class WPForms_Rating_Text extends WPForms_Field {
 	}
 
 	/**
-	 * Formats field.
+	 * Format field.
 	 *
 	 * @since 1.4.4
 	 *

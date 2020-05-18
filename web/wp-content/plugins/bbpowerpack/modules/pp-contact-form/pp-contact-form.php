@@ -31,16 +31,14 @@ class PPContactFormModule extends FLBuilderModule {
 	 */
 	public function enqueue_scripts() {
 		$settings = $this->settings;
-		if ( isset( $settings->recaptcha_toggle ) && 'show' == $settings->recaptcha_toggle
-			&& isset( $settings->recaptcha_site_key ) && ! empty( $settings->recaptcha_site_key )
-			) {
+		if ( isset( $settings->recaptcha_toggle ) && 'show' == $settings->recaptcha_toggle ) {
 
 			$site_lang = substr( get_locale(), 0, 2 );
 			$post_id    = FLBuilderModel::get_post_id();
 
 			$this->add_js(
 				'g-recaptcha',
-				'https://www.google.com/recaptcha/api.js?onload=onLoadFLReCaptcha&render=explicit&hl=' . $site_lang,
+				'https://www.google.com/recaptcha/api.js?onload=onLoadPPReCaptcha&render=explicit&hl=' . $site_lang,
 				array( 'fl-builder-layout-' . $post_id ),
 				'2.0',
 				true
@@ -101,9 +99,11 @@ class PPContactFormModule extends FLBuilderModule {
 		$subject 			= (isset($_POST['subject']) ? $_POST['subject'] : __('Contact Form Submission', 'bb-powerpack'));
 		$admin_email 		= get_option('admin_email');
 		$site_name 			= get_option( 'blogname' );
+		$email_from 		= apply_filters( 'pp_contact_form_from_email', $admin_email );
+		$email_from			= sanitize_email( $email_from );
 
-		if ( $site_name ) {
-			$site_name = apply_filters( 'pp_contact_form_from_name', html_entity_decode( $site_name ) );
+		if ( ! is_email( $email_from ) ) {
+			$email_from = $admin_email;
 		}
 
 		$response = array(
@@ -136,7 +136,14 @@ class PPContactFormModule extends FLBuilderModule {
 
 			// Validate reCAPTCHA if enabled
 			if ( isset( $settings->recaptcha_toggle ) && 'show' == $settings->recaptcha_toggle && $recaptcha_response ) {
-				if ( ! empty( $settings->recaptcha_secret_key ) && ! empty( $settings->recaptcha_site_key ) ) {
+				if ( isset( $settings->recaptcha_key_source ) && 'default' == $settings->recaptcha_key_source ) {
+					$recaptcha_site_key = BB_PowerPack_Admin_Settings::get_option( 'bb_powerpack_recaptcha_site_key' );
+					$recaptcha_secret_key = BB_PowerPack_Admin_Settings::get_option( 'bb_powerpack_recaptcha_secret_key' );
+				} else {
+					$recaptcha_site_key = $settings->recaptcha_site_key;
+					$recaptcha_secret_key = $settings->recaptcha_secret_key;
+				}
+				if ( ! empty( $recaptcha_secret_key ) && ! empty( $recaptcha_site_key ) ) {
 					if ( version_compare( phpversion(), '5.3', '>=' ) ) {
 						include FLBuilderModel::$modules['pp-contact-form']->dir . 'includes/validate-recaptcha.php';
 					} else {
@@ -152,12 +159,16 @@ class PPContactFormModule extends FLBuilderModule {
 				$response['error'] = false;
 			}
 
-			$pp_contact_from_email = (isset($_POST['email']) ? sanitize_email($_POST['email']) : null);
-			$pp_contact_from_name = (isset($_POST['name']) ? $_POST['name'] : '');
+			$sender_email = ( isset($_POST['email'] ) ? sanitize_email( $_POST['email'] ) : null );
+			$sender_name = ( isset( $_POST['name'] ) ? $_POST['name'] : '' );
+
+			$site_name = apply_filters( 'pp_contact_form_from_name', $site_name, $sender_name );
+
+			$site_name = html_entity_decode( $site_name );
 
 			$headers = array(
-				'From: ' . $site_name . ' <' . $admin_email . '>',
-				  'Reply-To: ' . $pp_contact_from_name . ' <' . $pp_contact_from_email . '>',
+				'From: ' . $site_name . ' <' . $email_from . '>',
+				  'Reply-To: ' . $sender_name . ' <' . $sender_email . '>',
 			);
 
 			// Build the email
@@ -363,7 +374,7 @@ class PPContactFormModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPContactFormModule', array(
+BB_PowerPack::register_module('PPContactFormModule', array(
 	'general'       => array(
 		'title'         => __('General', 'bb-powerpack'),
 		'sections'      => array(
@@ -400,7 +411,7 @@ FLBuilder::register_module('PPContactFormModule', array(
                         ),
                         'toggle' => array(
                             'yes'      => array(
-                                'fields'  => array('custom_title', 'custom_description'),
+                                'fields'  => array('custom_title', 'custom_description', 'title_tag'),
                             ),
                         )
                     ),
@@ -642,7 +653,7 @@ FLBuilder::register_module('PPContactFormModule', array(
 	                'form_bg_color'     => array(
 	                    'type'          => 'color',
 	                    'label'         => __('Background Color', 'bb-powerpack'),
-	                    'default'       => 'ffffff',
+	                    'default'       => '',
 						'show_reset'    => true,
 						'show_alpha'	=> true,
 						'connections'	=> array('color'),
@@ -724,7 +735,7 @@ FLBuilder::register_module('PPContactFormModule', array(
                     'title_margin' 	=> array(
                         'type' 			=> 'pp-multitext',
                         'label' 		=> __('Margin', 'bb-powerpack'),
-                        'description'   => __( 'px', 'Value unit for font size. Such as: "14 px"', 'bb-powerpack' ),
+                        'description'   => 'px',
                         'default'       => array(
                             'top' => 10,
                             'bottom' => 10,
@@ -763,7 +774,7 @@ FLBuilder::register_module('PPContactFormModule', array(
                     'description_margin' 	=> array(
                         'type' 			=> 'pp-multitext',
                         'label' 		=> __('Margin', 'bb-powerpack'),
-                        'description'   => __( 'px', 'Value unit for font size. Such as: "14 px"', 'bb-powerpack' ),
+                        'description'   => 'px',
                         'default'       => array(
                             'top' => 10,
                             'bottom' => 10,
@@ -806,7 +817,7 @@ FLBuilder::register_module('PPContactFormModule', array(
                     'input_field_text_color'    => array(
                         'type'                  => 'color',
                         'label'                 => __('Text Color', 'bb-powerpack'),
-						'default'               => '333333',
+						'default'               => '',
 						'connections'			=> array('color'),
                         'preview'               => array(
                             'type'                  => 'css',
@@ -817,7 +828,7 @@ FLBuilder::register_module('PPContactFormModule', array(
                     'input_field_bg_color'      => array(
                         'type'                  => 'color',
                         'label'                 => __('Background Color', 'bb-powerpack'),
-                        'default'               => 'ffffff',
+                        'default'               => '',
 						'show_reset'            => true,
 						'show_alpha'			=> true,
 						'connections'			=> array('color'),
@@ -836,7 +847,7 @@ FLBuilder::register_module('PPContactFormModule', array(
                     'input_field_border_color'  => array(
                         'type'                  => 'color',
                         'label'                 => __('Border Color', 'bb-powerpack'),
-                        'default'               => 'eeeeee',
+                        'default'               => '',
 						'show_reset'            => true,
 						'connections'			=> array('color'),
                         'preview'               => array(
@@ -850,7 +861,7 @@ FLBuilder::register_module('PPContactFormModule', array(
                         'label'                   => __('Border Width', 'bb-powerpack'),
                         'units'  	  	          => array('px'),
                         'slider'                  => true,
-                        'default'                 => '1',
+                        'default'                 => '',
                         'preview'                 => array(
                             'type'                => 'css',
                             'rules'                 => array(
@@ -903,7 +914,7 @@ FLBuilder::register_module('PPContactFormModule', array(
                     'input_field_focus_color'      => array(
                         'type'                  => 'color',
                         'label'                 => __('Focus Border Color', 'bb-powerpack'),
-                        'default'               => '719ece',
+                        'default'               => '',
 						'show_reset'            => true,
 						'connections'			=> array('color'),
                         'preview'               => array(
@@ -923,7 +934,7 @@ FLBuilder::register_module('PPContactFormModule', array(
                         'label'                   => __('Input Height', 'bb-powerpack'),
                         'units'		              => array('px'),
                         'slider'                  => true,
-                        'default'                 => '32',
+                        'default'                 => '',
                         'preview'                 => array(
                             'type'                => 'css',
                             'selector'            => '.pp-contact-form input[type=text], .pp-contact-form input[type=tel], .pp-contact-form input[type=email]',
@@ -936,7 +947,7 @@ FLBuilder::register_module('PPContactFormModule', array(
                         'label'                   => __('Textarea Height', 'bb-powerpack'),
                         'units'		              => array('px'),
                         'slider'                  => true,
-                        'default'                 => '140',
+                        'default'                 => '',
                         'preview'                 => array(
                             'type'                => 'css',
                             'selector'            => '.pp-contact-form textarea',
@@ -955,7 +966,7 @@ FLBuilder::register_module('PPContactFormModule', array(
                         'label'                    => __('Round Corners', 'bb-powerpack'),
                         'units'		               => array('px'),
                         'slider'                   => true,
-                        'default'                  => '2',
+                        'default'                  => '',
                         'preview'                  => array(
                             'type'                 => 'css',
                             'selector'             => '.pp-contact-form textarea, .pp-contact-form input[type=text], .pp-contact-form input[type=tel], .pp-contact-form input[type=email]',
@@ -1046,7 +1057,7 @@ FLBuilder::register_module('PPContactFormModule', array(
                     'input_placeholder_color'  => array(
                         'type'                  => 'color',
                         'label'                 => __('Color', 'bb-powerpack'),
-                        'default'               => 'eeeeee',
+                        'default'               => '',
 						'show_reset'            => true,
 						'connections'			=> array('color'),
                         'preview'               => array(
@@ -1281,6 +1292,20 @@ FLBuilder::register_module('PPContactFormModule', array(
 	'form_messages_setting' => array(
         'title' => __('Messages', 'bb-powerpack'),
         'sections'  => array(
+			'form_messages'	=> array(
+				'title'			=> '',
+				'fields'		=> array(
+					'error_message'	=> array(
+						'type'		=> 'text',
+						'label'		=> __( 'Error Message', 'bb-powerpack' ),
+						'default'	=> __( 'Message failed. Please try again.', 'bb-powerpack' ),
+						'preview'	=> array(
+							'type'		=> 'text',
+							'selector'	=> '.pp-send-error',
+						),
+					),
+				),
+			),
 			'form_error_styling'    => array( // Section
                 'title'             => __('Errors', 'bb-powerpack'), // Section Title
                 'fields'            => array( // Section Fields
@@ -1334,6 +1359,19 @@ FLBuilder::register_module('PPContactFormModule', array(
 			'title_typography'       => array( // Section
                 'title'         => __('Title', 'bb-powerpack'), // Section Title
 				'fields'        => array( // Section Fields
+					'title_tag'		=> array(
+						'type'			=> 'select',
+						'label'			=> __('HTML Tag', 'bb-powerpack'),
+						'default'		=> 'h3',
+						'options'		=> array(
+							'h1'			=> 'H1',
+							'h2'			=> 'H2',
+							'h3'			=> 'H3',
+							'h4'			=> 'H4',
+							'h5'			=> 'H5',
+							'h6'			=> 'H6'
+						),
+					),
 					'title_typography'	=> array(
 						'type'        	   => 'typography',
 						'label'       	   => __( 'Typography', 'bb-powerpack' ),
@@ -1590,15 +1628,32 @@ FLBuilder::register_module('PPContactFormModule', array(
 						),
 						'toggle' 		=> array(
 							'show'        => array(
-								'fields' 	=> array( 'recaptcha_site_key', 'recaptcha_secret_key', 'recaptcha_validate_type', 'recaptcha_theme' ),
+								'fields' 	=> array( 'recaptcha_key_source', 'recaptcha_site_key', 'recaptcha_secret_key', 'recaptcha_validate_type', 'recaptcha_theme' ),
 							),
 						),
 						'help' 			=> __( 'If you want to show this field, please provide valid Site and Secret Keys.', 'bb-powerpack' ),
+						'preview'		=> array(
+							'type'			=> 'none',
+						),
+					),
+					'recaptcha_key_source'	=> array(
+						'type'		=> 'pp-switch',
+						'label'		=> __( 'reCAPTCHA Key Source', 'bb-powerpack' ),
+						'default' 	=> 'custom',
+						'options'	=> array(
+							'default'	=> __( 'Default', 'bb-powerpack' ),
+							'custom'	=> __( 'Custom', 'bb-powerpack' ),
+						),
+						'help'	=> sprintf( __( 'Default keys which are stored under %s Integration settings.', 'bb-powerpack' ), pp_get_admin_label() ),
+						'preview'		=> array(
+							'type'			=> 'none',
+						),
 					),
 					'recaptcha_site_key'		=> array(
 						'type'			=> 'text',
 						'label' 		=> __( 'Site Key', 'bb-powerpack' ),
 						'default'		  => '',
+						'connections'		=> array( 'string' ),
 						'preview'		  => array(
 							'type'		   => 'none',
 						),
@@ -1607,6 +1662,7 @@ FLBuilder::register_module('PPContactFormModule', array(
 						'type'			=> 'text',
 						'label' 		=> __( 'Secret Key', 'bb-powerpack' ),
 						'default'		  => '',
+						'connections'		=> array( 'string' ),
 						'preview'		  => array(
 							'type'		   => 'none',
 						),
@@ -1616,8 +1672,8 @@ FLBuilder::register_module('PPContactFormModule', array(
 						'label'         		=> __( 'Validate Type', 'bb-powerpack' ),
 						'default'       		=> 'normal',
 						'options'       		=> array(
-							'normal'  				=> __( '"I\'m not a robot" checkbox', 'bb-powerpack' ),
-							'invisible'     		=> __( 'Invisible', 'bb-powerpack' ),
+							'normal'  				=> __( '"I\'m not a robot" checkbox (V2)', 'bb-powerpack' ),
+							'invisible'     		=> __( 'Invisible (V2)', 'bb-powerpack' ),
 						),
 						'help' 					=> __( 'Validate users with checkbox or in the background.<br />Note: Checkbox and Invisible types use seperate API keys.', 'bb-powerpack' ),
 						'preview'      		 	=> array(
@@ -1639,6 +1695,6 @@ FLBuilder::register_module('PPContactFormModule', array(
 				),
 			),
 		),
-		'description'	  => sprintf( __( 'Please register keys for your website at the <a%s>Google Admin Console</a>.', 'bb-powerpack' ), ' href="https://www.google.com/recaptcha/admin" target="_blank"' ),
+		'description'	  => pp_get_recaptcha_desc(),
 	),
 ));

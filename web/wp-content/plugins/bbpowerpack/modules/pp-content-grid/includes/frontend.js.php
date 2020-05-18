@@ -3,14 +3,15 @@
 $space_desktop	= ( $settings->post_grid_count['desktop'] - 1 ) * $settings->post_spacing;
 $space_tablet 	= ( $settings->post_grid_count['tablet'] - 1 ) * $settings->post_spacing;
 $space_mobile 	= ( $settings->post_grid_count['mobile'] - 1 ) * $settings->post_spacing;
-$speed          = !empty( $settings->transition_speed ) ? $settings->transition_speed * 1000 : '200';
-$slide_speed    = ( isset( $settings->slides_speed ) && ! empty( $settings->slides_speed ) ) ? $settings->slides_speed * 1000 : 'false';
+$speed          = ! empty( $settings->transition_speed ) ? $settings->transition_speed * 1000 : 3000;
+$slide_speed    = ( isset( $settings->slides_speed ) && ! empty( $settings->slides_speed ) ) ? $settings->slides_speed * 1000 : 1000;
 $page_arg	 	= is_front_page() ? 'page' : 'paged';
 $paged 			= get_query_var( $page_arg, 1 );
-$breakpoints		= array(
+$breakpoints	= array(
 	'mobile'		=> empty( $global_settings->responsive_breakpoint ) ? '768' : $global_settings->responsive_breakpoint,
 	'tablet'		=> empty( $global_settings->medium_breakpoint ) ? '980' : $global_settings->medium_breakpoint,
 );
+$scrollTo		= apply_filters( 'pp_cg_scroll_to_grid_on_filter', true );
 ?>
 
 var ppcg_<?php echo $id; ?> = '';
@@ -23,11 +24,12 @@ var ppcg_<?php echo $id; ?> = '';
 		id: '<?php echo $id ?>',
 		layout: '<?php echo $settings->layout; ?>',
 		style: '<?php echo $settings->post_grid_style_select; ?>',
-		ajaxUrl: '<?php echo admin_url('admin-ajax.php'); ?>',
+		ajaxUrl: '<?php echo admin_url( 'admin-ajax.php' ); ?>',
+		scrollTo: <?php echo $scrollTo ? 'true' : 'false'; ?>,
 		perPage: '<?php echo $settings->posts_per_page; ?>',
-		fields: <?php echo json_encode($settings); ?>,
+		fields: <?php echo json_encode( $settings ); ?>,
 		pagination: '<?php echo $settings->pagination; ?>',
-		current_page: '<?php echo home_url($_SERVER['REQUEST_URI']); ?>',
+		current_page: '<?php echo home_url( $_SERVER['REQUEST_URI'] ); ?>',
 		page: '<?php echo $paged; ?>',
 		is_tax: false,
 		is_author: false,
@@ -38,12 +40,13 @@ var ppcg_<?php echo $id; ?> = '';
 			mobile: <?php echo $settings->post_grid_count['mobile']; ?>,
 		},
 		matchHeight: '<?php echo $settings->match_height; ?>',
-		<?php echo (isset($settings->post_grid_filters_display) && 'yes' == $settings->post_grid_filters_display) ? 'filters: true' : 'filters: false'; ?>,
+		<?php echo ( isset( $settings->post_grid_filters_display ) && 'yes' == $settings->post_grid_filters_display ) ? 'filters: true' : 'filters: false'; ?>,
+		//defaultFilter: '<?php echo isset( $settings->post_grid_filters_default ) && ! empty( $settings->post_grid_filters_default ) ? $settings->post_grid_filters_default : ''; ?>',
 		<?php if ( isset( $settings->post_grid_filters ) && 'none' != $settings->post_grid_filters ) { ?>
-        	filterTax: '<?php echo $settings->post_grid_filters; ?>',
-        	filterType: '<?php echo isset( $settings->post_grid_filters_type ) ? $settings->post_grid_filters_type : 'static'; ?>',
+			filterTax: '<?php echo $settings->post_grid_filters; ?>',
 		<?php } ?>
-		<?php if ('grid' == $settings->layout && 'no' == $settings->match_height && 'style-9' != $settings->post_grid_style_select ) { ?>
+		filterType: '<?php echo isset( $settings->post_grid_filters_type ) ? $settings->post_grid_filters_type : 'static'; ?>',
+		<?php if ( 'grid' == $settings->layout && 'no' == $settings->match_height && 'style-9' != $settings->post_grid_style_select ) { ?>
 		masonry: 'yes',
 		<?php } ?>
 		<?php if ( 'carousel' == $settings->layout ) { ?>
@@ -59,39 +62,43 @@ var ppcg_<?php echo $id; ?> = '';
 					<?php echo $breakpoints['tablet']; ?>: {
 						items: <?php echo $settings->post_grid_count['desktop']; ?>,
 					},
-					1199: {
+					<?php echo apply_filters( 'pp_cg_carousel_max_breakpoint', 1199 ); ?>: {
 						items: <?php echo $settings->post_grid_count['desktop']; ?>,
 					},
 				},
-	        <?php if( isset( $settings->slider_pagination ) && $settings->slider_pagination == 'no' ): ?>
-		        dots: false,
-		    <?php endif; ?>
-	        <?php if( isset( $settings->auto_play ) ): ?>
-		        <?php echo 'yes' == $settings->auto_play ? 'autoplay: true' : 'autoplay: false'; ?>,
-		    <?php endif; ?>
-		        autoplayTimeout: <?php echo $speed ?>,
-		        autoplaySpeed: <?php echo $slide_speed ?>,
-		        navSpeed: <?php echo $slide_speed ?>,
-		        dotsSpeed: <?php echo $slide_speed ?>,
-		    	<?php echo 'yes' == $settings->slider_navigation ? 'nav: true' : 'nav: false'; ?>,
-		    	<?php echo ($settings->stop_on_hover == 'yes') ? 'autoplayHoverPause: true' : 'autoplayHoverPause: false'; ?>,
-				<?php echo ($settings->lazy_load == 'yes') ? 'lazyLoad: true' : 'lazyLoad: false'; ?>,
+			<?php if ( isset( $settings->slider_pagination ) && 'no' === $settings->slider_pagination ) : ?>
+				dots: false,
+			<?php endif; ?>
+			<?php if ( isset( $settings->auto_play ) ) : ?>
+				<?php echo 'yes' === $settings->auto_play && ! FLBuilderModel::is_builder_active() ? 'autoplay: true' : 'autoplay: false'; ?>,
+			<?php endif; ?>
+				autoplayTimeout: <?php echo $speed ?>,
+				autoplaySpeed: <?php echo $slide_speed ?>,
+				navSpeed: <?php echo $slide_speed ?>,
+				dotsSpeed: <?php echo $slide_speed ?>,
+				<?php echo 'yes' === $settings->slider_navigation ? 'nav: true' : 'nav: false'; ?>,
+				<?php echo 'yes' === $settings->stop_on_hover ? 'autoplayHoverPause: true' : 'autoplayHoverPause: false'; ?>,
+				<?php echo 'yes' === $settings->lazy_load ? 'lazyLoad: true' : 'lazyLoad: false'; ?>,
 				navText : [left_arrow_svg, right_arrow_svg],
-			    responsiveRefreshRate : 200,
-			    responsiveBaseWidth: window,
-				loop: true
+				responsiveRefreshRate: 200,
+				responsiveBaseWidth: window,
+				loop: <?php echo isset( $settings->slide_loop ) && 'yes' === $settings->slide_loop ? 'true' : 'false'; ?>,
+				center: <?php echo ( isset( $settings->slides_center_align ) && 'yes' == $settings->slides_center_align ) ? 'true' : 'false'; ?>
 			}
-		<?php } ?>
+			<?php } // End if(). ?>
 	};
 
 	<?php if ( is_archive() || is_post_type_archive() ) { ?>
 		PPContentGridOptions.is_archive = true;
 	<?php } ?>
 
-	<?php if ( is_tax() ) { ?>
+	<?php if ( is_tax() || is_archive() ) { ?>
 	PPContentGridOptions.is_tax = true;
-	PPContentGridOptions.current_tax = '<?php echo get_queried_object()->taxonomy; ?>';
-	PPContentGridOptions.current_term = '<?php echo get_queried_object()->slug; ?>';
+	<?php } ?>
+
+	<?php if ( isset( get_queried_object()->taxonomy ) && isset( get_queried_object()->slug ) ) { ?>
+		PPContentGridOptions.current_tax = '<?php echo get_queried_object()->taxonomy; ?>';
+		PPContentGridOptions.current_term = '<?php echo get_queried_object()->slug; ?>';
 	<?php } ?>
 
 	<?php if ( is_author() ) { ?>
@@ -100,8 +107,13 @@ var ppcg_<?php echo $id; ?> = '';
 	<?php } ?>
 
 	<?php if ( isset( $_GET['orderby'] ) && ! empty( $_GET['orderby'] ) ) { ?>
-    PPContentGridOptions.orderby = '<?php echo (string)$_GET['orderby']; ?>';
-    <?php } ?>
+	PPContentGridOptions.orderby = '<?php echo (string) $_GET['orderby']; ?>';
+	<?php } ?>
+
+	<?php if ( isset( $module->template_id ) ) { ?>
+	PPContentGridOptions.template_id = '<?php echo $module->template_id; ?>';
+	PPContentGridOptions.template_node_id = '<?php echo $module->template_node_id; ?>';
+	<?php } ?>
 
 	ppcg_<?php echo $id; ?> = new PPContentGrid( PPContentGridOptions );
 	
@@ -109,7 +121,10 @@ var ppcg_<?php echo $id; ?> = '';
 	var state = 0;
 	$(document).on('pp_expandable_row_toggle', function(e, selector) {
 		if ( selector.is('.pp-er-open') && state === 0 ) {
-			ppcg_<?php echo $id; ?> = new PPContentGrid( PPContentGridOptions );
+			//ppcg_<?php echo $id; ?> = new PPContentGrid( PPContentGridOptions );
+			if ( 'undefined' !== typeof $.fn.isotope ) {
+				$(ppcg_<?php echo $id; ?>.wrapperClass).isotope('layout');
+			}
 			state = 1;
 		}
 	});

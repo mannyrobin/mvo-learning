@@ -69,7 +69,9 @@ class PPAdvancedTabsModule extends FLBuilderModule {
 	public function filter_settings( $settings, $helper )
 	{
 		// Handle old content padding multitext field.
-		$settings = PP_Module_Fields::handle_multitext_field( $settings, 'content_padding', 'padding', 'content_padding' );
+		if ( isset( $settings->content_padding ) && is_array( $settings->content_padding ) ) {
+			$settings = PP_Module_Fields::handle_multitext_field( $settings, 'content_padding', 'padding', 'content_padding' );
+		}
 
 		// Handle old title typography fields.
 		$settings = PP_Module_Fields::handle_typography_field( $settings, array(
@@ -112,7 +114,7 @@ class PPAdvancedTabsModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPAdvancedTabsModule', array(
+BB_PowerPack::register_module('PPAdvancedTabsModule', array(
 	'items'         => array(
 		'title'         => __('Items', 'bb-powerpack'),
 		'sections'      => array(
@@ -416,10 +418,11 @@ FLBuilder::register_module('PPAdvancedTabsModule', array(
 					),
 					'content_bg_color'  => array(
 						'type'          => 'color',
-						'label'         => __('Background Color', 'bb-powerpack'),
+						'label'         => __( 'Background Color', 'bb-powerpack' ),
 						'default'       => '',
 						'show_reset'	=> true,
-						'connections'	=> array('color'),
+						'show_alpha'	=> true,
+						'connections'	=> array( 'color' ),
 						'preview'		=> array(
 							'type'			=> 'css',
 							'selector'		=> '.pp-tabs-panels .pp-tabs-panel-content',

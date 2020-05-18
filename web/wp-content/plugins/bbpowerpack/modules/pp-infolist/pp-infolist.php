@@ -67,7 +67,7 @@ class PPInfoListModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPInfoListModule', array(
+BB_PowerPack::register_module('PPInfoListModule', array(
 	'general'      => array( // Tab
 		'title'         => __('General', 'bb-powerpack'), // Tab title
 		'sections'      => array(
@@ -75,14 +75,18 @@ FLBuilder::register_module('PPInfoListModule', array(
                 'title' => '',
                 'fields'    => array(
                     'layouts'   => array(
-                        'type'  => 'pp-switch',
+                        'type'  => 'select',
                         'default'   => '1',
                         'label'     => __('Icon Position', 'bb-powerpack'),
                         'options'   => array(
                             '1'     => __('Left', 'bb-powerpack'),
                             '2'     => __('Right', 'bb-powerpack'),
                             '3'     => __('Top', 'bb-powerpack'),
-                        ),
+						),
+						'responsive' => true,
+						'preview'	=> array(
+							'type'	=> 'none',
+						),
                     ),
                 ),
             ),

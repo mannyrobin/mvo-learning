@@ -3,11 +3,12 @@
 # Translators:
 # FX Bénard <fxb@wp-translations.org>, 2018
 # Luis Rull <luisrull@gmail.com>, 2019
+# Nilo Velez <nilovelez@gmail.com>, 2019
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: WPForms Zapier\n"
-"Last-Translator: Luis Rull <luisrull@gmail.com>, 2019\n"
+"Last-Translator: Nilo Velez <nilovelez@gmail.com>, 2019\n"
 "Language-Team: Spanish (Spain) (https://www.transifex.com/wp-translations/teams/64435/es_ES/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,19 +24,19 @@ msgstr ""
 #. translators: %s - field id.
 #: class-zapier.php:81
 msgid "Field #%s"
-msgstr "Campo nº %s"
+msgstr "Campo #%s"
 
 #: class-zapier.php:108
 msgid "First"
-msgstr "Primer"
+msgstr "Nombre"
 
 #: class-zapier.php:109
 msgid "Middle"
-msgstr "Segundo"
+msgstr "Primer apellido"
 
 #: class-zapier.php:110
 msgid "Last"
-msgstr "Ultimo"
+msgstr "Segundo apellido"
 
 #: class-zapier.php:142
 msgid "Line 1"
@@ -87,7 +88,7 @@ msgstr "Error de zap de Zapier"
 
 #: class-zapier.php:301
 msgid "Invalid WPForms Zapier API key"
-msgstr "Clave de API de Zapier WPForms no válido"
+msgstr "Clave de API de Zapier para WPForms no válida"
 
 #: class-zapier.php:407
 msgid "No data"
@@ -97,7 +98,7 @@ msgstr "Sin datos"
 #. translators: %s - API key.
 #: class-zapier.php454, class-zapier.php:579
 msgid "Your WPForms Zapier API key is %s"
-msgstr "Tu clave de API de Zapier WPForms es %s"
+msgstr "Tu clave de API de Zapier para WPForms es %s"
 
 #: class-zapier.php:462
 msgid "No Zaps are connected to this form."
@@ -125,7 +126,7 @@ msgstr "En vivo"
 
 #: class-zapier.php:474
 msgid "Edit this Zap"
-msgstr "Ediatr este zap"
+msgstr "Editar este zap"
 
 #. translators: %s - WPForms.com Zapier documentation article URL.
 #. translators: %s - WPForms.com Zapier documentation article URL.

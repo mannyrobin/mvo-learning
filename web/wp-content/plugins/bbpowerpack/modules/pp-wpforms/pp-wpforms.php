@@ -244,6 +244,10 @@ class PPWPFormsModule extends FLBuilderModule {
     public static function wpforms_titles() {
         $options = array( '' => __('None', 'bb-powerpack') );
 
+		if ( ! isset( $_GET['fl_builder'] ) ) {
+			return $options;
+		}
+
         if ( function_exists( 'wpforms' ) ) {
             $forms = wpforms()->form->get();
             if ( ( is_array( $forms ) || is_object( $forms ) ) && count( $forms ) ) {
@@ -260,7 +264,7 @@ class PPWPFormsModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPWPFormsModule', array(
+BB_PowerPack::register_module('PPWPFormsModule', array(
     'form'       => array( // Tab
         'title'         => __('General', 'bb-powerpack'), // Tab title
         'sections'      => array( // Tab Sections
@@ -466,7 +470,7 @@ FLBuilder::register_module('PPWPFormsModule', array(
                     'title_margin' 	=> array(
                         'type' 			=> 'pp-multitext',
                         'label' 		=> __('Margin', 'bb-powerpack'),
-                        'description'   => __( 'px', 'Value unit for font size. Such as: "14 px"', 'bb-powerpack' ),
+                        'description'   => 'px',
                         'default'       => array(
                             'top' => 10,
                             'bottom' => 10,
@@ -504,7 +508,7 @@ FLBuilder::register_module('PPWPFormsModule', array(
                     'description_margin' 	=> array(
                         'type' 			=> 'pp-multitext',
                         'label' 		=> __('Margin', 'bb-powerpack'),
-                        'description'   => __( 'px', 'Value unit for margin. Such as: "14 px"', 'bb-powerpack' ),
+                        'description'   => 'px',
                         'default'       => array(
                             'top' => 10,
                             'bottom' => 10,

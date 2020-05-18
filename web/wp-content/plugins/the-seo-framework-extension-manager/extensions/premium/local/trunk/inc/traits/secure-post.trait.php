@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Extension\Local\Traits
  */
+
 namespace TSF_Extension_Manager\Extension\Local;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * Local extension for The SEO Framework
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -37,16 +38,24 @@ defined( 'ABSPATH' ) or die;
 trait Secure_Post {
 
 	/**
-	 * The POST nonce validation name, action and name.
-	 *
 	 * @since 1.0.0
 	 *
 	 * @var string The validation nonce name.
-	 * @var string The validation request name.
-	 * @var string The validation nonce action.
 	 */
 	protected $nonce_name;
+
+	/**
+	 * @since 1.0.0
+	 *
+	 * @var string The validation request name.
+	 */
 	protected $request_name = [];
+
+	/**
+	 * @since 1.0.0
+	 *
+	 * @var string The validation nonce action.
+	 */
 	protected $nonce_action = [];
 
 	/**
@@ -85,7 +94,7 @@ trait Secure_Post {
 		// AJAX only, not registered. Also, this method AFTER admin_init, so it went by unnoticed.
 		// \add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( \wp_doing_ajax() ) {
 			$this->init_ajax_post_checks();
 		}
 	}
@@ -101,6 +110,7 @@ trait Secure_Post {
 
 		/**
 		 * Registers and checks form AJAX iteration callback listeners.
+		 *
 		 * @see class TSF_Extension_Manager\FormGenerator
 		 *
 		 * Action is called in TSF_Extension_Manager\LoadAdmin::_wp_ajax_tsfemForm_iterate().
@@ -111,6 +121,7 @@ trait Secure_Post {
 
 		/**
 		 * Listens to AJAX form save.
+		 *
 		 * @see class TSF_Extension_Manager\FormGenerator
 		 *
 		 * Action is called in TSF_Extension_Manager\LoadAdmin::_wp_ajax_tsfemForm_save().
@@ -131,31 +142,32 @@ trait Secure_Post {
 	 * @NOTE: Nonce and user capabilities MUST be validated before calling this.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.4 Now strips slashes from POST.
 	 * @uses trait \TSF_Extension_Manager\Extension_Options
 	 * @uses trait \TSF_Extension_Manager\Error
 	 * @uses class \TSF_Extension_Manager\Extension\Local\Options
 	 */
 	public function _do_ajax_form_save() {
 
-		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : ''; // CSRF, sanitization, input var ok.
-
+		// phpcs:ignore, WordPress.Security.NonceVerification -- Already done at _wp_ajax_tsfemForm_save()
+		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : '';
 		parse_str( $post_data, $data );
 
 		$send = [];
+
+		// Nothing to see here.
+		if ( ! isset( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+			return;
 
 		/**
 		 * If this page doesn't parse the site options,
 		 * there's no need to check them on each request.
 		 */
-		if ( empty( $data )
-		|| ( ! isset( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
-		|| ( ! is_array( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
-		) {
+		if ( ! is_array( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) ) {
 			$type            = 'failure';
 			$send['results'] = $this->get_ajax_notice( false, 1070100 );
 		} else {
-
-			$options = $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
+			$options = \wp_unslash( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] );
 			$success = $this->update_stale_options_array_by_key( $options );
 			$this->process_all_stored_data();
 
@@ -184,7 +196,8 @@ trait Secure_Post {
 		$key = \TSF_Extension_Manager\FormGenerator::_parse_ajax_its_listener( __CLASS__, $this->form_args );
 
 		if ( $key ) {
-			if ( ( $method = $this->get_iterator_callback_by_key( $key ) ) ) {
+			$method = $this->get_iterator_callback_by_key( $key );
+			if ( $method ) {
 				$fields = &\TSF_Extension_Manager\FormGenerator::_collect_ajax_its_fields();
 				$fields = Fields::get_instance()->{$method}();
 			}
@@ -229,7 +242,7 @@ trait Secure_Post {
 	 */
 	public function _prepare_ajax_form_json_validation() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+		if ( \wp_doing_ajax() ) :
 			if ( \tsf_extension_manager()->can_do_settings() ) :
 				if ( \check_ajax_referer( 'tsfem-e-local-ajax-nonce', 'nonce', false ) ) {
 					$this->send_ajax_form_json_validation();
@@ -250,12 +263,15 @@ trait Secure_Post {
 	 * @NOTE: Nonce and user capabilities MUST be validated before calling this.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.4 Now strips slashes from POST.
 	 * @see $this->send_ajax_form_json_validation()
 	 * @access private
 	 */
 	private function send_ajax_form_json_validation() {
 
-		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : ''; // CSRF, sanitization, input var ok.
+		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- Caller must check for this.
+
+		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : '';
 
 		parse_str( $post_data, $data );
 
@@ -273,8 +289,8 @@ trait Secure_Post {
 			$send['results'] = $this->get_ajax_notice( false, 1070200 );
 		} else {
 
-			$options = $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
-			$data = $this->pack_data( $options, true );
+			$options = \wp_unslash( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] );
+			$data    = $this->pack_data( $options, true );
 
 			if ( ! $data ) {
 				$type            = 'failure';
@@ -287,5 +303,7 @@ trait Secure_Post {
 		}
 
 		\tsf_extension_manager()->send_json( $send, \tsf_extension_manager()->coalesce_var( $type, 'failure' ) );
+
+		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 	}
 }

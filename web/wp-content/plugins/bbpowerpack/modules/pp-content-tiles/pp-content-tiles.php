@@ -170,7 +170,7 @@ class PPContentTilesModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPContentTilesModule', array(
+BB_PowerPack::register_module('PPContentTilesModule', array(
 	'layout'	=> array(
 		'title'		=> __('Layout', 'bb-powerpack'),
 		'sections'	=> array(

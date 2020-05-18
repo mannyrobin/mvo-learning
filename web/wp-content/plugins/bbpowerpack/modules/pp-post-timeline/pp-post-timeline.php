@@ -192,7 +192,7 @@ class PPPostTimelineModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPPostTimelineModule', array(
+BB_PowerPack::register_module('PPPostTimelineModule', array(
 	'general'      => array( // Tab
 		'title'         => __('Structure', 'bb-powerpack'), // Tab title
 		'sections'      => array( // Tab Sections

@@ -1,5 +1,8 @@
 <?php
+
 defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
+
+// phpcs:disable, PHPCompatibility.Classes.NewLateStaticBinding.OutsideClassScope, VariableAnalysis.CodeAnalysis.VariableAnalysis.StaticOutsideClass -- We're stil in scope.
 
 if ( $this->is_plugin_activated() ) {
 	if ( $this->is_enterprise_user() ) {
@@ -42,10 +45,10 @@ $mottos = array_merge( $mottos, $more_mottos );
 $motto_key = mt_rand( 0, count( $mottos ) - 1 );
 
 ?>
-<p class="tsfem-footer-title">
-	The SEO Framework Extension Manager
+<p class="tsfem-footer-title" dir=ltr>
+	The SEO Framework &ndash; Extension Manager
 </p>
-<p class="tsfem-footer-motto">
+<p class="tsfem-footer-motto" dir=ltr>
 	<?php echo \esc_html( "{$mottos[ $motto_key ]} Initiative" ); ?>
 </p>
 <?php

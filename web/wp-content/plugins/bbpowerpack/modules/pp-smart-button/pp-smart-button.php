@@ -101,16 +101,20 @@ class PPSmartButtonModule extends FLBuilderModule {
 		if ( ! isset( $settings->border ) || empty( $settings->border ) ) {
 			$border = array();
 
-			$border['style'] = $settings->border_type;
-			$border['width'] = array(
-				'top' 		=> $settings->border_size,
-				'right' 	=> $settings->border_size,
-				'bottom' 	=> $settings->border_size,
-				'left' 		=> $settings->border_size,
-			);
-			$border['color'] = ( is_array( $settings->border_color ) && isset( $settings->border_color['primary'] ) ) ? $settings->border_color['primary'] : '';
+			if ( isset( $settings->border_type ) && isset( $settings->border_size ) && isset( $settings->border_color ) ) {
+				$border['style'] = $settings->border_type;
+				$border['width'] = array(
+					'top' 		=> $settings->border_size,
+					'right' 	=> $settings->border_size,
+					'bottom' 	=> $settings->border_size,
+					'left' 		=> $settings->border_size,
+				);
+				$border['color'] = ( is_array( $settings->border_color ) && isset( $settings->border_color['primary'] ) ) ? $settings->border_color['primary'] : '';
+			}
 			
-			$settings->border_hover_color = ( is_array( $settings->border_color ) && isset( $settings->border_color['secondary'] ) ) ? $settings->border_color['secondary'] : '';
+			if ( isset( $settings->border_color ) ) {
+				$settings->border_hover_color = ( is_array( $settings->border_color ) && isset( $settings->border_color['secondary'] ) ) ? $settings->border_color['secondary'] : '';
+			}
 
 			unset( $settings->border_type );
 			unset( $settings->border_size );
@@ -273,17 +277,46 @@ class PPSmartButtonModule extends FLBuilderModule {
 			$rel[] = 'nofollow';
 		}
 		$rel = implode( ' ', $rel );
-		if ( $rel ) {
-			$rel = ' rel="' . $rel . '" ';
-		}
+
 		return $rel;
+	}
+
+	public function get_attributes() {
+		$attrs = array(
+			'href'	=> $this->settings->link,
+			'target' => $this->settings->link_target,
+			'class'	=> 'pp-button',
+			'role'	=> 'button',
+		);
+
+		if ( $rel = $this->get_rel() ) {
+			$attrs['rel'] = $rel;
+		}
+
+		if ( isset( $this->settings->download ) ) {
+			$attrs['download'] = $this->settings->download;
+		}
+
+		$attrs['aria-label'] = strip_tags( $this->settings->text );
+
+		$attrs = apply_filters( 'pp_smart_button_html_attrs', $attrs, $this->settings );
+
+		$output = '';
+
+		foreach ( $attrs as $key => $value ) {
+			$output .= $key . '="' . $value . '" ';
+		}
+
+		$output = trim( $output );
+
+		return $output;
 	}
 }
 
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPSmartButtonModule', array(
+BB_PowerPack::register_module('PPSmartButtonModule', array(
 	'general'       => array(
 		'title'         => __('General', 'bb-powerpack'),
 		'sections'      => array(
@@ -333,7 +366,7 @@ FLBuilder::register_module('PPSmartButtonModule', array(
 						),
 						'toggle'	=> array(
 							'yes'		=> array(
-								'fields'	=> array('icon', 'icon_size', 'icon_position')
+								'fields'	=> array('icon', 'icon_size', 'icon_position', 'icon_spacing')
 							),
 						),
 						'preview'	=> array(
@@ -367,7 +400,14 @@ FLBuilder::register_module('PPSmartButtonModule', array(
 							'before'        => __('Before Text', 'bb-powerpack'),
 							'after'         => __('After Text', 'bb-powerpack')
 						)
-					)
+					),
+					'icon_spacing'	=> array(
+						'type'          => 'unit',
+						'label'         => __('Icon Spacing', 'bb-powerpack'),
+						'default'		=> '',
+						'units'			=> array('px'),
+						'slider'		=> true,
+					),
 				)
 			),
 			'link'          => array(
@@ -489,7 +529,7 @@ FLBuilder::register_module('PPSmartButtonModule', array(
 						'preview'		=> array(
 							'type'		=> 'css',
 							'selector'	=> '.pp-button-wrap a.pp-button span',
-							'property'	=> 'background',
+							'property'	=> 'color',
 						),
 					),
 					'text_hover_color'    => array(
@@ -556,6 +596,7 @@ FLBuilder::register_module('PPSmartButtonModule', array(
 						'label'         => __('Padding', 'bb-powerpack'),
 						'responsive'	=> true,
 						'slider'		=> true,
+						'default'		=> 10,
 						'units'   		=> array('px'),
 						'preview'		=> array(
 							'type'			=> 'css',

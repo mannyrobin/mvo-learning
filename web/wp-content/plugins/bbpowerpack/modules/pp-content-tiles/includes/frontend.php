@@ -30,7 +30,7 @@ endswitch;
 $settings->posts_per_page = $default_posts_count;
 
 if ( $show_other_posts ) {
-	if ( ! empty( $settings->number_of_posts ) && is_numeric( $settings->number_of_posts ) ) {
+	if ( ! empty( $settings->number_of_posts ) && is_numeric( $settings->number_of_posts ) && $settings->number_of_posts > 0 ) {
 		$number_of_posts = absint( $settings->number_of_posts );
 		$settings->posts_per_page += $number_of_posts;
 	} else {
@@ -39,10 +39,10 @@ if ( $show_other_posts ) {
 }
 $other_posts_displayed = false;
 
-$query = FLBuilderLoop::query($settings);
+$query = FLBuilderLoop::query( $settings );
 
 // Render the posts.
-if($query->have_posts()) :
+if ( $query->have_posts() ) :
 
 	do_action( 'pp_tiles_before_posts', $settings, $query );
 
@@ -52,18 +52,28 @@ if($query->have_posts()) :
 
 	$count = 1;
 
-	while($query->have_posts()) :
+	while ( $query->have_posts() ) :
 
 		$query->the_post();
-		
+
 		$image_size = 'large';
 
-		if ( $count == 1 || ( $count == 2 && $layout == 1 ) ) {
+		// Large size for all layout's first post.
+		if ( $count == 1 ) {
 			$image_size = isset( $settings->image_size_large_tile ) ? $settings->image_size_large_tile : $image_size;
 		}
+
+		// Medium size for Layout 1 - Post 2, Layout 3 - Post 2 and Post 3.
+		if ( ( $count == 2 && ( $layout == 1 || $layout == 3 ) ) || ( $count == 3 && $layout == 3 ) ) {
+			$image_size = isset( $settings->image_size_medium_tile ) ? $settings->image_size_medium_tile : $image_size;
+		}
+
+		// Small size for Layout 2 - Post 3 and Post 4.
 		if ( ( $count == 2 || $count == 4 ) && $layout == 2 ) {
 			$image_size = isset( $settings->image_size_small_tile ) ? $settings->image_size_small_tile : $image_size;
 		}
+
+		// Small size for Layout 1 - Post 3 and Post 4, Layout 2 - Post 1-4, Layout 4 - Post 2 and Post 3.
 		if ( ( $count == 3 || $count == 4 ) && ( $layout == 1 || $layout == 2 || $layout == 4 ) ) {
 			$image_size = isset( $settings->image_size_small_tile ) ? $settings->image_size_small_tile : $image_size;
 		}
@@ -84,21 +94,26 @@ if($query->have_posts()) :
 			if ( $count == 1 ) {
 				echo '</div>';
 			}
-			if ( ($count == 3 && $settings->layout == 3) || ($count == 3 && $settings->layout == 4) || ($count == 4 && $settings->layout == 1) || ($count == 5 && $settings->layout == 2) ) {
+			if ( ( $count == 3 && $settings->layout == 3 ) || 
+				( $count == 3 && $settings->layout == 4 ) || 
+				( $count == 3 && $query->found_posts == 3 ) || 
+				( $count == 4 && $settings->layout == 1 ) || 
+				( $count == 4 && $query->found_posts == 4 ) || 
+				( $count == 5 && $settings->layout == 2 ) ) {
 				echo '</div>';
 			}
 
 			// Other posts.
-			if ( $show_other_posts && $count > $layout_posts_count && ! $other_posts_displayed ) {
+			if ( $show_other_posts && $count > $layout_posts_count && $query->post_count > $layout_posts_count && ! $other_posts_displayed ) {
 				$other_posts_displayed = true;
-				echo '<div class="pp-post-tile-group pp-post-col-'. $settings->column_width .'">';
+				echo '<div class="pp-post-tile-group pp-post-col-' . $settings->column_width . '">';
 			}
 
 			if ( $show_other_posts && $count > $layout_posts_count && $count <= $query->post_count ) {
 				include apply_filters( 'pp_tiles_layout_path', $module->dir . 'includes/post-grid.php', $layout, $settings );
 			}
 
-			if ( $show_other_posts && $count >= $query->post_count ) {
+			if ( $show_other_posts && $count >= $query->post_count && $query->post_count > $layout_posts_count ) {
 				echo '</div>';
 			}
 

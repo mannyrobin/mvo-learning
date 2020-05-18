@@ -88,7 +88,10 @@ class WPForms_Zapier extends WPForms_Provider {
 			}
 
 			if ( in_array( $field['type'], array( 'checkbox' ), true ) ) {
-				$value = implode( ', ', explode( "\n", trim( $entry[ $field_id ]['value'] ) ) );
+				$value = '';
+				if ( is_array( $entry ) && is_array( $entry[ $field_id ] ) && ! empty( $entry[ $field_id ]['value'] ) ) {
+					$value = implode( ', ', explode( "\n", trim( $entry[ $field_id ]['value'] ) ) );
+				}
 			}
 
 			if ( empty( $entry ) ) {
@@ -113,27 +116,31 @@ class WPForms_Zapier extends WPForms_Provider {
 			} elseif ( 'checkbox' === $field['type'] ) {
 
 				foreach ( $field['choices'] as $choice_id => $choice ) {
-					$choice = sanitize_text_field( $choice['label'] );
-					if ( empty( $choice ) ) {
+					$choice['value'] = sanitize_text_field( $choice['value'] );
+					$choice['label'] = sanitize_text_field( $choice['label'] );
+					if ( empty( $choice['label'] ) ) {
 						if (
 							( 1 === count( $field['choices'] ) && 'Checked' === $value ) ||
-							( count( $field['choices'] ) > 1 && $value === 'Choice ' . $choice_id )
+							( count( $field['choices'] ) > 1 && 'Choice ' . $choice_id === $value )
 						) {
-							$choice_val = 'checked';
+							$choice_checked = 'checked';
 						} else {
-							$choice_val = '';
+							$choice_checked = '';
 						}
 					} else {
-						$choice_val = ( strpos( $value, $choice ) !== false ) ? 'checked' : '';
+						$choice_checked = ( strpos( $value, $choice['label'] ) !== false ) ? 'checked' : '';
 					}
 					if ( empty( $entry ) ) {
 						$data[] = array(
 							'key'   => 'field' . $field_id . '_choice' . $choice_id,
-							'label' => $choice,
+							'label' => $choice['label'],
 							'type'  => 'unicode',
 						);
 					} else {
-						$data[ 'field' . $field_id . '_choice' . $choice_id ] = $choice_val;
+						$choice['value'] = ( ! empty( $choice['value'] ) ) ? $choice['value'] : $choice['label'];
+						$choice['value'] = ( ! empty( $choice_checked ) ) ? $choice['value'] : '';
+
+						$data[ 'field' . $field_id . '_choice' . $choice_id ] = ( ! empty( $field['show_values'] ) && 1 === (int) $field['show_values'] ) ? $choice['value'] : $choice_checked;
 					}
 				}
 			} elseif ( 'address' === $field['type'] ) {
@@ -222,8 +229,11 @@ class WPForms_Zapier extends WPForms_Provider {
 			}
 
 			$post_data = array(
-				'ssl'  => true,
-				'body' => wp_json_encode( $data ),
+				'ssl'     => true,
+				'body'    => wp_json_encode( $data ),
+				'headers' => array(
+					'X-WPForms-Zapier-Version' => WPFORMS_ZAPIER_VERSION,
+				),
 			);
 			$response  = wp_remote_post( $zap['hook'], $post_data );
 

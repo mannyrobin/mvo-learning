@@ -8,6 +8,8 @@
 		this.markerClass 		= this.node.find('.pp-hotspot-marker');
 		this.customClass 		= 'pp-tooltip-wrap-' + this.id;
 		this.tooltipEnable 		= settings.tooltipEnable;
+		this.enableCloseIcon    = settings.enableCloseIcon;
+		this.escToClose 		= settings.escToClose;
 		this.tooltipPosition 	= settings.tooltipPosition;
 		this.tooltipTrigger 	= settings.tooltipTrigger;
 		this.tooltipArrow 		= settings.tooltipArrow;
@@ -31,6 +33,9 @@
 		this.hotspotInterval 	= [];
 		this.hoverFlag 			= '';
 		this.scrolling 			= false;
+		this.hideMaxWidth       = settings.maxWidth;
+		this.hideMinWidth       = settings.minWidth;
+		this.winWidth           = $( window ).width();
 
 		this._init();
 	};
@@ -43,6 +48,8 @@
 		markerClass:	 	'',
 		customClass:	 	'',
 		tooltipEnable:	 	'',
+		enableCloseIcon:    '',
+		escToClose:         '',
 		tooltipPosition:	'',
 		tooltipTrigger:	 	'',
 		tooltipArrow:	 	'',
@@ -69,11 +76,21 @@
 		
 		_init: function () {
 			clearInterval(this.hotspotInterval[this.id]);
-			this._initTooltip(this.markerClass, this.tooltipTrigger);
+			if ( $(window).width() < 768 ) {
+				this._initTooltip(this.markerClass, 'click');
+			} else{ 
+				this._initTooltip(this.markerClass, this.tooltipTrigger);
+			}
 
 			// Start of hotspot functionality.
-			if ('yes' == this.tourEnable) {
-				this._initButtonOverlay();
+			if ( 'yes' == this.tourEnable ) {
+				if ( this.winWidth > this.hideMaxWidth || this.winWidth < this.hideMinWidth || 'none' == this.hideMaxWidth || 'none' == this.hideMinWidth ) {
+					this._initButtonOverlay();
+				} else {
+					this.node.find('.pp-hotspot-overlay').hide();
+					this.node.find('.pp-tour').hide();
+					clearInterval(this.hotspotInterval[this.id]);
+				}
 			} else {
 				clearInterval(this.hotspotInterval[this.id]);
 			}
@@ -116,6 +133,36 @@
 				animation: 			self.tooltipAnimation,
 				animationDuration:	self.animationDur,
 				zIndex: 			self.tooltipZindex,
+				functionReady: function (origin, tooltip) {
+					//functionality to close previous other tooltips.
+					var $all_tooltipser = $('*').filter(function () {
+						return $(this).data('tooltipsterNs');
+					});
+					if ( typeof $all_tooltipser !== 'undefined' ){
+						$all_tooltipser.not(tooltip.origin).tooltipster('hide');
+					}
+
+					// Click on Close Icon to Close 
+					if ( 'yes' == self.enableCloseIcon ) {
+						$( '.pp-tooltip-content-' + self.id ).find( '.pp-tooltip-close' ).off('click').on('click', function (e) {
+							e.preventDefault();
+							$all_tooltipser.tooltipster('hide');
+						});
+					}
+					// ESC key to Close 
+					if ( 'yes' == self.escToClose ) {
+						var	prefix = 'cbox';
+						// Key Bindings
+						$( document ).bind( 'keydown.' + prefix, function (e) {
+							var key    = e.keyCode;
+							if ( key == 27) {
+								e.preventDefault();
+								$all_tooltipser.tooltipster('hide');
+							}
+						});
+					}
+					return false;
+				}
 			});
 		},
 

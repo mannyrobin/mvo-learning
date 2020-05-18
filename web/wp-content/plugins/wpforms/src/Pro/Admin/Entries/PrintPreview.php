@@ -5,11 +5,7 @@ namespace WPForms\Pro\Admin\Entries;
 /**
  * Print view for single form entries.
  *
- * @package    WPForms\Pro\Admin\Entries
- * @author     WPForms
- * @since      1.5.1
- * @license    GPL-2.0+
- * @copyright  Copyright (c) 201p, WPForms LLC
+ * @since 1.5.1
  */
 class PrintPreview {
 
@@ -65,18 +61,20 @@ class PrintPreview {
 			return false;
 		}
 
-		// Check for user with correct capabilities.
-		if ( ! \wpforms_current_user_can() ) {
-			return false;
-		}
-
 		// Check that entry ID was passed.
 		if ( empty( $_GET['entry_id'] ) ) { //phpcs:ignore;
 			return false;
 		}
 
+		$entry_id = \absint( $_GET['entry_id'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		// Check for user with correct capabilities.
+		if ( ! \wpforms_current_user_can( 'view_entry_single', $entry_id ) ) {
+			return false;
+		}
+
 		// Fetch the entry.
-		$this->entry = \wpforms()->entry->get( \absint( $_GET['entry_id'] ) ); //phpcs:ignore
+		$this->entry = \wpforms()->entry->get( $entry_id );
 
 		// Check valid entry was found.
 		if ( empty( $this->entry ) ) {
@@ -108,7 +106,7 @@ class PrintPreview {
 	}
 
 	/**
-	 * Outputs HTML markup for the print preview page.
+	 * Output HTML markup for the print preview page.
 	 *
 	 * @since 1.5.1
 	 */
@@ -202,7 +200,13 @@ class PrintPreview {
 					<a href="#" class="toggle-view"><?php \esc_html_e( 'Compact view', 'wpforms-lite' ); ?></a>
 				</div>
 				<?php
-				\do_action( 'wpforms_pro_admin_entries_printpreview_print_hrml_header_after', $this->entry, $this->form_data );
+				\do_action_deprecated(
+					'wpforms_pro_admin_entries_printpreview_print_hrml_header_after',
+					array( $this->entry, $this->form_data ),
+					'1.5.5 of the WPForms plugin',
+					'wpforms_pro_admin_entries_printpreview_print_html_header_after'
+				);
+				\do_action( 'wpforms_pro_admin_entries_printpreview_print_html_header_after', $this->entry, $this->form_data );
 				$fields = \apply_filters( 'wpforms_entry_single_data', \wpforms_decode( $this->entry->fields ), $this->entry, $this->form_data );
 
 				if ( empty( $fields ) ) {
@@ -233,7 +237,13 @@ class PrintPreview {
 					echo '</div>';
 				}
 
-				\do_action( 'wpforms_pro_admin_entries_printpreview_print_hrml_fields_after', $this->entry, $this->form_data );
+				\do_action_deprecated(
+					'wpforms_pro_admin_entries_printpreview_print_hrml_fields_after',
+					array( $this->entry, $this->form_data ),
+					'1.5.5 of the WPForms plugin',
+					'wpforms_pro_admin_entries_printpreview_print_html_fields_after'
+				);
+				\do_action( 'wpforms_pro_admin_entries_printpreview_print_html_fields_after', $this->entry, $this->form_data );
 
 				if ( ! empty( $this->entry->entry_notes ) ) {
 
@@ -258,7 +268,13 @@ class PrintPreview {
 					echo '</div>';
 				}
 
-				\do_action( 'wpforms_pro_admin_entries_printpreview_print_hrml_notes_after', $this->entry, $this->form_data );
+				\do_action_deprecated(
+					'wpforms_pro_admin_entries_printpreview_print_hrml_notes_after',
+					array( $this->entry, $this->form_data ),
+					'1.5.5 of the WPForms plugin',
+					'wpforms_pro_admin_entries_printpreview_print_html_notes_after'
+				);
+				\do_action( 'wpforms_pro_admin_entries_printpreview_print_html_notes_after', $this->entry, $this->form_data );
 				?>
 			</div>
 			<p class="site"><a href="<?php echo \esc_url( \home_url() ); ?>"><?php echo \esc_html( \get_bloginfo( 'name' ) ); ?></a></p>

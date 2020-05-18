@@ -3,7 +3,7 @@ Location: https://theseoframework.com/extensions/honeypot/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-This extension catches comment spammers through four lightweight yet powerful methods.
+This extension catches comment spammers with a 99.98% catch-rate through four lightweight yet powerful methods.
 
 ## Overview
 
@@ -11,7 +11,7 @@ This extension catches comment spammers through four lightweight yet powerful me
 
 WordPress allows visitors to easily interact with your website. Unfortunately, it's too easy.
 
-Because WordPress' comment system is open, it attracts unwanted comments. Such comments are often automatically inserted to share backlinks. Websites with spammy content are rendered as low-quality by users and search engines alike.
+Because WordPress's comment system is open, it attracts unwanted comments. Such comments are often automatically inserted to share backlinks. Websites with spammy content are rendered as low-quality by users and search engines alike.
 
 To reduce comment spam, you could manually moderate the comments, but this is very time-consuming. Luckily, the Honeypot extension stops automatically inserted comments, saving you loads of time while improving SEO.
 
@@ -92,7 +92,7 @@ There is no setup required, and no options are available.
 
 WordPress has various discussion settings, through which you can fine-tune how comments are displayed and moderated.
 
-These settings can be found at **Settings -> Discussion**.
+These settings can be found at **Settings > Discussion**.
 
 ### Gotta catch 'em all
 

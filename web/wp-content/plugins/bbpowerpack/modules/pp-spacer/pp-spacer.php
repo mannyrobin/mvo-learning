@@ -6,9 +6,6 @@
 class PPSpacerModule extends FLBuilderModule {
 
     /**
-     * Constructor function for the module. You must pass the
-     * name, description, dir and url in an array to the parent class.
-     *
      * @method __construct
      */
     public function __construct()
@@ -29,7 +26,7 @@ class PPSpacerModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPSpacerModule', array(
+BB_PowerPack::register_module('PPSpacerModule', array(
     'general'       => array( // Tab
         'title'         => __('General', 'bb-powerpack'), // Tab title
         'sections'      => array( // Tab Sections

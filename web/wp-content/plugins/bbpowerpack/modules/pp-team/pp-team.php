@@ -4,6 +4,16 @@
  * @class PPTeamModule
  */
 class PPTeamModule extends FLBuilderModule {
+	/**
+	 * @property $data
+	 */
+	public $data = null;
+
+	/**
+	 * @property $_editor
+	 * @protected
+	 */
+	protected $_editor = null;
 
     /**
      * Constructor function for the module. You must pass the
@@ -179,17 +189,6 @@ class PPTeamModule extends FLBuilderModule {
 	}
 
     /**
-	 * @property $data
-	 */
-	public $data = null;
-
-	/**
-	 * @property $_editor
-	 * @protected
-	 */
-	protected $_editor = null;
-
-    /**
 	 * @method update
 	 * @param $settings {object}
 	 */
@@ -219,9 +218,15 @@ class PPTeamModule extends FLBuilderModule {
 	public function delete()
 	{
 		$cropped_path = $this->_get_cropped_path();
-
-		if(file_exists($cropped_path['path'])) {
-			unlink($cropped_path['path']);
+		
+		if ( function_exists( 'fl_builder_filesystem' ) ) {
+			if ( fl_builder_filesystem()->file_exists( $cropped_path['path'] ) ) {
+				fl_builder_filesystem()->unlink( $cropped_path['path'] );
+			}
+		} else {
+			if ( file_exists( $cropped_path['path'] ) ) {
+				unlink( $cropped_path['path'] );
+			}
 		}
 	}
 
@@ -327,8 +332,10 @@ class PPTeamModule extends FLBuilderModule {
 
 					foreach ( $data->sizes as $key => $size ) {
 
+						if ( $size->url == $this->settings->member_image_src ) {
 							$classes[] = 'size-' . $key;
 							break;
+						}
 					}
 				}
 			}
@@ -413,12 +420,25 @@ class PPTeamModule extends FLBuilderModule {
 	 */
 	public function get_attributes()
 	{
+		$photo = $this->get_data();
 		$attrs = '';
 
 		if ( isset( $this->settings->attributes ) ) {
 			foreach ( $this->settings->attributes as $key => $val ) {
 				$attrs .= $key . '="' . $val . '" ';
 			}
+		}
+
+		if ( is_object( $photo ) && isset( $photo->sizes ) ) {
+			foreach ( $photo->sizes as $size ) {
+				if ( $size->url == $this->settings->member_image_src && isset( $size->width ) && isset( $size->height ) ) {
+					$attrs .= 'height="' . $size->height . '" width="' . $size->width . '" ';
+				}
+			}
+		}
+
+		if ( ! empty( $photo->title ) ) {
+			$attrs .= 'title="' . htmlspecialchars( $photo->title ) . '" ';
 		}
 
 		return $attrs;
@@ -515,7 +535,7 @@ class PPTeamModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPTeamModule', array(
+BB_PowerPack::register_module('PPTeamModule', array(
     'general'       => array( // Tab
         'title'         => __('Content', 'bb-powerpack'), // Tab title
         'sections'      => array( // Tab Sections
@@ -1018,7 +1038,7 @@ FLBuilder::register_module('PPTeamModule', array(
 					'title_margin' 	=> array(
                     	'type' 				=> 'pp-multitext',
                     	'label' 			=> __('Margin', 'bb-powerpack'),
-                        'description'   	=> __( 'px', 'Value unit for font size. Such as: "14 px"', 'bb-powerpack' ),
+                        'description'   	=> 'px',
                         'default'       	=> array(
                             'top' 				=> 30,
                             'bottom' 			=> 5,
@@ -1077,7 +1097,7 @@ FLBuilder::register_module('PPTeamModule', array(
 					'designation_margin' 	=> array(
                     	'type' 				=> 'pp-multitext',
                     	'label' 			=> __('Margin', 'bb-powerpack'),
-                        'description'   	=> __( 'px', 'Value unit for font size. Such as: "14 px"', 'bb-powerpack' ),
+                        'description'   	=> 'px',
                         'default'       	=> array(
                             'top' 				=> 0,
                             'bottom' 			=> 15,
@@ -1136,7 +1156,7 @@ FLBuilder::register_module('PPTeamModule', array(
 					'description_margin' 	=> array(
                     	'type' 				=> 'pp-multitext',
                     	'label' 			=> __('Margin', 'bb-powerpack'),
-                        'description'   	=> __( 'px', 'Value unit for font size. Such as: "14 px"', 'bb-powerpack' ),
+                        'description'   	=> 'px',
                         'default'       	=> array(
                             'top' 				=> 5,
                             'bottom' 			=> 20,

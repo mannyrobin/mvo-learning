@@ -25,7 +25,7 @@ class PPImageModule extends FLBuilderModule {
 			'name'          	=> __('Image', 'bb-powerpack'),
 			'description'   	=> __('Upload a photo or display one from the media library.', 'bb-powerpack'),
 			'group'         	=> pp_get_modules_group(),
-            'category'			=> pp_get_modules_cat( 'content' ),
+            'category'			=> pp_get_modules_cat( 'media' ),
 			'dir'           	=> BB_POWERPACK_DIR . 'modules/pp-image/',
             'url'           	=> BB_POWERPACK_URL . 'modules/pp-image/',
             'editor_export' 	=> true, // Defaults to true and can be omitted.
@@ -521,7 +521,7 @@ class PPImageModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPImageModule', array(
+BB_PowerPack::register_module('PPImageModule', array(
 	'general'       => array( // Tab
 		'title'         => __('General', 'bb-powerpack'), // Tab title
 		'sections'      => array( // Tab Sections
@@ -816,7 +816,7 @@ FLBuilder::register_module('PPImageModule', array(
 							)
 						)
 					),
-					'image_spacing'		=> array(
+					'image_spacing'			=> array(
 						'type'		=> 'unit',
 						'label'		=> __('Spacing', 'bb-powerpack'),
 						'default'	=> 10,
@@ -828,9 +828,33 @@ FLBuilder::register_module('PPImageModule', array(
 							'property'	=> 'margin',
 							'unit'		=> 'px'
 						)
-					)
+					),
+					'show_image_effect'		=> array(
+						'type'					=> 'pp-switch',
+						'label'					=> __('Show Image Effects', 'bb-powerpack'),
+						'default'				=> 'no',
+						'options'				=> array(
+							'yes'					=> __('Yes', 'bb-powerpack'),
+							'no'					=> __('No', 'bb-powerpack'),
+						),
+						'toggle'				=> array(
+							'yes'				=> array(
+								'sections'				=> array('image_effects','image_hover_effects')
+							)
+						)
+					),
 				)
 			),
+			'image_effects'		=> array(
+				'title'				=> __('Image Effects', 'bb-powerpack'),
+				'collapsed'			=> true,
+				'fields'			=> pp_image_effect_fields(),
+			),
+			'image_hover_effects'=> array(
+				'title'				=> __('Image Effects on Hover', 'bb-powerpack'),
+				'collapsed'			=> true,
+				'fields'			=> pp_image_effect_fields(true),
+			)
 		),
 	),
 	'caption'	=> array(

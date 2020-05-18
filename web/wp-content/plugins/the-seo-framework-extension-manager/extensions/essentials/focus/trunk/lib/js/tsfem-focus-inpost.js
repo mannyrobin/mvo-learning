@@ -9,8 +9,8 @@
 
 
 /**
- * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2018-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Focus extension for The SEO Framework
+ * Copyright (C) 2018-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -299,7 +299,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		/**
 		 * @param {(boolean|object<number,string>|array)} inflections
-		 * @param {boolean|object<number,string>|array)} synonyms
+		 * @param {(boolean|object<number,string>|array)} synonyms
 		 */
 		let inflections = activeWords( idPrefix ).get( 'inflections' ),
 			synonyms    = activeWords( idPrefix ).get( 'synonyms' );
@@ -555,7 +555,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @param {string} idPrefix
 	 */
 	const runLexicalFormSetter = ( idPrefix ) => {
-		let keyword = getSubElementById( idPrefix, 'keyword' ).value,
+		let keyword          = getSubElementById( idPrefix, 'keyword' ).value,
 			lexicalFormField = getSubElementById( idPrefix, 'lexical_form' );
 
 		if ( ! lexicalFormField instanceof HTMLInputElement ) return;
@@ -573,9 +573,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				entries.forEach( ( entry ) => {
 					if ( entry.inflection && entry.category ) {
 						_forms.push( {
-							'value' : entry.inflection,
-							'category' : entry.category,
-							'name' : entry.category + ': ' + entry.inflection,
+							value:    entry.inflection,
+							category: entry.category,
+							name:     entry.category + ': ' + entry.inflection,
 						} );
 					}
 				} );
@@ -597,20 +597,20 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 		const getLexicalForms = ( idPrefix, keyword ) => {
 			let ops = {
-				method: 'POST',
-				url: ajaxurl,
+				method:   'POST',
+				url:      ajaxurl,
 				dataType: 'json',
 				data: {
-					'action' : 'tsfem_e_focus_get_lexicalforms',
-					'nonce' : l10n.nonce,
-					'post_ID' : tsfem_inpost.postID,
-					'args' : {
-						'keyword': keyword,
-						'language': 'en' // language || 'en', // TODO
+					action: 'tsfem_e_focus_get_lexicalforms',
+					nonce:   l10n.nonce,
+					post_ID: tsfem_inpost.postID,
+					args:    {
+						keyword: keyword,
+						language: 'en' // language || 'en' // TODO this accepts: 'en', and a few other languages. No 'en-us', 'en-gb', etc. however.
 					},
 				},
-				timeout: 15000,
-				async: true,
+				timeout:  15000,
+				async:    true,
 			};
 
 			let $dfd = $.Deferred();
@@ -814,7 +814,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					'post_ID' : tsfem_inpost.postID,
 					'args' : {
 						'form': form,
-						'language': 'en' // language || 'en', // TODO
+						'language': 'en' // language || 'en' // TODO this accepts: 'en', 'en-gb', 'en-us', but nothing else...!
 					},
 				},
 				timeout: 15000,
@@ -1322,9 +1322,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				return;
 			}
 
-			if ( tsfem_inpost.isPremium ) {
-				if ( l10n.languageSupported )
-					runLexicalFormSetter( idPrefix );
+			if ( tsfem_inpost.isPremium && l10n.languageSupported ) {
+				runLexicalFormSetter( idPrefix );
 			}
 
 			prepareWrapScoreElements( idPrefix );
@@ -1609,16 +1608,16 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			const idPrefix = data.idPrefix;
 			const
-				inflectionHolder = getSubElementById( idPrefix, 'inflection_data' ),
-				synonymHolder = getSubElementById( idPrefix, 'synonym_data' ),
+				inflectionHolder    = getSubElementById( idPrefix, 'inflection_data' ),
+				synonymHolder       = getSubElementById( idPrefix, 'synonym_data' ),
 
 				definitionSelection = getSubElementById( idPrefix, 'definition_selection' ),
 
-				inflectionSection = getSubElementById( idPrefix, 'inflections' ),
-				synonymSection = getSubElementById( idPrefix, 'synonyms' ),
+				inflectionSection   = getSubElementById( idPrefix, 'inflections' ),
+				synonymSection      = getSubElementById( idPrefix, 'synonyms' ),
 
-				inflectionEntries = inflectionSection.querySelector( '.tsfem-e-focus-subject-selection' ),
-				synonymEntries = synonymSection.querySelector( '.tsfem-e-focus-subject-selection' );
+				inflectionEntries   = inflectionSection.querySelector( '.tsfem-e-focus-subject-selection' ),
+				synonymEntries      = synonymSection.querySelector( '.tsfem-e-focus-subject-selection' );
 			const subjectTemplate = wp.template( 'tsfem-e-focus-subject-item' );
 
 			//?! There's always just one form of inflections in latin.
@@ -1633,17 +1632,17 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			synonymEntries.style.opacity = 0;
 
 			let activeInflections = getSubElementById( idPrefix, 'active_inflections' ).value.split( ',' ),
-				activeSynonyms = getSubElementById( idPrefix, 'active_synonyms' ).value.split( ',' );
+				activeSynonyms    = getSubElementById( idPrefix, 'active_synonyms' ).value.split( ',' );
 
 			let html = '',
 				prefix = createSubId( idPrefix, 'inflection' );
 			//= We need the keys... but they're sequential?
 			for ( let i in inflections ) {
 				html += subjectTemplate( {
-					'id': createSubId( prefix, i ),
-					'value': inflections[ i ],
-					'checked': !+i || ( activeInflections.indexOf( String( i ) ) > -1 ) ? 'checked' : '', // Always enable the first inflection.
-					'disabled': !+i ? 'disabled' : '' // Disable the first inflection.
+					id:       createSubId( prefix, i ),
+					value:    inflections[ i ],
+					checked:  !+i || ( activeInflections.indexOf( String( i ) ) > -1 ) ? 'checked' : '', // Always enable the first inflection.
+					disabled: !+i ? 'disabled' : '' // Disable the first inflection.
 				} );
 			}
 			inflectionEntries.innerHTML = html;
@@ -1653,9 +1652,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			//= We need the keys... but they're sequential?
 			for ( let i in synonyms ) {
 				html += subjectTemplate( {
-					'id': createSubId( prefix, i ),
-					'value': synonyms[ i ],
-					'checked': activeSynonyms.indexOf( String( i ) ) > -1 ? 'checked' : ''
+					id:      createSubId( prefix, i ),
+					value:   synonyms[ i ],
+					checked: activeSynonyms.indexOf( String( i ) ) > -1 ? 'checked' : ''
 				} );
 			}
 			synonymEntries.innerHTML = html;
@@ -1709,6 +1708,10 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @since 1.0.0
 	 * @access private
 	 * @uses @var cachedActiveWords
+	 *
+	 * @FIXME: When the current language isn't supported, stale inflections and synonyms
+	 *         may still be used. The issue is that the current keyword is included in
+	 *         the list, so we can't easily filter it.
 	 *
 	 * @function
 	 * @param {string} idPrefix
@@ -1771,14 +1774,14 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				return cachedActiveWords[ idPrefix ][ what ];
 
 			switch ( what ) {
-				case 'inflections' :
+				case 'inflections':
 					return getActiveInflections();
-				case 'synonyms' :
+				case 'synonyms':
 					return getActiveSynonyms();
-				default :
+				default:
 					return {
-						'inflections': getActiveInflections(),
-						'synonyms': getActiveSynonyms()
+						inflections: getActiveInflections(),
+						synonyms:    getActiveSynonyms()
 					};
 			}
 		}
@@ -1792,7 +1795,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		return {
-			get: what => getActive( what ),
+			get:        what => getActive( what ),
 			clearCache: what => clear( what )
 		};
 	}
@@ -2013,7 +2016,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		if ( ! holder ) return;
 
-		const getId = type => `tsfem-focus-gbc-${type}`;
+		const getId      = type => `tsfem-focus-gbc-${type}`;
 		const getElement = type => document.getElementById( getId( type ) );
 
 		/**
@@ -2089,7 +2092,15 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 		$document.on( 'tsf-updated-gutenberg-content', ( event, content ) => {
 			let debouncer = lodash.debounce( updateContent, 500 );
-			if ( wp.data.select( 'core/editor' ).isTyping() ) {
+
+			let isTyping = false,
+				editor   = wp.data.select( 'core/block-editor' ) || wp.data.select( 'core/editor' );
+
+			if ( 'function' === typeof editor.isTyping ) {
+				isTyping = editor.isTyping();
+			}
+
+			if ( isTyping ) {
 				// Don't process and lag when typing, just show that the data is invalidated.
 				setAllRatersOf( 'pageContent', 'unknown' );
 				debouncer( content );
@@ -2231,7 +2242,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			if ( kwEntry.value.length ) {
 				//= Prepare keyword value.
 				kwEntry.dataset.prev = kwEntry.value;
-				if ( tsfem_inpost.isPremium ) {
+				if ( tsfem_inpost.isPremium && l10n.languageSupported ) {
 					//= Prepare lexical selector values.
 					let lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' );
 					lexicalSelector.dataset.prev = lexicalSelector.value;
@@ -2288,7 +2299,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		resetCollapserListeners();
 		resetKeywordEntryListeners();
 
-		if ( tsfem_inpost.isPremium ) {
+		if ( tsfem_inpost.isPremium && l10n.languageSupported ) {
 			//= Prepare definition selector.
 			resetSubjectEditListeners();
 			resetSubjectFilterListeners();

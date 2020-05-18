@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Local\Admin
  */
+
 namespace TSF_Extension_Manager\Extension\Local;
 
 defined( 'ABSPATH' ) or die;
@@ -11,7 +12,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Local extension for The SEO Framework
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -96,13 +97,12 @@ final class Admin extends Core {
 	 * @access private
 	 */
 	public function _init_menu() {
-
 		if ( \tsf_extension_manager()->can_do_settings() && \the_seo_framework()->load_options )
-			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 11 );
+			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 20 );
 	}
 
 	/**
-	 * Adds menu link for Local SEO, when possible, underneath The SEO Framework
+	 * Adds menu link for Local, when possible, underneath The SEO Framework
 	 * SEO settings.
 	 *
 	 * @since 1.0.0
@@ -114,8 +114,8 @@ final class Admin extends Core {
 
 		$menu = [
 			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
-			'page_title'  => \esc_html__( 'Local SEO', 'the-seo-framework-extension-manager' ),
-			'menu_title'  => \esc_html__( 'Local', 'the-seo-framework-extension-manager' ),
+			'page_title'  => 'Local',
+			'menu_title'  => 'Local',
 			'capability'  => 'manage_options',
 			'menu_slug'   => $this->local_page_slug,
 			'callback'    => [ $this, '_output_local_settings_page' ],
@@ -132,7 +132,7 @@ final class Admin extends Core {
 	}
 
 	/**
-	 * Outputs Local SEO settings page.
+	 * Outputs Local settings page.
 	 *
 	 * @since 1.0.0
 	 * @access private
@@ -150,7 +150,7 @@ final class Admin extends Core {
 	 */
 	public function _load_local_admin_actions() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( \wp_doing_ajax() ) {
 			$this->do_settings_page_ajax_actions();
 		} else {
 			\add_action( 'load-' . $this->local_menu_page_hook, [ $this, '_do_settings_page_actions' ] );
@@ -158,7 +158,7 @@ final class Admin extends Core {
 	}
 
 	/**
-	 * Hooks admin actions into the Local SEO pagehook.
+	 * Hooks admin actions into the Local pagehook.
 	 * Early enough for admin_notices and admin_head :).
 	 *
 	 * @since 1.0.0
@@ -174,13 +174,13 @@ final class Admin extends Core {
 		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) )
 			return false;
 
-		$this->get_local_settings_instance()->_init( $this, $this->local_page_slug, $this->local_menu_page_hook );
+		$this->get_local_settings_instance()->_init( $this, $this->local_page_slug, $this->local_menu_page_hook, $this->o_index );
 
 		return true;
 	}
 
 	/**
-	 * Hooks admin AJAX actions into the Local SEO pagehook.
+	 * Hooks admin AJAX actions into the Local pagehook.
 	 *
 	 * @since 1.0.0
 	 *
@@ -191,7 +191,7 @@ final class Admin extends Core {
 		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) )
 			return false;
 
-		$this->get_local_settings_instance()->_init_ajax( $this );
+		$this->get_local_settings_instance()->_init_ajax( $this, $this->o_index );
 
 		return true;
 	}
@@ -214,7 +214,7 @@ final class Admin extends Core {
 	}
 
 	/**
-	 * Sets up and returns Transporter_Steps.
+	 * Sets up and returns \TSF_Extension_Manager\Extension\Local\Settings.
 	 *
 	 * @since 1.0.0
 	 *

@@ -72,7 +72,7 @@ class PPAnimatedHeadlinesModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPAnimatedHeadlinesModule', array(
+BB_PowerPack::register_module('PPAnimatedHeadlinesModule', array(
 	'general'       => array(
 		'title'         => __('General', 'bb-powerpack'),
 		'sections'      => array(
@@ -226,12 +226,14 @@ FLBuilder::register_module('PPAnimatedHeadlinesModule', array(
 		                'label'         => __('Title Tag', 'bb-powerpack'),
 		                'default'       => 'h3',
 		                'options'       => array(
-		                	'h1'	  => __('H1', 'bb-powerpack'),
-		                    'h2'      => __('H2', 'bb-powerpack'),
-		                    'h3'      => __('H3', 'bb-powerpack'),
-		                    'h4'      => __('H4', 'bb-powerpack'),
-		                    'h5'      => __('H5', 'bb-powerpack'),
-		                    'h6'      => __('H6', 'bb-powerpack'),
+		                	'h1'	  	=> __('H1', 'bb-powerpack'),
+		                    'h2'      	=> __('H2', 'bb-powerpack'),
+		                    'h3'      	=> __('H3', 'bb-powerpack'),
+		                    'h4'      	=> __('H4', 'bb-powerpack'),
+		                    'h5'      	=> __('H5', 'bb-powerpack'),
+							'h6'      	=> __('H6', 'bb-powerpack'),
+							'div'		=> 'div',
+							'p'			=> 'p'
 		                )
 		            ),
 				)

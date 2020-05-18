@@ -8,7 +8,7 @@
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -22,16 +22,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-// ==ClosureCompiler==
-// @compilation_level ADVANCED_OPTIMIZATIONS
-// @language ECMASCRIPT6_STRICT
-// @language_out ECMASCRIPT5_STRICT
-// @output_file_name tsfem.min.js
-// @externs_url https://raw.githubusercontent.com/google/closure-compiler/master/contrib/externs/jquery-1.9.js
-// @externs_url https://raw.githubusercontent.com/sybrew/The-SEO-Framework-Extension-Manager/master/lib/js/externs/tsfem.externs.js
-// ==/ClosureCompiler==
-// http://closure-compiler.appspot.com/home
 
 'use strict';
 
@@ -387,22 +377,22 @@ window.tsfem = {
 						case 10007: // No slug set.
 						case 10013: // Forced inactive...
 						case 10014: // Hidden... User didn't log out when this was imposed.
-							status = 0;
+							status        = 0;
 							topNoticeCode = rCode;
 							break;
 
 						case 10005: // Extension caused fatal error.
-							status = 0;
+							status         = 0;
 							let fatalError = data && data.fatal_error || void 0;
-							topNotice = fatalError;
-							topNoticeCode = rCode;
+							topNotice      = fatalError;
+							topNoticeCode  = rCode;
 							break;
 
 						case 10008: // Premium/Essentials activated.
 						case 10010: // Free activated.
 						case 10012: // Already active...
 							status = 1;
-							$button.removeClass( 'tsfem-button-extension-activate' ).addClass( 'tsfem-button-extension-deactivate' );
+							$button.removeClass( 'tsfem-button tsfem-button-extension-activate' ).addClass( 'tsfem-button-primary tsfem-button-primary-dark tsfem-button-extension-deactivate' );
 							$button.data( 'case', 'deactivate' );
 							$button.text( tsfem.i18n['Deactivate'] );
 							jQuery( '#' + actionSlug + '-extension-entry' ).removeClass( 'tsfem-extension-deactivated' ).addClass( 'tsfem-extension-activated' );
@@ -423,7 +413,7 @@ window.tsfem = {
 					switch ( rCode ) {
 						case 11001: // success.
 							status = 1;
-							$button.removeClass( 'tsfem-button-extension-deactivate' ).addClass( 'tsfem-button-extension-activate' );
+							$button.removeClass( 'tsfem-button-primary tsfem-button-primary-dark tsfem-button-extension-deactivate' ).addClass( 'tsfem-button tsfem-button-extension-activate' );
 							$button.data( 'case', 'activate' );
 							$button.text( tsfem.i18n['Activate'] );
 							jQuery( '#' + actionSlug + '-extension-entry' ).removeClass( 'tsfem-extension-activated' ).addClass( 'tsfem-extension-deactivated' );
@@ -664,12 +654,12 @@ window.tsfem = {
 			url: ajaxurl,
 			dataType: 'json',
 			data: {
-				'action' : 'tsfem_update_extension_desc_footer',
-				'nonce' : tsfem.nonce,
-				'slug' : actionSlug,
-				'case' : actionCase,
+				action: 'tsfem_update_extension_desc_footer',
+				nonce:  tsfem.nonce,
+				slug:   actionSlug,
+				case:   actionCase,
 			},
-			timeout: 3000,
+			timeout: 7000,
 			async: true,
 		} ).done( ( response ) => {
 
@@ -788,16 +778,13 @@ window.tsfem = {
 	 */
 	setDismissNoticeListener: function() {
 
-		let $dismiss = jQuery( '.tsfem-dismiss' );
-
 		const dismissNotice = ( event ) => {
 			jQuery( event.target ).closest( '.tsfem-notice' ).slideUp( 200, function() {
 				this.remove();
 			} );
 		};
 
-		$dismiss.off( 'click', dismissNotice );
-		$dismiss.on( 'click', dismissNotice );
+		jQuery( '.tsfem-dismiss' ).off( 'click', dismissNotice ).on( 'click', dismissNotice );
 	},
 
 	/**
@@ -831,10 +818,10 @@ window.tsfem = {
 			url: ajaxurl,
 			datatype: 'json',
 			data: {
-				'action' : 'tsfem_get_dismissible_notice',
-				'nonce' : tsfem.nonce,
-				'tsfem-notice-key' : noticeKey,
-				'tsfem-notice-has-msg' : hasMsg,
+				action: 'tsfem_get_dismissible_notice',
+				nonce: tsfem.nonce,
+				'tsfem-notice-key': noticeKey,
+				'tsfem-notice-has-msg': hasMsg,
 			},
 			timeout: 7000,
 			async: true,
@@ -1068,7 +1055,7 @@ window.tsfem = {
 				modal.confirmButton = document.createElement( 'button' );
 				modal.confirmButton.className = 'tsfem-modal-confirm tsfem-button-small';
 				if ( hasSelect ) {
-					modal.confirmButton.className += ' tsfem-button-primary tsfem-button-green';
+					modal.confirmButton.className += ' tsfem-button-primary tsfem-button-primary-bright';
 				} else {
 					modal.confirmButton.className += ' tsfem-button';
 				}
@@ -1231,19 +1218,6 @@ window.tsfem = {
 	},
 
 	/**
-	 * Adds tooltip boundaries to known elements.
-	 *
-	 * @since 2.0.2
-	 * @access private
-	 *
-	 * @function
-	 * @return {undefined}
-	 */
-	setToolTipBoundary: function() {
-		tsfTT.addBoundary( '.tsfem-pane-inner-wrap' );
-	},
-
-	/**
 	 * Initialises all aspects of the scripts.
 	 *
 	 * Generally ordered with stuff that inserts new elements into the DOM first,
@@ -1282,8 +1256,6 @@ window.tsfem = {
 
 		// Set dismissible notice listener.
 		jQ( document.body ).ready( tsfem.setDismissNoticeListener );
-
-		jQ( document.body ).ready( tsfem.setToolTipBoundary );
 	}
 };
 jQuery( tsfem.ready );

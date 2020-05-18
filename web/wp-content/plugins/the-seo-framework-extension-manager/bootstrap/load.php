@@ -1,14 +1,15 @@
 <?php
 /**
- * @package TSF_Extension_Manager/Bootstrap
+ * @package TSF_Extension_Manager\Bootstrap
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -81,9 +82,9 @@ function _protect_options() {
  * @access private
  * @uses TSF_Extension_Manager\SecureOption::verify_option_instance()
  *
- * @param mixed $value The new, unserialized option value.
- * @param mixed $old_value The old option value.
- * @param string $option The option name.
+ * @param mixed  $new_value The new, unserialized option value.
+ * @param mixed  $old_value The old option value.
+ * @param string $option    The option name.
  * @return mixed $value on success.
  */
 function _pre_execute_protect_option( $new_value, $old_value, $option ) {
@@ -130,8 +131,10 @@ function _init_tsf_extension_manager() {
 	if ( $tsf_extension_manager )
 		return $tsf_extension_manager;
 
-	if ( false === \doing_action( 'plugins_loaded' ) )
+	if ( false === \doing_action( 'plugins_loaded' ) ) {
 		\wp_die( 'Use tsf_extension_manager() after action `plugins_loaded` priority 6.' );
+		exit;
+	}
 
 	if ( \TSF_Extension_Manager\can_load_class() ) {
 
@@ -154,9 +157,17 @@ function _init_tsf_extension_manager() {
 
 		/**
 		 * Runs after extensions are initialized
+		 *
 		 * @since 1.5.0
 		 */
-		do_action( 'tsfem_extensions_initialized' );
+		\do_action( 'tsfem_extensions_initialized' );
+	} elseif ( ! function_exists( '\\the_seo_framework' ) ) {
+		/**
+		 * Nothing is loaded at this point; not even The SEO Framework.
+		 *
+		 * @since 2.2.0
+		 */
+		\do_action( 'tsfem_needs_the_seo_framework' );
 	}
 
 	return $tsf_extension_manager;
@@ -186,7 +197,7 @@ function _register_autoloader() {
 
 	/**
 	 * Register class autoload here.
-	 * This will make sure the website crashes when extensions try to bypass WordPress' loop.
+	 * This will make sure the website crashes when extensions try to bypass WordPress's loop.
 	 */
 	spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
 }
@@ -199,6 +210,7 @@ function _register_autoloader() {
  * @since 1.0.0
  * @since 1.5.0 Now requires TSF 2.8+ to load.
  * @since 2.0.2 Now requires TSF 3.1+ to load.
+ * @since 2.2.0 Now requires TSF 3.3+ to load.
  * @staticvar bool $can_load
  *
  * @return bool Whether the plugin can load. Always returns false on the front-end.
@@ -210,13 +222,8 @@ function can_load_class() {
 	if ( isset( $can_load ) )
 		return $can_load;
 
-	if ( function_exists( 'the_seo_framework' ) ) {
-		$tsf = \the_seo_framework();
-		$loaded = isset( $tsf->loaded ) ? $tsf->loaded : (
-			function_exists( 'the_seo_framework_active' ) ? \the_seo_framework_active() : false
-		);
-
-		if ( $loaded && version_compare( THE_SEO_FRAMEWORK_VERSION, '3.1', '>=' ) )
+	if ( function_exists( '\\the_seo_framework' ) ) {
+		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '3.3', '>=' ) && \the_seo_framework()->loaded )
 			return $can_load = (bool) \apply_filters( 'tsf_extension_manager_enabled', true );
 	}
 
@@ -255,6 +262,15 @@ function _autoload_classes( $class ) {
 			return;
 	}
 
+	static $_timenow = true;
+
+	if ( $_timenow ) {
+		$_bootstrap_timer = microtime( true );
+		$_timenow         = false;
+	} else {
+		$_bootstrap_timer = 0;
+	}
+
 	$class = strtolower( str_replace( __NAMESPACE__ . '\\', '', $class ) );
 
 	if ( strpos( $class, '_abstract' ) ) {
@@ -266,4 +282,11 @@ function _autoload_classes( $class ) {
 	}
 
 	require $path . $class . '.class.php';
+
+	if ( $_bootstrap_timer ) {
+		$_t = microtime( true ) - $_bootstrap_timer;
+		\The_SEO_Framework\_bootstrap_timer( $_t );
+		\TSF_Extension_Manager\_bootstrap_timer( $_t );
+		$_timenow = true;
+	}
 }

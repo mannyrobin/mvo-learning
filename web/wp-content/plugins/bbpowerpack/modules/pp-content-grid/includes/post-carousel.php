@@ -29,14 +29,14 @@
 	} else { ?>
 
 	<?php if( $settings->more_link_type == 'box' && ('product' != $settings->post_type || 'download' != $settings->post_type )) { ?>
-		<a class="pp-post-link" href="<?php echo $permalink; ?>"></a>
+		<a class="pp-post-link" href="<?php echo $permalink; ?>" title="<?php the_title_attribute(); ?>"></a>
 	<?php } ?>
 
 	<?php if( 'style-1' == $settings->post_grid_style_select ) { ?>
 
 	<<?php echo $settings->title_tag; ?> class="pp-content-grid-title pp-post-title" itemprop="headline">
 		<?php if( $settings->more_link_type == 'button' || $settings->more_link_type == 'title' || $settings->more_link_type == 'title_thumb' ) { ?>
-			<a href="<?php echo $permalink; ?>">
+			<a href="<?php echo $permalink; ?>" title="<?php the_title_attribute(); ?>">
 		<?php } ?>
 			<?php the_title(); ?>
 		<?php if( $settings->more_link_type == 'button' || $settings->more_link_type == 'title' || $settings->more_link_type == 'title_thumb' ) { ?>
@@ -62,7 +62,11 @@
 				<span> <?php echo $settings->meta_separator; ?> </span>
 			<?php endif; ?>
 			<span class="pp-content-grid-date">
-				<?php echo get_the_date(); ?>
+				<?php if ( pp_is_tribe_events_post( $post_id ) && function_exists( 'tribe_get_start_date' ) ) { ?>
+					<?php echo tribe_get_start_date( null, false, $date_format ); ?>
+				<?php } else { ?>
+					<?php echo get_the_date( $date_format ); ?>
+				<?php } ?>
 			</span>
 		<?php endif; ?>
 
@@ -78,8 +82,13 @@
 
 		<?php if('style-5' == $settings->post_grid_style_select && 'yes' == $settings->show_date) { ?>
 		<div class="pp-content-post-date pp-post-meta">
-			<span class="pp-post-day"><?php echo get_the_date('d'); ?></span>
-			<span class="pp-post-month"><?php echo get_the_date('M'); ?></span>
+			<?php if ( pp_is_tribe_events_post( $post_id ) && function_exists( 'tribe_get_start_date' ) ) { ?>
+				<span class="pp-post-day"><?php echo tribe_get_start_date( null, false, 'd' ); ?></span>
+				<span class="pp-post-month"><?php echo tribe_get_start_date( null, false, 'M' ); ?></span>
+			<?php } else { ?>
+				<span class="pp-post-day"><?php echo get_the_date('d'); ?></span>
+				<span class="pp-post-month"><?php echo get_the_date('M'); ?></span>
+			<?php } ?>
 		</div>
 		<?php } ?>
 
@@ -88,7 +97,7 @@
 			<?php if( 'style-1' != $settings->post_grid_style_select && 'style-4' != $settings->post_grid_style_select ) { ?>
 				<<?php echo $settings->title_tag; ?> class="pp-content-carousel-title pp-post-title" itemprop="headline">
 					<?php if( $settings->more_link_type == 'button' || $settings->more_link_type == 'title' || $settings->more_link_type == 'title_thumb' ) { ?>
-						<a href="<?php echo $permalink; ?>">
+						<a href="<?php echo $permalink; ?>" title="<?php the_title_attribute(); ?>">
 					<?php } ?>
 						<?php the_title(); ?>
 					<?php if( $settings->more_link_type == 'button' || $settings->more_link_type == 'title' || $settings->more_link_type == 'title_thumb' ) { ?>
@@ -122,7 +131,11 @@
 						<span> <?php echo $settings->meta_separator; ?> </span>
 					<?php endif; ?>
 					<span class="pp-content-carousel-date">
-						<?php echo get_the_date(); ?>
+						<?php if ( pp_is_tribe_events_post( $post_id ) && function_exists( 'tribe_get_start_date' ) ) { ?>
+							<?php echo tribe_get_start_date( null, false, $date_format ); ?>
+						<?php } else { ?>
+							<?php echo get_the_date( $date_format ); ?>
+						<?php } ?>
 					</span>
 				<?php endif; ?>
 
@@ -139,7 +152,7 @@
 							<?php if( $i == count($terms_list) ) { ?>
 								<a href="<?php echo get_term_link($term); ?>" class="pp-post-meta-term"><?php echo $term->name; ?></a>
 							<?php } else { ?>
-								<a href="<?php echo get_term_link($term); ?>" class="pp-post-meta-term"><?php echo $term->name; ?></a> /
+								<a href="<?php echo get_term_link($term); ?>" class="pp-post-meta-term"><?php echo $term->name; ?></a> <?php echo ! empty( $settings->meta_separator ) ? $settings->meta_separator : '/'; ?>
 							<?php } ?>
 							<?php $i++; endforeach; ?>
 						<?php } ?>

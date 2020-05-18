@@ -5,22 +5,29 @@
 .tsfem-form-collapse {
 	position: relative;
 	width: 100%;
-	padding: 0 20px 20px;
+	margin: 0;
+	padding: 0;
+	box-shadow: 0 0 0 1px rgba(0,0,0,.18) inset;
+	border-radius: 4px;
 }
 
-.tsfem-form-collapse-sub-wrap {
-	padding-top: 15px;
+.tsfem-form-collapse-sub-wrap:not(:empty) {
+	margin-top: 1em;
+}
+
+.tsfem-form-collapse-sub-wrap.tsfem-form-multi-setting-input {
+	margin-top: 0;
 }
 
 .tsfem-form-collapse-sub-wrap .tsfem-form-collapse {
-	padding: 0 0 15px;
+	margin-bottom: 1em;
 }
 
 .tsfem-form-collapse-sub-wrap .tsfem-form-collapse:last-of-type {
-	padding: 0;
+	margin-bottom: 0;
 }
 
-.tsfem-form-collapse > input[type="checkbox"] {
+.tsfem-form-collapse > input {
 	position: absolute;
 	width: 0;
 	height: 0;
@@ -33,7 +40,7 @@
 	appearance: none;
 }
 
-.tsfem-form-collapse > input[type=checkbox]:checked:before {
+.tsfem-form-collapse > input:checked:before {
 	content: none;
 	float: none;
 	margin: 0;
@@ -43,14 +50,14 @@
 .tsfem-form-collapse-header {
 	position: relative;
 	width: 100%;
-	background: #fefefe;
-	color: #23282d;
-	box-shadow: 0 .1em .3em .1em rgba(0,0,0,.18);
-	-webkit-align-items: center;
+	padding: 1em;
+	background: #fff;
+	box-shadow: 0 0 0 1px rgba(0,0,0,.18), 0 0 0 0 rgba(0,0,0,.18) inset;
 	align-items: center;
 	cursor: pointer;
-	transition: box-shadow .33s;
 	z-index: 1;
+	transition: box-shadow .33s;
+	border-radius: 4px;
 }
 
 .tsfem-form-collapse-header-good .tsfem-form-collapse-icon {
@@ -61,26 +68,26 @@
 	color: #dd3811;
 }
 
-.tsfem-form-collapse:nth-of-type(2n-1) > .tsfem-form-collapse-header {
-	background: #f9f9f9;
-}
-
 .tsfem-form-collapse-header:hover,
-.tsfem-form-collapse > input[type="checkbox"]:focus + .tsfem-form-collapse-header {
-	box-shadow: 0 .1em .3em .1em rgba(0,0,0,.3);
+.tsfem-form-collapse > input:focus + .tsfem-form-collapse-header {
+	box-shadow: 0 0 4px 1px rgba(0,0,0,.3), 0 0 1px 0 rgba(0,0,0,.3) inset;
 }
 
-.tsfem-form-collapse > input[type="checkbox"]:active + .tsfem-form-collapse-header,
+.tsfem-form-collapse > input:active + .tsfem-form-collapse-header,
 .tsfem-forum-collapse-header:active {
-	box-shadow: 0 0em 0em .1em rgba(0,0,0,.18);
+	box-shadow: 0 0 0 1px rgba(0,0,0,.3), 0 0 2px 1px rgba(0,0,0,.18) inset;
+}
+
+.tsfem-form-collapse > input:focus:not(:checked):not(:hover) + .tsfem-form-collapse-header {
+	box-shadow: 0 0 0 1px rgba(0,0,0,.18), 0 0 0 0 rgba(0,0,0,.18) inset;
 }
 
 .tsfem-form-collapse-title-wrap {
 	line-height: 1.15em;
 	font-size: 1.15em;
+	padding: 0;
+	margin: 0;
 	vertical-align: middle;
-	padding: 14px 0;
-	margin: 0 14px 0 2.3em;
 }
 
 .tsfem-form-title-icon:before {
@@ -137,7 +144,7 @@
 	content: "";
 	position: absolute;
 	width: 6px;
-	left: 20px;
+	left: .5em;
 	top: 0;
 	height: 1px;
 	border: 1px solid;
@@ -147,35 +154,26 @@
 }
 
 .tsfem-form-collapse-icon:before {
-	-webkit-transform: translate(-2px, 0) rotate(-45deg);
 	transform: translate(-2px, 0) rotate(-45deg);
 }
 
 .tsfem-form-collapse-icon:after {
-	-webkit-transform: translate(2px, 0) rotate(45deg);
 	transform: translate(2px, 0) rotate(45deg);
 }
 
-/* TODO might be a performance hit: */
 .tsfem-form-collapse > input[type="checkbox"]:checked + .tsfem-form-collapse-header .tsfem-form-collapse-icon:before {
-	-webkit-transform: translate(-2px, 0) rotate(45deg);
 	transform: translate(-2px, 0) rotate(45deg);
 }
 
-/* TODO might be a performance hit: */
 .tsfem-form-collapse > input[type="checkbox"]:checked + .tsfem-form-collapse-header .tsfem-form-collapse-icon:after {
-	-webkit-transform: translate(2px, 0) rotate(-45deg);
 	transform: translate(2px, 0) rotate(-45deg);
 }
 
 .tsfem-form-collapse-content {
 	display: block;
-	position: relative;
-	margin: 0;
-	padding: 0;
-	box-shadow: 0 2px 3px 1px #ccc;
-	width: 100%;
-	-webkit-animation: tsfemForm-fade-in .25s;
+	margin: 0 auto;
+	box-sizing: border-box;
+	padding: 1em;
 	animation: tsfemForm-fade-in .25s;
 }
 
@@ -204,7 +202,6 @@ h4.tsfem-form-multi-title {
 .tsfem-form-iterator-selector-wrap,
 .tsfem-form-setting {
 	width: 100%;
-	-webkit-flex-direction: row;
 	flex-direction: row;
 }
 
@@ -215,51 +212,49 @@ h4.tsfem-form-multi-title {
 .tsfem-form-setting-label,
 .tsfem-form-setting-input {
 	background-color: #fff;
-	padding: 15px 12px;
-	-webkit-flex: 10 1 350px;
+	padding: 1em;
 	flex: 10 1 350px;
-	box-shadow: 0 0 0 1px #e9e9e9;
+	box-shadow: 0 0 0 1px #ccd0d4;
 }
 
 .tsfem-form-multi-setting-label,
 .tsfem-form-iterator-setting-label,
 .tsfem-form-setting-label {
 	background-color: #f9f9f9;
-	-webkit-flex: 1 1 250px;
-	flex: 1 1 250px;
+	flex: 2 1 200px;
+	border-radius: 3px;
+}
+
+.tsfem-form-plain-settings-label {
+	margin-bottom: 1em;
+	flex: 1 1 100%;
 }
 
 .tsfem-form-multi-setting-label-item,
 .tsfem-form-iterator-setting-label-item,
 .tsfem-form-setting-label-item,
 .tsfem-form-setting-action {
-	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
 	flex-wrap: nowrap;
-	-webkit-flex-direction: row;
 	flex-direction: row;
-	-webkit-justify-content: space-between;
 	justify-content: space-between;
-	-webkit-flex-grow: 0;
 	flex-grow: 0;
+	max-width: max-content; /* does not work on Edge... it's fine */
 }
 
 .tsfem-form-multi-setting-input,
 .tsfem-form-iterator-setting-input,
 .tsfem-form-setting-input,
 .tsfem-form-setting-label-inner-wrap {
-	-webkit-justify-content: center;
 	justify-content: center;
 }
 
-.tsfem-form-setting-label-inner-wrap {
+.tsfem-form-iterator-selector-wrap .tsfem-form-setting-label-inner-wrap {
 	will-change: contents;
 }
 
 .tsfem-form-multi-setting-label-inner-wrap,
 .tsfem-form-select-multi-a11y-label-inner-wrap,
 .tsfem-form-iterator-setting-label-inner-wrap {
-	-webkit-justify-content: flex-start;
 	justify-content: flex-start;
 }
 
@@ -291,8 +286,12 @@ h4.tsfem-form-multi-title {
 	margin: .5em 0;
 }
 
-.tsfem-form-option-description:last-of-type {
-	margin: .5em 0 0;
+.tsfem-form-plain-settings-label .tsfem-form-option-description:first-of-type {
+	margin-top: 0;
+}
+
+.tsfem-form-plain-settings-label .tsfem-form-option-description:last-of-type {
+	margin-bottom: 0;
 }
 
 .tsfem-form-validate .tsfem-form-setting-input input[type=text],
@@ -312,6 +311,7 @@ h4.tsfem-form-multi-title {
 .tsfem-form-setting-input textarea {
 	display: inline-block;
 	width: 100%;
+	max-width: unset;
 }
 
 .tsfem-form-image-buttons-wrap {
@@ -332,21 +332,16 @@ h4.tsfem-form-multi-title {
 .tsfem-form-multi-select-wrap {
 	max-height: 350px;
 	padding: 0px 15px;
-	box-shadow: 0 0 0 1px #e9e9e9;
+	box-shadow: 0 0 0 1px #ccd0d4;
 	overflow: hidden;
 	overflow-y: auto;
 	position: relative; /* For traps */
 }
 
 .tsfem-form-multi-select-wrap-row ul {
-	display: -webkit-box;
-	display: -webkit-flex;
 	display: flex;
-	-webkit-flex-direction: row;
 	flex-direction: row;
-	-webkit-flex-wrap: wrap;
 	flex-wrap: wrap;
-	-webkit-justify-content: flex-start;
 	justify-content: flex-start;
 }
 

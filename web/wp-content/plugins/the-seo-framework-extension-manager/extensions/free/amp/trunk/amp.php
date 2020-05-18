@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Extension\AMP
  */
+
 namespace TSF_Extension_Manager\Extension\AMP;
 
 /**
  * Extension Name: AMP
  * Extension URI: https://theseoframework.com/extensions/amp/
  * Extension Description: The AMP extension binds The SEO Framework to the [AMP plugin](https://wordpress.org/plugins/amp/) for [AMP](https://www.ampproject.org/) supported articles and pages.
- * Extension Version: 1.1.0
+ * Extension Version: 1.2.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -21,7 +22,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * AMP extension for The SEO Framework
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -38,6 +39,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * The AMP extension version.
+ *
  * @since 1.0.0
  * @param string
  */
@@ -97,6 +99,7 @@ final class Front {
 
 		/**
 		 * Removes the default AMP articles metadata output.
+		 *
 		 * @since 1.0.0
 		 * @link https://theseoframework.com/extensions/articles/
 		 * @param bool $remove
@@ -122,6 +125,7 @@ final class Front {
 
 		$output .= $this->get_general_metadata();
 		$output .= $this->get_social_metadata();
+		$output .= $this->get_structured_metadata();
 
 		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '2.9.2', '>=' ) ) {
 			$output = \the_seo_framework()->get_plugin_indicator( 'before' )
@@ -170,6 +174,7 @@ final class Front {
 
 		/**
 		 * Adds content before the output.
+		 *
 		 * @since 1.0.2
 		 * @param string $before
 		 */
@@ -196,11 +201,24 @@ final class Front {
 
 		/**
 		 * Adds content after the output.
+		 *
 		 * @since 1.0.2
 		 * @param string $after
 		 */
 		$after = (string) \apply_filters( 'the_seo_framework_amp_pro', '' );
 
 		return $before . $output . $after;
+	}
+
+	/**
+	 * Returns structured metadata in the AMP HTML head.
+	 * Data is taken from The SEO Framework.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @return string The structured metadata.
+	 */
+	protected function get_structured_metadata() {
+		return \the_seo_framework()->ld_json();
 	}
 }

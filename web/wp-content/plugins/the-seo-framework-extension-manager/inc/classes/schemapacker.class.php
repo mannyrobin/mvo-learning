@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -28,10 +29,10 @@ defined( 'ABSPATH' ) or die;
  * Schema.org defined layout.
  *
  * Compliments FormGenerator.
- * @see \TSF_Extension_Manager\FormGenerator
  *
  * @since 1.3.0
  * @access private
+ * @see \TSF_Extension_Manager\FormGenerator
  * @uses trait TSF_Extension_Manager\Enclose_Core_Final
  * @see TSF_Extension_Manager\Traits\Overload
  *
@@ -41,18 +42,41 @@ final class SchemaPacker {
 	use Enclose_Core_Final;
 
 	/**
-	 * Holds the bits and maximum iterations thereof.
+	 * Holds the bits
 	 *
 	 * @since 1.3.0
+	 * @see $max_it
 	 *
 	 * @var int $bits
-	 * @var int $max_it
 	 */
-	private $bits,
-			$max_it;
+	private $bits;
 
 	/**
-	 * Maintains the reiteration level and the iteration within.
+	 * Holds the maximum iterations of bits.
+	 *
+	 * @since 1.3.0
+	 * @see $bits
+	 *
+	 * @var int $max_it
+	 */
+	private $max_it;
+
+	/**
+	 * Maintains the reiteration level.
+	 *
+	 * This corresponds to FormGenerator, but, it doesn't keep perfect track of
+	 * all data.
+	 * It's only maintained when iterating, as we access the `'$nth'` schema key.
+	 *
+	 * @since 1.3.0
+	 * @see $it
+	 *
+	 * @var int $level
+	 */
+	private $level = 0;
+
+	/**
+	 * Maintains the iteration within the iteration level.
 	 *
 	 * This corresponds to FormGenerator, but, it doesn't keep perfect track of
 	 * all data.
@@ -61,23 +85,31 @@ final class SchemaPacker {
 	 * NOTE: $it should not ever exceed $max_it.
 	 *
 	 * @since 1.3.0
+	 * @see $level
 	 *
-	 * @var int $level
 	 * @var int $it
 	 */
-	private $level = 0,
-			$it    = 0;
+	private $it = 0;
 
 	/**
-	 * Maintains data and corresponding data.
+	 * Maintains data for $schema.
 	 *
 	 * @since 1.3.0
+	 * @see $schema
 	 *
 	 * @var array  $data
+	 */
+	private $data;
+
+	/**
+	 * Maintains corresponding schema of $data.
+	 *
+	 * @since 1.3.0
+	 * @see $data
+	 *
 	 * @var object $schema
 	 */
-	private $data,
-			$schema;
+	private $schema;
 
 	/**
 	 * Maintains output.
@@ -91,8 +123,8 @@ final class SchemaPacker {
 	/**
 	 * Constructor. Sets up class main variables.
 	 *
-	 * @param array  $data   The data to iterate over.
-	 * @param object $schema The JSON decoded schema to use. {
+	 * @param array     $data   The data to iterate over.
+	 * @param \stdClass $schema The JSON decoded schema to use. {
 	 *    object '_OPTIONS' : Any processing options attached.
 	 *    object '_MAIN'    : The main data to iterate over.
 	 * }
@@ -104,12 +136,12 @@ final class SchemaPacker {
 			return false;
 
 		$this->data =& $data;
-		$o = $schema->_OPTIONS;
+		$o          = $schema->_OPTIONS;
 
 		$architecture = $o->architecture ?: ( \tsf_extension_manager()->is_64() ? 64 : 32 );
-		$levels = $o->levels ?: 5;
-		$this->bits = floor( $architecture / $levels );
-		$this->max_it = pow( 2, $this->bits );
+		$levels       = $o->levels ?: 5;
+		$this->bits   = floor( $architecture / $levels );
+		$this->max_it = 2 ** $this->bits;
 
 		$this->schema = $schema->_MAIN;
 
@@ -121,7 +153,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param int <unsigned> (R>0) $by
+	 * @param int <unsigned> (R>0) $by The base iterations.
 	 */
 	public function _iterate_base( $by = 1 ) {
 		$this->level or ++$this->level;
@@ -148,7 +180,6 @@ final class SchemaPacker {
 	 * @since 1.3.0
 	 * @collector
 	 *
-	 * @param mixed ...
 	 * @return object $this->output
 	 */
 	public function &_collector() {
@@ -195,8 +226,8 @@ final class SchemaPacker {
 	 * @return int The current iteration of the current level.
 	 */
 	private function get_iteration_from_level( $l = 0 ) {
-		$bits_level = ( $l - 1 ) * $this->bits;
-		$written_bits = ( pow( 2, $this->bits ) - 1 );
+		$bits_level   = ( $l - 1 ) * $this->bits;
+		$written_bits = ( 2 ** $this->bits - 1 );
 		return ( $this->it >> $bits_level ) & $written_bits;
 	}
 
@@ -225,7 +256,7 @@ final class SchemaPacker {
 	 * @return void
 	 */
 	private function delevel() {
-		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( --$this->level ) ) );
+		$this->it &= ~( ( 2 ** $this->bits - 1 ) << ( $this->bits * ( --$this->level ) ) );
 	}
 
 	/**
@@ -272,7 +303,7 @@ final class SchemaPacker {
 	 * @return void
 	 */
 	private function reiterate() {
-		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( $this->level - 1 ) ) );
+		$this->it &= ~( ( 2 ** $this->bits - 1 ) << ( $this->bits * ( $this->level - 1 ) ) );
 		$this->iterate();
 	}
 
@@ -282,7 +313,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param object $schema
+	 * @param \stdClass $schema The schema data to pack.
 	 * @return object The packed data.
 	 */
 	private function pack( \stdClass $schema ) {
@@ -316,7 +347,7 @@ final class SchemaPacker {
 	 * @since 1.3.0
 	 * @generator
 	 *
-	 * @param object $schema
+	 * @param \stdClass $schema The schema data to generate from.
 	 * @yield array { string $key => mixed $value }
 	 */
 	private function generate_data( \stdClass $schema ) {
@@ -331,8 +362,8 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param string $key
-	 * @param object $schema
+	 * @param string    $key    The key to get the value of.
+	 * @param \stdClass $schema The schema data to get the value from.
 	 * @return mixed The key's value.
 	 */
 	private function get_value( $key, \stdClass $schema ) {
@@ -356,6 +387,7 @@ final class SchemaPacker {
 
 		if ( isset( $schema->_handlers->_condition ) ) {
 			$this->condition[ $key ] = [];
+
 			$value = $this->condition( $key, $value, $schema->_handlers->_condition );
 		}
 
@@ -370,7 +402,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param object $schema
+	 * @param \stdClass $schema The schema data to iterate.
 	 * @return mixed The packed iteration data, if successful.
 	 */
 	private function make_iteration( \stdClass $schema ) {
@@ -383,8 +415,8 @@ final class SchemaPacker {
 
 		$data = [];
 		for ( $i = 0; $i < $count; $i++ ) {
-
 			$_d = $this->pack( $_schema );
+
 			isset( $_d ) and $data[] = $_d;
 
 			$this->iterate();
@@ -403,7 +435,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param object $schema
+	 * @param \stdClass $schema The schema data to generate data from.
 	 * @return mixed The expected data.
 	 */
 	private function make_data( \stdClass $schema ) {
@@ -426,7 +458,7 @@ final class SchemaPacker {
 				break;
 
 			default:
-				return null;
+				$value = null;
 				break;
 		}
 
@@ -438,7 +470,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param object $schema
+	 * @param \stdClass $schema The schema data to pack and concatenate.
 	 * @return mixed The concatenated data.
 	 */
 	private function concat( \stdClass $schema ) {
@@ -463,7 +495,7 @@ final class SchemaPacker {
 	 */
 	private function access_data( array $keys ) {
 
-		$v = $this->data;
+		$v     = $this->data;
 		$level = 0;
 
 		foreach ( $keys as $k ) {
@@ -490,7 +522,7 @@ final class SchemaPacker {
 	 * @todo implement this function in $this->condition() for conditional escape.
 	 * @since 1.3.0
 	 *
-	 * @param mixed $value The value to escape. $keys The $this->data access keys.
+	 * @param mixed  $value The value to escape. $keys The $this->data access keys.
 	 * @param string $how The how-to escape $value.
 	 * @return mixed The escaped data.
 	 */
@@ -511,7 +543,7 @@ final class SchemaPacker {
 				return parse_url( $value, PHP_URL_HOST ) ?: '';
 
 			case 'esc_url_raw':
-				return \esc_url_raw( $value, [ 'http', 'https' ] );
+				return \esc_url_raw( $value, [ 'https', 'http' ] );
 
 			default:
 			case 'sanitize_text_field':
@@ -565,8 +597,8 @@ final class SchemaPacker {
 	 * @since 2.0.0 Added level ($level) and iteration ($it) access in the 'set' _do->_to action.
 	 * @todo implement self-resolving staticvar that breaks the loop?
 	 *
-	 * @param string $key   The value's key
-	 * @param mixed  $value The value to be conditioned.
+	 * @param string       $key   The value's key
+	 * @param mixed        $value The value to be conditioned.
 	 * @param array|object $what The conditional parameters. Can and must loop
 	 *                     over all conditions that apply, in order.
 	 * @return mixed The likely conditioned value.
@@ -597,6 +629,7 @@ final class SchemaPacker {
 
 		switch ( $c->_op ) {
 			case '==':
+				// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- that's the whole idea.
 				$action = $v == $c->_value;
 				break;
 
@@ -605,6 +638,7 @@ final class SchemaPacker {
 				break;
 
 			case '!=':
+				// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- that's the whole idea.
 				$action = $v != $c->_value;
 				break;
 
@@ -696,8 +730,8 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param mixed $value
-	 * @param string $to
+	 * @param mixed  $value The value to convert.
+	 * @param string $to    The type to convert the value to.
 	 * @return mixed The probable converted value.
 	 */
 	private function convert( $value, $to ) {

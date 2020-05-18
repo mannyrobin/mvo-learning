@@ -5,7 +5,7 @@
  * Description: Zapier integration with WPForms.
  * Author:      WPForms
  * Author URI:  https://wpforms.com
- * Version:     1.1.0
+ * Version:     1.2.0
  * Text Domain: wpforms-zapier
  * Domain Path: languages
  *
@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin version.
-define( 'WPFORMS_ZAPIER_VERSION', '1.1.0' );
+define( 'WPFORMS_ZAPIER_VERSION', '1.2.0' );
 
 /**
  * Load the provider class.

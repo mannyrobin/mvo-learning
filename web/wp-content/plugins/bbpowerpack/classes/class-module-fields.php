@@ -83,6 +83,8 @@ if ( ! class_exists( 'PP_Module_Fields' ) ) {
             return $module;
         }
 
+		
+
         /**
          * Radio input
          */
@@ -579,11 +581,12 @@ if ( ! class_exists( 'PP_Module_Fields' ) ) {
             $fields['pp-file']        	= BB_POWERPACK_DIR . 'includes/ui-field-pp-file.php';
             $fields['pp-hidden']        = BB_POWERPACK_DIR . 'includes/ui-field-pp-hidden.php';
             $fields['pp-hidden-textarea'] = BB_POWERPACK_DIR . 'includes/ui-field-pp-hidden-textarea.php';
-            $fields['pp-css-class']     = BB_POWERPACK_DIR . 'includes/ui-field-pp-css-class.php';
+			$fields['pp-css-class']       = BB_POWERPACK_DIR . 'includes/ui-field-pp-css-class.php';
+			$fields['pp-media-uploader']  = BB_POWERPACK_DIR . 'includes/ui-field-pp-media-uploader.php';
 
             return $fields;
 		}
-		
+
 		public static function get_field( $type, $label = '', $args = array() )
 		{
 			$field 		= array();
@@ -761,6 +764,10 @@ if ( ! class_exists( 'PP_Module_Fields' ) ) {
 
 			$value = $settings->{$field};
 
+			if ( is_array( $settings->{$field} ) ) {
+				unset( $settings->{$field} );
+			}
+
 			if ( is_object( $value ) ) {
 				$value = (array) $value;
 			}
@@ -842,8 +849,10 @@ if ( ! class_exists( 'PP_Module_Fields' ) ) {
 				
 				switch ( $type ) {
 					case 'font':
-						$typography['font_family'] = $value['family'];
-						$typography['font_weight'] = $value['weight'] === 'regular' ? 'normal' : $value['weight'];
+						if ( is_array( $value ) ) {
+							$typography['font_family'] = $value['family'];
+							$typography['font_weight'] = $value['weight'] === 'regular' ? 'normal' : $value['weight'];
+						}
 						break;
 
 					case 'font_size':

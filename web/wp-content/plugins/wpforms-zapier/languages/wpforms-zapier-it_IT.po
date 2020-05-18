@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the WPForms Zapier package.
 # Translators:
 # FX Bénard <fxb@wp-translations.org>, 2018
+# raffaella isidori <words@raffaellaisidori.com>, 2019
 # Laura Sacco <laurasacco12@gmail.com>, 2019
-# raffaella isidori <r.isidori@thesign.it>, 2019
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: WPForms Zapier\n"
-"Last-Translator: raffaella isidori <r.isidori@thesign.it>, 2019\n"
+"Last-Translator: Laura Sacco <laurasacco12@gmail.com>, 2019\n"
 "Language-Team: Italian (Italy) (https://www.transifex.com/wp-translations/teams/64435/it_IT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -88,7 +88,7 @@ msgstr "Errore di Zapier Zap"
 
 #: class-zapier.php:301
 msgid "Invalid WPForms Zapier API key"
-msgstr "Chiave API di WPForms Zapier non valida!"
+msgstr "La chiave API di WPForms Zapier non è valida!"
 
 #: class-zapier.php:407
 msgid "No data"
@@ -98,7 +98,7 @@ msgstr "Nessun dato"
 #. translators: %s - API key.
 #: class-zapier.php454, class-zapier.php:579
 msgid "Your WPForms Zapier API key is %s"
-msgstr "La tua chiave API di WPForms Zapier é %s"
+msgstr "La tua chiave API di WPForms Zapier è %s"
 
 #: class-zapier.php:462
 msgid "No Zaps are connected to this form."
