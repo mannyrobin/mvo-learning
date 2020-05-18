@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -25,12 +26,14 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * Require option trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'manager/options' );
 
 /**
  * Require error trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'core/error' );
@@ -51,16 +54,24 @@ class Core {
 		Error;
 
 	/**
-	 * The POST nonce validation name, action and name.
-	 *
 	 * @since 1.0.0
 	 *
 	 * @var string The validation nonce name.
-	 * @var string The validation request name.
-	 * @var string The validation nonce action.
 	 */
 	protected $nonce_name;
+
+	/**
+	 * @since 1.0.0
+	 *
+	 * @var string The validation request name.
+	 */
 	protected $request_name = [];
+
+	/**
+	 * @since 1.0.0
+	 *
+	 * @var string The validation nonce action.
+	 */
 	protected $nonce_action = [];
 
 	/**
@@ -106,7 +117,6 @@ class Core {
 			'deactivate-ext'    => 'tsfem_nonce_action_deactivate_ext',
 		];
 		/**
-		 * Set error notice option.
 		 * @see trait TSF_Extension_Manager\Error
 		 */
 		$this->error_notice_option = 'tsfem_error_notice_option';
@@ -153,7 +163,7 @@ class Core {
 		$this->get_verification_codes( $_instance, $bits );
 
 		//* Some AJAX functions require Extension layout traits to be loaded.
-		if ( \is_admin() && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( \is_admin() && \wp_doing_ajax() ) {
 			if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) )
 				$this->ajax_is_tsf_extension_manager_page( true );
 		}
@@ -271,8 +281,8 @@ class Core {
 	 * @since 1.2.0
 	 * @uses status_header(): https://developer.wordpress.org/reference/functions/status_header/
 	 *
+	 * @param bool   $code The status code.
 	 * @param string $type The header type.
-	 * @param bool $code The status code.
 	 */
 	final public function set_status_header( $code = 200, $type = '' ) {
 
@@ -300,7 +310,7 @@ class Core {
 	 * @since 1.2.0
 	 * @TODO set a standard for $data, i.e. [ 'results'=>[],'html'=>"", etc. ];
 	 *
-	 * @param mixed $data The data that needs to be send.
+	 * @param mixed  $data The data that needs to be send.
 	 * @param string $type The status type.
 	 */
 	final public function send_json( $data, $type = 'success' ) {
@@ -325,7 +335,7 @@ class Core {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param mixed $html The HTML that needs to be send. Must be escaped.
+	 * @param mixed  $html The HTML that needs to be send. Must be escaped.
 	 * @param string $type The status type.
 	 */
 	final public function send_html( $html, $type = 'success' ) {
@@ -425,8 +435,8 @@ class Core {
 	 * @staticvar string $last The last value;
 	 *
 	 * @param string|array $value The array or string to loop. First call must be array.
-	 * @param int $i The iteration count. This shouldn't be filled in.
-	 * @param bool $get Whether to return the value. This shouldn't be filled in.
+	 * @param int          $i     The iteration count. This shouldn't be filled in.
+	 * @param bool         $get   Whether to return the value. This shouldn't be filled in.
 	 * @return array|false The iterated array to string. False if input isn't array.
 	 */
 	final public function matosa( $value, $i = 0, $get = true ) {
@@ -462,94 +472,6 @@ class Core {
 	}
 
 	/**
-	 * Converts single dimensional strings from matosa to a multidimensional array.
-	 *
-	 * Great for parsing form array keys.
-	 * umatosa: "Undo Multidimensional Array TO Single Array"
-	 *
-	 * Direct matosa to umatosa:
-	 * Example: '1[2][3]=value';
-	 * Becomes: [ 1 => [ 2 => [ 3 => [ 'value' ] ] ] ];
-	 *
-	 * From form key:
-	 * Example: '1[2][3][value]';
-	 * Becomes: [ 1 => [ 2 => [ 3 => [ 'value' ] ] ] ];
-	 *
-	 * @since 1.3.0
-	 * @todo improve readability. It's very hackesque.
-	 * @see parse_str() You might wish to use that instead.
-	 *
-	 * @param string|array $value The array or string to loop. First call must be array.
-	 * @return array The iterated string to array.
-	 */
-	final public function umatosa( $value ) {
-
-		$items = [];
-		if ( ']' === substr( $value, -1 ) ) {
-			$items = preg_split( '/[\[\]]+/', $value, -1, PREG_SPLIT_NO_EMPTY );
-			return $this->satoma( $items );
-		}
-
-		parse_str( $value, $items );
-
-		return $items;
-	}
-
-	/**
-	 * Converts a single or sequential|associative array into a multidimensional array.
-	 *
-	 * satoma: "Single Array to Multidimensional Array"
-	 *
-	 * Example: '[ 0 => a, 1 => b, 3 => c ]';
-	 * Becomes: [ a => [ b => [ c ] ];
-	 *
-	 * @NOTE Do not pass multidimensional arrays, as they will cause PHP errors.
-	 *       Their values will be used as keys. Arrays can't be keys.
-	 *
-	 * @since 1.3.0
-	 * @staticvar array $_b Maintains iteration and depth.
-	 *
-	 * @param array $a The single dimensional array.
-	 * @return array Multidimensional array, where the values are the dimensional keys.
-	 */
-	final public function satoma( array $a ) {
-
-		static $_b;
-
-		$_b = $a;
-
-		if ( $_b ) {
-			$last = array_shift( $a );
-
-			if ( $a ) {
-				$r[ $last ] = $this->satoma( $a );
-			} else {
-				$r = $last;
-			}
-		}
-
-		return $r;
-	}
-
-	/**
-	 * Returns last value.
-	 *
-	 * I should get a nobel prize for this.
-	 *
-	 * @since 1.3.0
-	 * @see $this->umatosa() Which created a need for this.
-	 *
-	 * @param array $a
-	 * @return string The last array value.
-	 */
-	final public function get_last_value( array $a ) {
-
-		while ( is_array( $a = end( $a ) ) );
-
-		return $a;
-	}
-
-	/**
 	 * Determines if all required keys are set in $input.
 	 *
 	 * @since 1.2.0
@@ -567,12 +489,13 @@ class Core {
 	 * Checks whether the variable is set and passes it back.
 	 * If the value isn't set, it will set it to the fallback variable.
 	 *
+	 * Basically, a PHP < 7 wrapper for null coalescing.
+	 *
 	 * It will also return the value so it can be used in a return statement.
 	 *
 	 * Example: `$v ?? $f` becomes `coalesce_var( $v, $f )`
 	 * The fallback value must always be set, so performance benefits thereof aren't present.
 	 *
-	 * PHP < 7 wrapper for null coalescing.
 	 * @link http://php.net/manual/en/migration70.new-features.php#migration70.new-features.null-coalesce-op
 	 * @since 1.2.0
 	 *
@@ -659,8 +582,8 @@ class Core {
 	 * @since 1.0.0
 	 * @since 1.2.0 Now uses instanceof comparison
 	 *
-	 * @param array $current_filter The filter to walk.
-	 * @param string $key The current array key.
+	 * @param array  $current_filter The filter to walk.
+	 * @param string $key            The current array key.
 	 * @return bool true
 	 */
 	final protected function stop_class_filters( $current_filter, $key ) {
@@ -695,7 +618,7 @@ class Core {
 	 * @access private
 	 *
 	 * @param string $instance The verification instance key. Passed by reference.
-	 * @param int $bit The verification instance bit. Passed by reference.
+	 * @param int    $bit      The verification instance bit. Passed by reference.
 	 * @return bool True if verified.
 	 */
 	final public function _verify_instance( &$instance, &$bit ) {
@@ -711,9 +634,9 @@ class Core {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param int $count The amount of instances to loop for.
+	 * @param int    $count    The amount of instances to loop for.
 	 * @param string $instance The verification instance key. Passed by reference.
-	 * @param array $bits The verification instance bits. Passed by reference.
+	 * @param array  $bits     The verification instance bits. Passed by reference.
 	 * @yield array Generator : {
 	 *    $instance string The verification instance key
 	 *    $bits array The verification instance bits
@@ -737,10 +660,10 @@ class Core {
 	 * @since 1.0.0
 	 *
 	 * @param string $instance The verification instance. Passed by reference.
-	 * @param array $bits The verification bits. Passed by reference.
+	 * @param array  $bits The verification bits. Passed by reference.
 	 */
 	final protected function get_verification_codes( &$instance = null, &$bits = null ) {
-		$bits = $this->get_bits();
+		$bits     = $this->get_bits();
 		$instance = $this->get_verification_instance( $bits[1] );
 	}
 
@@ -775,13 +698,13 @@ class Core {
 			//* Don't use hash_equals(). This is already safe.
 			if ( empty( $instance[ $bit ] ) || $instance[ $n_bit ] !== $instance[ $bit ] ) {
 				//* Only die on plugin settings page upon failure. Otherwise kill instance and all bindings.
-				$this->_maybe_die( 'Error -1: The SEO Framework Extension Manager instance verification failed.' );
+				$this->_maybe_die( 'Error -1: The SEO Framework - Extension Manager instance verification failed.' );
 				$instance = [];
 				return '';
 			}
 
 			//* Set retval and empty to prevent recursive timing attacks.
-			$_retval = $instance[ $bit ];
+			$_retval  = $instance[ $bit ];
 			$instance = [];
 
 			return $_retval;
@@ -821,6 +744,7 @@ class Core {
 	 * @return array The verification bits.
 	 */
 	final protected function get_bits() {
+		// phpcs:disable, Generic.WhiteSpace.DisallowSpaceIndent
 
 		static $_bit, $bit;
 
@@ -872,10 +796,11 @@ class Core {
 			    $bit  = $_bit <= 0 ? ~$bit | ~$_bit-- : ~$bit | ~$_bit++
 			and $bit  = $bit++ & $_bit--
 			and $_bit = $_bit < 0 ? $_bit : ~$_bit
-			and $bit  = ~$_bit++ + 1;
+			and $bit  = ( ~$_bit++ ) + 1;
 		}
 
 		return [ $_bit, $bit ];
+		// phpcs:enable, Generic.WhiteSpace.DisallowSpaceIndent
 	}
 
 	/**
@@ -883,7 +808,7 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $data The data to hash.
+	 * @param mixed  $data   The data to hash.
 	 * @param string $scheme Authentication scheme ( 'instance', 'auth', 'secure_auth', 'nonce' ).
 	 *                       Default 'instance'.
 	 * @return string Hash of $data.
@@ -909,7 +834,7 @@ class Core {
 	 */
 	final public function _get_uid_hash( $uid ) {
 
-		if ( empty( $uid ) ) return '';
+		if ( ! $uid ) return '';
 
 		$a   = (string) $uid;
 		$b   = strrev( $a );
@@ -933,14 +858,14 @@ class Core {
 	 * @since 1.2.0
 	 * @access private
 	 *
-	 * @param string $uid   The unique ID for the hash. A good choice would be the method name.
-	 * @param int    $scale The time scale in seconds.
-	 * @param int    $end   UNIX timestamp where the hash invalidates. Defaults to now.
+	 * @param string $uid    The unique ID for the hash. A good choice would be the method name.
+	 * @param int    $length The time length in seconds.
+	 * @param int    $end    UNIX timestamp where the hash invalidates. Defaults to now.
 	 * @return string The timed hash that will always return the same.
 	 */
 	final public function _get_timed_hash( $uid, $length = 3600, $end = 0 ) {
 
-		if ( empty( $uid ) || empty( $length ) )
+		if ( ! $uid || ! $length )
 			return '';
 
 		$_time  = time();
@@ -958,8 +883,8 @@ class Core {
 	 * Generates salt from WordPress defined constants.
 	 *
 	 * Taken from WordPress core function `wp_salt()` and adjusted accordingly.
-	 * @link https://developer.wordpress.org/reference/functions/wp_salt/
 	 *
+	 * @link https://developer.wordpress.org/reference/functions/wp_salt/
 	 * @since 1.0.0
 	 * @staticvar array $cached_salts Contains cached salts based on $scheme input.
 	 * @staticvar string $instance_scheme Random scheme for instance verification. Determined at runtime.
@@ -985,7 +910,7 @@ class Core {
 		//* 'instance' picks a random key.
 		static $instance_scheme = null;
 		if ( null === $instance_scheme ) {
-			$_key = mt_rand( 0, count( $schemes ) - 1 );
+			$_key            = mt_rand( 0, count( $schemes ) - 1 );
 			$instance_scheme = $schemes[ $_key ];
 		}
 		$_scheme = 'instance' === $scheme ? $instance_scheme : $scheme;
@@ -1089,9 +1014,9 @@ class Core {
 	 * @see $this->_yield_verification_instance() for faster looping instances.
 	 * @access private
 	 *
-	 * @param object $object The class object. Passed by reference.
+	 * @param object $object    The class object. Passed by reference.
 	 * @param string $_instance The verification instance. Passed by reference.
-	 * @param array $bits The verification bits. Passed by reference.
+	 * @param array  $bits      The verification instance bits. Passed by reference.
 	 * @return bool True on success, false on failure.
 	 */
 	final public function _request_premium_extension_verification_instance( &$object, &$_instance, &$bits ) {
@@ -1189,7 +1114,7 @@ class Core {
 	 * @staticvar array $registered The registered classes.
 	 *
 	 * @param string|null $path      The extension path to look for.
-	 * @param string|null $class     The $class name including namespace.
+	 * @param string|null $namespace The class name including namespace.
 	 * @param string|null $get       The namespace path to get from cache.
 	 * @return void|bool|string : {
 	 *    false  : The extension namespace wasn't set when $get is true.
@@ -1214,6 +1139,7 @@ class Core {
 			}
 		}
 
+		// phpcs:ignore, Squiz.PHP.NonExecutableCode.ReturnNotRequired -- readability.
 		return;
 	}
 
@@ -1252,35 +1178,55 @@ class Core {
 		if ( isset( $loaded[ $class ] ) )
 			return $loaded[ $class ];
 
+		if ( $this->_has_died() ) {
+			$this->create_class_alias( $class );
+			return false;
+		}
+
+		static $_timenow = true;
+
+		if ( $_timenow ) {
+			$_bootstrap_timer = microtime( true );
+			$_timenow         = false;
+		} else {
+			$_bootstrap_timer = 0;
+		}
+
 		$_class = str_replace( '\\TSF_Extension_Manager\\Extension\\', '', $class );
-		$_ns = substr( $_class, 0, strpos( $_class, '\\' ) );
+		$_ns    = substr( $_class, 0, strpos( $_class, '\\' ) );
 
 		$_path = $this->get_extension_autload_path( $_ns );
 
 		if ( $_path ) {
-			if ( $this->_has_died() ) {
-				$this->create_class_alias( $class );
-				return false;
-			}
 
 			$_file = strtolower( str_replace( '_', '-', str_replace( $_ns . '\\', '', $_class ) ) );
 			$this->get_verification_codes( $_instance, $bits );
 
 			//= Needs to be "_once", because `Extensions_Actions::include_extension` also loads it.
-			return $loaded[ $class ] = require_once $_path . $_file . '.class.php';
+			$loaded[ $class ] = require_once $_path . $_file . '.class.php';
 		} else {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> has not been registered.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> has not been registered. Check the capitalization!' );
 
-			//* Most likely, a fatal error will now occur.
-			return $loaded[ $class ] = false;
+			//* Prevent fatal errors.
+			$this->create_class_alias( $class );
+
+			$loaded[ $class ] = false;
 		}
+
+		if ( $_bootstrap_timer ) {
+			$_t = microtime( true ) - $_bootstrap_timer;
+			\The_SEO_Framework\_bootstrap_timer( $_t );
+			\TSF_Extension_Manager\_bootstrap_timer( $_t );
+			$_timenow = true;
+		}
+
+		return $loaded[ $class ];
 	}
 
 	/**
 	 * Validates extensions option checksum.
 	 *
 	 * @since 1.0.0
-	 * @uses PHP 5.6 hash_equals : WordPress core has compat.
 	 *
 	 * @param array $checksum The extensions checksum.
 	 * @return int|bool, Negative int on failure, true on success.
@@ -1297,6 +1243,34 @@ class Core {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Returns a numeric order list for all extensions.
+	 *
+	 * @since 2.0.0
+	 * @staticvar array $order
+	 *
+	 * @return array { string Extension => int Order }
+	 */
+	final public function get_extension_order() {
+
+		static $order = [];
+
+		if ( $order ) return $order;
+
+		$this->get_verification_codes( $_instance, $bits );
+		Extensions::initialize( 'list', $_instance, $bits );
+
+		$last = 0;
+
+		foreach ( Extensions::get( 'extensions_list' ) as $slug => $data ) {
+			$order[ $slug ] = ( $last = $last + 10 );
+		}
+
+		Extensions::reset();
+
+		return $order;
 	}
 
 	/**
@@ -1319,7 +1293,7 @@ class Core {
 	 * @return int Points.
 	 */
 	final public function pixels_to_points( $px = 0 ) {
-		return intval( $px ) * 0.75;
+		return intval( $px ) * .75;
 	}
 
 	/**
@@ -1375,7 +1349,7 @@ class Core {
 	 * @access private
 	 *
 	 * @param string $_instance The verification instance key. Passed by reference.
-	 * @param int $bit The verification instance bit. Passed by reference.
+	 * @param array  $bits      The verification instance bits. Passed by reference.
 	 * @return array|boolean Current subscription status. False on failed instance verification.
 	 */
 	final public function _get_subscription_status( &$_instance, &$bits ) {
@@ -1418,7 +1392,7 @@ class Core {
 	 * @since 1.0.0
 	 *
 	 * @param string $font The font name, should include .ttf.
-	 * @param bool $url Whether to return a path or URL.
+	 * @param bool   $url  Whether to return a path or URL.
 	 * @return string The font URL or path. Not escaped.
 	 */
 	final public function get_font_file_location( $font = '', $url = false ) {
@@ -1435,7 +1409,7 @@ class Core {
 	 * @since 1.0.0
 	 *
 	 * @param string $image The image name, should include .jpg, .png, etc..
-	 * @param bool $url Whether to return a path or URL.
+	 * @param bool   $url   Whether to return a path or URL.
 	 * @return string The image URL or path. Not escaped.
 	 */
 	final public function get_image_file_location( $image = '', $url = false ) {
@@ -1447,154 +1421,13 @@ class Core {
 	}
 
 	/**
-	 * Converts markdown text into HMTL.
-	 *
-	 * Does not support list or block elements. Only inline statements.
-	 * Expects input to be escaped: For added security, the converted strings are escaped once more.
-	 *
-	 * @since 1.0.0
-	 * @since 1.1.0 Can now convert stacked strong/em correctly.
-	 * @since 1.2.0 : 1. Removed word boundary requirement for strong.
-	 *                2. Now accepts regex count their numeric values in string.
-	 *                3. Fixed header 1~6 calculation.
-	 * @link https://wordpress.org/plugins/about/readme.txt
-	 *
-	 * @param string $text The text that might contain markdown. Expected to be escaped.
-	 * @param array $convert The markdown style types wished to be converted.
-	 *              If left empty, it will convert all.
-	 * @return string The markdown converted text.
-	 */
-	final public function convert_markdown( $text, $convert = [] ) {
-
-		preprocess : {
-			$text = str_replace( "\r\n", "\n", $text );
-			$text = str_replace( "\t", ' ', $text );
-			$text = trim( $text );
-		}
-
-		if ( '' === $text )
-			return '';
-
-		/**
-		 * The conversion list's keys are per reference only.
-		 */
-		$conversions = [
-			'**'     => 'strong',
-			'*'      => 'em',
-			'`'      => 'code',
-			'[]()'   => 'a',
-			'======' => 'h6',
-			'====='  => 'h5',
-			'===='   => 'h4',
-			'==='    => 'h3',
-			'=='     => 'h2',
-			'='      => 'h1',
-		];
-
-		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
-
-		if ( 2 === count( array_intersect( $md_types, [ 'em', 'strong' ] ) ) ) :
-			$count = preg_match_all( '/(?:\*{3})([^\*{\3}]+)(?:\*{3})/', $text, $matches, PREG_PATTERN_ORDER );
-
-			for ( $i = 0; $i < $count; $i++ ) {
-				$text = str_replace(
-					$matches[0][ $i ],
-					sprintf( '<strong><em>%s</em></strong>', \esc_html( $matches[1][ $i ] ) ),
-					$text
-				);
-			}
-		endif;
-
-		foreach ( $md_types as $type ) :
-			switch ( $type ) :
-				case 'strong':
-					$count = preg_match_all( '/(?:\*{2})([^\*{\2}]+)(?:\*{2})/', $text, $matches, PREG_PATTERN_ORDER );
-
-					for ( $i = 0; $i < $count; $i++ ) {
-						$text = str_replace(
-							$matches[0][ $i ],
-							sprintf( '<strong>%s</strong>', \esc_html( $matches[1][ $i ] ) ),
-							$text
-						);
-					}
-					break;
-
-				case 'em':
-					$count = preg_match_all( '/(?:\*{1})([^\*{\1}]+)(?:\*{1})/', $text, $matches, PREG_PATTERN_ORDER );
-
-					for ( $i = 0; $i < $count; $i++ ) {
-						$text = str_replace(
-							$matches[0][ $i ],
-							sprintf( '<em>%s</em>', \esc_html( $matches[1][ $i ] ) ),
-							$text
-						);
-					}
-					break;
-
-				case 'code':
-					$count = preg_match_all( '/(?:`{1})([^`{\1}]+)(?:`{1})/', $text, $matches, PREG_PATTERN_ORDER );
-
-					for ( $i = 0; $i < $count; $i++ ) {
-						$text = str_replace(
-							$matches[0][ $i ],
-							sprintf( '<code>%s</code>', \esc_html( $matches[1][ $i ] ) ),
-							$text
-						);
-					}
-					break;
-
-				case 'h6':
-				case 'h5':
-				case 'h4':
-				case 'h3':
-				case 'h2':
-				case 'h1':
-					$amount = filter_var( $type, FILTER_SANITIZE_NUMBER_INT );
-					//* Considers word non-boundary. @TODO consider removing this?
-					$expression = sprintf( '/(?:\={%1$s})\B([^\={\%1$s}]+)\B(?:\={%1$s})/', $amount );
-					$count = preg_match_all( $expression, $text, $matches, PREG_PATTERN_ORDER );
-
-					for ( $i = 0; $i < $count; $i++ ) {
-						$text = str_replace(
-							$matches[0][ $i ],
-							sprintf( '<%1$s>%2$s</%1$s>', \esc_attr( $type ), \esc_html( $matches[1][ $i ] ) ),
-							$text
-						);
-					}
-					break;
-
-				case 'a':
-					$count = preg_match_all( '/(?:(?:\[{1})([^\]]+)(?:\]{1})(?:\({1})([^\)\(]+)(?:\){1}))/', $text, $matches, PREG_PATTERN_ORDER );
-
-					for ( $i = 0; $i < $count; $i++ ) {
-						$text = str_replace(
-							$matches[0][ $i ],
-							sprintf(
-								'<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>',
-								\esc_url( $matches[2][ $i ], [ 'http', 'https' ] ),
-								\esc_html( $matches[1][ $i ] )
-							),
-							$text
-						);
-					}
-					break;
-
-				default:
-					break;
-			endswitch;
-		endforeach;
-
-		return $text;
-	}
-
-	/**
 	 * Determines filesize in bytes from intput.
 	 *
 	 * Accepts multibyte.
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string The content to calculate size from.
+	 * @param string $content The content to calculate size from.
 	 * @return int The filesize in bytes/octets.
 	 */
 	final public function get_filesize( $content = '' ) {
@@ -1663,7 +1496,7 @@ class Core {
 			}
 		} else {
 			//* Don't cache if insecure.
-			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			if ( \wp_doing_ajax() ) {
 				return $this->ajax_is_tsf_extension_manager_page();
 			} else {
 				return \the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook, $this->seo_extensions_page_slug );

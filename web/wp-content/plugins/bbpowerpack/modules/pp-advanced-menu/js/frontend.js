@@ -13,6 +13,7 @@
 		this.wrapperClass        = this.nodeClass + ' .pp-advanced-menu';
 		this.type				 = settings.type;
 		this.mobileToggle		 = settings.mobile;
+		this.mobileBelowRow		 = 'below' === settings.menuPosition;
 		this.breakPoints         = settings.breakPoints;
 		this.mobileBreakpoint	 = settings.mobileBreakpoint;
 		this.mediaBreakpoint	 = settings.mediaBreakpoint;
@@ -20,6 +21,9 @@
 		this.offCanvasDirection	 = settings.offCanvasDirection;
 		this.isBuilderActive	 = settings.isBuilderActive;
 		this.currentBrowserWidth = window.innerWidth;
+		this.fullScreenMenu 	= null;
+		this.offCanvasMenu 		= null;
+		this.$submenus 			= null;
 
 		this._bindSettingsFormEvents();
 		// initialize the menu
@@ -167,7 +171,7 @@
 				}
 			}
 
-			$(this.wrapperClass).find('li:not(.menu-item-has-children)').off().on('click', 'a', $.proxy(function (e) {
+			$(this.wrapperClass).find('li:not(.menu-item-has-children)').on('click', 'a', $.proxy(function (e) {
 
 				$(this.nodeClass).find('.pp-advanced-menu').removeClass('menu-open');
 				$(this.nodeClass).find('.pp-advanced-menu').addClass('menu-close');
@@ -194,7 +198,9 @@
 				$parents.addClass('focus');
 
 			}, this ) ).on( 'focusout', 'a', $.proxy( function( e ) {
-				$( e.target ).parentsUntil( this.wrapperClass ).removeClass( 'focus' );
+				if ( $('.pp-advanced-menu .focus').hasClass('pp-has-submenu') ) {
+					$( e.target ).parentsUntil( this.wrapperClass ).removeClass( 'focus' );
+				}
 			}, this ) );
 		},
 
@@ -423,13 +429,12 @@
 
 			if( this._isMenuToggle() ) {
 
-				if (this.mobileMenuType === 'default') {
+				if ( this._isMobileBelowRowEnabled() ) {
 					this._placeMobileMenuBelowRow();
 					$wrapper = $(this.wrapperClass);
 					$menu = $(this.nodeClass + '-clone');
 					$menu.find('ul.menu').show();
-				}
-				else {
+				} else {
 					$wrapper = $(this.wrapperClass);
 					$menu = $wrapper.children('.menu');
 				}
@@ -468,7 +473,7 @@
 			}
 			else {
 
-				if (this.mobileMenuType === 'default') {
+				if ( this._isMobileBelowRowEnabled() ) {
 					this._removeMenuFromBelowRow();
 				}
 
@@ -525,7 +530,7 @@
 				if ( null === this.offCanvasMenu && $(this.nodeClass).find('.pp-advanced-menu.off-canvas').length > 0 ) {
 					this.offCanvasMenu = $(this.nodeClass).find('.pp-advanced-menu.off-canvas');
 				}
-				if ($('#pp-advanced-menu-off-canvas-'+this.settingsId).length === 0) {
+				if ($('#pp-advanced-menu-off-canvas-'+this.settingsId).length === 0 && null !== this.offCanvasMenu) {
 					this.offCanvasMenu.appendTo('body').wrap('<div id="pp-advanced-menu-off-canvas-'+this.settingsId+'" class="fl-node-'+this.settingsId+'">');
 				}
 			}
@@ -547,9 +552,9 @@
 			if ( 'always' === this.mediaBreakpoint || this.mediaBreakpoint >= this.currentBrowserWidth ) {
 				if ( null === this.offCanvasMenu && $(this.nodeClass).find('.pp-advanced-menu.full-screen').length > 0 ) {
 					this.fullScreenMenu = $(this.nodeClass).find('.pp-advanced-menu.full-screen');
-				}
-				if ($('#pp-advanced-menu-full-screen-'+this.settingsId).length === 0) {
-					this.fullScreenMenu.appendTo('body').wrap('<div id="pp-advanced-menu-full-screen-'+this.settingsId+'" class="fl-node-'+this.settingsId+'">');
+					if ( $('#pp-advanced-menu-full-screen-'+this.settingsId).length === 0 ) {
+						this.fullScreenMenu.appendTo('body').wrap('<div id="pp-advanced-menu-full-screen-'+this.settingsId+'" class="fl-node-'+this.settingsId+'">');
+					}
 				}
 			}
 			this._toggleMenu();
@@ -632,6 +637,19 @@
 		},
 
 		/**
+		 * Check to see if Below Row should be enabled.
+		 *
+		 * @since  	2.8.0
+		 * @return boolean
+		 */
+		_isMobileBelowRowEnabled: function() {
+			if (this.mobileMenuType === 'default') {
+				return this.mobileBelowRow && $( this.nodeClass ).closest( '.fl-col' ).length;
+			}
+			return false;
+		},
+
+		/**
 		 * Logic for putting the mobile menu below the menu's
 		 * column so it spans the full width of the page.
 		 *
@@ -652,6 +670,11 @@
 			clone.addClass((this.nodeClass + '-clone').replace('.', ''));
 			clone.find('.pp-advanced-menu-mobile-toggle').remove();
 			col.after(clone);
+
+			// Removes animation when enabled.
+			if ( module.hasClass( 'fl-animation' ) ) {
+				clone.removeClass( 'fl-animation' );
+			}
 
 			this._menuOnClick();
 		},

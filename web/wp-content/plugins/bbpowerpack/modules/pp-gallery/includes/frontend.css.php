@@ -11,13 +11,13 @@ if ( 'justified' != $settings->gallery_layout ) {
 	$mobile_col = ( $settings->photo_grid_count_responsive ) ? $settings->photo_grid_count_responsive : 1;
 
 	$space_desktop = ( $desktop_col - 1 ) * $settings->photo_spacing;
-	$photo_columns_desktop = ( 100 - $space_desktop ) / $desktop_col;
+	$photo_columns_desktop = ( ( 100 - $space_desktop ) / $desktop_col ) - 0.1;
 
 	$space_tablet = ( $medium_col - 1 ) * $settings->photo_spacing;
-	$photo_columns_tablet = ( 100 - $space_tablet ) / $medium_col;
+	$photo_columns_tablet = ( ( 100 - $space_tablet ) / $medium_col ) - 0.1;
 
 	$space_mobile = ( $mobile_col - 1 ) * $settings->photo_spacing;
-	$photo_columns_mobile = ( 100 - $space_mobile ) / $mobile_col;
+	$photo_columns_mobile = ( ( 100 - $space_mobile ) / $mobile_col ) - 0.1;
 ?>
 
 .fancybox-<?php echo $id; ?> button.fancybox-button {
@@ -25,6 +25,17 @@ if ( 'justified' != $settings->gallery_layout ) {
 	border-radius: 0;
     box-shadow: none;
 }
+
+<?php if ( 'grid' === $settings->gallery_layout ) { ?>
+.fl-node-<?php echo $id; ?> .pp-photo-gallery {
+	<?php if ( isset( $settings->align_items ) && 'yes' === $settings->align_items ) { ?>
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	<?php } ?>
+}
+<?php } ?>
+
 
 .fl-node-<?php echo $id; ?> .pp-photo-gallery-item {
 	width: <?php echo $photo_columns_desktop;?>%;
@@ -426,6 +437,17 @@ if ( 'justified' != $settings->gallery_layout ) {
 
 	.fl-node-<?php echo $id; ?> .pp-photo-gallery-content:hover .pp-gallery-overlay {
 		opacity: 1;
+	}
+
+	.fl-node-<?php echo $id; ?> .pp-photo-gallery-content .pp-caption {
+		position: absolute;
+		left: <?php echo ( $settings->overlay_spacing ) ? $settings->overlay_spacing . 'px' : '30px'; ?>;
+		right: <?php echo ( $settings->overlay_spacing ) ? $settings->overlay_spacing . 'px' : '30px'; ?>;
+		top: 50%;
+		transform: translateY( -50% );
+		-webkit-transition: -webkit-transform .35s ease 0s;
+			-ms-transition: -ms-transform .35s ease 0s;
+				transition: transform .35s ease 0s;
 	}
 <?php } ?>
 

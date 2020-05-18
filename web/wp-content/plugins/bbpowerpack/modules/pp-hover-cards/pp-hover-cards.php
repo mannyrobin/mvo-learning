@@ -24,8 +24,6 @@ class PPHoverCardsModule extends FLBuilderModule {
             'enabled'       => true, // Defaults to true and can be omitted.
             'partial_refresh'   => true,
         ));
-
-        $this->add_css( 'hover-cards-settings-style', $this->url . 'css/settings.css' );
     }
 
 	public function filter_settings( $settings, $helper )
@@ -200,7 +198,7 @@ class PPHoverCardsModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPHoverCardsModule', array(
+BB_PowerPack::register_module('PPHoverCardsModule', array(
     'general'   => array(
         'title'     => __('General', 'bb-powerpack'),
         'sections'  => array(
@@ -264,9 +262,14 @@ FLBuilder::register_module('PPHoverCardsModule', array(
 					'hover_card_columns'	=> array(
 						'type'						=> 'unit',
 						'label'						=> __('Cards', 'bb-powerpack'),
-						'default'					=> '4',
 						'slider'					=> true,
-						'responsive'				=> true,
+						'responsive'				=> array(
+							'default' => array(
+								'default'    => '3',
+								'medium'     => '2',
+								'responsive' => '1',
+							),
+						),
 					),
                 )
             )

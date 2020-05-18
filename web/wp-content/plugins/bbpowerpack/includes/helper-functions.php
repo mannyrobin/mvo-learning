@@ -69,6 +69,15 @@ function pp_get_upload_dir()
 		'url'	 => $wp_info['baseurl'] . '/' . $dir_name . '/'
 	);
 
+	// Create .htaccess file for security.
+	$htaccess = '<FilesMatch "\.(php|php\.)$">';
+	$htaccess .= "\n\r";
+	$htaccess .= 'Order Allow,Deny';
+	$htaccess .= "\n\r";
+	$htaccess .= 'Deny from all';
+	$htaccess .= "\n\r";
+	$htaccess .= '</FilesMatch>';
+
 	// Create the upload dir if it doesn't exist.
 	if ( function_exists( 'fl_builder_filesystem' ) ) {
 		if ( ! fl_builder_filesystem()->file_exists( $dir_info['path'] ) ) {
@@ -78,6 +87,9 @@ function pp_get_upload_dir()
 
 			// Add an index file for security.
 			fl_builder_filesystem()->file_put_contents( $dir_info['path'] . 'index.html', '' );
+
+			// Add .htaccess file.
+			fl_builder_filesystem()->file_put_contents( $dir_info['path'] . '.htaccess', $htaccess );
 		}
 	} else {
 		if ( ! file_exists( $dir_info['path'] ) ) {
@@ -87,6 +99,9 @@ function pp_get_upload_dir()
 
 			// Add an index file for security.
 			file_put_contents( $dir_info['path'] . 'index.html', '' );
+
+			// Add .htaccess file.
+			file_put_contents( $dir_info['path'] . '.htaccess', $htaccess );
 		}
 	}
 
@@ -163,6 +178,8 @@ function pp_template_filters()
 		'landing'			=> __( 'Landing', 'bb-powerpack' ),
 		'sales'				=> __( 'Sales', 'bb-powerpack' ),
 		'coming-soon'		=> __( 'Coming Soon', 'bb-powerpack' ),
+		'login'				=> __( 'Login', 'bb-powerpack' ),
+		'under-construction' => __( 'Under Construction', 'bb-powerpack' ),
 	);
 
 	return $filters;
@@ -259,20 +276,36 @@ function pp_modules()
  */
 function pp_extensions()
 {
-    $extensions = array(
-        'row'       => array(
-            'separators'    => __('Separators', 'bb-powerpack'),
-            'overlay'       => __('Overlay Style', 'bb-powerpack'),
-            'expandable'    => __('Expandable', 'bb-powerpack'),
-            'downarrow'     => __('Down Arrow', 'bb-powerpack'),
-        ),
-        'col'       => array(
-            'separators'    => __('Separators', 'bb-powerpack'),
-            // 'gradient'      => __('Gradient', 'bb-powerpack'),
-            // 'corners'       => __('Round Corners', 'bb-powerpack'),
-            // 'shadow'        => __('Box Shadow', 'bb-powerpack'),
-        )
-    );
+	$extensions = array(
+		'row'       => array(
+			'separators'    	=> array(
+				'label'				=> __('Separators', 'bb-powerpack'),
+				'description'		=> __('Row separators can be added to the top, bottom or both the ends of a row.', 'bb-powerpack'),
+			),
+			'overlay'       	=> array(
+				'label'				=> __('Overlay Style', 'bb-powerpack'),
+				'description'		=> __('Choose overlay pattern among Half Overlay Left or Right, Vertical Angled Left or Right.', 'bb-powerpack'),
+			),
+			'expandable'		=> array(
+				'label'				=> __('Expandable', 'bb-powerpack'),
+				'description'		=> __('This feature lets you toggle the entire row on just a single click.', 'bb-powerpack'),
+			),
+			'downarrow'     	=> array(
+				'label'				=> __('Down Arrow', 'bb-powerpack'),
+				'description'		=> __('This feature will add an arrow icon button at the bottom of a row which let users jump to the next row by clicking on it.', 'bb-powerpack'),
+			),
+			'background_effect'	=> array(
+				'label'				=> __('Background Effects', 'bb-powerpack'),
+				'description'		=> __('This feature includes 13 types of amazing animated background for row. These animations consist of an extensive list of styling options.', 'bb-powerpack'),
+			),
+		),
+		'col'       => array(
+			'separators'    => array(
+				'label'			=> __('Separators', 'bb-powerpack'),
+				'description'	=> __('Just like row separators, this feature adds various shapes for column.', 'bb-powerpack'),
+			),
+		)
+	);
 
     return $extensions;
 }
@@ -369,6 +402,20 @@ function pp_short_day_format( $day )
 	}
 }
 
+function pp_get_date_formats() {
+	return array(
+		''			=> __( 'Default', 'bb-powerpack' ),
+		'F j, Y'	=> current_time( 'F j, y' ),
+		'Y-m-d'		=> current_time( 'Y-m-d' ),
+		'm/d/Y'		=> current_time( 'm/d/Y' ),
+		'd/m/Y'		=> current_time( 'd/m/Y' ),
+	);
+}
+
+function pp_is_tribe_events_post( $post_id ) {
+	return 'tribe_events' === get_post_type( $post_id );
+}
+
 /**
  * Returns user agent.
  *
@@ -403,13 +450,30 @@ function pp_get_user_agent()
 	return;
 }
 
+function pp_get_client_ip() {
+	$keys = array(
+		'HTTP_CLIENT_IP',
+		'HTTP_X_FORWARDED_FOR',
+		'HTTP_X_FORWARDED',
+		'HTTP_X_CLUSTER_CLIENT_IP',
+		'HTTP_FORWARDED_FOR',
+		'HTTP_FORWARDED',
+		'REMOTE_ADDR',
+	);
+
+	foreach ( $keys as $key ) {
+		if ( isset( $_SERVER[ $key ] ) && filter_var( $_SERVER[ $key ], FILTER_VALIDATE_IP ) ) {
+			return $_SERVER[ $key ];
+		}
+	}
+
+	// fallback IP address.
+	return '127.0.0.1';
+}
+
 function pp_get_client_details()
 {
-	$ip = $_SERVER['REMOTE_ADDR'];
-
-	if ( array_key_exists( 'HTTP_X_FORWARDED_FOR', $_SERVER ) ) {
-		$ip = array_pop( explode( ',', $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
-	}
+	$ip = pp_get_client_ip();
 
 	$user_agent = pp_get_user_agent();
 
@@ -421,13 +485,19 @@ function pp_get_client_details()
 
 function pp_get_modules_categories( $cat = '' )
 {
-	$admin_label = pp_get_admin_label();
+	if ( isset( $_GET['tab'] ) && 'modules' === $_GET['tab'] ) {
+		$admin_label = '';
+	} else {
+		$admin_label = ' - ' . pp_get_admin_label();
+	}
 
 	$cats = array(
-		'creative'		=> sprintf( __('Creative Modules%s', 'bb-powerpack'), ' - ' . $admin_label ),
-		'content'		=> sprintf( __('Content Modules%s', 'bb-powerpack'), ' - ' . $admin_label ),
-		'lead_gen'		=> sprintf( __('Lead Generation Modules%s', 'bb-powerpack'), ' - ' . $admin_label ),
-		'form_style'	=> sprintf( __('Form Styler Modules%s', 'bb-powerpack'), ' - ' . $admin_label ),
+		'creative'		=> sprintf( __('Creative Modules%s', 'bb-powerpack'), $admin_label ),
+		'content'		=> sprintf( __('Content Modules%s', 'bb-powerpack'), $admin_label ),
+		'form_style'	=> sprintf( __('Form Styler Modules%s', 'bb-powerpack'), $admin_label ),
+		'lead_gen'		=> sprintf( __('Lead Generation Modules%s', 'bb-powerpack'), $admin_label ),
+		'media'			=> sprintf( __('Media Modules%s', 'bb-powerpack'), $admin_label ),
+		'social'		=> sprintf( __('Social Media Modules%s', 'bb-powerpack'), $admin_label ),
 	);
 
 	if ( empty( $cat ) ) {
@@ -578,9 +648,9 @@ function pp_get_fb_app_id()
  * @since 2.4
  * @return string
  */
-function pp_get_fb_sdk_url()
+function pp_get_fb_sdk_url( $app_id = '' )
 {
-	$app_id = pp_get_fb_app_id();
+	$app_id = empty( $app_id ) ? pp_get_fb_app_id() : $app_id;
 	
 	if ( $app_id && ! empty( $app_id ) ) {
 		return sprintf( 'https://connect.facebook.net/%s/sdk.js#xfbml=1&version=v2.12&appId=%s', get_locale(), $app_id );
@@ -600,8 +670,7 @@ function pp_get_fb_app_settings_url()
 	}
 }
 
-function pp_get_fb_module_desc()
-{
+function pp_get_fb_module_desc() {
 	$app_id = pp_get_fb_app_id();
 
 	if ( ! $app_id ) {
@@ -613,8 +682,37 @@ function pp_get_fb_module_desc()
 	}
 }
 
-function pp_clear_enabled_templates()
-{
+function pp_get_google_api_key() {
+	return BB_PowerPack_Admin_Settings::get_option( 'bb_powerpack_google_api_key' );
+}
+
+function pp_get_google_api_url() {
+	$key = pp_get_google_api_key();
+	if ( ! empty( $key ) ) {
+		return "https://maps.googleapis.com/maps/api/js?key={$key}";
+	}
+
+	return false;
+}
+
+function pp_get_google_places_api_key() {
+	return BB_PowerPack_Admin_Settings::get_option( 'bb_powerpack_google_places_api_key' );
+}
+
+function pp_get_google_places_api_url() {
+	$key = pp_get_google_places_api_key();
+	if ( ! empty( $key ) ) {
+		return "https://maps.googleapis.com/maps/api/place/details/json?key={$key}";
+	}
+
+	return false;
+}
+
+function pp_get_yelp_api_key() {
+	return BB_PowerPack_Admin_Settings::get_option( 'bb_powerpack_yelp_api_key' );
+}
+
+function pp_clear_enabled_templates() {
 	BB_PowerPack_Admin_Settings::update_option( 'bb_powerpack_page_templates', array('disabled') );
 	BB_PowerPack_Admin_Settings::update_option( 'bb_powerpack_templates', array('disabled') );
 	BB_PowerPack_Admin_Settings::delete_option( 'bb_powerpack_row_templates_type' );
@@ -676,4 +774,162 @@ function pp_gradient_angle_to_direction( $angle = 45 ) {
 	}
 
 	return $direction;
+}
+
+function pp_image_effect_fields( $hover = false ) {
+	$suffix = $hover ? '_hover' : '';
+
+	return array(
+		'image_effect_opacity'.$suffix		=> array(
+			'type'						=> 'unit',
+			'label'						=> __('Opacity', 'bb-powerpack'),
+			'property'					=> 'opacity',
+			'slider'					=> array(
+				'min'						=> 0,
+				'max'						=> 1,
+				'step'						=> 0.1
+			),
+		),
+		'image_effect_brightness'.$suffix	=> array(
+			'type'						=> 'unit',
+			'label'						=> __('Brightness', 'bb-powerpack'),
+			'property'					=> 'brightness',
+			'units'						=> array('%'),
+			'slider'					=> array(
+				'min'						=> 0,
+				'max'						=> 200,
+				'step'						=> 1
+			),
+		),
+		'image_effect_contrast'.$suffix		=> array(
+			'type'						=> 'unit',
+			'label'						=> __('Contrast', 'bb-powerpack'),
+			'property'					=> 'contrast',
+			'units'						=> array('%'),
+			'slider'					=> array(
+				'min'						=> 0,
+				'max'						=> 200,
+				'step'						=> 1
+			),
+		),
+		'image_effect_saturate'.$suffix		=> array(
+			'type'						=> 'unit',
+			'label'						=> __('Saturate', 'bb-powerpack'),
+			'property'					=> 'saturate',
+			'slider'					=> array(
+				'min'						=> 0,
+				'max'						=> 1,
+				'step'						=> 0.1
+			),
+		),
+		'image_effect_hue_rotate'.$suffix	=> array(
+			'type'						=> 'unit',
+			'label'						=> __('Hue Rotate', 'bb-powerpack'),
+			'property'					=> 'hue-rotate',
+			'units'						=> array('deg'),
+			'slider'					=> array(
+				'min'						=> 0,
+				'max'						=> 360,
+				'step'						=> 1
+			),
+		),
+		'image_effect_grayscale'.$suffix	=> array(
+			'type'						=> 'unit',
+			'label'						=> __('Grayscale', 'bb-powerpack'),
+			'property'					=> 'grayscale',
+			'units'						=> array( '%' ),
+			'slider'					=> true,
+		),
+		'image_effect_blur'.$suffix			=> array(
+			'type'						=> 'unit',
+			'label'						=> __('Blur', 'bb-powerpack'),
+			'property'					=> 'blur',
+			'units'						=> array( 'px' ),
+			'slider'					=> array(
+				'min'						=> 1,
+				'max'						=> 30,
+				'step'						=> 1
+			),
+		),
+		'image_effect_sepia'.$suffix		=> array(
+			'type'						=> 'unit',
+			'label'						=> __('Sepia', 'bb-powerpack'),
+			'property'					=> 'sepia',
+			'slider'					=> array(
+				'min'						=> 0,
+				'max'						=> 1,
+				'step'						=> 0.1
+			),
+		),
+		'image_effect_invert'.$suffix		=> array(
+			'type'						=> 'unit',
+			'label'						=> __('Invert', 'bb-powerpack'),
+			'property'					=> 'invert',
+			'units'						=> array('%'),
+			'slider'					=> array(
+				'min'						=> 0,
+				'max'						=> 100,
+				'step'						=> 1
+			),
+		),
+	);
+}
+
+function pp_image_effect_render_style( $settings, $selector, $is_hover = false ) {
+    $fields 		= pp_image_effect_fields( $is_hover );
+	
+	$css 			= "\n $selector {";
+	$css			.= "\n\t cursor: pointer;\n";
+
+	$webkit_props = array();
+	$filter_props = array();
+
+	foreach ( $fields as $name => $field ) {
+        $unit = isset( $field['units'] ) ? $field['units'][0] : '';
+        if ( isset( $settings->{$name} ) && '' != $settings->{$name} ) {
+			$webkit_props[] = $field['property']."(" . $settings->{$name} . $unit .")";
+			$filter_props[] = $field['property']."(" . $settings->{$name} . $unit .")";
+        }
+    }
+
+	if ( ! empty( $webkit_props ) ) {
+		$css .= "\n\t" . '-webkit-filter: ' . implode( ' ', $webkit_props ) . ';';
+	}
+	if ( ! empty( $filter_props ) ) {
+		$css .= "\n\t" . 'filter: ' . implode( ' ', $filter_props ) . ';';
+	}
+    $css .= "\n" . '}';
+
+    return $css;
+}
+
+function pp_get_site_domain() {
+	return str_ireplace( 'www.', '', parse_url( home_url(), PHP_URL_HOST ) );
+}
+
+function pp_get_recaptcha_desc() {
+	// translators: %s: Integration Setting Page link
+	return sprintf( __( 'To use reCAPTCHA, you need to add the API keys in the <a href="%s" target="_blank">Integrations Settings</a> and complete the setup process.', 'bb-powerpack' ), BB_PowerPack_Admin_Settings::get_form_action( '&tab=integration' ) );
+}
+
+function pp_is_builder_active() {
+	return is_user_logged_in() && isset( $_GET['fl_builder'] );
+}
+
+function pp_wl_reset_settings() {
+	delete_option( 'ppwl_hide_form' );
+	delete_option( 'ppwl_hide_plugin' );
+
+	if ( is_network_admin() ) {
+		delete_site_option( 'ppwl_hide_form' );
+		delete_site_option( 'ppwl_hide_plugin' );
+	}
+}
+
+function pp_wl_get_reset_url() {
+	return BB_PowerPack_Admin_Settings::get_form_action( '&tab=white-label&reset_wl=' . pp_plugin_get_hash() );
+}
+
+function pp_plugin_get_hash() {
+	return md5( 'PowerPack for Beaver Builder' );
 }

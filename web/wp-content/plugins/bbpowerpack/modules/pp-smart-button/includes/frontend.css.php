@@ -71,6 +71,7 @@ if ( empty( $settings->bg_color_primary ) && 'gradient' === $settings->style ) {
 		background: linear-gradient(to bottom,  <?php echo pp_get_color_value( $settings->bg_color_primary ); ?> 0%, <?php echo pp_get_color_value( $settings->bg_color_secondary ); ?> 100%); /* W3C */
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='<?php echo pp_get_color_value( $settings->bg_color_primary ); ?>', endColorstr='<?php echo pp_get_color_value( $settings->bg_color_secondary ); ?>', GradientType=0 ); /* IE6-9 */
 	<?php } ?>
+	background-clip: border-box;
 }
 
 .fl-node-<?php echo $id; ?> .pp-button-wrap a.pp-button:hover,
@@ -125,18 +126,25 @@ FLBuilderCSS::border_field_rule( array(
 
 .fl-node-<?php echo $id; ?> .pp-button .pp-button-icon {
 	font-size: <?php echo ( $settings->icon_size >= 0 ) ? $settings->icon_size . 'px' : '16px'; ?>;
+	<?php if ( isset( $settings->icon_spacing ) && $settings->icon_spacing !== '' ) { ?>
+		<?php if ( 'before' === $settings->icon_position ) { ?>
+			margin-right: <?php echo $settings->icon_spacing; ?>px;
+		<?php } else { ?>
+			margin-left: <?php echo $settings->icon_spacing; ?>px;
+		<?php } ?>
+	<?php } ?>
 }
 
 <?php if ( isset( $settings->text_color ) && ! empty( $settings->text_color ) ) : ?>
 .fl-node-<?php echo $id; ?> a.pp-button {
-	color: #<?php echo $settings->text_color; ?>;
 	-webkit-transition: all .3s ease 0s;
-    -moz-transition: all .3s ease 0s;
-    -o-transition: all .3s ease 0s;
-    -ms-transition: all .3s ease 0s;
-    transition: all .3s ease 0s;
+	-moz-transition: all .3s ease 0s;
+	-o-transition: all .3s ease 0s;
+	-ms-transition: all .3s ease 0s;
+	transition: all .3s ease 0s;
 }
-.fl-node-<?php echo $id; ?> a.pp-button span {
+.fl-node-<?php echo $id; ?> a.pp-button,
+.fl-node-<?php echo $id; ?> a.pp-button * {
 	color: #<?php echo $settings->text_color; ?>;
 }
 <?php endif; ?>

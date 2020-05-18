@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Extension\Local\Traits
  */
+
 namespace TSF_Extension_Manager\Extension\Local;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * Local extension for The SEO Framework
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -102,14 +103,19 @@ trait Schema_Packer {
 
 		static $prev = null;
 
+		// phpcs:disable, WordPress.PHP.IniSet.Risky -- cPanel needs to fix this...
+		// @TODO make case for feature change.
+
 		if ( $this->should_change_precision() && $this->can_change_precision() ) {
 			if ( $reset ) {
-				$prev && ini_set( 'serialize_precision', $prev );
+				isset( $prev ) and ini_set( 'serialize_precision', $prev );
 			} else {
 				$prev = ini_get( 'serialize_precision' );
 				ini_set( 'serialize_precision', '-1' );
 			}
 		}
+
+		// phpcs:enable, WordPress.PHP.IniSet.Risky -- cPanel needs to fix this...
 	}
 
 	/**
@@ -130,11 +136,11 @@ trait Schema_Packer {
 	 * @return string The URL without scheme.
 	 */
 	protected function remove_scheme( $url ) {
-		return str_ireplace( [ 'http://', 'https://' ], '', \esc_url( $url, [ 'http', 'https' ] ) );
+		return str_ireplace( [ 'https://', 'http://' ], '', \esc_url( $url, [ 'https', 'http' ] ) );
 	}
 
 	/**
-	 * Returns the current Local SEO schema.
+	 * Returns the current Local schema.
 	 *
 	 * @since 1.0.0
 	 *
@@ -143,8 +149,9 @@ trait Schema_Packer {
 	protected function get_schema() {
 
 		$schema_file = TSFEM_E_LOCAL_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'schema' . DIRECTORY_SEPARATOR . 'schema.json';
-		$timeout = stream_context_create( [ 'http' => [ 'timeout' => 3 ] ] );
+		$timeout     = stream_context_create( [ 'http' => [ 'timeout' => 3 ] ] );
 
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- This isn't a remote call.
 		return json_decode( file_get_contents( $schema_file, false, $timeout ) );
 	}
 
@@ -184,11 +191,13 @@ trait Schema_Packer {
 				$_collection->department = [];
 				for ( $i = 2; $i <= $count; $i++ ) {
 					$packer->_iterate_base();
+
 					/**
 					 * Gets sub-department data, and store it inclusively.
 					 * i.e. Inclusively for homepage for $_collection.
 					 */
 					$_data = $packer->_pack();
+
 					if ( isset( $_data ) )
 						$_collection->department[] = $_data;
 				}
@@ -203,7 +212,7 @@ trait Schema_Packer {
 			goto reset;
 		}
 
-		$options = JSON_UNESCAPED_SLASHES;
+		$options  = JSON_UNESCAPED_SLASHES;
 		$options |= $pretty ? JSON_PRETTY_PRINT : 0;
 
 		$output = json_encode( $_data, $options );
@@ -218,7 +227,7 @@ trait Schema_Packer {
 	 * Parses and stores all packed data.
 	 * It stores the data by URL.
 	 *
-	 * note: It uses stale options and saves new options. Therefore, it makes two
+	 * Note: It uses stale options and saves new options. Therefore, it makes two
 	 *       consecutive database calls.
 	 *
 	 * @since 1.0.0
@@ -230,14 +239,14 @@ trait Schema_Packer {
 	 */
 	protected function process_all_stored_data() {
 
-		$data = $this->get_stale_extension_options();
+		$data   = $this->get_stale_extension_options();
 		$schema = $this->get_schema();
 
 		$this->correct_precision();
 
 		$packer = new \TSF_Extension_Manager\SchemaPacker( $data, $schema );
 
-		$count = isset( $data['department']['count'] ) ? $data['department']['count'] : 0;
+		$count    = isset( $data['department']['count'] ) ? $data['department']['count'] : 0;
 		$main_url = isset( $data['department'][1]['url'] ) ? $this->remove_scheme( $data['department'][1]['url'] ) : 1;
 
 		$json_options = JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION;
@@ -313,9 +322,9 @@ trait Schema_Packer {
 	 * @see $this->store_packed_data();
 	 * @staticvar array $_d The stored data.
 	 *
-	 * @param string|int $id Either the URL or ID.
+	 * @param string|int $id   Either the URL or ID.
 	 * @param object     $data The data to store.
-	 * @param bool      $save Whether to store save the stored output.
+	 * @param bool       $save Whether to store save the stored output.
 	 * @return bool|void : {
 	 *   Saving:  True on success, false on failure.
 	 *   Storing: void.

@@ -1,13 +1,20 @@
 <?php
-// Exit if accessed directly.
+/**
+ * Handles logic for the site Header / Footer.
+ *
+ * @package BB_PowerPack
+ * @since 2.6.10
+ */
+
+/**
+ * Exit if accessed directly.
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Handles logic for the maintenance mode.
- *
- * @since 2.7.1
+ * BB_PowerPack_Header_Footer
  */
 final class BB_PowerPack_Header_Footer {
 	/**
@@ -17,7 +24,8 @@ final class BB_PowerPack_Header_Footer {
 
 	/**
 	 * Holds an array of posts.
-	 * 
+	 *
+	 * @var array $templates
 	 * @since 2.7.1
 	 */
 	static private $templates = array();
@@ -25,6 +33,7 @@ final class BB_PowerPack_Header_Footer {
 	/**
 	 * Holds the post ID for header.
 	 *
+	 * @var int $header
 	 * @since 2.7.1
 	 */
 	static public $header;
@@ -32,6 +41,7 @@ final class BB_PowerPack_Header_Footer {
 	/**
 	 * Holds the post ID for footer.
 	 *
+	 * @var int $footer
 	 * @since 2.7.1
 	 */
 	static public $footer;
@@ -42,10 +52,8 @@ final class BB_PowerPack_Header_Footer {
 	 * @since 2.7.1
 	 * @return void
 	 */
-	static public function init()
-	{
+	static public function init() {
 		add_filter( 'pp_admin_settings_tabs', 	__CLASS__ . '::render_settings_tab', 10, 1 );
-		add_action( 'pp_admin_settings_forms', 	__CLASS__ . '::render_settings' );
 		add_action( 'pp_admin_settings_save', 	__CLASS__ . '::save_settings' );
 
 		add_action( 'after_setup_theme', __CLASS__ . '::load' );
@@ -62,30 +70,16 @@ final class BB_PowerPack_Header_Footer {
 	 * @since 2.7.1
 	 * @param array $tabs Array of existing settings tabs.
 	 */
-	static public function render_settings_tab( $tabs )
-	{
+	static public function render_settings_tab( $tabs ) {
 		$tabs[ self::SETTINGS_TAB ] = array(
-			'title'				=> esc_html__('Header / Footer', 'bb-powerpack'),
-			'show'				=> ! is_network_admin(),
-			'priority'			=> 325
+			'title'				=> esc_html__( 'Header / Footer', 'bb-powerpack' ),
+			'show'				=> ! is_network_admin() && ! BB_PowerPack_Admin_Settings::get_option( 'ppwl_hide_header_footer_tab' ),
+			'cap'				=> ! is_network_admin() ? 'manage_options' : 'manage_network_plugins',
+			'file'				=> BB_POWERPACK_DIR . 'includes/admin-settings-header-footer.php',
+			'priority'			=> 325,
 		);
 
 		return $tabs;
-	}
-
-	/**
-	 * Render settings.
-	 *
-	 * Adds settings form fields for Header / Footer tab.
-	 *
-	 * @since 2.7.1
-	 * @param string $current_tab Active tab.
-	 */
-	static public function render_settings( $current_tab )
-	{
-        if ( self::SETTINGS_TAB == $current_tab ) {
-            include BB_POWERPACK_DIR . 'includes/admin-settings-header-footer.php';
-        }
 	}
 
 	/**
@@ -95,14 +89,13 @@ final class BB_PowerPack_Header_Footer {
 	 *
 	 * @since 2.7.1
 	 */
-	static public function save_settings()
-	{
+	static public function save_settings() {
 		if ( ! isset( $_POST['bb_powerpack_header_footer_page'] ) ) {
 			return;
 		}
 
-		$header = isset( $_POST['bb_powerpack_header_footer_template_header'] ) ? sanitize_text_field( $_POST['bb_powerpack_header_footer_template_header'] ) : '';
-		$footer = isset( $_POST['bb_powerpack_header_footer_template_footer'] ) ? sanitize_text_field( $_POST['bb_powerpack_header_footer_template_footer'] ) : '';
+		$header = isset( $_POST['bb_powerpack_header_footer_template_header'] ) ? sanitize_text_field( wp_unslash( $_POST['bb_powerpack_header_footer_template_header'] ) ) : '';
+		$footer = isset( $_POST['bb_powerpack_header_footer_template_footer'] ) ? sanitize_text_field( wp_unslash( $_POST['bb_powerpack_header_footer_template_footer'] ) ) : '';
 
 		update_option( 'bb_powerpack_header_footer_template_header', $header );
 		update_option( 'bb_powerpack_header_footer_template_footer', $footer );
@@ -126,7 +119,7 @@ final class BB_PowerPack_Header_Footer {
 		}
 
 		if ( isset( $_POST['bb_powerpack_header_footer_overlay_header_bg'] ) ) {
-			update_option( 'bb_powerpack_header_footer_overlay_header_bg', sanitize_text_field( $_POST['bb_powerpack_header_footer_overlay_header_bg'] ) );
+			update_option( 'bb_powerpack_header_footer_overlay_header_bg', sanitize_text_field( wp_unslash( $_POST['bb_powerpack_header_footer_overlay_header_bg'] ) ) );
 		}
 
 		// Clear BB's assets cache.
@@ -146,8 +139,7 @@ final class BB_PowerPack_Header_Footer {
 	 *
 	 * @return array An array of body classes.
 	 */
-	static public function body_class( $classes )
-	{
+	static public function body_class( $classes ) {
 		$classes[] = 'bb-powerpack-header-footer';
 
 		return $classes;
@@ -160,8 +152,7 @@ final class BB_PowerPack_Header_Footer {
 	 *
 	 * @since 2.7.1
 	 */
-	static public function get_templates()
-	{
+	static public function get_templates() {
 		if ( ! empty( self::$templates ) ) {
 			return self::$templates;
 		}
@@ -172,6 +163,8 @@ final class BB_PowerPack_Header_Footer {
 			'orderby' 			=> 'title',
 			'order' 			=> 'ASC',
 			'posts_per_page' 	=> '-1',
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
 		);
 
 		$pages = get_posts( $args );
@@ -182,15 +175,18 @@ final class BB_PowerPack_Header_Footer {
 			array(
 				'taxonomy'		=> 'fl-builder-template-type',
 				'field'			=> 'slug',
-				'terms'			=> array('layout', 'row')
-			)
+				'terms'			=> array(
+					'layout',
+					'row',
+				),
+			),
 		);
 
 		$templates = get_posts( $args );
 
 		self::$templates = array(
 			'pages'		=> $pages,
-			'templates'	=> $templates
+			'templates'	=> $templates,
 		);
 
 		return self::$templates;
@@ -204,8 +200,7 @@ final class BB_PowerPack_Header_Footer {
 	 * @since 2.7.1
 	 * @param string $selected Selected template for the field.
 	 */
-	static public function get_templates_html( $selected = '' )
-	{
+	static public function get_templates_html( $selected = '' ) {
 		$templates = self::get_templates();
 
 		$options = '<option value="">' . esc_html__( 'Default', 'bb-powerpack' ) . '</option>';
@@ -217,17 +212,17 @@ final class BB_PowerPack_Header_Footer {
 
 			$label = '';
 
-			if ( 'pages' == $type ) {
+			if ( 'pages' === $type ) {
 				$label = esc_html__( 'Pages', 'bb-powerpack' );
 			}
-			if ( 'templates' == $type ) {
+			if ( 'templates' === $type ) {
 				$label = esc_html__( 'Builder Templates', 'bb-powerpack' );
 			}
 
 			$options .= '<optgroup label="' . $label . '">';
 
 			foreach ( $data as $post ) {
-				$options .= '<option value="' . $post->ID . '" ' . selected( $selected, $post->ID ) . '>' . $post->post_title . '</option>';
+				$options .= '<option value="' . $post->ID . '" ' . selected( $selected, $post->ID, false ) . '>' . $post->post_title . '</option>';
 			}
 
 			$options .= '</optgroup>';
@@ -242,8 +237,7 @@ final class BB_PowerPack_Header_Footer {
 	 * @since 2.7.1
 	 * @return mixed
 	 */
-	static public function get_theme_support_slug()
-	{
+	static public function get_theme_support_slug() {
 		$slug = false;
 
 		if ( defined( 'FL_THEME_VERSION' ) ) {
@@ -258,7 +252,7 @@ final class BB_PowerPack_Header_Footer {
 			$slug = 'storefront';
 		}
 
-		return $slug;
+		return apply_filters( 'pp_header_footer_theme_slug', $slug );
 	}
 
 	/**
@@ -267,10 +261,18 @@ final class BB_PowerPack_Header_Footer {
 	 * @since 2.7.1
 	 * @return void
 	 */
-	static public function load()
-	{
+	static public function load() {
 		self::$header = get_option( 'bb_powerpack_header_footer_template_header' );
 		self::$footer = get_option( 'bb_powerpack_header_footer_template_footer' );
+
+		// Remove option if header template has deleted.
+		if ( ! empty( self::$header ) && 'publish' != get_post_status( self::$header ) ) {
+			delete_option( 'bb_powerpack_header_footer_template_header' );
+		}
+		// Remove option if footer template has deleted.
+		if ( ! empty( self::$footer ) && 'publish' != get_post_status( self::$footer ) ) {
+			delete_option( 'bb_powerpack_header_footer_template_footer' );
+		}
 
 		if ( empty( self::$header ) && empty( self::$footer ) ) {
 			return;
@@ -281,8 +283,9 @@ final class BB_PowerPack_Header_Footer {
 		add_filter( 'body_class', __CLASS__ . '::body_class' );
 
 		if ( $slug ) {
-			if ( is_callable( 'FLBuilder::render_content_by_id' ) ) {
-				require_once BB_POWERPACK_DIR . "classes/theme-support/class-pp-theme-support-$slug.php";
+			$file = BB_POWERPACK_DIR . "classes/theme-support/class-pp-theme-support-$slug.php";
+			if ( file_exists( $file ) && is_callable( 'FLBuilder::render_content_by_id' ) ) {
+				require_once $file;
 			}
 		}
 	}
@@ -291,17 +294,16 @@ final class BB_PowerPack_Header_Footer {
 	 * Renders the CSS for header/footer and adds
 	 * it to the cached builder CSS layout file.
 	 *
+	 * @param string $css	CSS of nodes.
 	 * @since 2.7.1
-	 * @param string $css
 	 * @return string
 	 */
-	static public function render_css( $css )
-	{
+	static public function render_css( $css ) {
 		if ( ! is_callable( 'FLBuilderModel::get_post_id' ) ) {
 			return $css;
 		}
 
-		if ( self::$header == FLBuilderModel::get_post_id() ) {
+		if ( FLBuilderModel::get_post_id() === self::$header ) {
 			$css .= file_get_contents( BB_POWERPACK_DIR . 'assets/css/header-layout.css' );
 		}
 
@@ -312,17 +314,16 @@ final class BB_PowerPack_Header_Footer {
 	 * Renders the JS for header/footer and adds
 	 * it to the cached builder JS layout file.
 	 *
+	 * @param string $js	JS of nodes.
 	 * @since 2.7.1
-	 * @param string $js
 	 * @return string
 	 */
-	static public function render_js( $js )
-	{
+	static public function render_js( $js ) {
 		if ( ! is_callable( 'FLBuilderModel::get_post_id' ) ) {
 			return $js;
 		}
 
-		if ( self::$header == FLBuilderModel::get_post_id() ) {
+		if ( FLBuilderModel::get_post_id() === self::$header ) {
 			$js .= file_get_contents( BB_POWERPACK_DIR . 'assets/js/header-layout.js' );
 		}
 
@@ -333,11 +334,11 @@ final class BB_PowerPack_Header_Footer {
 	 * Renders the header for the current page.
 	 * Used by theme support classes.
 	 *
+	 * @param mixed $tag	HTML tag for header.
 	 * @since 2.7.1
 	 * @return void
 	 */
-	static public function render_header( $tag = null )
-	{
+	static public function render_header( $tag = null ) {
 		$tag 		= ! $tag ? 'header' : $tag;
 		$id 		= self::$header;
 		$is_fixed 	= get_option( 'bb_powerpack_header_footer_fixed_header' );
@@ -346,6 +347,12 @@ final class BB_PowerPack_Header_Footer {
 		$overlay_bg = get_option( 'bb_powerpack_header_footer_overlay_header_bg', 'default' );
 
 		do_action( 'pp_header_footer_before_render_header', $id );
+
+		// Enqueue jQyery throttle.
+		wp_enqueue_script( 'jquery-throttle' );
+
+		// Enqueue imagesloaded.
+		wp_enqueue_script( 'imagesloaded' );
 
 		// Enqueue styles and scripts for this post.
 		if ( is_callable( 'FLBuilder::enqueue_layout_styles_scripts_by_id' ) ) {
@@ -374,11 +381,11 @@ final class BB_PowerPack_Header_Footer {
 	 * Renders the footer for the current page.
 	 * Used by theme support classes.
 	 *
+	 * @param mixed $tag	HTML tag for footer.
 	 * @since 2.7.1
 	 * @return void
 	 */
-	static public function render_footer( $tag = null )
-	{
+	static public function render_footer( $tag = null ) {
 		$tag = ! $tag ? 'footer' : $tag;
 		$id = self::$footer;
 
@@ -393,7 +400,7 @@ final class BB_PowerPack_Header_Footer {
 		}
 
 		do_action( 'pp_header_footer_before_render_footer', $id );
-		
+
 		FLBuilder::render_content_by_id( $id, $tag, array(
 			'itemscope'       => 'itemscope',
 			'itemtype'        => 'http://schema.org/WPFooter',
@@ -410,15 +417,14 @@ final class BB_PowerPack_Header_Footer {
 	 * @since 2.7.1
 	 * @return void
 	 */
-	static public function disable_content_rendering()
-	{
+	static public function disable_content_rendering() {
 		global $post;
-		
+
 		if ( is_object( $post ) ) {
 			$header = get_option( 'bb_powerpack_header_footer_template_header' );
 			$footer = get_option( 'bb_powerpack_header_footer_template_footer' );
-			$has_header = $post->ID == $header;
-			$has_footer = $post->ID == $footer;
+			$has_header = $post->ID === $header;
+			$has_footer = $post->ID === $footer;
 
 			if ( $has_header || $has_footer ) {
 				remove_filter( 'the_content', 'FLBuilder::render_content' );
@@ -431,8 +437,8 @@ final class BB_PowerPack_Header_Footer {
 	 * Overrides the default editor content for headers
 	 * and footers since those are edited in place.
 	 *
+	 * @param string $content	Post content.
 	 * @since 2.7.1
-	 * @param string $content
 	 * @return string
 	 */
 	static public function override_the_content( $content ) {

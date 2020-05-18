@@ -8,6 +8,13 @@ $post_columns_tablet = ( 100 - $space_tablet ) / $settings->post_grid_count['tab
 $post_columns_mobile = ( 100 - $space_mobile ) / $settings->post_grid_count['mobile'];
 $responsive_filter = $settings->responsive_filter;
 ?>
+<?php
+// Image Effects
+if ( isset( $settings->show_image_effect ) && 'yes' === $settings->show_image_effect ){
+	echo pp_image_effect_render_style( $settings, ".fl-node-$id .pp-content-grid-image img" );
+	echo pp_image_effect_render_style( $settings, ".fl-node-$id .pp-content-post:hover .pp-content-grid-image img", true );
+}
+?>
 
 <?php if(isset( $settings->post_grid_filters_display ) && $settings->post_grid_filters_display == 'yes') { ?>
 .fl-node-<?php echo $id; ?> .pp-content-post {
@@ -145,7 +152,8 @@ FLBuilderCSS::responsive_rule( array(
 }
 
 .fl-node-<?php echo $id; ?> .pp-content-grid-pagination li a.page-numbers:hover,
-.fl-node-<?php echo $id; ?> .pp-content-grid-pagination li span.current {
+.fl-node-<?php echo $id; ?> .pp-content-grid-pagination li span.current,
+.fl-node-<?php echo $id; ?> .pp-content-grid-pagination li span[aria-current] {
 	<?php if ( isset( $settings->pagination_bg_color_hover ) && ! empty( $settings->pagination_bg_color_hover ) ) { ?>
 		background-color: <?php echo pp_get_color_value( $settings->pagination_bg_color_hover ); ?>;
 	<?php } ?>

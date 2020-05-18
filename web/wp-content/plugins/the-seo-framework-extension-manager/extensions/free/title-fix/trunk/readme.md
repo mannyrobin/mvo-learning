@@ -47,6 +47,12 @@ There is no setup required, and no options are available.
 
 ## Changelog
 
+### 1.2.1
+
+[tsfep-release time="November 5th, 2019"]
+
+* **Updated:** Removed backward compatibility checks. The extension now requires TSF v4.0 and later.
+
 ### 1.2.0
 
 [tsfep-release time="August 28th, 2018"]
@@ -59,7 +65,7 @@ There is no setup required, and no options are available.
 
 * **Removed:** filter `the_seo_framework_force_title_fix`.
 	* In preparation for TSF 3.1.
-	* This was added to include multisite support for the plugin, but as this now an extension it's automatically supported.
+	* This was added to include multisite support for the plugin; but, as this is now an extension, it's automatically supported.
 
 ### 1.0.3
 

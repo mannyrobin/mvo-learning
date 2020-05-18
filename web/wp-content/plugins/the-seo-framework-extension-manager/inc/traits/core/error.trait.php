@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Traits
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -99,11 +100,11 @@ trait Error {
 	 *                2. Added a new parameter to clear previous notices.
 	 * @since 1.5.1 : Added an exact-match check to prevent duplicated entries.
 	 *
-	 * @param array $notice The notice. : {
+	 * @param array $notice    The notice. : {
 	 *    0 => int    key,
 	 *    1 => string additional message
 	 * }
-	 * @param bool $clear_old When true, it removes all previous notices.
+	 * @param bool  $clear_old When true, it removes all previous notices.
 	 * @return void
 	 */
 	final protected function set_error_notice( $notice = [], $clear_old = false ) {
@@ -111,7 +112,7 @@ trait Error {
 		if ( ! \is_admin() || ! $this->error_notice_option )
 			return;
 
-		$notices = $clear_old ? [] : \get_option( $this->error_notice_option ) ?: [];
+		$notices = ( $clear_old ? null : \get_option( $this->error_notice_option ) ) ?: [];
 
 		if ( empty( $notices ) ) {
 			$notices = [ $notice ];
@@ -138,8 +139,6 @@ trait Error {
 	 * @since 1.2.0 1. No longer deletes option, but instead overwrites it.
 	 *              2. Now removes the option from autoload.
 	 * @since 1.5.0 No longer called `unset_error_notice()`
-	 *
-	 * @param array $notice The notice.
 	 */
 	final protected function unset_error_notice_option() {
 		$this->error_notice_option and \update_option( $this->error_notice_option, null, 'no' );
@@ -165,7 +164,7 @@ trait Error {
 		if ( empty( $key ) )
 			return '';
 
-		$notice = $this->get_error_notice_by_key( $key, true );
+		$notice          = $this->get_error_notice_by_key( $key, true );
 		$additional_info = is_array( $option ) && ! empty( $option[ $key ] ) ? $option[ $key ] : '';
 
 		$args = [
@@ -182,7 +181,7 @@ trait Error {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param array $options
+	 * @param array $options The error notice keys.
 	 * @return array $notices
 	 */
 	final protected function get_error_notices( array $options = [] ) {
@@ -229,6 +228,7 @@ trait Error {
 				break;
 
 			default:
+			case 'info':
 			case 'updated':
 				$status_i18n = \esc_html__( 'Status code:', 'the-seo-framework-extension-manager' );
 				break;
@@ -260,9 +260,10 @@ trait Error {
 	 * Fetches notices by option and returns type.
 	 *
 	 * Not final. Can be overwritten.
+	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $key The error key.
+	 * @param int  $key The error key.
 	 * @param bool $get_type Whether to fetch the error type as well.
 	 * @return array|string The escaped notice. When $get_type is true, an array is returned.
 	 */
@@ -272,17 +273,17 @@ trait Error {
 			case -1:
 				//? Placeholder error. See TSF_Extension_Manager\_wp_ajax_get_dismissible_notice()
 				$message = 'Undefined error. Check other messages.';
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 101:
 				$message = \esc_html__( 'No valid license key was supplied.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 102:
 				$message = \esc_html__( 'No valid license email was supplied.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 103:
@@ -291,7 +292,7 @@ trait Error {
 			case 708:
 			case 1010702:
 				$message = \esc_html__( 'Invalid API request type.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 201:
@@ -299,12 +300,12 @@ trait Error {
 			case 1100101:
 			case 1100201:
 				$message = \esc_html__( 'An incomplete API request was supplied.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 301:
 				$message = \esc_html__( 'No response received from the API server. Please try again later. If this error keeps coming back, contact your hosting provider.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 202:
@@ -316,12 +317,12 @@ trait Error {
 			case 10004:
 			case 1010101:
 				$message = \esc_html__( 'An error occurred while contacting the API server. Please try again later.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 401:
 				$message = \esc_html__( 'An error occured while validating the settings. Please try again.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 303:
@@ -331,7 +332,7 @@ trait Error {
 					\esc_html__( 'Invalid API license key. Login to the %s page to find a valid API License Key.', 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 304:
@@ -342,7 +343,7 @@ trait Error {
 			case 1100104:
 			case 1100204:
 				$message = \esc_html__( 'Remote software API error.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 17008:
@@ -356,7 +357,7 @@ trait Error {
 			case 1100203:
 			case 1100207:
 				$message = \esc_html__( 'Remote Software API error. Please try again. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 17013:
@@ -364,7 +365,7 @@ trait Error {
 			case 1100208:
 			case 1010508:
 				$message = \esc_html__( 'Exceeded maximum number of monthly request. Upgrade your license or check back in next month.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 305:
@@ -373,49 +374,49 @@ trait Error {
 					\esc_html__( 'Exceeded maximum number of activations. Login to the %s page to manage your sites.', 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 306:
 				$message = \esc_html__( 'Invalid instance ID. Please try again. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 308:
 			case 1010202:
 				$message = \esc_html__( 'Your subscription is not active or has expired.', 'the-seo-framework-extension-manager' );
-				$type = 'warning';
+				$type    = 'warning';
 				break;
 
 			case 402:
 				$message = \esc_html__( 'Your account has been successfully authorized to be used on this website.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
+				$type    = 'updated';
 				break;
 
 			case 501:
 			case 502:
 				$message = \esc_html__( 'Your account has been successfully deauthorized from this website.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
+				$type    = 'updated';
 				break;
 
 			case 601:
 				$message = \esc_html__( 'Enjoy your free extensions!', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
+				$type    = 'updated';
 				break;
 
 			case 702:
 				$message = \esc_html__( 'The feed has been enabled.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
+				$type    = 'updated';
 				break;
 
 			case 801:
 				$message = \esc_html__( 'Successfully deactivated.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
+				$type    = 'updated';
 				break;
 
 			case 901:
 				$message = \esc_html__( 'Your subscription has expired or has been deactivated remotely.', 'the-seo-framework-extension-manager' );
-				$type = 'warning';
+				$type    = 'warning';
 				break;
 
 			case 902:
@@ -424,7 +425,7 @@ trait Error {
 					\esc_html__( "Your subscription instance couldn't be verified. Login to the %s page and verify if this site is still connected.", 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
-				$type = 'warning';
+				$type    = 'warning';
 				break;
 
 			case 904:
@@ -432,7 +433,7 @@ trait Error {
 					\esc_html__( "Your account level has been set to Essentials. Reload the page if it didn't take effect.", 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
-				$type = 'updated';
+				$type    = 'info';
 				break;
 
 			case 905:
@@ -440,7 +441,7 @@ trait Error {
 					\esc_html__( "Your account level has been set to Premium. Reload the page if it didn't take effect.", 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
-				$type = 'updated';
+				$type    = 'info';
 				break;
 
 			case 906:
@@ -448,7 +449,7 @@ trait Error {
 					\esc_html__( "Your account level has been set to Enterprise. Reload the page if it didn't take effect.", 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
-				$type = 'updated';
+				$type    = 'info';
 				break;
 
 			case 2001:
@@ -457,7 +458,7 @@ trait Error {
 			case 7002:
 			case 7101:
 				$message = \esc_html__( 'An error occured while verifying the options. Security keys have likely changed and enabled extensions are now inactive. If this error keeps coming back, please disconnect your account and try again.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			//* IT'S OVER NINE THOUSAAAAAAAAAAAAAAAAAAAAAAND!!one!1!!
@@ -471,161 +472,181 @@ trait Error {
 			case 1079001:
 			case 1109001:
 				$message = \esc_html__( 'User verification failed. Please try again.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 2002:
 			case 10001:
 			case 10002:
 				$message = \esc_html__( 'Extension list has been tampered with. Please reinstall this plugin and try again.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 10005:
 				$message = \esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 10008:
 			case 10010:
 				$message = \esc_html__( 'Extension has been successfully activated.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
+				$type    = 'updated';
 				break;
 
 			case 10012:
 				$message = \esc_html__( 'Extension was already activated in another browser instance.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
+				$type    = 'updated';
 				break;
 
 			case 10009:
 			case 10102:
 				$message = \esc_html__( "Can't touch this.", 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 11001:
 				$message = \esc_html__( 'Extension has been successfully deactivated.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
+				$type    = 'updated';
 				break;
 
 			case 1010304:
 				$message = \esc_html__( 'Your website has been successfully connected to the Monitor API server.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
+				$type    = 'updated';
 				break;
 
 			case 1010403:
 				$message = \esc_html__( 'Your site has been successfully disconnected from the Monitor API server.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
+				$type    = 'updated';
 				break;
 
 			case 1010502:
 			case 1010602:
 			case 1010802:
-				$message = \esc_html__( 'The Monitor API server does not recognize your instance. Request a fix.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$message = \esc_html__( "The Monitor API server does not recognize your website's instance. Request reactivation.", 'the-seo-framework-extension-manager' );
+				$type    = 'error';
 				break;
 
 			case 1010503:
 			case 1010603:
 			case 1010803:
 				$message = \esc_html__( 'Your website has been marked as inactive by the Monitor API server.', 'the-seo-framework-extension-manager' );
-				$type = 'warning';
+				$type    = 'warning';
 				break;
 
 			case 1010504:
 				$message = \esc_html__( 'Crawl request is still in queue. Please try again later.', 'the-seo-framework-extension-manager' );
-				$type = 'warning';
+				$type    = 'warning';
 				break;
 
 			case 1010507:
 				$message = \esc_html__( 'Crawl request has just been submitted.', 'the-seo-framework-extension-manager' );
-				$type = 'warning';
+				$type    = 'warning';
 				break;
 
 			case 1010607:
 				$message = \esc_html__( 'Data has just been updated.', 'the-seo-framework-extension-manager' );
-				$type = 'warning';
+				$type    = 'warning';
 				break;
 
 			case 1010305:
 			case 1010506:
 				$message = \esc_html__( 'Crawl has been requested successfully. It can take up to three minutes to be processed.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
+				$type    = 'updated';
 				break;
 
 			case 1010606:
 				$message = \esc_html__( 'The latest Monitor data has been recieved.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
+				$type    = 'updated';
 				break;
 
 			case 1010804:
 				$message = \esc_html__( 'Monitor has updated your site settings, but your site is now out of sync. You should fetch data.', 'the-seo-framework-extension-manager' );
-				$type = 'warning';
+				$type    = 'warning';
 				break;
 
 			case 1010805:
 				$message = \esc_html__( 'Monitor has updated your site settings.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
+				$type    = 'updated';
 				break;
 
 			case 1060301:
 				$message = \esc_html__( "The SEO settings couldn't be converted to file.", 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 1060302:
 				$message = \esc_html__( 'An unknown source outputted data before sending the file. Therefore, Transporter is unable to complete your request.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 1060401:
 				$message = \esc_html__( 'Download will start shortly.', 'the-seo-framework-extension-manager' );
-				$type = 'success';
+				$type    = 'info';
 				break;
 
+			case 17100:
+			case 18101:
 			case 1070100:
-			case 1070701:
+			case 1090100:
 				$message = \esc_html__( 'Invalid data was sent to the server.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
+			case 18102:
+				$message = \esc_html__( "A database error occurred. Some settings aren't saved.", 'the-seo-framework-extension-manager' );
+				$type    = 'error';
+				break;
+
+			case 18103:
 			case 1070101:
-				$message = \esc_url__( "Settings aren't saved", 'the-seo-framework-extension-manager' );
-				$type = 'error';
+			case 1090101:
+				$message = \esc_html__( "A database error occurred. Settings aren't saved.", 'the-seo-framework-extension-manager' );
+				$type    = 'error';
+				break;
+
+			case 18104:
+				$message = \esc_html__( 'All settings are saved.', 'the-seo-framework-extension-manager' );
+				$type    = 'updated';
+				break;
+
+			case 18105:
+				$message = \esc_html__( 'Settings are saved for one extension.', 'the-seo-framework-extension-manager' );
+				$type    = 'updated';
 				break;
 
 			case 1070102:
+			case 1090102:
 				$message = \esc_html__( 'Settings are saved.', 'the-seo-framework-extension-manager' );
-				$type = 'success';
+				$type    = 'updated';
 				break;
 
 			case 1011700:
 			case 1071100:
 			case 1071101:
-				$message = \esc_html__( 'Unable to verify if settings are saved.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$message = \esc_html__( 'Unable to verify if settings are saved. Refresh this page to manually verify.', 'the-seo-framework-extension-manager' );
+				$type    = 'error';
 				break;
 
 			case 1011800:
 				$message = \esc_html__( 'Unable to propagate request. Are you running the latest version?', 'the-seo-framework-extension-manager' );
-				$type = 'warning';
+				$type    = 'warning';
 				break;
 
 			case 1072100:
 				$message = \esc_html__( "Couldn't fetch data.", 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 1070201:
 				$message = \esc_html__( 'Unable to create markup. Inspect your fields for errors or contact support.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 17000:
 			case 17003:
 			case 17200:
 				$message = \esc_html__( 'Unable to fetch geocoding data.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 17004:
@@ -645,39 +666,39 @@ trait Error {
 
 			case 17009:
 				$message = \esc_html__( 'Please wait a few seconds before making another request.', 'the-seo-framework-extension-manager' );
-				$type = 'warning';
+				$type    = 'warning';
 				break;
 
 			case 17010:
 				$message = \esc_html__( 'Too many requests in the last period. Limit will be lifted soon.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 
 			case 17012:
 				$message = \esc_html__( 'Geocoding data received.', 'the-seo-framework-extension-manager' );
-				$type = 'success';
+				$type    = 'updated';
 				break;
 
 			case 1100102:
 			case 1100105:
 				$message = \esc_html__( 'No definitions found. Check your spelling.', 'the-seo-framework-extension-manager' );
-				$type = 'warning';
+				$type    = 'warning';
 				break;
 
 			case 1100202:
 			case 1100205:
 				$message = \esc_html__( 'No synonyms found.', 'the-seo-framework-extension-manager' );
-				$type = 'warning';
+				$type    = 'warning';
 				break;
 
 			case 1100106:
 			case 1100206:
 				$message = \esc_html__( 'Lexical information received.', 'the-seo-framework-extension-manager' );
-				$type = 'success';
+				$type    = 'updated';
 				break;
 
-			//* These errors shouldn't occur. Most likely WordPress Database/Option issues,
-			//  or some doofus spread erroneous files to the public.
+			// These errors shouldn't occur. Most likely WordPress Database/Option issues,
+			// or some doofus spread erroneous files to the public.
 			default:
 			case 602:
 			case 703:
@@ -704,7 +725,7 @@ trait Error {
 			case 1060101:
 			case 1060402:
 				$message = \esc_html__( 'An unknown error occurred. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
+				$type    = 'error';
 				break;
 		endswitch;
 
@@ -718,7 +739,7 @@ trait Error {
 	 * @since 1.5.0 Now appends notice type.
 	 *
 	 * @param mixed $success The success status, either boolean, int, or other.
-	 * @param int $code The error code.
+	 * @param int   $code    The error code.
 	 * @return array {
 	 *    'success' => mixed $success,
 	 *    'notice'  => string $notice,

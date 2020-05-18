@@ -3,11 +3,7 @@
 /**
  * Settings management panel.
  *
- * @package    WPForms
- * @author     WPForms
- * @since      1.0.0
- * @license    GPL-2.0+
- * @copyright  Copyright (c) 2016, WPForms LLC
+ * @since 1.0.0
  */
 class WPForms_Builder_Panel_Settings extends WPForms_Builder_Panel {
 
@@ -27,7 +23,7 @@ class WPForms_Builder_Panel_Settings extends WPForms_Builder_Panel {
 	}
 
 	/**
-	 * Outputs the Settings panel sidebar.
+	 * Output the Settings panel sidebar.
 	 *
 	 * @since 1.0.0
 	 */
@@ -41,7 +37,7 @@ class WPForms_Builder_Panel_Settings extends WPForms_Builder_Panel {
 		$sections = array(
 			'general'       => esc_html__( 'General', 'wpforms-lite' ),
 			'notifications' => esc_html__( 'Notifications', 'wpforms-lite' ),
-			'confirmation'  => esc_html__( 'Confirmation', 'wpforms-lite' ),
+			'confirmation'  => esc_html__( 'Confirmations', 'wpforms-lite' ),
 		);
 		$sections = apply_filters( 'wpforms_builder_settings_sections', $sections, $this->form_data );
 		foreach ( $sections as $slug => $section ) {
@@ -50,7 +46,7 @@ class WPForms_Builder_Panel_Settings extends WPForms_Builder_Panel {
 	}
 
 	/**
-	 * Outputs the Settings panel primary content.
+	 * Output the Settings panel primary content.
 	 *
 	 * @since 1.0.0
 	 */
@@ -148,7 +144,7 @@ class WPForms_Builder_Panel_Settings extends WPForms_Builder_Panel {
 			);
 			$recaptcha_key    = wpforms_setting( 'recaptcha-site-key' );
 			$recaptcha_secret = wpforms_setting( 'recaptcha-secret-key' );
-			$recaptcha_type   = wpforms_setting( 'recaptcha-type' );
+			$recaptcha_type   = wpforms_setting( 'recaptcha-type', 'v2' );
 			if ( ! empty( $recaptcha_key ) && ! empty( $recaptcha_secret ) ) {
 				switch ( $recaptcha_type ) {
 					case 'v2':

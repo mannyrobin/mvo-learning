@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Local\Front
  */
+
 namespace TSF_Extension_Manager\Extension\Local;
 
 defined( 'ABSPATH' ) or die;
@@ -11,7 +12,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Local extension for The SEO Framework
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -93,7 +94,7 @@ final class Front extends Core {
 
 		$functions[] = [
 			'callback' => [ $this, '_get_local_json_output' ],
-			'args' => [],
+			'args'     => [],
 		];
 
 		return $functions;
@@ -127,7 +128,7 @@ final class Front extends Core {
 	 * @return string URL without scheme.
 	 */
 	protected function remove_scheme( $url ) {
-		return str_ireplace( [ 'http://', 'https://' ], '', \esc_url( $url, [ 'http', 'https' ] ) );
+		return str_ireplace( [ 'https://', 'http://' ], '', \esc_url( $url, [ 'https', 'http' ] ) );
 	}
 
 	/**
@@ -151,7 +152,7 @@ final class Front extends Core {
 	 */
 	protected function get_processed_packed_data_from_url( $url ) {
 
-		$url = $this->remove_scheme( $url );
+		$url  = $this->remove_scheme( $url );
 		$data = $this->get_processed_packed_data();
 
 		if ( isset( $data[ $url ] ) )
@@ -165,7 +166,7 @@ final class Front extends Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $url The URL where the data might be for.
+	 * @param string $id The data key to get from the pack.
 	 * @return array The packed data.
 	 */
 	protected function get_processed_packed_data_from_id( $id = 0 ) {
@@ -195,7 +196,7 @@ final class Front extends Core {
 		} elseif ( \is_singular() ) {
 			$url = \get_permalink();
 		} else {
-			$term = \get_queried_object();
+			$term     = \get_queried_object();
 			$taxonomy = isset( $term->taxonomy ) ? $term->taxonomy : null;
 
 			if ( ! $taxonomy )

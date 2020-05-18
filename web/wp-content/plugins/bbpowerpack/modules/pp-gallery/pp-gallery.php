@@ -13,14 +13,14 @@ class PPGalleryModule extends FLBuilderModule {
 	{
 		parent::__construct( array(
 			'name'          => __('Photo Gallery', 'bb-powerpack'),
-            'description'   => __('A module for photo gallery.', 'bb-powerpack'),
-            'group'         => pp_get_modules_group(),
-            'category'		=> pp_get_modules_cat( 'content' ),
-            'dir'           => BB_POWERPACK_DIR . 'modules/pp-gallery/',
-            'url'           => BB_POWERPACK_URL . 'modules/pp-gallery/',
-            'editor_export' => true, // Defaults to true and can be omitted.
-            'enabled'       => true, // Defaults to true and can be omitted.
-            'partial_refresh' => true
+			'description'   => __('A module for photo gallery.', 'bb-powerpack'),
+			'group'         => pp_get_modules_group(),
+			'category'		=> pp_get_modules_cat( 'media' ),
+			'dir'           => BB_POWERPACK_DIR . 'modules/pp-gallery/',
+			'url'           => BB_POWERPACK_URL . 'modules/pp-gallery/',
+			'editor_export' => true, // Defaults to true and can be omitted.
+			'enabled'       => true, // Defaults to true and can be omitted.
+			'partial_refresh' => true
 		) );
 		
 		add_action( 'wp', array( $this, 'ajax_get_gallery_photos' ) );
@@ -145,7 +145,7 @@ class PPGalleryModule extends FLBuilderModule {
 
 		$node_id 			= isset( $_POST['node_id'] ) ? sanitize_text_field( $_POST['node_id'] ) : false;
 		$template_id    	= isset( $_POST['template_id'] ) ? sanitize_text_field( $_POST['template_id'] ) : false;
-        $template_node_id   = isset( $_POST['template_node_id'] ) ? sanitize_text_field( $_POST['template_node_id'] ) : false;
+		$template_node_id   = isset( $_POST['template_node_id'] ) ? sanitize_text_field( $_POST['template_node_id'] ) : false;
 
 		if ( $node_id ) {
 			$settings = (object)$_POST['settings'];
@@ -354,9 +354,9 @@ class PPGalleryModule extends FLBuilderModule {
 				}
 
 				/* Add Custom field attachment data to object */
-	 			$cta_link = get_post_meta( $id, 'gallery_external_link', true );
+				$cta_link = get_post_meta( $id, 'gallery_external_link', true );
 				if(!empty($cta_link) && $this->settings->click_action == 'custom-link' ) {
-		 			$data->cta_link = esc_url( $cta_link );
+					$data->cta_link = esc_url( $cta_link );
 				}
 
 				$photos[$id] = $data;
@@ -379,13 +379,13 @@ class PPGalleryModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPGalleryModule', array(
-    'general'       => array( // Tab
-        'title'         => __('General', 'bb-powerpack'), // Tab title
-        'sections'      => array( // Tab Sections
-            'general'       => array( // Section
-                'title'         => '', // Section Title
-                'fields'        => array( // Section Fields
+BB_PowerPack::register_module('PPGalleryModule', array(
+	'general'       => array( // Tab
+		'title'         => __('General', 'bb-powerpack'), // Tab title
+		'sections'      => array( // Tab Sections
+			'general'       => array( // Section
+				'title'         => '', // Section Title
+				'fields'        => array( // Section Fields
 					'gallery_layout'        => array(
 						'type'          => 'pp-switch',
 						'label'         => __( 'Layout', 'bb-powerpack' ),
@@ -397,7 +397,8 @@ FLBuilder::register_module('PPGalleryModule', array(
 						),
 						'toggle'	=> array(
 							'grid'	=> array(
-								'sections'	=> array('gallery_columns', 'general_style', 'image_shadow_style', 'image_shadow_hover_style')
+								'sections'	=> array('gallery_columns', 'general_style', 'image_shadow_style', 'image_shadow_hover_style'),
+								'fields'	=> array( 'align_items' ),
 							),
 							'masonry'	=> array(
 								'sections'	=> array('gallery_columns', 'general_style', 'image_shadow_style', 'image_shadow_hover_style')
@@ -408,9 +409,9 @@ FLBuilder::register_module('PPGalleryModule', array(
 						)
 					),
 					'gallery_photos' => array(
-					    'type'          => 'multiple-photos',
-					    'label'         => __( 'Photos', 'bb-powerpack' ),
-                        'connections'  	=> array('multiple-photos')
+						'type'          => 'multiple-photos',
+						'label'         => __( 'Photos', 'bb-powerpack' ),
+						'connections'  	=> array('multiple-photos')
 					),
 					'photo_size'        => array(
 						'type'          => 'photo-sizes',
@@ -427,8 +428,17 @@ FLBuilder::register_module('PPGalleryModule', array(
 						'label'         => __( 'Display Order', 'bb-powerpack' ),
 						'default'       => 'normal',
 						'options'       => array(
-							'normal'     	=> __( 'Normal', 'bb-powerpack'),
+							'normal'     	=> __( 'Normal', 'bb-powerpack' ),
 							'random' 		=> __( 'Random', 'bb-powerpack' )
+						),
+					),
+					'align_items'	=> array(
+						'type'			=> 'pp-switch',
+						'label'			=> __( 'Last Row Centered', 'bb-powerpack' ),
+						'default'		=> 'no',
+						'options'		=> array(
+							'yes'			=> __( 'Yes', 'bb-powerpack' ),
+							'no'			=> __( 'No', 'bb-powerpack' ),
 						),
 					),
 					'show_captions' => array(
@@ -446,12 +456,12 @@ FLBuilder::register_module('PPGalleryModule', array(
 							),
 							'below'	=> array(
 								'tabs'	=> array('caption_settings'),
-								'section'	=> array('caption_style')
+								'sections'	=> array('caption_style')
 							)
 						),
 						'help'          => __('The caption pulls from whatever text you put in the caption area in the media manager for each image.', 'bb-powerpack')
 					),
-                )
+				)
 			),
 			'click_action'	=> array(
 				'title'			=> __('Click Action', 'bb-powerpack'),
@@ -462,7 +472,7 @@ FLBuilder::register_module('PPGalleryModule', array(
 						'label'         => __('Click Action', 'bb-powerpack'),
 						'default'       => 'lightbox',
 						'options'       => array(
-							'none'          => __( 'None', 'Click action.', 'bb-powerpack' ),
+							'none'          => __( 'None', 'bb-powerpack' ),
 							'lightbox'      => __('Lightbox', 'bb-powerpack'),
 							'custom-link'   => __('Custom URL', 'bb-powerpack')
 						),
@@ -509,6 +519,15 @@ FLBuilder::register_module('PPGalleryModule', array(
 							'yes'		=> __('Yes', 'bb-powerpack'),
 							'no'		=> __('No', 'bb-powerpack')
 						)
+					),
+					'lightbox_caption_source'	=> array(
+						'type'			=> 'pp-switch',
+						'label'			=> __('Caption Source', 'bb-powerpack'),
+						'default'		=> 'title',
+						'options'		=> array(
+							'title'			=> __( 'Title', 'bb-powerpack' ),
+							'caption'		=> __( 'Caption', 'bb-powerpack' ),
+						),
 					),
 					'custom_link_target' => array(
 						'type'		=> 'select',
@@ -651,7 +670,7 @@ FLBuilder::register_module('PPGalleryModule', array(
 					'photo_grid_count'    => array(
 						'type' 			=> 'unit',
 						'label' 		=> __('Number of Columns', 'bb-powerpack'),
-                        'slider'          => true,
+						'slider'          => true,
 						'responsive' => array(
 							'placeholder' => array(
 								'default' => '4',
@@ -659,7 +678,7 @@ FLBuilder::register_module('PPGalleryModule', array(
 								'responsive' => '1',
 							),
 						),
-                    ),
+					),
 					'photo_spacing' => array(
 						'type'          => 'unit',
 						'label'         => __('Spacing', 'bb-powerpack'),
@@ -705,9 +724,41 @@ FLBuilder::register_module('PPGalleryModule', array(
 						),
 					)
 				)
-			)
-        )
-    ),
+			),
+			'lightbox_settings'	=> array(
+				'title'				=>	__('Lightbox Settings', 'bb-powerpack'),
+				'collapsed'			=> true,
+				'fields'			=> array(
+					'lightbox_animation' => array(
+						'type'				=> 'select',
+						'label'				=> __( 'Open/Close Animation', 'bb-powerpack'),
+						'default'			=> 'zoom',
+						'options'			=> array(
+							''              	=> __( 'None', 'bb-powerpack' ),
+							'fade'          	=> __( 'Fade', 'bb-powerpack' ),
+							'zoom'          	=> __( 'Zoom', 'bb-powerpack' ),
+							'zoom-in-out'   	=> __( 'Zoom in Out', 'bb-powerpack' ),
+						),
+					),
+					'transition_effect'	=> array(
+						'type'				=> 'select',
+						'label'				=> __( 'Transition Effect', 'bb-powerpack'),
+						'default'			=> 'fade',
+						'help'				=> __( 'Transition effect between slides', 'bb-powerpack' ),
+						'options'			=> array(
+							''              	=> __( 'None', 'bb-powerpack' ),
+							'fade'          	=> __( 'Fade', 'bb-powerpack' ),
+							'slide'         	=> __( 'Slide', 'bb-powerpack' ),
+							'circular'      	=> __( 'Circular', 'bb-powerpack' ),
+							'tube'          	=> __( 'Tube', 'bb-powerpack' ),
+							'zoom-in-out'   	=> __( 'Zoom in Out', 'bb-powerpack' ),
+							'rotate'        	=> __( 'Rotate', 'bb-powerpack' ),
+						),
+					),
+				),
+			),
+		)
+	),
 	'style'	=> array(
 		'title'	=> __( 'Style', 'bb-powerpack' ),
 		'sections'	=> array(
@@ -719,16 +770,16 @@ FLBuilder::register_module('PPGalleryModule', array(
 						'label'         => __( 'Border', 'bb-powerpack' ),
 						'responsive'	=> true,
 						'preview'   	=> array(
-                            'type'  		=> 'css',
-                            'selector'  	=> '.pp-photo-gallery-item',
-                            'property'  	=> 'border',
-                        ),
+							'type'  		=> 'css',
+							'selector'  	=> '.pp-photo-gallery-item',
+							'property'  	=> 'border',
+						),
 					),
 					'photo_padding'    => array(
 						'type' 			=> 'unit',
 						'label' 		=> __('Padding', 'bb-powerpack'),
 						'units'			=> array( 'px' ),
-                        'slider'        => true,
+						'slider'        => true,
 						'responsive'	=> true,
 						'preview' => array(
 							'type' 		=> 'css',
@@ -736,7 +787,7 @@ FLBuilder::register_module('PPGalleryModule', array(
 							'property'	=> 'padding',
 							'unit' 		=> 'px'
 						),
-                    ),
+					),
 				)
 			),
 			'image_shadow_hover_style'	=> array(
@@ -744,20 +795,20 @@ FLBuilder::register_module('PPGalleryModule', array(
 				'collapsed'	=> true,
 				'fields'	=> array(
 					'show_image_shadow_hover'   => array(
-                        'type'                 => 'pp-switch',
-                        'label'                => __('Enable Shadow', 'bb-powerpack'),
-                        'default'              => 'no',
-                        'options'              => array(
-                            'yes'          	=> __('Yes', 'bb-powerpack'),
-                            'no'            => __('No', 'bb-powerpack'),
-                        ),
-                        'toggle'    =>  array(
-                            'yes'   => array(
-                                'fields'    => array('image_shadow_hover', 'image_shadow_color_hover', 'image_shadow_hover_speed')
-                            )
-                        )
-                    ),
-                    'image_shadow_hover' 		=> array(
+						'type'                 => 'pp-switch',
+						'label'                => __('Enable Shadow', 'bb-powerpack'),
+						'default'              => 'no',
+						'options'              => array(
+							'yes'          	=> __('Yes', 'bb-powerpack'),
+							'no'            => __('No', 'bb-powerpack'),
+						),
+						'toggle'    =>  array(
+							'yes'   => array(
+								'fields'    => array('image_shadow_hover', 'image_shadow_color_hover', 'image_shadow_hover_speed')
+							)
+						)
+					),
+					'image_shadow_hover' 		=> array(
 						'type'              => 'pp-multitext',
 						'label'             => __('Shadow', 'bb-powerpack'),
 						'default'           => array(
@@ -789,20 +840,20 @@ FLBuilder::register_module('PPGalleryModule', array(
 							),
 						)
 					),
-                    'image_shadow_color_hover' => array(
-                        'type'              => 'color',
-                        'label'             => __('Shadow Color', 'bb-powerpack'),
-                        'default'           => 'rgba(0,0,0,0.5)',
+					'image_shadow_color_hover' => array(
+						'type'              => 'color',
+						'label'             => __('Shadow Color', 'bb-powerpack'),
+						'default'           => 'rgba(0,0,0,0.5)',
 						'show_alpha'		=> true,
 						'connections'		=> array('color'),
-                    ),
+					),
 					'image_shadow_hover_speed' => array(
-                        'type'              => 'text',
-                        'label'             => __('Transition Speed', 'bb-powerpack'),
+						'type'              => 'text',
+						'label'             => __('Transition Speed', 'bb-powerpack'),
 						'default'			=> '300',
-                        'description'       => 'ms',
-                        'size'             	=> 5,
-                    ),
+						'description'       => 'ms',
+						'size'             	=> 5,
+					),
 				)
 			),
 			'overlay_style'       => array(
@@ -810,22 +861,22 @@ FLBuilder::register_module('PPGalleryModule', array(
 				'collapsed'		=> true,
 				'fields'        => array(
 					'overlay_type'     => array(
-                        'type'      => 'pp-switch',
-                        'label'     => __('Type', 'bb-powerpack'),
-                        'default'     => 'solid',
-                        'options'       => array(
-                            'solid'          => __('Solid', 'bb-powerpack'),
-                            'gradient'          => __('Gradient', 'bb-powerpack'),
-                        ),
-                        'toggle'   => array(
-                        	'solid'    => array(
-                                 'fields'   => array('overlay_color')
-                             ),
-                             'gradient'    => array(
-                                 'fields'   => array('overlay_primary_color', 'overlay_secondary_color')
-                             ),
-                         )
-                    ),
+						'type'      => 'pp-switch',
+						'label'     => __('Type', 'bb-powerpack'),
+						'default'     => 'solid',
+						'options'       => array(
+							'solid'          => __('Solid', 'bb-powerpack'),
+							'gradient'          => __('Gradient', 'bb-powerpack'),
+						),
+						'toggle'   => array(
+							'solid'    => array(
+								'fields'   => array('overlay_color')
+							),
+							'gradient'    => array(
+								'fields'   => array('overlay_primary_color', 'overlay_secondary_color')
+							),
+						)
+					),
 					'overlay_color' => array(
 						'type'       => 'color',
 						'label'     => __('Color', 'bb-powerpack'),
@@ -962,7 +1013,7 @@ FLBuilder::register_module('PPGalleryModule', array(
 								),
 							)
 						),
-                    ),
+					),
 					'overlay_icon_vertical_padding' 	=> array(
 						'type'          => 'text',
 						'label'         => __('Vertical Padding', 'bb-powerpack'),
@@ -985,7 +1036,7 @@ FLBuilder::register_module('PPGalleryModule', array(
 								),
 							)
 						),
-                    ),
+					),
 				)
 			),
 			'lightbox_style'	=> array(
@@ -1061,9 +1112,9 @@ FLBuilder::register_module('PPGalleryModule', array(
 							'selector'		=> '.pp-photo-gallery-caption, .pp-gallery-overlay .pp-caption',
 						),
 					),
-			        'caption_color'        => array(
-			            'type'       => 'color',
-			            'label'      => __('Color', 'bb-powerpack'),
+					'caption_color'        => array(
+						'type'       => 'color',
+						'label'      => __('Color', 'bb-powerpack'),
 						'default'    => '',
 						'connections'	=> array('color'),
 						'preview'	=> array(
@@ -1071,7 +1122,7 @@ FLBuilder::register_module('PPGalleryModule', array(
 							'selector'	=> '.pp-photo-gallery-caption, .pp-gallery-overlay .pp-caption',
 							'property'	=> 'color'
 						)
-			        ),
+					),
 				)
 			)
 		)

@@ -3,11 +3,7 @@
 /**
  * Multiple Choice field.
  *
- * @package    WPForms
- * @author     WPForms
- * @since      1.0.0
- * @license    GPL-2.0+
- * @copyright  Copyright (c) 2016, WPForms LLC
+ * @since 1.0.0
  */
 class WPForms_Field_Radio extends WPForms_Field {
 
@@ -119,6 +115,7 @@ class WPForms_Field_Radio extends WPForms_Field {
 		$properties['input_container'] = array(
 			'class' => array( ! empty( $field['random'] ) ? 'wpforms-randomize' : '' ),
 			'data'  => array(),
+			'attr'  => array(),
 			'id'    => "wpforms-{$form_id}-field_{$field_id}",
 		);
 
@@ -127,6 +124,10 @@ class WPForms_Field_Radio extends WPForms_Field {
 
 			// Used for dynamic choices.
 			$depth = isset( $choice['depth'] ) ? absint( $choice['depth'] ) : 1;
+
+			$value = isset( $field['show_values'] ) ? $choice['value'] : $choice['label'];
+			/* translators: %s - choice number. */
+			$value = ( '' === $value ) ? sprintf( esc_html__( 'Choice %s', 'wpforms-lite' ), $key ) : $value;
 
 			$properties['inputs'][ $key ] = array(
 				'container' => array(
@@ -146,7 +147,7 @@ class WPForms_Field_Radio extends WPForms_Field {
 				),
 				'attr'      => array(
 					'name'  => "wpforms[fields][{$field_id}]",
-					'value' => isset( $field['show_values'] ) ? $choice['value'] : $choice['label'],
+					'value' => $value,
 				),
 				'class'     => array(),
 				'data'      => array(),
@@ -372,7 +373,7 @@ class WPForms_Field_Radio extends WPForms_Field {
 
 		printf(
 			'<ul %s>',
-			wpforms_html_attributes( $container['id'], $container['class'], $container['data'] )
+			wpforms_html_attributes( $container['id'], $container['class'], $container['data'], $container['attr'] )
 		); // WPCS: XSS ok.
 
 			foreach ( $choices as $key => $choice ) {
@@ -467,7 +468,7 @@ class WPForms_Field_Radio extends WPForms_Field {
 	}
 
 	/**
-	 * Formats and sanitizes field.
+	 * Format and sanitize field.
 	 *
 	 * @since 1.0.2
 	 *
@@ -534,7 +535,8 @@ class WPForms_Field_Radio extends WPForms_Field {
 
 				// Determine choice key, this is needed for image choices.
 				foreach ( $field['choices'] as $key => $choice ) {
-					if ( $choice['label'] === $field_submit ) {
+					/* translators: %s - choice number. */
+					if ( $value_raw === $choice['label'] || $value_raw === sprintf( esc_html__( 'Choice %s', 'wpforms-lite' ), $key ) ) {
 						$choice_key = $key;
 						break;
 					}

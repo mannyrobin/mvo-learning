@@ -9,7 +9,7 @@
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -23,17 +23,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-// ==ClosureCompiler==
-// @compilation_level ADVANCED_OPTIMIZATIONS
-// @language ECMASCRIPT6_STRICT
-// @language_out ECMASCRIPT5_STRICT
-// @output_file_name tsfem-media.min.js
-// @externs_url https://raw.githubusercontent.com/google/closure-compiler/master/contrib/externs/jquery-1.9.js
-// @externs_url https://raw.githubusercontent.com/sybrew/The-SEO-Framework-Extension-Manager/master/lib/js/externs/tsfem.externs.js
-// @externs_url https://raw.githubusercontent.com/sybrew/The-SEO-Framework-Extension-Manager/master/lib/js/externs/tsfem-media.externs.js
-// ==/ClosureCompiler==
-// http://closure-compiler.appspot.com/home
 
 'use strict';
 
@@ -116,21 +105,21 @@ window.tsfemMedia = {
 
 		frame = wp.media( {
 			button : {
-				'text' : tsfemMedia.data['imgFrameButton'],
-				'close' : false,
+				text:  tsfemMedia.data['imgFrameButton'],
+				close: false,
 			},
 			states: [
 				new wp.media.controller.Library( {
-					'title' : tsfemMedia.data['imgFrameTitle'],
-					'library' : wp.media.query({ 'type' : 'image' }),
-					'multiple' : false,
-					'date' : false,
-					'priority' : 20,
-					'suggestedWidth' : 1920, // TODO USE DATA
-					'suggestedHeight' : 1080 // TODO USE DATA
+					title:           tsfemMedia.data['imgFrameTitle'],
+					library:         wp.media.query({ 'type' : 'image' }),
+					multiple:        false,
+					date:            false,
+					priority:        20,
+					// suggestedWidth:  1920, // TODO USE DATA
+					// suggestedHeight: 1080  // TODO USE DATA
 				} ),
 				new tsfemMedia.cropper( {
-					'imgSelectOptions' : tsfemMedia.calculateImageSelectOptions
+					imgSelectOptions: tsfemMedia.calculateImageSelectOptions
 				} ),
 			],
 		} );
@@ -139,30 +128,30 @@ window.tsfemMedia = {
 			frame.setState( 'cropper' );
 		};
 		const croppedFunc = function( croppedImage ) {
-			let url = croppedImage.url,
+			let url          = croppedImage.url,
 				attachmentId = croppedImage.id;
 
 			let e_inputURL = document.getElementById( inputURL ),
-				e_inputID = document.getElementById( inputID );
+				e_inputID  = document.getElementById( inputID );
 
 			// Send the attachmentId to our hidden input. URL to explicit output.
 			e_inputURL.value = url;
-			e_inputID.value = attachmentId;
+			e_inputID.value  = attachmentId;
 
 			// Trigger changes.
 			jQuery( e_inputURL ).trigger( 'change' );
 			jQuery( e_inputID ).trigger( 'change' );
 		};
 		const skippedcropFunc = function( selection ) {
-			let url = selection.get( 'url' ),
+			let url          = selection.get( 'url' ),
 				attachmentId = selection.get( 'id' );
 
 			let e_inputURL = document.getElementById( inputURL ),
-				e_inputID = document.getElementById( inputID );
+				e_inputID  = document.getElementById( inputID );
 
 			// Send the attachmentId to our hidden input. URL to explicit output.
 			e_inputURL.value = url;
-			e_inputID.value = attachmentId;
+			e_inputID.value  = attachmentId;
 
 			// Trigger changes.
 			jQuery( e_inputURL ).trigger( 'change' );
@@ -176,7 +165,7 @@ window.tsfemMedia = {
 			);
 			let data = {};
 			data.url = inputURL;
-			data.id = inputID;
+			data.id  = inputID;
 
 			tsfemMedia.appendRemoveButton( $target, data, true );
 
@@ -247,12 +236,12 @@ window.tsfemMedia = {
 	 */
 	removeEditorImage: function( event ) {
 
-		let $target = jQuery( event.target ),
-			inputURL = $target.data( 'input-url' ),
-			inputID = $target.data( 'input-id' ),
+		let $target       = jQuery( event.target ),
+			inputURL      = $target.data( 'input-url' ),
+			inputID       = $target.data( 'input-id' ),
 			disabledClass = 'tsfem-button-disabled',
-			selectButton = document.getElementById( inputURL + '-select' ),
-			removeButton = document.getElementById( inputURL + '-remove' );
+			selectButton  = document.getElementById( inputURL + '-select' ),
+			removeButton  = document.getElementById( inputURL + '-remove' );
 
 		if ( jQuery( selectButton ).prop( 'disabled' ) )
 			return;
@@ -265,7 +254,12 @@ window.tsfemMedia = {
 			jQuery( selectButton ).removeClass( disabledClass ).removeProp( 'disabled' );
 		} );
 
-		jQuery( document.getElementById( inputURL ) ).val( '' ).removeProp( 'readonly' ).css( 'opacity', 0 ).animate(
+		let $inputUrl = jQuery( document.getElementById( inputURL ) );
+		$inputUrl.val( '' ).trigger( 'change' );
+		if ( ! $inputUrl.data( 'readonly' ) ) {
+			$inputUrl.removeProp( 'readonly' );
+		}
+		$inputUrl.css( 'opacity', 0 ).animate(
 			{ 'opacity' : 1 },
 			{ 'queue' : true, 'duration' : 500 }
 		);
@@ -352,11 +346,11 @@ window.tsfemMedia = {
 
 		tsfemCropper.prototype.control = {};
 		tsfemCropper.control = {
-			'params' : {
-				'flex_width' : 4096,
-				'flex_height' : 4096,
-				'width' : 1920,  // TODO USE DATA
-				'height' : 1080, // TODO USE DATA
+			params: {
+				flex_width:  4096,
+				flex_height: 4096,
+				width:       1920, // TODO USE DATA
+				height:      1080, // TODO USE DATA
 			},
 		};
 
@@ -411,18 +405,18 @@ window.tsfemMedia = {
 		y1 = ( realHeight - yInit ) / 2;
 
 		imgSelectOptions = {
-			'handles' : true,
-			'keys' : true,
-			'instance' : true,
-			'persistent' : true,
-			'imageWidth' : realWidth,
-			'imageHeight' : realHeight,
-			'minWidth' : xImg > xInit ? xInit : xImg,
-			'minHeight' : yImg > yInit ? yInit : yImg,
-			'x1' : x1,
-			'y1' : y1,
-			'x2' : xInit + x1,
-			'y2' : yInit + y1
+			handles:     true,
+			keys:        true,
+			instance:    true,
+			persistent:  true,
+			imageWidth:  realWidth,
+			imageHeight: realHeight,
+			minWidth:    xImg > xInit ? xInit : xImg,
+			minHeight:   yImg > yInit ? yInit : yImg,
+			x1:          x1,
+			y1:          y1,
+			x2:          xInit + x1,
+			y2:          yInit + y1
 		};
 
 		if ( false === flexHeight && false === flexWidth ) {
@@ -510,8 +504,9 @@ window.tsfemMedia = {
 	 * @return {(undefined|null)}
 	 */
 	resetImageEditorRemovalActions: function() {
-		jQuery( '.tsfem-remove-image-button' ).off( 'click', tsfemMedia.removeEditorImage );
-		jQuery( '.tsfem-remove-image-button' ).on( 'click', tsfemMedia.removeEditorImage );
+		jQuery( '.tsfem-remove-image-button' )
+			.off( 'click', tsfemMedia.removeEditorImage )
+			.on( 'click', tsfemMedia.removeEditorImage );
 	},
 
 	/**
@@ -525,10 +520,12 @@ window.tsfemMedia = {
 	setupImageEditorActions: function() {
 
 		const setup = function() {
-			jQuery( '.tsfem-set-image-button' ).off( 'click', tsfemMedia.openImageEditor );
-			jQuery( '.tsfem-remove-image-button' ).off( 'click', tsfemMedia.removeEditorImage );
-			jQuery( '.tsfem-set-image-button' ).on( 'click', tsfemMedia.openImageEditor );
-			jQuery( '.tsfem-remove-image-button' ).on( 'click', tsfemMedia.removeEditorImage );
+			jQuery( '.tsfem-set-image-button' )
+				.off( 'click', tsfemMedia.openImageEditor )
+				.on( 'click', tsfemMedia.openImageEditor );
+			jQuery( '.tsfem-remove-image-button' )
+				.off( 'click', tsfemMedia.removeEditorImage )
+				.on( 'click', tsfemMedia.removeEditorImage );
 		}
 		setup();
 

@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -27,11 +28,12 @@ defined( 'ABSPATH' ) or die;
  * Holds settings generator functions for package TSF_Extension_Manager\Extension.
  *
  * The class maintains static functions as well as a constructor. They go hand-in-hand.
+ *
  * @see package TSF_Extension_Manager\Extension\Local\Settings for an example.
  *
  * @TODO The AJAX part will be put in another class when PHP 5.6 will be the requirement.
  *       We miss variadic functionality for proper static propagated construction.
- *       Note to self: The static caller needs to moved.
+ *       Note to self: The static caller needs to be moved.
  *
  * Not according to DRY standards for improved performance.
  *
@@ -58,10 +60,11 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @var int $bits
-	 * @var int $max_it
+	 * @var string $o_key
+	 * @var bool   $has_o_key
+	 * @var bool   $use_stale
 	 */
-	private $o_key = '',
+	private $o_key     = '',
 	        $has_o_key = false,
 	        $use_stale = false;
 
@@ -88,13 +91,22 @@ final class FormGenerator {
 	 * @var array $level_names
 	 * @var int   $it
 	 */
-	private $level = 0,
+	private $level       = 0,
 	        $level_names = [],
-	        $it = 0;
+	        $it          = 0;
 
+	/**
+	 * Holds AJAX calling settings.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @var string $cur_ajax_caller
+	 * @var array  $ajax_it_fields
+	 * @var array  $ajax_it_args
+	 */
 	private static $cur_ajax_caller = '',
-	               $ajax_it_fields = [],
-	               $ajax_it_args = [];
+	               $ajax_it_fields  = [],
+	               $ajax_it_args    = [];
 
 	/**
 	 * Determines and initializes AJAX iteration listener.
@@ -105,8 +117,8 @@ final class FormGenerator {
 	 * @static
 	 * @staticvar bool $found Prevents further callback matching to improve performance.
 	 *
-	 * @param string $class The caller class.
-	 * @param array $args : The form arguments {
+	 * @param string $class  The caller class.
+	 * @param array  $args : The form arguments {
 	 *   string 'caller'   : Required. The calling class. Checks for "doing it right" iteration listeners.
 	 *   string 'o_index'  : Required. The option index field for storing extension options.
 	 *   string 'o_key'    : The pre-assigned option key. Great for when working
@@ -127,12 +139,14 @@ final class FormGenerator {
 
 		if ( static::is_ajax_callee( $class ) ) {
 			$found = true;
+
 			static::$cur_ajax_caller = $class;
-			static::$ajax_it_args = $args;
+			static::$ajax_it_args    = $args;
 
 			/**
 			 * Action is called in TSF_Extension_Manager\LoadAdmin::_wp_ajax_tsfemForm_iterate().
 			 * It has already checked referrer and capability.
+			 *
 			 * @see \TSF_Extension_Manager\LoadAdmin
 			 */
 			\add_action( 'tsfem_form_do_ajax_iterations', __CLASS__ . '::_output_ajax_form_its', PHP_INT_MIN );
@@ -148,15 +162,14 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 * @static
-	 * @global object $_POST
 	 *
 	 * @param string $caller The caller.
 	 * @return bool True if matched, false otherwise.
 	 */
 	private static function is_ajax_callee( $caller ) {
-		//* Referer check OK.
 		//= Stripslashes is required, as `\WP_Scripts::localize` adds them.
-		return isset( $_POST['args']['callee'] ) && $caller === stripslashes( $_POST['args']['callee'] );
+		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- tsfem_form_prepare_ajax_iterations() is called before this, which performed user verification checks.
+		return isset( $_POST['args']['callee'] ) && stripslashes( $_POST['args']['callee'] ) === $caller;
 	}
 
 	/**
@@ -164,15 +177,15 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 * @static
-	 * @global object $_POST
 	 *
 	 * @return string|bool The called iterator name. False otherwise.
 	 */
 	private static function get_ajax_target_id() {
 
-		//* Referer check OK.
+		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- _wp_ajax_tsfemForm_iterate() is called hereafter, performing user verification checks.
 		if ( isset( $_POST['args']['caller'] ) )
-			return \tsf_extension_manager()->get_last_value( \tsf_extension_manager()->umatosa( $_POST['args']['caller'] ) );
+			return FormFieldParser::get_last_value( FormFieldParser::umatosa( $_POST['args']['caller'] ) );
+		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 
 		return false;
 	}
@@ -182,13 +195,12 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 * @static
-	 * @global object $_POST
 	 *
 	 * @return int <unsigned> (R>0) $i The previous iteration value. 1 if $_POST value not set.
 	 */
 	private static function get_ajax_iteration_start() {
-		//* Referer check OK.
 		//= Careful, smart logic. Will return 1 if not set.
+		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- _wp_ajax_tsfemForm_iterate() is called hereafter, performing user verification checks.
 		return \absint( ! isset( $_POST['args']['previousIt'] ) ?: $_POST['args']['previousIt'] );
 	}
 
@@ -197,13 +209,12 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 * @static
-	 * @global object $_POST
 	 *
 	 * @return int <unsigned> (R>=0) $i The new iteration value. 0 if $_POST is not set.
 	 */
 	private static function get_ajax_iteration_amount() {
-		//* Referer check OK.
-		return  \absint( isset( $_POST['args']['newIt'] ) ? $_POST['args']['newIt'] : 0 );
+		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- _wp_ajax_tsfemForm_iterate() is called hereafter, performing user verification checks.
+		return \absint( isset( $_POST['args']['newIt'] ) ? $_POST['args']['newIt'] : 0 );
 	}
 
 	/**
@@ -216,13 +227,10 @@ final class FormGenerator {
 	 * @uses $this->_fields()
 	 */
 	public static function _output_ajax_form_its() {
-
 		$o = new static( static::$ajax_it_args );
 		$o->prepare_ajax_iteration();
 		$o->prepare_ajax_iteration_fields();
 		$o->_fields( static::$ajax_it_fields );
-
-		exit;
 	}
 
 	/**
@@ -235,9 +243,9 @@ final class FormGenerator {
 	 */
 	private function prepare_ajax_iteration() {
 
-		//* Referer check OK.
+		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- tsfem_form_prepare_ajax_iterations() is called before this, which performed user verification checks.
 		$caller = $_POST['args']['caller'];
-		$items = preg_split( '/[\[\]]+/', $caller, -1, PREG_SPLIT_NO_EMPTY );
+		$items  = preg_split( '/[\[\]]+/', $caller, -1, PREG_SPLIT_NO_EMPTY );
 
 		//* Unset the option indexes.
 		$unset_count = $this->has_o_key ? 3 : 2;
@@ -282,9 +290,9 @@ final class FormGenerator {
 		//* TODO Move this into method parameter so we can loop?
 		$k = key( static::$ajax_it_fields );
 
-		static::$ajax_it_fields[ $k ]['_type'] = 'iterate_ajax';
+		static::$ajax_it_fields[ $k ]['_type']          = 'iterate_ajax';
 		static::$ajax_it_fields[ $k ]['_ajax_it_start'] = static::get_ajax_iteration_start();
-		static::$ajax_it_fields[ $k ]['_ajax_it_new'] = static::get_ajax_iteration_amount();
+		static::$ajax_it_fields[ $k ]['_ajax_it_new']   = static::get_ajax_iteration_amount();
 	}
 
 	/**
@@ -314,6 +322,7 @@ final class FormGenerator {
 
 		$defaults = [
 			'o_index'      => '',
+			'o_defaults'   => [],
 			'o_key'        => '',
 			'use_stale'    => false,
 			'levels'       => 5,
@@ -324,14 +333,15 @@ final class FormGenerator {
 		/**
 		 * @see trait \TSF_Extension_Manager\Extension_Options
 		 */
-		$this->o_index = $args['o_index'];
+		$this->o_index    = $args['o_index'];
+		$this->o_defaults = $args['o_defaults'];
 
 		$args['architecture'] = $args['architecture'] ?: ( \tsf_extension_manager()->is_64() ? 64 : 32 );
 
-		$this->bits = floor( $args['architecture'] / $args['levels'] );
-		$this->max_it = pow( 2, $this->bits );
+		$this->bits   = floor( $args['architecture'] / $args['levels'] );
+		$this->max_it = 2 ** $this->bits;
 
-		$this->o_key = $args['o_key'] = $this->sanitize_id( $args['o_key'] );
+		$this->o_key     = $args['o_key'] = $this->sanitize_id( $args['o_key'] );
 		$this->has_o_key = (bool) $this->o_key;
 
 		$this->use_stale = (bool) $args['use_stale'];
@@ -349,13 +359,13 @@ final class FormGenerator {
 	 */
 	public function get( $what = '' ) {
 		switch ( $what ) :
-			case 'bits' :
+			case 'bits':
 				return $this->bits;
 
-			case 'max_it' :
+			case 'max_it':
 				return $this->max_it;
 
-			default :
+			default:
 				break;
 		endswitch;
 	}
@@ -376,7 +386,7 @@ final class FormGenerator {
 		if ( 'get' === $type )
 			return $this->get_form_wrap( $what, $url, $validator );
 
-		//* Already escaped.
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 		echo $this->get_form_wrap( $what, $url, $validator );
 	}
 
@@ -393,7 +403,7 @@ final class FormGenerator {
 	private function get_form_wrap( $what, $url, $validator ) {
 
 		switch ( $what ) :
-			case 'start' :
+			case 'start':
 				return vsprintf(
 					'<form action="%s" method=post id="%s" enctype="multipart/form-data" class="tsfem-form%s">',
 					[
@@ -403,10 +413,10 @@ final class FormGenerator {
 					]
 				);
 
-			case 'end' :
+			case 'end':
 				return '</form>';
 
-			default :
+			default:
 				break;
 		endswitch;
 	}
@@ -427,6 +437,7 @@ final class FormGenerator {
 		if ( 'get' === $type )
 			return $this->get_form_button( $what, $name );
 
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 		echo $this->get_form_button( $what, $name );
 	}
 
@@ -434,6 +445,7 @@ final class FormGenerator {
 	 * Returns the form button.
 	 *
 	 * @since 1.3.0
+	 * @since 2.2.0 Added hide-if-no-js class.
 	 *
 	 * @param string $what What to get. Currently only supports 'submit'.
 	 * @param string $name The form name where the button is for.
@@ -442,17 +454,16 @@ final class FormGenerator {
 	private function get_form_button( $what, $name ) {
 
 		switch ( $what ) :
-			case 'submit' :
+			case 'submit':
 				return vsprintf(
-					'<button type=submit name="%1$s" form="%1$s" class="tsfem-button-primary tsfem-button-upload tsfem-button-flat">%2$s</button>',
+					'<button type=submit name="%1$s" form="%1$s" class="tsfem-button-primary tsfem-button-upload hide-if-no-js">%2$s</button>',
 					[
 						$this->get_form_id(),
 						\esc_html( $name ),
 					]
 				);
-				break;
 
-			default :
+			default:
 				break;
 		endswitch;
 	}
@@ -462,8 +473,8 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param array  $fields. Passed by reference for performance.
-	 * @param string $type. Accepts 'get' and 'echo'.
+	 * @param array  $fields Passed by reference for performance.
+	 * @param string $type   Accepts 'get' and 'echo'.
 	 * @return string|void $_fields. Void if $type is echo.
 	 */
 	public function _fields( array $fields, $type = 'echo' ) {
@@ -481,7 +492,7 @@ final class FormGenerator {
 	 * @see http://php.net/manual/en/language.references.return.php
 	 * @uses $this->generate_fields()
 	 *
-	 * @param array $fields. Passed by reference for performance.
+	 * @param array $fields Passed by reference for performance.
 	 * @return string $_fields.
 	 */
 	private function get_fields( array &$fields ) {
@@ -502,11 +513,11 @@ final class FormGenerator {
 	 * @see http://php.net/manual/en/language.references.return.php
 	 * @uses $this->generate_fields()
 	 *
-	 * @param array $fields. Passed by reference for performance.
+	 * @param array $fields Passed by reference for performance.
 	 */
 	private function output_fields( array &$fields ) {
 		foreach ( $this->generate_fields( $fields ) as $field ) {
-			//* Already escaped.
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			echo $field;
 		}
 	}
@@ -570,7 +581,7 @@ final class FormGenerator {
 		}
 
 		//= Correct the length of bits, split them and put them in the right order.
-		$_f = sprintf( '%%0%db', ( $this->level * $this->bits ) );
+		$_f     = sprintf( '%%0%db', ( $this->level * $this->bits ) );
 		$levels = array_reverse( str_split( sprintf( $_f, $this->it ), $this->bits ) );
 
 		$i = 0;
@@ -580,7 +591,7 @@ final class FormGenerator {
 			if ( $b > 1 ) {
 				$k = sprintf( '%s[%d]', $k, bindec( $b ) - 1 );
 			}
-			$i++;
+			++$i;
 		}
 
 		return $k;
@@ -613,7 +624,7 @@ final class FormGenerator {
 			$k[] = $this->o_key;
 
 		//= Correct the length of bits, split them and put them in the right order.
-		$_f = sprintf( '%%0%db', ( $this->level * $this->bits ) );
+		$_f     = sprintf( '%%0%db', ( $this->level * $this->bits ) );
 		$levels = array_reverse( str_split( sprintf( $_f, $this->it ), $this->bits ) );
 
 		$i = 0;
@@ -623,10 +634,27 @@ final class FormGenerator {
 			if ( $b > 1 ) {
 				$k[] = bindec( $b ) - 1;
 			}
-			$i++;
+			++$i;
 		}
 
 		return $k;
+	}
+
+	/**
+	 * Returns custom following field name and ID attributes for form fields based on $key.
+	 *
+	 * Careful, when used, it should be used for all fields within scope.
+	 * Otherwise, data will not get through POST. As the current ID is converted
+	 * to an array, rather than string.
+	 *
+	 * @since 2.3.0
+	 *
+	 * @param string $id  The base associative field ID.
+	 * @param string $key The next form field key.
+	 * @return string Full field ID/name attribute.
+	 */
+	private function create_sub_field_id( $id, $key ) {
+		return sprintf( '%s[%s]', $id, $key );
 	}
 
 	/**
@@ -643,10 +671,7 @@ final class FormGenerator {
 	 * @return string Full field ID/name attribute.
 	 */
 	private function get_sub_field_id( $key ) {
-
-		$id = $this->get_field_id();
-
-		return sprintf( '%s[%s]', $id, $key );
+		return $this->create_sub_field_id( $this->get_field_id(), $key );
 	}
 
 	/**
@@ -665,7 +690,35 @@ final class FormGenerator {
 	 */
 	private function get_raw_sub_field_id( $key, $what = 'full' ) {
 
-		$id = $this->get_raw_field_id( $what );
+		$id   = $this->get_raw_field_id( $what );
+		$id[] = $key;
+
+		return $id;
+	}
+
+	/**
+	 * Returns custom following field name and ID attributes for form fields based on $key.
+	 *
+	 * Careful, when used, it should be used for all fields within scope.
+	 * Otherwise, data will not get through POST. As the current ID is converted
+	 * to an array, rather than string.
+	 *
+	 * @since 2.3.0
+	 * @uses $this->get_field_id()
+	 *
+	 * @param array  $id  The current form field id.
+	 * @param array  $key The next form field key.
+	 * @param string $what Whether to fetch the full key or the associative key.
+	 * @return string Full field ID/name attribute.
+	 */
+	private function create_raw_sub_field_id( $id, $key, $what = 'full' ) {
+
+		// 0 = base option index. 1 = extension index.
+		if ( 'full' !== $what ) {
+			$slice = $this->has_o_key ? 3 : 2;
+			$id    = array_slice( $id, $slice );
+		}
+
 		$id[] = $key;
 
 		return $id;
@@ -729,7 +782,7 @@ final class FormGenerator {
 	 * @return void
 	 */
 	private function delevel() {
-		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( --$this->level ) ) );
+		$this->it &= ~( ( 2 ** $this->bits - 1 ) << ( $this->bits * ( --$this->level ) ) );
 		//= Unset highest level.
 		unset( $this->level_names[ $this->level + 1 ] );
 	}
@@ -778,8 +831,45 @@ final class FormGenerator {
 	 * @return void
 	 */
 	private function reiterate() {
-		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( $this->level - 1 ) ) );
+		$this->it &= ~( ( 2 ** $this->bits - 1 ) << ( $this->bits * ( $this->level - 1 ) ) );
 		$this->iterate();
+	}
+
+	/**
+	 * Creates a field description.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param array  $args The field arguments.
+	 * @param string $id   The field ID.
+	 * @return string
+	 */
+	private function create_field_description( array $args, $id ) {
+
+		// Not escaped.
+		$title = $args['_desc'][0];
+
+		// Escaped
+		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1], ! empty( $args['_md'] ) ) : '';
+		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+
+		return sprintf(
+			'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
+			vsprintf(
+				'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
+				[
+					vsprintf(
+						'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></label>',
+						[
+							$id,
+							sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
+							sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
+						]
+					),
+					$s_desc,
+				]
+			)
+		);
 	}
 
 	/**
@@ -798,69 +888,70 @@ final class FormGenerator {
 		$this->clean_desc_index( $args['_desc'] );
 
 		switch ( $args['_type'] ) :
-			case 'multi' :
+			case 'multi':
 				return $this->create_fields_multi( $args );
-				break;
 
-			case 'iterate_main' :
+			case 'plain_multi':
+				return $this->create_fields_multi( $args, true );
+
+			case 'multi_dropdown':
+				return $this->create_fields_multi_dropdown( $args );
+
+			case 'plain_dropdown':
+				return $this->create_fields_multi_dropdown( $args, true );
+
+			case 'multi_placeholder':
+				return $this->create_fields_multi_placeholder( $args );
+
+			case 'iterate_main':
 				//= Can only be used on main output field. Will echo. Will try to defer.
 				return $this->fields_iterator( $args, 'echo' );
-				break;
 
-			case 'iterate_ajax' :
+			case 'iterate_ajax':
 				//= Can only be used in AJAX. Will echo. Will try to defer.
 				return $this->fields_iterator( $args, 'ajax' );
-				break;
 
-			case 'iterate' :
+			case 'iterate':
 				return $this->fields_iterator( $args, 'get' );
-				break;
 
-			case 'select' :
-			case 'selectmulti' :
+			case 'select':
+			case 'selectmulti':
 				return $this->create_select_field( $args );
-				break;
 
-			case 'selectmultia11y' :
+			case 'selectmultia11y':
 				//= Select field, but then through checkboxes.
 				return $this->create_select_multi_a11y_field( $args );
-				break;
 
-			case 'text' :
-			case 'password' :
-			case 'tel' :
-			case 'url' :
-			case 'search' :
-			case 'time' :
-			case 'week' :
-			case 'month' :
-			case 'datetime-local' :
-			case 'date' :
-			case 'number' :
-			case 'range' :
-			case 'color' :
-			case 'hidden' :
+			case 'text':
+			case 'password':
+			case 'tel':
+			case 'url':
+			case 'search':
+			case 'time':
+			case 'week':
+			case 'month':
+			case 'datetime-local':
+			case 'date':
+			case 'number':
+			case 'range':
+			case 'color':
+			case 'hidden':
 				return $this->create_input_field_by_type( $args );
-				break;
 
-			case 'textarea' :
+			case 'textarea':
 				return $this->create_textarea_field( $args );
-				break;
 
-			case 'checkbox' :
+			case 'checkbox':
 				return $this->create_checkbox_field( $args );
-				break;
 
-			case 'radio' :
+			case 'radio':
 				return $this->create_radio_field( $args );
-				break;
 
-			case 'image' :
+			case 'image':
 				return $this->create_image_field( $args );
-				break;
 
-			default :
-				break;
+			default:
+				return '';
 		endswitch;
 
 		return '';
@@ -872,47 +963,151 @@ final class FormGenerator {
 	 * @since 1.3.0
 	 * @see $this->create_field()
 	 *
-	 * @param array $args The field arguments.
+	 * @param array $args  The field arguments.
+	 * @param bool  $plain Whether to conver the fields to a plain wrap.
 	 * @return mixed string the fields; empty string failure; bool true or false; void.
 	 */
-	private function create_fields_multi( array $args ) {
+	private function create_fields_multi( array $args, $plain = false ) {
 
 		$this->clean_desc_index( $args['_desc'] );
 		$title = $args['_desc'][0];
-		$desc  = $args['_desc'][1];
 
-		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
+		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1], ! empty( $args['_md'] ) ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 
 		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
+		$s_type = $plain ? 'tsfem-form-plain-settings' : 'tsfem-form-multi-setting';
+
 		return vsprintf(
-			'<div class="tsfem-form-multi-setting tsfem-form-setting tsfem-flex"%s>%s%s</div>',
+			'<div class="%s tsfem-form-setting tsfem-flex"%s>%s%s</div>',
 			[
+				$s_type,
 				$s_data,
 				sprintf(
-					'<div class="tsfem-form-multi-setting-label tsfem-flex" id="%s">%s</div>',
+					'<div class="%s-label tsfem-flex" id="%s">%s</div>',
+					$s_type,
 					$this->get_field_id(),
 					vsprintf(
-						'<div class="tsfem-form-multi-setting-label-inner-wrap tsfem-flex">%s%s</div>',
+						'<div class="%s-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
-							vsprintf(
-								'<div class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></div>',
+							$s_type,
+							$title ? vsprintf(
+								'<div class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></div>',
 								[
 									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
+									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
 								]
-							),
+							) : '',
 							$s_desc,
 						]
 					)
 				),
 				sprintf(
-					'<div class="tsfem-form-multi-setting-input tsfem-flex">%s</div>',
+					'<div class="%s-input tsfem-flex">%s</div>',
+					$s_type,
 					$this->get_fields( $args['_fields'] )
 				),
 			]
 		);
+	}
+
+	/**
+	 * Returns the fields iterator wrap and fields, without allowing manual iteration.
+	 * AKA multi-select with dropdown.
+	 *
+	 * @since 2.3.0
+	 * @iterator
+	 *
+	 * @param array $args  The field arguments.
+	 * @param bool  $plain Whether to conver the fields to a plain wrap.
+	 * @return string
+	 */
+	private function create_fields_multi_dropdown( array $args, $plain = false ) {
+
+		$this->clean_desc_index( $args['_desc'] );
+		$title = $args['_desc'][0];
+
+		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1], ! empty( $args['_md'] ) ) : '';
+		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+
+		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
+
+		//= Get wrap ID before iteration.
+		$wrap_id = $this->get_field_id();
+		$_fields = '';
+
+		foreach ( $args['_fields'] as $field_id => $fields ) {
+
+			$this->clean_desc_index( $fields['_desc'] );
+
+			$collapse_args = [
+				'title'             => $fields['_desc'][0],
+				'dyn_title'         => $args['_dropdown_title_dynamic'],
+				'dyn_title_checked' => $args['_dropdown_title_checked'],
+				'id'                => $this->create_sub_field_id( $this->get_field_id(), $field_id ),
+			];
+
+			// Empty first field's title if it's of a plain multi-type. It'd be duplicated otherwise.
+			if ( 'plain_multi' === $fields['_type'] )
+				$fields['_desc'][0] = '';
+
+			$_field_data = [ $field_id => $fields ];
+
+			$_fields .= $this->get_collapse_wrap( 'start', $collapse_args );
+			$_fields .= $this->get_fields( $_field_data );
+			$_fields .= $this->get_collapse_wrap( 'end' );
+		}
+
+		$s_type = $plain ? 'tsfem-form-plain-settings' : 'tsfem-form-multi-setting';
+
+		return vsprintf(
+			'<div class="%s tsfem-form-setting tsfem-flex"%s>%s%s</div>',
+			[
+				$s_type,
+				$s_data,
+				sprintf(
+					'<div class="%s-label tsfem-flex" id="%s">%s</div>',
+					$s_type,
+					$this->get_field_id(),
+					vsprintf(
+						'<div class="%s-label-inner-wrap tsfem-flex">%s%s</div>',
+						[
+							$s_type,
+							! $plain && $title ? vsprintf(
+								'<div class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></div>',
+								[
+									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
+									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
+								]
+							) : '',
+							$s_desc,
+						]
+					)
+				),
+				sprintf(
+					'<div class="tsfem-form-collapse-wrap tsfem-form-collapse-sub-wrap %s-input tsfem-flex" id="%s-wrapper">%s</div>',
+					$s_type,
+					$wrap_id,
+					$_fields
+				),
+			]
+		);
+	}
+
+	/**
+	 * Mimics the multi-field wrapper, without the wrapper.
+	 * To be used as a placeholder for future multi-expansion; using this ticks the
+	 * fields iterator.
+	 *
+	 * @since 2.3.0
+	 * @see $this->create_field()
+	 *
+	 * @param array $args The field arguments.
+	 * @return mixed string the fields; empty string failure; bool true or false; void.
+	 */
+	private function create_fields_multi_placeholder( array $args ) {
+		return $this->get_fields( $args['_fields'] );
 	}
 
 	/**
@@ -923,7 +1118,7 @@ final class FormGenerator {
 	 * @since 1.3.0
 	 * @see $this->create_field()
 	 *
-	 * @param array $args The iterator fields arguments.
+	 * @param array  $args The iterator fields arguments.
 	 * @param string $type Determines whether to output, output for AJAX or return.
 	 * @return string HTML on return. Empty string on echo.
 	 */
@@ -932,19 +1127,19 @@ final class FormGenerator {
 		$o = '';
 
 		switch ( $type ) :
-			case 'echo' :
+			case 'echo':
 				$this->output_fields_iterator( $args );
 				break;
 
-			case 'ajax' :
+			case 'ajax':
 				$this->output_ajax_fields_iterator( $args );
 				break;
 
-			case 'get' :
+			case 'get':
 				$o = $this->get_fields_iterator( $args );
 				break;
 
-			default :
+			default:
 				break;
 		endswitch;
 
@@ -961,10 +1156,8 @@ final class FormGenerator {
 	 * @param int <unsigned> (R>0) $max The maximum value. Passed by reference.
 	 */
 	private function set_max_iterations( &$max ) {
-
-		if ( $max < 1 || $max > $this->max_it ) {
+		if ( $max < 1 || $max > $this->max_it )
 			$max = $this->max_it;
-		}
 	}
 
 	/**
@@ -977,15 +1170,15 @@ final class FormGenerator {
 	 */
 	private function output_fields_iterator( array $args ) {
 
-		echo '<div class="tsfem-form-iterator-setting tsfem-flex">';
+		echo '<div class="tsfem-form-iterator-setting">';
 
 		$it_option_key = key( $args['_iterate_selector'] );
 		//* Set maximum iterations based on option depth if left unassigned.
 		$this->set_max_iterations( $args['_iterate_selector'][ $it_option_key ]['_range'][1] );
 
-		//= The selector. Already escaped.
 		printf(
 			'<div class="tsfem-form-iterator-selector-wrap tsfem-flex tsfem-flex-noshrink">%s</div>',
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			$this->get_fields( $args['_iterate_selector'] )
 		);
 
@@ -1001,15 +1194,15 @@ final class FormGenerator {
 		//= Get wrap ID before iteration.
 		$wrap_id = $this->get_field_id();
 
-		//* Already escaped.
 		$defer and printf(
 			'<div class="tsfem-flex-status-loading tsfem-flex tsfem-flex-center" id="%s-loader" style=padding-top:4vh><span></span></div>',
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			$wrap_id
 		);
 
-		//* Already escaped.
 		printf(
 			'<div class="tsfem-form-collapse-wrap tsfem-form-collapse-sub-wrap" id="%s-wrapper"%s>',
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			$wrap_id,
 			( $defer ? ' style=display:none' : '' )
 		);
@@ -1021,23 +1214,24 @@ final class FormGenerator {
 			$this->iterate();
 
 			$collapse_args = [
-				'title'     => $_title,
-				'dyn_title' => $args['_iterator_title_dynamic'],
-				'id'        => $this->get_field_id(),
+				'title'             => $_title,
+				'dyn_title'         => $args['_iterator_title_dynamic'],
+				'dyn_title_checked' => $args['_iterator_title_checked'],
+				'id'                => $this->get_field_id(),
 			];
 
-			//* Already escaped.
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			echo $this->get_collapse_wrap( 'start', $collapse_args );
 			$this->output_fields( $args['_fields'], $_title );
-			//* Already escaped.
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			echo $this->get_collapse_wrap( 'end' );
 		}
 
 		echo '</div>';
 
-		//* Already escaped.
 		$defer and printf(
 			'<script>window.onload=function(){var a=document.getElementById("%1$s-loader");a.parentNode.removeChild(a);document.getElementById("%1$s-wrapper").style=null;};</script>',
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			$wrap_id
 		);
 
@@ -1058,7 +1252,7 @@ final class FormGenerator {
 		//* Set maximum iterations based on option depth if left unassigned.
 		$this->set_max_iterations( $args['_iterate_selector'][ $it_option_key ]['_range'][1] );
 
-		$start = (int) $args['_ajax_it_start'];
+		$start  = (int) $args['_ajax_it_start'];
 		$amount = (int) $args['_ajax_it_new'];
 		// $count = $amount + $start - 1; // (that's nice, dear.)
 
@@ -1074,15 +1268,16 @@ final class FormGenerator {
 			$this->iterate();
 
 			$collapse_args = [
-				'title' => $_title,
-				'dyn_title' => $args['_iterator_title_dynamic'],
-				'id' => $this->get_field_id(),
+				'title'             => $_title,
+				'dyn_title'         => $args['_iterator_title_dynamic'],
+				'dyn_title_checked' => $args['_iterator_title_checked'],
+				'id'                => $this->get_field_id(),
 			];
 
-			//* Already escaped.
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			echo $this->get_collapse_wrap( 'start', $collapse_args );
 			$this->output_fields( $args['_fields'], $_title );
-			//* Already escaped.
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			echo $this->get_collapse_wrap( 'end' );
 		}
 	}
@@ -1124,9 +1319,10 @@ final class FormGenerator {
 			$this->iterate();
 
 			$collapse_args = [
-				'title' => $_title,
-				'dyn_title' => $args['_iterator_title_dynamic'],
-				'id' => $this->get_field_id(),
+				'title'             => $_title,
+				'dyn_title'         => $args['_iterator_title_dynamic'],
+				'dyn_title_checked' => $args['_iterator_title_checked'],
+				'id'                => $this->get_field_id(),
 			];
 
 			$_fields .= $this->get_collapse_wrap( 'start', $collapse_args );
@@ -1135,7 +1331,7 @@ final class FormGenerator {
 		}
 
 		return vsprintf(
-			'<div class="tsfem-form-iterator-setting tsfem-flex">%s%s</div>',
+			'<div class="tsfem-form-iterator-setting">%s%s</div>',
 			[
 				sprintf(
 					'<div class="tsfem-form-iterator-selector-wrap tsfem-flex tsfem-flex-noshrink">%s</div>',
@@ -1156,7 +1352,7 @@ final class FormGenerator {
 	 * @since 1.3.0
 	 *
 	 * @param string $what Whether to 'start' or 'end' the wrap.
-	 * @param array $args The collapse wrap arguments.
+	 * @param array  $args The collapse wrap arguments.
 	 * @return string
 	 */
 	private function get_collapse_wrap( $what, array $args = [] ) {
@@ -1166,30 +1362,24 @@ final class FormGenerator {
 			$s_id = $args['id'] ? sprintf( 'id="tsfem-form-collapse-%s"', $args['id'] ) : '';
 
 			$checkbox_id = sprintf( 'tsfem-form-collapse-checkbox-%s', $args['id'] );
-			$checkbox = sprintf( '<input type="checkbox" id="%s" class="tsfem-form-collapse-checkbox" checked>', $checkbox_id );
+			$checkbox    = sprintf( '<input type=checkbox id="%s" class="tsfem-form-collapse-checkbox" checked>', $checkbox_id );
 
+			$args['dyn_title'] = (array) $args['dyn_title'];
+
+			// For now, we only support one test. I doubt we should support more, due to the complexity involved.
 			$dyn_title_type = key( $args['dyn_title'] );
-			$dyn_title_key = reset( $args['dyn_title'] );
+			$dyn_title_key  = reset( $args['dyn_title'] );
+
 			$data = vsprintf(
-				'data-dyntitletype="%s" data-dyntitleid="%s" data-dyntitlekey="%s" data-dyntitleprep="%s"',
+				'data-dyntitletype="%s" data-dyntitleid="%s" data-dyntitlekey="%s" data-dyntitleprep="%s" data-dyntitlechecked="%s"',
 				[
 					$dyn_title_type,
 					$args['id'],
 					$dyn_title_key,
-					$args['title'],
+					\esc_attr( $args['title'] ),
+					\esc_attr( $args['dyn_title_checked'] ),
 				]
 			);
-
-			$_dyn_title = $this->get_field_value_by_key( $this->get_raw_sub_field_id( $dyn_title_key, 'associative' ) );
-			if ( is_array( $_dyn_title ) ) {
-				$tmp = '';
-				foreach ( $_dyn_title as $_tmp ) {
-					$tmp .= $_tmp . ', ';
-				}
-				$_dyn_title = rtrim( $tmp, ', ' );
-			}
-
-			$_title = $_dyn_title ? $args['title'] . ' - ' . $_dyn_title : $args['title'];
 
 			$title = vsprintf(
 				'<h3 class="tsfem-form-collapse-title-wrap">%s%s</h3>',
@@ -1197,7 +1387,7 @@ final class FormGenerator {
 					'<span class="tsfem-form-title-icon tsfem-form-title-icon-unknown"></span>',
 					sprintf(
 						'<span class="tsfem-form-collapse-title">%s</span>',
-						\esc_html( $_title )
+						\esc_html( $args['title'] )
 					),
 				]
 			);
@@ -1247,21 +1437,23 @@ final class FormGenerator {
 	 * descriptions fed through array,
 	 *
 	 * @since 1.3.0
+	 * @since 2.2.0 Added $use_markdown.
 	 *
-	 * @param mixed $description The description field(s).
+	 * @param mixed $description  The description field(s).
+	 * @param bool  $use_markdown Whether to use markdown parsing.
 	 * @return string The escaped flex HTML description output.
 	 */
-	private function create_fields_description( $description ) {
+	private function create_fields_description( $description, $use_markdown ) {
 
 		if ( is_scalar( $description ) ) {
 			return sprintf(
 				'<span class="tsfem-form-option-description">%s</span>',
-				\esc_html( $description )
+				$use_markdown ? \the_seo_framework()->convert_markdown( \esc_html( $description ) ) : \esc_html( $description )
 			);
 		} else {
 			$ret = '';
 			foreach ( $description as $desc ) {
-				$ret .= $this->create_fields_description( $desc );
+				$ret .= $this->create_fields_description( $desc, $use_markdown );
 			}
 			return $ret;
 		}
@@ -1343,23 +1535,40 @@ final class FormGenerator {
 	 * Creates fields data based on input.
 	 *
 	 * @since 1.3.0
+	 * @since 2.1.0 Now accepts mixed quotes as values.
 	 *
 	 * @param array $data The field's data.
 	 * @return string The field's data.
 	 */
 	private function get_fields_data( array $data ) {
 
-		$ret = '';
+		$ret = [];
+
 		foreach ( $data as $k => $v ) {
-			if ( is_array( $v ) ) {
-				//* NOTE: Using single quotes.
-				$ret .= sprintf( " data-%s='%s'", $k, json_encode( $v, JSON_UNESCAPED_SLASHES ) );
+			if ( ! is_scalar( $v ) ) {
+				$ret[] = sprintf(
+					'data-%s="%s"',
+					strtolower( preg_replace(
+						'/([A-Z])/',
+						'-$1',
+						preg_replace( '/[^a-z0-9_\-]/i', '', $k )
+					) ), // dash case.
+					htmlspecialchars( json_encode( $v, JSON_UNESCAPED_SLASHES ), ENT_COMPAT, 'UTF-8' )
+				);
 			} else {
-				$ret .= sprintf( ' data-%s="%s"', $k, $v );
+				$ret[] = sprintf(
+					'data-%s="%s"',
+					strtolower( preg_replace(
+						'/([A-Z])/',
+						'-$1',
+						preg_replace( '/[^a-z0-9_\-]/i', '', $k )
+					) ), // dash case.
+					\esc_attr( $v )
+				);
 			}
 		}
 
-		return $ret;
+		return ' ' . implode( ' ', $ret );
 	}
 
 	/**
@@ -1368,7 +1577,7 @@ final class FormGenerator {
 	 * @since 1.3.0
 	 *
 	 * @param string $pattern The field's pattern.
-	 *              Passed by reference to circumvent coalescing key requirements.
+	 *               Passed by reference to circumvent coalescing key requirements.
 	 * @param string $fallback The fallback pattern.
 	 * @return string The field's pattern.
 	 */
@@ -1394,12 +1603,12 @@ final class FormGenerator {
 	private function create_input_field_by_type( array $args ) {
 
 		switch ( $args['_type'] ) :
-			case 'date' :
-			case 'number' :
-			case 'range' :
+			case 'date':
+			case 'number':
+			case 'range':
 				$this->clean_range_index( $args['_range'] );
 
-				$s_range = '';
+				$s_range  = '';
 				$s_range .= '' !== $args['_range'][0] ? sprintf( 'min=%s', $args['_range'][0] ) : '';
 				$s_range .= '' !== $args['_range'][1] ? sprintf( ' max=%s', $args['_range'][1] ) : '';
 				$s_range .= '' !== $args['_range'][2] ? sprintf( ' step=%s', $args['_range'][2] ) : '';
@@ -1407,65 +1616,44 @@ final class FormGenerator {
 				$s_pattern = $this->get_fields_pattern( $args['_pattern'], '' );
 				break;
 
-			case 'color' :
+			case 'color':
 				// TODO
 				break;
 
-			case 'tel' :
+			case 'tel':
 				$s_pattern = $this->get_fields_pattern(
 					$args['_pattern'],
 					'(\+|00)(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$'
 				);
 				break;
 
-			default :
-			case 'text' :
-			case 'password' :
-			case 'url' :
-			case 'search' :
-			case 'time' :
-			case 'week' :
-			case 'month' :
-			case 'datetime-local' :
-			case 'hidden' :
+			default:
+			case 'text':
+			case 'password':
+			case 'url':
+			case 'search':
+			case 'time':
+			case 'week':
+			case 'month':
+			case 'datetime-local':
+			case 'hidden':
 				$s_pattern = $this->get_fields_pattern( $args['_pattern'], '' );
 				break;
 		endswitch;
 
-		//= Not escaped.
-		$title = $args['_desc'][0];
-
-		//= Escaped.
-		$s_type = \esc_attr( $args['_type'] );
-		$s_name = $s_id = $this->get_field_id();
-		$s_ph   = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
-		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
-		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
-		$s_range = isset( $s_range ) ? $s_range : '';
-		$s_pattern = isset( $s_pattern ) ? $s_pattern : '';
+		//= s = Escaped.
+		$s_type     = \esc_attr( $args['_type'] );
+		$s_name     = $s_id = $this->get_field_id();
+		$s_ph       = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
+		$s_range    = isset( $s_range ) ? $s_range : '';
+		$s_pattern  = isset( $s_pattern ) ? $s_pattern : '';
 		$s_required = $args['_req'] ? 'required' : '';
 
 		return vsprintf(
 			'<div class="tsfem-%s-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
 			[
 				$s_type,
-				sprintf(
-					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
-					vsprintf(
-						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
-						[
-							vsprintf(
-								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
-								[
-									$s_id,
-									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
-								]
-							),
-							$s_desc,
-						]
-					)
-				),
+				$this->create_field_description( $args, $s_id ),
 				sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
@@ -1497,15 +1685,10 @@ final class FormGenerator {
 	 */
 	private function create_select_field( array $args ) {
 
-		//* Not escaped.
-		$title = $args['_desc'][0];
-
-		$s_name = $s_id = $this->get_field_id();
-		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
-		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+		//= s = Escaped.
+		$s_name     = $s_id = $this->get_field_id();
+		$s_data     = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 		$s_required = $args['_req'] ? 'required' : '';
-
-		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
 		$multiple = 'selectmulti' === $args['_type'];
 
@@ -1513,23 +1696,7 @@ final class FormGenerator {
 			'<div class="tsfem-%s-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
 			[
 				$args['_type'], //= Doesn't need escaping.
-				sprintf(
-					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
-					vsprintf(
-						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
-						[
-							vsprintf(
-								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
-								[
-									$s_id,
-									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
-								]
-							),
-							$s_desc,
-						]
-					)
-				),
+				$this->create_field_description( $args, $s_id ),
 				sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
@@ -1578,8 +1745,9 @@ final class FormGenerator {
 	 * It will clean up $selected if it is found. Unless $multiple is true.
 	 *
 	 * Heavily optimized for performance. Therefore, not according to DRY standards.
-	 * @generator
+	 *
 	 * @since 1.3.0
+	 * @generator
 	 *
 	 * @param array        $select   The select fields.
 	 * @param string|array $selected The default or currently selected field.
@@ -1590,7 +1758,7 @@ final class FormGenerator {
 
 		static $_level = 0;
 
-		if ( '' !== $selected && [] !== $selected ) :
+		if ( null !== $selected && '' !== $selected && [] !== $selected ) :
 
 			//= Convert $selected to array.
 			$a_selected = (array) $selected;
@@ -1658,14 +1826,15 @@ final class FormGenerator {
 	 */
 	private function create_select_multi_a11y_field( array $args ) {
 
-		//* Not escaped.
+		// Not escaped.
 		$title = $args['_desc'][0];
 
-		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
+		//= s = escaped
+		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1], ! empty( $args['_md'] ) ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
-
-		$_data_required = ! empty( $args['_req'] ) ? 'data-required=1' : '';
 		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
+
+		$s_data_required = $args['_req'] ? 'data-required=1' : '';
 
 		return vsprintf(
 			'<div class="tsfem-select-multi-a11y-field-wrapper tsfem-form-setting tsfem-flex" %s>%s%s</div>',
@@ -1677,10 +1846,10 @@ final class FormGenerator {
 						'<div class="tsfem-form-select-multi-a11y-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
 							vsprintf(
-								'<div class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></div>',
+								'<div class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></div>',
 								[
 									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
+									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
 								]
 							),
 							$s_desc,
@@ -1694,7 +1863,7 @@ final class FormGenerator {
 						[
 							isset( $args['_display'] ) && 'row' === $args['_display'] ? 'tsfem-form-multi-select-wrap-row' : '',
 							$this->get_field_id(),
-							$_data_required,
+							$s_data_required,
 							$this->get_select_multi_a11y_options( $args['_select'], $this->get_field_value( $args['_default'] ), true ),
 						]
 					)
@@ -1710,8 +1879,8 @@ final class FormGenerator {
 	 * Propagates to an iterator. That's why it can reiterate.
 	 * It loops back to itself to generate more fields.
 	 *
-	 * @iterator Careful: it can and will reset current iteration count.
 	 * @since 1.3.0
+	 * @iterator Careful: it can and will reset current iteration count.
 	 *
 	 * @param array $select   The select fields.
 	 * @param array $selected The default or currently selected fields.
@@ -1740,9 +1909,10 @@ final class FormGenerator {
 	 * For this reason, the POST return value will differ from regular select fields.
 	 *
 	 * Heavily optimized for performance. Therefore, not according to DRY standards.
+	 *
+	 * @since 1.3.0
 	 * @generator
 	 * @iterator
-	 * @since 1.3.0
 	 *
 	 * @param array $select   The select fields.
 	 * @param array $selected The default or currently selected fields.
@@ -1804,46 +1974,49 @@ final class FormGenerator {
 	 * Adds dynamic buttons based on previous set value.
 	 *
 	 * Requires media scripts to be registered.
-	 * @see TSF_Extension_Manager\Traits\UI
-	 * @see TSF_Extension_Manager\Traits\UI\register_media_scripts()
-	 * @see method TSF_Extension_Manager\Traits\UI\_wp_ajax_crop_image() The AJAX cropper callback.
-	 * @uses \get_upload_iframe_src()
 	 *
 	 * @since 1.3.0
+	 * @see TSF_Extension_Manager\Traits\UI
+	 * @see TSF_Extension_Manager\Traits\UI\register_media_scripts()
+	 * @see method TSF_Extension_Manager\AJAX\_wp_ajax_crop_image() The AJAX cropper callback.
+	 * @uses \get_upload_iframe_src()
 	 *
 	 * @param array $args The field generation arguments.
 	 * @return string The image field input with buttons.
 	 */
 	private function create_image_field( array $args ) {
 
-		//= Not escaped.
-		$title = $args['_desc'][0];
-
-		//= Escaped.
-		$s_url_name = $s_url_id = $this->get_sub_field_id( 'url' );
-		$s_id_name = $s_id_id = $this->get_sub_field_id( 'id' );
-		$s_url_ph = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
-		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
-		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+		//= s = Escaped.
+		$s_url_name  = $s_url_id = $this->get_sub_field_id( 'url' );
+		$s_id_name   = $s_id_id = $this->get_sub_field_id( 'id' );
+		$s_url_ph    = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
 		$s_url_value = \esc_url(
 			$this->get_field_value_by_key(
 				$this->get_raw_sub_field_id( 'url', 'associative' ),
 				$args['_default']['url']
 			)
 		);
-		$s_id_value = \absint(
+		$s_id_value  = \absint(
 			$this->get_field_value_by_key(
 				$this->get_raw_sub_field_id( 'id', 'associative' ),
 				$args['_default']['id']
 			)
 		);
-		$s_required = isset( $args['_req'] ) ? 'required' : '';
-		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
-		$s_url_readonly = $s_remove_button = '';
+		$s_remove_button = '';
+
+		$url_readonly = false;
+
+		if ( ! empty( $args['_readonly'] ) ) {
+			$args['_data']['readonly'] = true;
+			$url_readonly              = true;
+		}
+
+		$s_required = $args['_req'] ? 'required' : '';
+		$s_data     = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
 		if ( $s_id_value ) {
-			$s_url_readonly = ' readonly';
+			$url_readonly    = true;
 			$s_remove_button = vsprintf(
 				'<button type=button class="%1$s" title="%2$s" id="%3$s-remove" data-input-url="%3$s" data-input-id="%4$s">%5$s</button>',
 				[
@@ -1859,26 +2032,7 @@ final class FormGenerator {
 		return vsprintf(
 			'<div class="tsfem-image-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
 			[
-				sprintf(
-					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
-					vsprintf(
-						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
-						[
-							vsprintf(
-								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
-								[
-									$s_url_id,
-									sprintf(
-										'tsfem-form-option-title%s',
-										( $s_desc ? ' tsfem-form-option-has-description' : '' )
-									),
-									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
-								]
-							),
-							$s_desc,
-						]
-					)
-				),
+				$this->create_field_description( $args, $s_url_id ),
 				vsprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s%s<div class="tsfem-form-image-buttons-wrap tsfem-flex tsfem-flex-row tsfem-flex-hide-if-no-js">%s%s</div></div>',
 					[
@@ -1890,7 +2044,7 @@ final class FormGenerator {
 								$s_url_value,
 								$s_required,
 								$s_url_ph,
-								$s_url_readonly,
+								$url_readonly ? ' readonly' : '',
 								$s_data,
 							]
 						),
@@ -1921,6 +2075,44 @@ final class FormGenerator {
 	}
 
 	/**
+	 * Creates a checkbox field.
+	 *
+	 * @since 1.3.0 Instated.
+	 * @since 2.2.0 Populated.
+	 *
+	 * @param array $args The field generation arguments.
+	 * @return string The checkbox field.
+	 */
+	private function create_checkbox_field( array $args ) {
+
+		//= s = Escaped.
+		$s_name     = $s_id = $this->get_field_id();
+		$s_required = $args['_req'] ? 'required' : '';
+		$s_data     = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
+
+		return vsprintf(
+			'<div class="tsfem-checkbox-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
+			[
+				$this->create_field_description( $args, $s_id ),
+				sprintf(
+					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
+					vsprintf(
+						'<label class=tsfem-form-checkbox-settings-content-label><input type=checkbox id="%s" name=%s value=1 %s %s %s> %s</label>',
+						[
+							$s_id,
+							$s_name,
+							$this->get_field_value( $args['_default'] ) ? 'checked' : '',
+							$s_required,
+							$s_data,
+							\esc_html( $args['_check'][0] ),
+						]
+					)
+				),
+			]
+		);
+	}
+
+	/**
 	 * These methods are acting as a placeholder for future implementation.
 	 * Will be built when required.
 	 *
@@ -1929,7 +2121,6 @@ final class FormGenerator {
 	 * @param array $args The field generation arguments.
 	 * @return void
 	 */
-	private function create_checkbox_field( array $args ) {}
 	private function create_radio_field( array $args ) {}
 	private function create_textarea_field( array $args ) {}
 }

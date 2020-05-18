@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Traits
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -72,8 +73,8 @@ trait Options {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $option The Option name.
-	 * @param mixed $default The fallback value if the option doesn't exist.
+	 * @param string $option  The Option name.
+	 * @param mixed  $default The fallback value if the option doesn't exist.
 	 * @return mixed The option value if exists. Otherwise $default.
 	 */
 	final protected function get_option( $option, $default = null ) {
@@ -118,9 +119,9 @@ trait Options {
 	 *              so the verification key no longers gets out of sync.
 	 *
 	 * @param string $option The option name.
-	 * @param mixed $value The option value.
+	 * @param mixed  $value The option value.
 	 * @param string $type The option update type, accepts 'instance' and 'regular'.
-	 * @param bool $kill Whether to kill the plugin on invalid instance.
+	 * @param bool   $kill Whether to kill the plugin on invalid instance.
 	 * @return bool True on success or the option is unchanged, false on failure.
 	 */
 	final protected function update_option( $option, $value, $type = 'instance', $kill = false ) {
@@ -176,12 +177,12 @@ trait Options {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $options : {
+	 * @param array  $options : {
 	 *    $option_name => $value,
 	 *    ...
 	 * }
 	 * @param string $type The option update type, accepts 'instance' and 'regular'.
-	 * @param bool $kill Whether to kill the plugin on invalid instance.
+	 * @param bool   $kill Whether to kill the plugin on invalid instance.
 	 * @return bool True on success, false on failure or when options haven't changed.
 	 */
 	final protected function update_option_multi( array $options = [], $type = 'instance', $kill = false ) {
@@ -292,8 +293,8 @@ trait Options {
 	 * @since 1.0.0
 	 * @since 1.2.0 Improved hashing algorithm.
 	 *
-	 * @param array $options The options to hash.
-	 * @param string $key The instance key, needs to be supplied on plugin activation.
+	 * @param array  $options The options to hash.
+	 * @param string $key     The instance key, needs to be supplied on plugin activation.
 	 * @return bool True on success, false on failure.
 	 */
 	final protected function set_options_instance( $options, $key = '' ) {
@@ -324,7 +325,6 @@ trait Options {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Expanded hashing algorithm.
-	 * @uses PHP 5.6 hash_equals : WordPress core has compat.
 	 *
 	 * @param string $data The data to compare hash with.
 	 * @return bool True when hash passes, false on failure.
@@ -391,12 +391,11 @@ trait Options {
 	 */
 	final protected function kill_options() {
 
-		$success = [];
-		$success[] = $this->delete_options_instance();
-		$success[] = \delete_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+		$success = [
+			$this->delete_options_instance(),
+			\delete_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS )
+		];
 
-		$this->killed_options = ! in_array( false, $success, true );
-
-		return $this->killed_options;
+		return $this->killed_options = ! in_array( false, $success, true );
 	}
 }

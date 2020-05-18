@@ -64,7 +64,7 @@
 			//allIcons.addClass('fa-plus');
 			//icon.removeClass('fa-plus');
 
-			if ( wrap.hasClass('pp-tabs-vertical') ) {
+			if ( wrap.hasClass('pp-tabs-vertical') && this.settings.scrollAnimate ) {
 				var header = $('.fl-theme-builder-header-sticky');
 				var offset = header.length > 0 ? header.height() + 32 : 120;
 				$('html, body').animate({
@@ -75,9 +75,11 @@
 			// Toggle the tabs.
 			wrap.find('.pp-tabs-labels:first > .pp-tab-active').removeClass('pp-tab-active');
 			wrap.find('.pp-tabs-panels:first > .pp-tabs-panel > .pp-tab-active').removeClass('pp-tab-active');
+			wrap.find('.pp-tabs-panels:first > .pp-tabs-panel > .pp-tabs-label').removeClass('pp-tab-active');
 
 			wrap.find('.pp-tabs-labels:first > .pp-tabs-label[data-index="' + index + '"]').addClass('pp-tab-active');
 			wrap.find('.pp-tabs-panels:first > .pp-tabs-panel > .pp-tabs-panel-content[data-index="' + index + '"]').addClass('pp-tab-active');
+			wrap.find('.pp-tabs-panels:first > .pp-tabs-panel > .pp-tabs-label[data-index="' + index + '"]').addClass('pp-tab-active');
 
 			// Gallery module support.
 			FLBuilderLayout.refreshGalleries( wrap.find('.pp-tabs-panel-content[data-index="' + index + '"]') );

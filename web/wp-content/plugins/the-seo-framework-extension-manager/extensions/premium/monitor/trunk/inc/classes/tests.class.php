@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Monitor\Tests
  */
+
 namespace TSF_Extension_Manager\Extension\Monitor;
 
 defined( 'ABSPATH' ) or die;
@@ -11,7 +12,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Monitor extension for The SEO Framework
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -57,8 +58,10 @@ final class Tests {
 	 * Handles unapproachable invoked methods.
 	 * Silently ignores errors on this call.
 	 *
-	 * @param string $name
-	 * @param array $arguments
+	 * @since 1.0.0
+	 *
+	 * @param string $name      The method name.
+	 * @param array  $arguments The method arguments.
 	 * @return string Empty.
 	 */
 	public function __call( $name, $arguments ) {
@@ -119,23 +122,22 @@ final class Tests {
 
 		if ( empty( $data['meta'] ) ) {
 			$content .= $this->wrap_info( \esc_html__( 'You should add a site icon through the customizer to add extra support for mobile devices.', 'the-seo-framework-extension-manager' ) );
-			$state   = 'warning';
+			$state    = 'warning';
+
+			if ( empty( $data['static'] ) ) {
+				$content .= $this->wrap_info( \the_seo_framework()->convert_markdown(
+					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
+					\esc_html__( 'No `favicon.ico` file was found in the root directory of your website. Web browsers automatically try to call this file; so, you should add one to prevent 404 hits and improve website performance.', 'the-seo-framework-extension-manager' ),
+					[ 'code' ]
+				) );
+			} else {
+				$content .= $this->wrap_info( \the_seo_framework()->convert_markdown(
+					\esc_html__( 'A `favicon.ico` file was found in the root directory of your website. This is good, because it prevents 404 hits to your website.', 'the-seo-framework-extension-manager' ),
+					[ 'code' ]
+				) );
+			}
 		} else {
 			$content .= $this->wrap_info( \esc_html__( 'A dynamic favicon has been found, this increases support for mobile devices.', 'the-seo-framework-extension-manager' ) );
-		}
-
-		if ( empty( $data['static'] ) ) {
-			$content .= $this->wrap_info( \tsf_extension_manager()->convert_markdown(
-				/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
-				\esc_html__( 'No `favicon.ico` file was found in the root directory of your website. Web browsers automatically try to call this file; so, you should add one to prevent 404 hits and improve website performance.', 'the-seo-framework-extension-manager' ),
-				[ 'code' ]
-			) );
-			$state = 'warning';
-		} else {
-			$content .= $this->wrap_info( \tsf_extension_manager()->convert_markdown(
-				\esc_html__( 'A `favicon.ico` file was found in the root directory of your website. This is good, because it prevents 404 hits to your website.', 'the-seo-framework-extension-manager' ),
-				[ 'code' ]
-			) );
 		}
 
 		end :;
@@ -154,11 +156,11 @@ final class Tests {
 	 */
 	public function issue_title( $data ) {
 
-		$state = 'unknown';
+		$state   = 'unknown';
 		$content = '';
 
 		if ( ! isset( $data['located'] ) ) {
-			$state = 'unknown';
+			$state   = 'unknown';
 			$content = $this->no_data_found();
 			goto end;
 		}
@@ -168,7 +170,9 @@ final class Tests {
 		$consult_theme_author = false;
 
 		if ( ! $data['located'] ) {
-			$state = 'error';
+			$content .= $this->wrap_info( \esc_html__( 'No title tag was found.', 'the-seo-framework-extension-manager' ) );
+			$state    = 'error';
+
 			$consult_theme_author = true;
 		} elseif ( isset( $data['value'] ) && $data['value'] ) {
 			preg_match( '/(?:<title.*?>)(.*)?(?:<\/title>)/is', $data['value'], $matches );
@@ -176,7 +180,7 @@ final class Tests {
 
 			if ( ! $first_found_title ) {
 				$content .= $this->wrap_info( \esc_html__( 'The homepage title tag is empty.', 'the-seo-framework-extension-manager' ) );
-				$state = 'error';
+				$state    = 'error';
 				$consult_theme_author = true;
 			} else {
 
@@ -242,7 +246,7 @@ final class Tests {
 	public function issue_description( $data ) {
 
 		$content = '';
-		$state = 'unknown';
+		$state   = 'unknown';
 
 		if ( ! isset( $data['located'] ) ) {
 			$state = 'unknown';
@@ -250,8 +254,9 @@ final class Tests {
 			goto end;
 		}
 
-		$state = 'good';
+		$state   = 'good';
 		$content = '';
+
 		$consult_theme_author_on_duplicate = false;
 
 		if ( ! $data['located'] ) {
@@ -319,17 +324,19 @@ final class Tests {
 		}
 
 		$links = [];
+		$tsf   = \the_seo_framework();
 
 		foreach ( $data as $value ) :
 			if ( isset( $value['value'] ) && false === $value['value'] ) :
 				$id = isset( $value['post_id'] ) ? (int) $value['post_id'] : false;
 
 				if ( false !== $id ) {
-					// $home = isset( $value['home'] ) && $value['home'];
-					$post = \get_post( $id );
+					if ( ! $id ) {
+						$id = $tsf->get_the_front_page_ID();
+					}
 
-					$url   = \get_permalink( $post );
-					$title = \get_the_title( $post );
+					$title = $tsf->get_title( [ 'id' => $id ] );
+					$url   = $tsf->create_canonical_url( [ 'id' => $id ] );
 
 					$links[] = sprintf( '<a href="%s" target="_blank" rel="noopener">%s</a>', $url, $title );
 				}
@@ -338,7 +345,7 @@ final class Tests {
 
 		//* Links are filled in with erroneous pages.
 		if ( empty( $links ) ) {
-			$state = 'good';
+			$state   = 'good';
 			$content = $this->wrap_info( $this->no_issue_found() );
 		} else {
 			$state = 'bad';
@@ -380,7 +387,7 @@ final class Tests {
 		if ( ! $data['located'] ) {
 			$state   = 'error';
 			$content = $this->wrap_info(
-				\tsf_extension_manager()->convert_markdown(
+				\the_seo_framework()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					\esc_html__( 'No `robots.txt` file has been found. Please check your server configuration.', 'the-seo-framework-extension-manager' ),
 					[ 'code' ]
@@ -406,14 +413,18 @@ final class Tests {
 		//* Cache safe.
 		$sample_tsf = \the_seo_framework()->robots_txt();
 
+		// TSF 4.0.5 compat, remove robots.txt warning. This warning cannot be translated, so this is fine... for now.
+		// TODO see note at robots_txt() method in The SEO Framework, and adjust this for that.
+		$sample_tsf = preg_replace( '/^\#.*?[\r\n]+\#.*?robots\.txt[\r\n]+/', '', $sample_tsf );
+
 		//* Normalize.
-		$sample_tsf = \esc_html( str_replace( [ "\r\n", "\r", "\n" ], '', trim( $sample_tsf ) ) );
+		$sample_tsf    = \esc_html( str_replace( [ "\r\n", "\r", "\n" ], '', trim( $sample_tsf ) ) );
 		$data['value'] = \esc_html( str_replace( [ "\r\n", "\r", "\n" ], '', trim( $data['value'] ) ) );
 
 		if ( $sample_tsf === $data['value'] ) {
 			$state   = 'good';
 			$content = $this->wrap_info(
-				\tsf_extension_manager()->convert_markdown(
+				\the_seo_framework()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					\esc_html__( 'The `robots.txt` file is handled correctly by The SEO Framework.', 'the-seo-framework-extension-manager' ),
 					[ 'code' ]
@@ -425,7 +436,7 @@ final class Tests {
 		if ( ! file_exists( \get_home_path() . 'robots.txt' ) ) {
 			$state   = 'unknown';
 			$content = $this->wrap_info(
-				\tsf_extension_manager()->convert_markdown(
+				\the_seo_framework()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					\esc_html__( 'The `robots.txt` file is not handled by The SEO Framework.', 'the-seo-framework-extension-manager' ),
 					[ 'code' ]
@@ -437,7 +448,7 @@ final class Tests {
 		static_file : {
 			$state   = 'okay';
 			$content = $this->wrap_info(
-				\tsf_extension_manager()->convert_markdown(
+				\the_seo_framework()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					\esc_html__( 'The `robots.txt` file is static or overwritten in another way. Consider deleting the `robots.txt` file from your home directory folder because The SEO Framework handles this appropriately.', 'the-seo-framework-extension-manager' ),
 					[ 'code' ]
@@ -478,7 +489,7 @@ final class Tests {
 
 		$state = 'good';
 
-		//* 10 MB, not 10 MiB
+		//* 10 MB, not 10 MiB. Although the real limit is 52428800 (50MiB), large files add weight to the server, and slows down cralwers.
 		if ( isset( $data['size'] ) && $data['size'] > 10000000 ) {
 			$state    = 'bad';
 			$content .= $this->wrap_info( \esc_html__( 'The sitemap file is bigger than 10MB, you should make it smaller.', 'the-seo-framework-extension-manager' ) );
@@ -579,13 +590,13 @@ final class Tests {
 					else :
 						$state = 'bad';
 						//* Cache safe.
-						defined( 'DOING_AJAX' ) and DOING_AJAX and \the_seo_framework()->add_menu_link();
+						\wp_doing_ajax() and \the_seo_framework()->add_menu_link();
 						$content .= $this->wrap_info(
-							\tsf_extension_manager()->convert_markdown(
+							\the_seo_framework()->convert_markdown(
 								sprintf(
 									/* translators: URLs are in markdown. %s = SEO Settings page admin URL. */
 									\esc_html__( 'The canonical URL scheme is automatically determined. Set the preferred scheme to either HTTP or HTTPS in the [General SEO settings](%s).', 'the-seo-framework-extension-manager' ),
-									\esc_url( \tsf_extension_manager()->get_admin_page_url( \the_seo_framework()->seo_settings_page_slug ), [ 'http', 'https' ] )
+									\esc_url( \the_seo_framework()->get_admin_page_url( \the_seo_framework()->seo_settings_page_slug ), [ 'https', 'http' ] )
 								),
 								[ 'a' ]
 							)
@@ -606,13 +617,13 @@ final class Tests {
 				} else {
 					$state = 'bad';
 					//* Cache safe.
-					defined( 'DOING_AJAX' ) and DOING_AJAX and \the_seo_framework()->add_menu_link();
+					\wp_doing_ajax() and \the_seo_framework()->add_menu_link();
 					$content .= $this->wrap_info(
-						\tsf_extension_manager()->convert_markdown(
+						\the_seo_framework()->convert_markdown(
 							sprintf(
 								/* translators: URLs are in markdown. %s = SEO Settings page admin URL. */
 								\esc_html__( 'The canonical URL scheme is set incorrectly. Set the preferred scheme to be detected automatically in the [General SEO settings](%s).', 'the-seo-framework-extension-manager' ),
-								\esc_url( \tsf_extension_manager()->get_admin_page_url( \the_seo_framework()->seo_settings_page_slug ), [ 'http', 'https' ] )
+								\esc_url( \tsf_extension_manager()->get_admin_page_url( \the_seo_framework()->seo_settings_page_slug ), [ 'https', 'http' ] )
 							),
 							[ 'a' ]
 						)

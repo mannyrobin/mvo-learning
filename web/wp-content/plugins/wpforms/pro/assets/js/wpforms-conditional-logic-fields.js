@@ -26,7 +26,48 @@
 		ready: function() {
 
 			$( '.wpforms-form' ).each( function() {
-				WPFormsConditionals.processConditionals( $( this ), false );
+				var $form = $( this );
+
+				WPFormsConditionals.initDefaultValues( $form );
+				WPFormsConditionals.processConditionals( $form, false );
+			} );
+		},
+
+		/**
+		 * Initialization of data-default-value attribute for each field.
+		 *
+		 * @since 1.5.5.1
+		 *
+		 * @param {object} $form The form DOM element.
+		 */
+		initDefaultValues: function( $form ) {
+			$form.find( '.wpforms-conditional-field input, .wpforms-conditional-field select, .wpforms-conditional-field textarea' ).each( function() {
+
+				var $field = $( this ),
+					defval = $field.val(),
+					type = $field.attr( 'type' ),
+					tagName = $field.prop( 'tagName' );
+
+				type = [ 'SELECT', 'BUTTON' ].indexOf( tagName ) > -1 ? tagName.toLowerCase() : type;
+
+				switch ( type ) {
+					case 'button':
+					case 'submit':
+					case 'reset':
+					case 'hidden':
+						break;
+					case 'checkbox':
+					case 'radio':
+						if ( $field.is( ':checked' ) ) {
+							$field.attr( 'data-default-value', 'checked' );
+						}
+						break;
+					default:
+						if ( defval !== '' ) {
+							$field.attr( 'data-default-value', defval );
+						}
+						break;
+				}
 			} );
 		},
 
@@ -80,11 +121,63 @@
 						}
 						break;
 					case 'select':
-							$( this ).find( 'option:selected' ).prop( 'selected', 'false' ).trigger( 'change' );
+						$( this ).find( 'option:selected' ).prop( 'selected', 'false' ).trigger( 'change' );
 						break;
 					default:
 						if ( $( this ).val() !== '' ) {
+							if ( $( this ).hasClass( 'dropzone-input' ) && $( '[data-name="' + $( this )[0].name + '"]', $form )[0] ) {
+								$( '[data-name="' + $( this )[0].name + '"]', $form )[0].dropzone.removeAllFiles( true );
+							}
+
 							$( this ).val( '' ).trigger( 'input' );
+						}
+						break;
+				}
+			} );
+		},
+
+		/**
+		 * Reset form elements to default values.
+		 *
+		 * @since 1.5.5.1
+		 *
+		 * @param {object} $fieldContainer The field container.
+		 */
+		resetToDefaults: function( $fieldContainer ) {
+			$fieldContainer.find( ':input' ).each( function() {
+
+				var $field = $( this ),
+					defval = $field.attr( 'data-default-value' ),
+					type = $field.attr( 'type' ),
+					tagName = $field.prop( 'tagName' );
+
+				if ( defval === undefined ) {
+					return;
+				}
+
+				type = [ 'SELECT', 'BUTTON' ].indexOf( tagName ) > -1 ? tagName.toLowerCase() : type;
+
+				switch ( type ) {
+					case 'button':
+					case 'submit':
+					case 'reset':
+					case 'hidden':
+						break;
+					case 'checkbox':
+					case 'radio':
+						if ( defval === 'checked' ) {
+							$field.prop( 'checked', true ).closest( 'li' ).addClass( 'wpforms-selected' );
+							$field.trigger( 'change' );
+						}
+						break;
+					case 'select':
+						if ( $field.val() !== defval ) {
+							$field.val( defval ).trigger( 'change' );
+						}
+						break;
+					default:
+						if ( $field.val() !== defval ) {
+							$field.val( defval ).trigger( 'input' );
 						}
 						break;
 				}
@@ -99,7 +192,7 @@
 		 * @param {element} el Any element inside the targeted form.
 		 * @param {boolean} initial Initial run of processing.
 		 *
-		 * @returns {void}|{boolean}
+		 * @returns {boolean} Returns false if something wrong.
 		 */
 		processConditionals: function( el, initial ) {
 
@@ -244,11 +337,11 @@
 								pass_rule = ( left.length > 0 );
 								break;
 							case '>' :
-								left      = left.replace( /[^0-9.]/g, '' );
+								left      = left.replace( /[^-0-9.]/g, '' );
 								pass_rule = ( '' !== left ) && ( WPFormsConditionals.floatval( left ) > WPFormsConditionals.floatval( right ) );
 								break;
 							case '<' :
-								left      = left.replace( /[^0-9.]/g, '' );
+								left      = left.replace( /[^-0-9.]/g, '' );
 								pass_rule = ( '' !== left ) && ( WPFormsConditionals.floatval( left ) < WPFormsConditionals.floatval( right ) );
 								break;
 						}
@@ -276,8 +369,14 @@
 						.removeClass( 'wpforms-conditional-show' );
 					hidden = true;
 				} else {
-					$form
-						.find( '#wpforms-' + formID + '-field_' + fieldID + '-container' )
+					var $fieldContainer = $form.find( '#wpforms-' + formID + '-field_' + fieldID + '-container' );
+					if (
+						$this.closest( '.wpforms-field' ).attr( 'id' ) !== $fieldContainer.attr( 'id' ) &&
+						$fieldContainer.hasClass( 'wpforms-conditional-hide' )
+					) {
+						WPFormsConditionals.resetToDefaults( $fieldContainer );
+					}
+					$fieldContainer
 						.show()
 						.removeClass( 'wpforms-conditional-hide' )
 						.addClass( 'wpforms-conditional-show' );
@@ -304,9 +403,9 @@
 		 *
 		 * @since 1.0.5
 		 *
-		 * @param {string} text String to escape.
+		 * @param {string} text Text to escape.
 		 *
-		 * @returns {string|boolean} Escaped text.
+		 * @returns {string|null} Escaped text.
 		 */
 		escapeText: function( text ) {
 
@@ -319,7 +418,7 @@
 				'<': '&lt;',
 				'>': '&gt;',
 				'"': '&quot;',
-				"'": '&#039;',
+				'\'': '&#039;',
 			};
 
 			return text.replace( /[&<>"']/g, function( m ) {
@@ -346,4 +445,4 @@
 
 	window.wpformsconditionals = WPFormsConditionals;
 
-} ) ( jQuery );
+}( jQuery ) );

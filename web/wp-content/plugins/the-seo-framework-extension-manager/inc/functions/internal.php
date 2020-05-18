@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Functions
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -34,9 +35,9 @@ defined( 'ABSPATH' ) or die;
 function extension_basename( $path ) {
 
 	$path = \wp_normalize_path( $path );
-	$extension_dir = \wp_normalize_path( TSF_EXTENSION_MANAGER_DIR_PATH );
-
 	$path = trim( $path, DIRECTORY_SEPARATOR );
+
+	$extension_dir = \wp_normalize_path( TSF_EXTENSION_MANAGER_DIR_PATH );
 	$extension_dir = trim( $extension_dir, DIRECTORY_SEPARATOR );
 
 	/**
@@ -79,7 +80,7 @@ function extension_dir_url( $file ) {
 	//= Convert Windows/Unix paths to URL paths.
 	$path = str_replace( DIRECTORY_SEPARATOR, '/', $path );
 
-	$url = TSF_EXTENSION_MANAGER_DIR_URL;
+	$url  = TSF_EXTENSION_MANAGER_DIR_URL;
 	$url .= trim( $path, '/ ' ) . '/';
 
 	return $url;
@@ -132,7 +133,7 @@ function load_upgrader() {
  * @param bool   $success The success status, either boolean, int, or other.
  * @param string $notice  The error notice displayed to the user.
  * @param int    $code    The error code. Defaults to -1 (undefined).
- * @param string $type    The notice type. Accepts 'success', 'warning', 'error'.
+ * @param string $type    The notice type. Accepts 'success', 'warning', 'info', 'error'.
  *                        Defaults to $success state: 'success'/'error'
  * @return array {
  *    'success' => mixed $success,

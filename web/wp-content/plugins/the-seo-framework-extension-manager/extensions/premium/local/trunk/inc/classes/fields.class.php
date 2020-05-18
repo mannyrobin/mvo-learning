@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Extension\Local\Fields
  */
+
 namespace TSF_Extension_Manager\Extension\Local;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * Local extension for The SEO Framework
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -22,6 +23,8 @@ defined( 'ABSPATH' ) or die;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned -- Nothing here can be aligned in the right mind.
 
 /**
  * Holds fields template for package TSF_Extension_Manager\Extension\Local.
@@ -104,6 +107,7 @@ final class Fields {
 				'_iterator_title_dynamic' => [
 					'single' => 'name',
 				],
+				'_iterator_title_checked' => '',
 				'_fields' => $this->get_global_department_fields(),
 			],
 		];
@@ -275,8 +279,8 @@ final class Fields {
 				'_type' => 'multi',
 				'_desc' => [
 					\__( 'Department opening hours', 'the-seo-framework-extension-manager' ),
-					\__( 'Specify the hours during which the business location is open.' ),
-					\__( 'Be sure to specify all days of the week.' ),
+					\__( 'Specify the hours during which the business location is open.', 'the-seo-framework-extension-manager' ),
+					\__( 'Be sure to specify all days of the week.', 'the-seo-framework-extension-manager' ),
 				],
 				'_fields' => $this->get_opening_hours_fields(),
 			],
@@ -423,7 +427,7 @@ final class Fields {
 				'_type' => 'text',
 				'_desc' => [
 					\__( 'State or province', 'the-seo-framework-extension-manager' ),
-					\__( 'The region. For example, CA for California.' ),
+					\__( 'The region. For example, CA for California.', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'geo-api' => true,
@@ -561,6 +565,7 @@ final class Fields {
 				'_iterator_title_dynamic' => [
 					'plural' => 'dayOfWeek',
 				],
+				'_iterator_title_checked' => '',
 				'_fields' => $this->get_opening_hours_action_fields(),
 			],
 		];
@@ -2272,8 +2277,8 @@ final class Fields {
 								\__( 'Moroccan', 'the-seo-framework-extension-manager' ),
 							],
 							[
-								'Sadunese',
-								\__( 'Sadunese', 'the-seo-framework-extension-manager' ),
+								'Sudanese',
+								\__( 'Sudanese', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Tunisian',
@@ -2766,8 +2771,8 @@ final class Fields {
 				\__( 'South American', 'the-seo-framework-extension-manager' ),
 				[
 					[
-						'Bralizian',
-						\__( 'Bralizian', 'the-seo-framework-extension-manager' ),
+						'Brazilian',
+						\__( 'Brazilian', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Colombian',
@@ -3699,6 +3704,7 @@ final class Fields {
 			'url' => [
 				/**
 				 * We could also do urlTemplate, but that's a bit too advanced.
+				 *
 				 * @see actionPlatform, which might allow redirecting (i.e. make it work)
 				 * if an urlTemplate is specified.
 				 */

@@ -147,7 +147,7 @@ class PPRestaurantMenuModule extends FLBuilderModule {
 	}
 }
 
-FLBuilder::register_module('PPRestaurantMenuModule', array(
+BB_PowerPack::register_module('PPRestaurantMenuModule', array(
 	'restaurant_menu_general'	=> array(
 		'title'         => __('General', 'bb-powerpack'), // Tab title
 		'sections'      => array( // Tab Sections
@@ -419,7 +419,7 @@ FLBuilder::register_module('PPRestaurantMenuModule', array(
 						),
 						'toggle'	=> array(
 							'yes'		=> array(
-								'fields'	=> 'card_custom_tabindex'
+								'fields'	=> array('card_custom_tabindex'),
 							)
 						)
 					),

@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Monitor\Api
  */
+
 namespace TSF_Extension_Manager\Extension\Monitor;
 
 defined( 'ABSPATH' ) or die;
@@ -11,7 +12,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Monitor extension for The SEO Framework
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -69,40 +70,47 @@ class Api extends Data {
 			return $ajax ? $this->get_ajax_notice( false, 1010201 ) : false;
 		}
 
+		$tsfem = \tsf_extension_manager();
+
 		/**
 		 * Request verification instances, variables are passed by reference :
 		 * 0. Request by class. Pass to yield.
 		 * 1. Yield first loop, get options.
 		 * 2. Yield second loop. Use options to build API link.
 		 */
-		\tsf_extension_manager()->_request_premium_extension_verification_instance( $this, $_instance, $bits );
+		$tsfem->_request_premium_extension_verification_instance( $this, $_instance, $bits );
 		$count = 1;
-		foreach ( \tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
-			$bits = $verification['bits'];
+		foreach ( $tsfem->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
+			$bits      = $verification['bits'];
 			$_instance = $verification['instance'];
 
 			switch ( $count ) :
 				case 1:
-					$subscription = \tsf_extension_manager()->_get_subscription_status( $_instance, $bits );
+					$subscription = $tsfem->_get_subscription_status( $_instance, $bits );
 					break;
 
 				case 2:
 					if ( is_array( $subscription ) ) {
-						$args = array_merge( $args, [
-							'request'     => 'extension/monitor/' . $type,
-							'email'       => $subscription['email'],
-							'licence_key' => $subscription['key'],
-						] );
-						$response = \tsf_extension_manager()->_get_api_response( $args, $_instance, $bits );
+						$args = array_merge(
+							$args,
+							[
+								'request'     => 'extension/monitor/' . $type,
+								'email'       => $subscription['email'],
+								'licence_key' => $subscription['key'],
+							]
+						);
+
+						$response = $tsfem->_get_api_response( $args, $_instance, $bits );
 					} else {
-						\tsf_extension_manager()->_verify_instance( $instance, $bits );
+						$tsfem->_verify_instance( $_instance, $bits );
+
 						$ajax or $this->set_error_notice( [ 1010202 => '' ] );
 						return $ajax ? $this->get_ajax_notice( false, 1010202 ) : false;
 					}
 					break;
 
 				default:
-					\tsf_extension_manager()->_verify_instance( $instance, $bits );
+					$tsfem->_verify_instance( $_instance, $bits );
 					break;
 			endswitch;
 			$count++;
@@ -160,8 +168,8 @@ class Api extends Data {
 			return false;
 		}
 
-		$success = [];
-		$success[] = $this->update_option( 'monitor_expected_domain', str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) ) );
+		$success   = [];
+		$success[] = $this->update_option( 'monitor_expected_domain', str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) ) );
 		$success[] = $this->update_option( 'connected', 'yes' );
 
 		if ( in_array( false, $success, true ) ) {
@@ -170,7 +178,7 @@ class Api extends Data {
 			return false;
 		}
 
-		$success = [];
+		$success   = [];
 		$success[] = $this->set_remote_crawl_timeout();
 		$success[] = $this->update_option( 'site_requires_fix', false );
 		$success[] = $this->update_option( 'site_marked_inactive', false );
@@ -350,6 +358,7 @@ class Api extends Data {
 
 		/**
 		 * Updates timeout to prevent DDoS.
+		 *
 		 * @see trait TSF_Extension_Manager\Extension_Options
 		 */
 		$success = $this->set_remote_data_timeout();
@@ -362,7 +371,7 @@ class Api extends Data {
 		$success = [];
 
 		foreach ( $response as $type => $values ) {
-			if ( in_array( $type, [ 'issues', 'stats', 'issues_lc', 'uptime_setting', 'performance_setting' ], true ) ) {
+			if ( in_array( $type, [ 'issues', 'issues_lc', 'uptime_setting', 'performance_setting' ], true ) ) {
 				/**
 				 * @see trait TSF_Extension_Manager\Extension_Options
 				 */
@@ -402,7 +411,7 @@ class Api extends Data {
 		}
 
 		$old_settings = [
-			'uptime_setting' => $this->get_option( 'uptime_setting', 0 ),
+			'uptime_setting'      => $this->get_option( 'uptime_setting', 0 ),
 			'performance_setting' => $this->get_option( 'performance_setting', 0 ),
 		];
 		//= Filters and merges old and new settings. Magic.
@@ -489,6 +498,7 @@ class Api extends Data {
 	 */
 	protected function get_try_again_notice( $seconds ) {
 		return sprintf(
+			/* translators: %s = numeric seconds. */
 			\esc_html( \_n( 'Try again in %s second.', 'Try again in %s seconds.', $seconds, 'the-seo-framework-extension-manager' ) ),
 			(int) $seconds
 		);

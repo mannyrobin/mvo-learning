@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Local\Settings
  */
+
 namespace TSF_Extension_Manager\Extension\Local;
 
 defined( 'ABSPATH' ) or die;
@@ -11,7 +12,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Local extension for The SEO Framework
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -28,24 +29,28 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
 * Require user interface trait.
+
 * @since 1.0.0
 */
 \TSF_Extension_Manager\_load_trait( 'core/ui' );
 
 /**
  * Require error trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'core/error' );
 
 /**
  * Require Local POST handling trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\Extension\Local\_load_trait( 'secure-post' );
 
 /**
  * Require Local Schema Data Packer trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\Extension\Local\_load_trait( 'schema-packer' );
@@ -83,11 +88,19 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Core $_core Used for integrity.
-	 * @param string $slug The menu slug.
-	 * @param string $hook The menu hook.
+	 * @param Core   $_core   Used for integrity.
+	 * @param string $slug    The menu slug.
+	 * @param string $hook    The menu hook.
+	 * @param string $o_index The options index.
 	 */
-	public function _init( Core $_core, $slug, $hook ) {
+	public function _init( Core $_core, $slug, $hook, $o_index ) {
+
+		/**
+		 * Set options index.
+		 *
+		 * @see trait TSF_Extension_Manager\Extension_Options
+		 */
+		$this->o_index = $o_index;
 
 		$this->_init_main();
 
@@ -98,12 +111,14 @@ final class Settings {
 
 		/**
 		 * Set UI hook.
+		 *
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->ui_hook = $hook;
 
 		/**
 		 * Initialize user interface.
+		 *
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->init_tsfem_ui();
@@ -115,9 +130,17 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Core $_core Used for integrity.
+	 * @param Core   $_core Used for integrity.
+	 * @param string $o_index The options index.
 	 */
-	public function _init_ajax( Core $_core ) {
+	public function _init_ajax( Core $_core, $o_index ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+		/**
+		 * Set options index.
+		 *
+		 * @see trait TSF_Extension_Manager\Extension_Options
+		 */
+		$this->o_index = $o_index;
+
 		$this->_init_main();
 	}
 
@@ -135,13 +158,8 @@ final class Settings {
 		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) ) return;
 
 		/**
-		 * Set options index.
-		 * @see trait TSF_Extension_Manager\Extension_Options
-		 */
-		$this->o_index = 'local';
-
-		/**
 		 * Set form arguments.
+		 *
 		 * @see class TSF_Extension_Manager\FormGenerator
 		 */
 		$this->form_args = [
@@ -155,27 +173,53 @@ final class Settings {
 
 		/**
 		 * Set error notice option.
+		 *
 		 * @see trait TSF_Extension_Manager\Error
 		 */
 		$this->error_notice_option = 'tsfem_e_local_error_notice_option';
 
 		/**
 		 * Initialize error interface.
+		 *
 		 * @see trait TSF_Extension_Manager\Error
 		 */
 		$this->init_errors();
 
 		/**
 		 * Sets nonces.
+		 *
 		 * @see trait TSF_Extension_Manager\Extension\Local\Secure_Post
 		 */
 		$this->set_nonces();
 
 		/**
 		 * Initialize POST data checks.
+		 *
 		 * @see trait TSF_Extension_Manager\Extension\Local\Secure_Post
 		 */
 		$this->init_post_checks();
+	}
+
+	/**
+	 * Prepares form object.
+	 *
+	 * @since 1.2.0
+	 */
+	private function prepare_form() {
+		$this->get_form();
+	}
+
+	/**
+	 * Returns form object by reference.
+	 *
+	 * @since 1.2.0
+	 * @staticvar \TSF_Extension_Manager\FormGenerator $form The form object.
+	 *
+	 * @return \TSF_Extension_Manager\FormGenerator Passed by reference.
+	 */
+	private function get_form() {
+		static $form;
+		return $form ?: $form = new \TSF_Extension_Manager\FormGenerator( $this->form_args );
 	}
 
 	/**
@@ -184,9 +228,12 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Core $_core Used for integrity.
+	 * @param Core $_core Used for integrity.
 	 */
-	public function _output_settings_page( Core $_core ) {
+	public function _output_settings_page( Core $_core ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+
+		$this->prepare_form();
+
 		\add_action( 'tsfem_header', [ $this, '_output_local_header' ] );
 		\add_action( 'tsfem_content', [ $this, '_output_local_content' ] );
 		\add_action( 'tsfem_footer', [ $this, '_output_local_footer' ] );
@@ -200,7 +247,7 @@ final class Settings {
 	 * @since 1.0.1
 	 * @access private
 	 */
-	final public function _output_local_header() {
+	public function _output_local_header() {
 		$this->get_view( 'layout/general/top' );
 	}
 
@@ -210,7 +257,7 @@ final class Settings {
 	 * @since 1.0.1
 	 * @access private
 	 */
-	final public function _output_local_content() {
+	public function _output_local_content() {
 		$this->get_view( 'layout/pages/local' );
 	}
 
@@ -220,7 +267,7 @@ final class Settings {
 	 * @since 1.0.1
 	 * @access private
 	 */
-	final public function _output_local_footer() {
+	public function _output_local_footer() {
 		$this->get_view( 'layout/general/footer' );
 	}
 
@@ -239,6 +286,7 @@ final class Settings {
 
 		/**
 		 * Initialize UI calls.
+		 *
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->init_ui();
@@ -251,24 +299,26 @@ final class Settings {
 	 * @since 1.1.3
 	 * @access private
 	 * @internal
-	 * @staticvar bool $registered : Prevents Re-registering of the script.
 	 *
-	 * @param \The_SEO_Framework\Builders\Scripts $scripts
+	 * @param string $scripts The scripts builder class name.
 	 */
 	public function _register_local_scripts( $scripts ) {
-		static $registered = false;
-		if ( $registered ) return;
+
+		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) ) return;
+
 		/**
 		 * Registers form scripts.
+		 *
 		 * @see trait TSF_Extension_Manager\UI
 		 */
-		$this->register_form_scripts();
+		$this->register_form_scripts( $scripts );
 
 		/**
 		 * Registers media scripts.
+		 *
 		 * @see trait TSF_Extension_Manager\UI
 		 */
-		$this->register_media_scripts();
+		$this->register_media_scripts( $scripts );
 
 		$scripts::register( [
 			[
@@ -291,30 +341,31 @@ final class Settings {
 				],
 			],
 		] );
-		$registered = true;
 	}
 
 	/**
-	 * Outputs Settings Panel overview for Local SEO settings.
+	 * Outputs Settings Panel overview for Local settings.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Settings $_s Used for integrity.
+	 * @param self $_s Used for integrity.
 	 */
-	public function _get_local_settings_overview( self $_s ) {
+	public function _get_local_settings_overview( self $_s ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 		$this->get_view( 'layout/pages/settings' );
 	}
 
 	/**
-	 * Outputs Settings bottom wrap for Local SEO Settings.
+	 * Outputs Settings bottom wrap for Local Settings.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Settings $_s Used for integrity.
+	 * @param self $_s Used for integrity.
 	 */
-	public function _get_local_settings_bottom_wrap( self $_s ) {
-		//* Already escaped.
-		echo $this->get_bottom_wrap_items();
+	public function _get_local_settings_bottom_wrap( self $_s ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+		// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
+		echo $this->get_test_button();
+		echo $this->get_form()->_form_button( 'submit', \__( 'Save', 'the-seo-framework-extension-manager' ), 'get' );
+		// phpcs:enable, WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -339,19 +390,11 @@ final class Settings {
 	 */
 	private function output_department_fields() {
 
-		$f = new \TSF_Extension_Manager\FormGenerator( $this->form_args );
+		$f = $this->get_form();
 
 		$f->_form_wrap( 'start', \tsf_extension_manager()->get_admin_page_url( $this->slug ), true );
 		$f->_fields( Fields::get_instance()->get_departments_fields() );
 		$f->_form_wrap( 'end' );
-
-		$this->set_bottom_wrap_items( $this->get_test_button() );
-		$this->set_bottom_wrap_items(
-			$f->_form_button( 'submit', \__( 'Save', 'the-seo-framework-extension-manager' ), 'get' )
-		);
-
-		//* Destruct class.
-		$f = null;
 	}
 
 	/**
@@ -365,50 +408,9 @@ final class Settings {
 		return sprintf(
 			'<button type=button name="tsfem-e-local-validateFormJson" form="%s" class="%s">%s</button>',
 			sprintf( '%s[%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index ),
-			'hide-if-no-js tsfem-button-primary tsfem-button-green tsfem-button-external tsfem-button-flat',
+			'hide-if-no-js tsfem-button tsfem-button-external',
 			\esc_html__( 'See Markup', 'the-seo-framework-extension-manager' )
 		);
-	}
-
-	/**
-	 * Sets form bottom wrap items. In order.
-	 *
-	 * @since 1.0.0
-	 * @staticvar array $cache
-	 *
-	 * @param string $item The bottom wrap item.
-	 * @param bool   $get  Whether to retrieve or store $item.
-	 * @return void|array Void if $get is false. The stores items otherwise.
-	 */
-	private function set_bottom_wrap_items( $item = null, $get = false ) {
-
-		static $cache = [];
-
-		if ( $get )
-			return $cache;
-
-		if ( isset( $item ) )
-			$cache[] = $item;
-	}
-
-	/**
-	 * Returns the form bottom wrap items.
-	 *
-	 * @since 1.0.0
-	 * @uses $this->set_bottom_wrap_items() The stored items.
-	 *
-	 * @return string The bottom wrap items.
-	 */
-	private function get_bottom_wrap_items() {
-
-		$items = $this->set_bottom_wrap_items( null, true );
-
-		$retval = '';
-		foreach ( $items as $item ) {
-			$retval .= $item;
-		}
-
-		return $retval;
 	}
 
 	/**
@@ -430,8 +432,8 @@ final class Settings {
 	 * @since 1.0.0
 	 *
 	 * @param string $view The file name.
-	 * @param array $args The arguments to be supplied within the file name.
-	 *        Each array key is converted to a variable with its value attached.
+	 * @param array  $args The arguments to be supplied within the file name.
+	 *                     Each array key is converted to a variable with its value attached.
 	 */
 	private function get_view( $view, array $args = [] ) {
 

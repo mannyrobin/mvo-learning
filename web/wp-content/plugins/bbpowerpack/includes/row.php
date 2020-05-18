@@ -239,19 +239,23 @@ function pp_output_before_row_bg( $row ) {
  * Output for Columns
  */
 function pp_output_after_render_row_bg( $row ) {
-    if ( is_object($row) && isset($row->settings->enable_down_arrow) && 'yes' == $row->settings->enable_down_arrow ) {
-        ?>
-        <div class="pp-down-arrow-container">
-            <div class="pp-down-arrow-wrap">
-               	<div class="pp-down-arrow<?php echo ($row->settings->da_animation == 'yes') ? ' pp-da-bounce' : ''; ?>" data-row-id="<?php echo $row->node; ?>" data-top-offset="<?php echo $row->settings->da_top_offset; ?>" data-transition-speed="<?php echo $row->settings->da_transition_speed; ?>">
-                    <svg xmlns="http://www.w3.org/2000/svg">
-        				<path stroke="null" d="m1.00122,14.45485c0,-0.24438 0.10878,-0.48877 0.32411,-0.67587c0.4329,-0.37231 1.13663,-0.37231 1.56952,0l19.19382,16.50735l19.19381,-16.50735c0.4329,-0.37231 1.13663,-0.37231 1.56952,0s0.43289,0.97753 0,1.34983l-19.97969,17.18324c-0.43289,0.3723 -1.13662,0.3723 -1.56951,0l-19.97969,-17.18324c-0.21755,-0.1871 -0.32411,-0.43149 -0.32411,-0.67587l0.00222,0.00191z" fill="#000000" id="svg_1"/>
-        			</svg>
-                </div>
-            </div>
-        </div>
-        <?php
-    }
+	if ( is_object($row) && isset($row->settings->enable_down_arrow) && 'yes' == $row->settings->enable_down_arrow ) {
+		?>
+		<div class="pp-down-arrow-container">
+			<div class="pp-down-arrow-wrap">
+				<?php if ( ! isset( $row->settings->da_icon_style ) || 'style-1' == $row->settings->da_icon_style ) { ?>
+				<div class="pp-down-arrow<?php echo ( $row->settings->da_animation == 'yes' ) ? ' pp-da-bounce' : ''; ?>" data-row-id="<?php echo $row->node; ?>" data-top-offset="<?php echo $row->settings->da_top_offset; ?>" data-transition-speed="<?php echo $row->settings->da_transition_speed; ?>">
+					<svg xmlns="http://www.w3.org/2000/svg">
+						<path stroke="null" d="m1.00122,14.45485c0,-0.24438 0.10878,-0.48877 0.32411,-0.67587c0.4329,-0.37231 1.13663,-0.37231 1.56952,0l19.19382,16.50735l19.19381,-16.50735c0.4329,-0.37231 1.13663,-0.37231 1.56952,0s0.43289,0.97753 0,1.34983l-19.97969,17.18324c-0.43289,0.3723 -1.13662,0.3723 -1.56951,0l-19.97969,-17.18324c-0.21755,-0.1871 -0.32411,-0.43149 -0.32411,-0.67587l0.00222,0.00191z" fill="#000000" id="svg_1"/>
+					</svg>
+				</div>
+				<?php } else { ?>
+				<div class='pp-down-arrow pp-down-icon-scroll' data-row-id="<?php echo $row->node; ?>" data-top-offset="<?php echo $row->settings->da_top_offset; ?>" data-transition-speed="<?php echo $row->settings->da_transition_speed; ?>"></div>
+				<?php } ?>
+			</div>
+		</div>
+		<?php
+	}
 }
 
 pp_row_settings_init();

@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Traits\Overload
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -104,6 +105,8 @@ defined( 'ABSPATH' ) or die;
  *
  *      - <No keyword>: Should not exist.
  */
+
+// phpcs:disable, Squiz.Commenting.FunctionComment.Missing -- Implied.
 
 /**
  * Holds private overloading functions to prevent injection or abstraction.
@@ -378,6 +381,68 @@ trait Construct_Core_Static_Final_Instance {
 }
 
 /**
+ * Forces the classes to be treated as a single static. In essence, classes that
+ * use this trait can't be used with a 'new' keyword. They may have public functions that
+ * can kick off private instantiation.
+ *
+ * This is great together with Enclose_Stray_Private.
+ * Does not load parent.
+ * Does load private instance methods and properties.
+ *
+ * This trait applies nicely with the following design patterns:
+ * - Builder Pattern.
+ * - Prototype Pattern.
+ *
+ * @since 2.2.0
+ * @access private
+ */
+trait Construct_Core_Static_Stray_Private_Instance {
+
+	private function __construct() {}
+
+	/**
+	 * The object instance.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @var object|null This object instance.
+	 */
+	private static $instance = null;
+
+	/**
+	 * Sets the class instance.
+	 *
+	 * @since 2.2.0
+	 * @access private
+	 * @static
+	 */
+	private static function set_instance() {
+
+		if ( is_null( static::$instance ) ) {
+			static::$instance = new static();
+		}
+	}
+
+	/**
+	 * Gets the class instance. It's set when it's null.
+	 *
+	 * @since 2.2.0
+	 * @access private
+	 * @static
+	 *
+	 * @return object The current instance.
+	 */
+	private static function get_instance() {
+
+		if ( is_null( static::$instance ) ) {
+			static::set_instance();
+		}
+
+		return static::$instance;
+	}
+}
+
+/**
  * Holds private magic constructor method.
  *
  * Does not load parent.
@@ -435,10 +500,10 @@ trait Ignore_Properties_Core_Public_Final {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param $name The inexisting property name.
-	 * @param $value The propertie value that ought to be set.
+	 * @param string $name  The inexisting property name.
+	 * @param mixed  $value The propertie value that ought to be set.
 	 */
-	final public function __set( $name = '', $val = null ) {
+	final public function __set( $name = '', $value = null ) {
 		\the_seo_framework()->_doing_it_wrong( __METHOD__, \esc_html( __CLASS__ . '::$' . $name . ' does not exist.' ) );
 	}
 
@@ -447,7 +512,7 @@ trait Ignore_Properties_Core_Public_Final {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param $name The inexisting property name.
+	 * @param string $name The inexisting property name.
 	 * @return null.
 	 */
 	final public function __get( $name = '' ) {

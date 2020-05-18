@@ -23,14 +23,18 @@ class PPSearchFormModule extends FLBuilderModule {
 	}
 
 	public function render_input_attrs() {
-		$attrs = array(
+		$attrs = apply_filters( 'pp_search_form_input_attrs', array(
 			'placeholder'	=> $this->settings->placeholder,
-			'class' 		=> 'pp-search-form__input',
+			'class' 		=> array( 'pp-search-form__input' ),
 			'type' 			=> 'search',
 			'name' 			=> 's',
 			'title' 		=> __( 'Search', 'bb-powerpack' ),
 			'value' 		=> get_search_query(),
-		);
+		), $this->settings );
+
+		if ( is_array( $attrs['class'] ) ) {
+			$attrs['class'] = implode( ' ', $attrs['class'] );
+		}
 
 		$attr_str = '';
 
@@ -42,7 +46,7 @@ class PPSearchFormModule extends FLBuilderModule {
 	}
 }
 
-FLBuilder::register_module('PPSearchFormModule', array(
+BB_PowerPack::register_module('PPSearchFormModule', array(
 	'general'		=> array(
 		'title'			=> __('General', 'bb-powerpack'),
 		'sections'		=> array(

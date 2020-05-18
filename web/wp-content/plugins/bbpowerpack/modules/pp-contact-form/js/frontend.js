@@ -1,7 +1,7 @@
 (function($) {
 
-	window.onLoadFLReCaptcha = function () {
-		var reCaptchaFields = $('.fl-grecaptcha'),
+	window.onLoadPPReCaptcha = function () {
+		var reCaptchaFields = $('.pp-grecaptcha'),
 			widgetID;
 
 		if (reCaptchaFields.length > 0) {
@@ -24,11 +24,11 @@
 						size: self.data('validate'),
 						callback: function (response) {
 							if (response != '') {
-								self.attr('data-fl-grecaptcha-response', response);
+								self.attr('data-pp-grecaptcha-response', response);
 
 								// Re-submitting the form after a successful invisible validation.
 								if ('invisible' == self.data('validate')) {
-									self.closest('.pp-contact-form').find('a.fl-button').trigger('click');
+									self.closest('.fl-module').find('.pp-submit-button').trigger('click');
 								}
 							}
 						}
@@ -67,8 +67,8 @@
 				subject	  		= $(this.nodeClass + ' .pp-subject input'),
 				message	  		= $(this.nodeClass + ' .pp-message textarea'),
 				checkbox		= $(this.nodeClass + ' .pp-checkbox input'),
-				reCaptchaField 	= $(this.nodeClass + ' .fl-grecaptcha'),
-				reCaptchaValue 	= reCaptchaField.data('fl-grecaptcha-response'),
+				reCaptchaField 	= $(this.nodeClass + ' .pp-grecaptcha'),
+				reCaptchaValue 	= reCaptchaField.data('pp-grecaptcha-response'),
 				ajaxData		= null,
 				ajaxurl	  		= FLBuilderLayoutConfig.paths.wpAjaxUrl,
 				email_regex 	= /\S+@\S+\.\S+/,
@@ -218,6 +218,8 @@
 					$( this.nodeClass + ' .pp-contact-form' ).hide();
 					$( this.nodeClass + ' .pp-success-msg' ).fadeIn();
 				}
+
+				$(document).trigger( 'pp_contact_form_submit_success', [ $( this.nodeClass ) ] );
 			}
 			// On failure show fail message and re-enable the send button
 			else {
@@ -226,8 +228,11 @@
 					$(this.nodeClass + ' .pp-send-error').html(response.message);
 				}
 				$(this.nodeClass + ' .pp-send-error').fadeIn();
+
 				return false;
 			}
+
+			$(document).trigger( 'pp_contact_form_after_submit', [ $( this.nodeClass ), response ] );
 		}
 	};
 

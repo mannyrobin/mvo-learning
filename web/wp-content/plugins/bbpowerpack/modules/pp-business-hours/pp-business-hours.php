@@ -100,7 +100,7 @@ class PPBusinessHoursModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPBusinessHoursModule', array(
+BB_PowerPack::register_module('PPBusinessHoursModule', array(
     'general'       => array( // Tab
         'title'         => __('General', 'bb-powerpack'), // Tab title
         'sections'      => array( // Tab Sections
@@ -218,7 +218,7 @@ FLBuilder::register_module('PPBusinessHoursModule', array(
 					'separator_width'       => array(
 						'type'          => 'text',
 						'label'         => __( 'Separator Width', 'bb-powerpack' ),
-						'description'	=> __( 'px', 'bb-powerpack' ),
+						'description'	=> 'px',
 						'default'       => 1,
 						'size'			=> 5,
 						'maxlength'		=> 10,

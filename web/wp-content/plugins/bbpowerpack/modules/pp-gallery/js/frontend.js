@@ -1,14 +1,16 @@
 (function($) {
 	PPGallery = function(settings)
 	{
-		this.settings       = settings;
-		this.id				= settings.id;
-		this.nodeClass      = '.fl-node-' + settings.id;
-		this.wrapperClass   = this.nodeClass + ' .pp-photo-gallery';
-		this.itemClass      = this.wrapperClass + ' .pp-photo-gallery-item';
-		this.cachedItems	= false;
-		this.cachedIds		= [];
-		this.isBuilderActive = settings.isBuilderActive;
+		this.settings       	= settings;
+		this.id					= settings.id;
+		this.nodeClass      	= '.fl-node-' + settings.id;
+		this.wrapperClass   	= this.nodeClass + ' .pp-photo-gallery';
+		this.itemClass      	= this.wrapperClass + ' .pp-photo-gallery-item';
+		this.cachedItems		= false;
+		this.lightboxAnimation 	= settings.lightboxAnimation,
+		this.transitionEffect 	= settings.transitionEffect,
+		this.cachedIds			= [];
+		this.isBuilderActive 	= settings.isBuilderActive;
 
 		if ( this._hasItem() ) {
 			this._initLayout();
@@ -87,6 +89,10 @@
 
 		_initLightbox: function()
 		{
+			if ( ! this.settings.lightbox ) {
+				return;
+			}
+
 			var id = this.id;
 			var options = {
 				modal			: false,
@@ -101,17 +107,22 @@
 				afterLoad		: function(current, previous) {
 					$('.fancybox-' + id).find('.fancybox-bg').addClass('fancybox-' + id + '-overlay');
 				},
+				animationEffect: this.lightboxAnimation,
+				transitionEffect: this.transitionEffect,
 			};
 
 			if ( this.settings.lightboxCaption ) {
+				var source = this.settings.lightboxCaptionSource;
                 options.caption = function(instance, item) {
-                    var caption = $(this).attr('title') || '';
+                    var caption = 'title' === source ? $(this).attr('title') : $(this).data('caption') || '';
                     var desc = $(this).data('description') || '';
                     if (desc !== '') {
                         caption += '<div class="pp-fancybox-desc">' + desc + '</div>';
                     }
                     return caption;
                 };
+			} else {
+				options.caption = '';
 			}
 
 			if ( this.settings.lightboxThumbs ) {

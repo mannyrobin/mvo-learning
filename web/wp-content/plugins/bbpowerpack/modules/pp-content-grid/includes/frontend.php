@@ -43,6 +43,12 @@ if ( $settings->layout == 'grid' && $settings->post_grid_filters_display == 'yes
 	$css_class .= ' pp-filters-active';
 }
 
+if ( in_array( $settings->post_grid_style_select, array( 'default', 'style-2', 'style-3', 'style-5', 'style-8' ) ) ) {
+	if ( isset( $settings->alternate_content ) && 'yes' === $settings->alternate_content ) {
+		$css_class .= ' pp-content-alternate';
+	}
+}
+
 // Set custom parameteres in module settings to verify
 // our module when using filter hooks.
 if ( ! isset( $settings->pp_content_grid ) ) {
@@ -91,9 +97,32 @@ add_filter( 'fl_builder_loop_query_args', function( $args ) {
 	return $args;
 } );
 
+// Default filter.
+add_filter( 'fl_builder_loop_query_args', function( $args ) {
+	if ( ! isset( $args['settings']->pp_content_grid ) ) {
+		return $args;
+	}
+
+	if ( 'carousel' !== $args['settings']->layout && 'yes' === $args['settings']->post_grid_filters_display ) {
+		if ( isset( $args['settings']->post_grid_filters_default ) && ! empty( $args['settings']->post_grid_filters_default ) ) {
+			$args['tax_query'][] = array(
+				'taxonomy' => $args['settings']->post_grid_filters,
+				'field'    => 'slug',
+				'terms'    => $args['settings']->post_grid_filters_default
+			);
+		}
+	}
+
+	return $args;
+} );
+
 if ( ! isset( $settings->offset ) || empty( $settings->offset ) ) {
 	$settings->offset = 0;
 }
+
+// Save the current post, so that it can be restored later (see the end of this file).
+global $post;
+$initial_current_post = $post;
 
 // Get the query data.
 $query = FLBuilderLoop::query( $settings );
@@ -126,6 +155,7 @@ $query = FLBuilderLoop::query( $settings );
 			<?php
 
 			$render = true;
+			$count = 0;
 
 			while( $query->have_posts() ) {
 
@@ -144,6 +174,8 @@ $query = FLBuilderLoop::query( $settings );
 				}
 
 				if ( $render ) {
+					$count++;
+
 					ob_start();
 
 					include apply_filters( 'pp_cg_module_layout_path', $module->dir . 'includes/post-' . $settings->layout . '.php', $settings->layout, $settings );
@@ -223,6 +255,16 @@ $query = FLBuilderLoop::query( $settings );
 	endif;
 
 	wp_reset_postdata();
+
+	// Restore the original current post.
+	//
+	// Note that wp_reset_postdata() isn't enough because it resets the current post by using the main
+	// query, but it doesn't take into account the possibility that it might have been overridden by a
+	// third-party plugin in the meantime.
+	//
+	// Specifically, this used to cause problems with Toolset Views, when its Content Templates were used.
+	$post = $initial_current_post;
+	setup_postdata( $initial_current_post );
 
 	?>
 </div>

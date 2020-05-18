@@ -15,7 +15,7 @@
 		}
 		
 		if ( typeof Swiper === 'undefined' ) {
-			$(window).load( $.proxy(function() {
+			$(window).on('load', $.proxy(function() {
 				if ( typeof Swiper === 'undefined' ) {
 					return;
 				} else {
@@ -53,7 +53,7 @@
 
             this.swipers.main = new Swiper(this.elements.mainSwiper, swiperOptions.main);
 
-            if (this._isSlideshow()) {
+            if (this._isSlideshow() && 1 < this._getSlidesCount()) {
                 this.swipers.main.controller.control = this.swipers.thumbs = new Swiper(this.elements.thumbSwiper, swiperOptions.thumbs);
                 this.swipers.thumbs.controller.control = this.swipers.main;
             }
@@ -208,15 +208,16 @@
 
         _getSwiperOptions: function () {
             var medium_breakpoint = this.settings.breakpoint.medium,
-                responsive_breakpoint = this.settings.breakpoint.responsive;
+				responsive_breakpoint = this.settings.breakpoint.responsive;
+				nodeClass = this.nodeClass;
 
             var options = {
 				navigation: {
-					prevEl: '.pp-swiper-button-prev',
-					nextEl: '.pp-swiper-button-next'
+					prevEl: nodeClass + ' .pp-swiper-button-prev',
+					nextEl: nodeClass + ' .pp-swiper-button-next'
 				},
 				pagination: {
-					el: '.swiper-pagination',
+					el: nodeClass + ' .swiper-pagination',
 					type: this.settings.pagination,
 					clickable: true
 				},
@@ -226,20 +227,21 @@
                 slidesPerView: this._getSlidesPerView(),
                 slidesPerGroup: this._getSlidesToScrollDesktop(),
                 spaceBetween: this._getSpaceBetween(),
-                loop: true,
+                loop: 'undefined' !== typeof this.settings.loop ? this.settings.loop : true,
                 loopedSlides: this._getSlidesCount(),
                 speed: this.settings.speed,
-                breakpoints: {}
+				breakpoints: {}
 			};
 			
 			if ( ! this.settings.isBuilderActive && this.settings.autoplay_speed !== false ) {
 				options.autoplay = {
 					delay: this.settings.autoplay_speed,
-					disableOnInteraction: this.settings.pause_on_interaction
+					disableOnInteraction: !!this.settings.pause_on_interaction,
+					stopOnLastSlide: 'undefined' !== typeof this.settings.stopOnLastSlide ? this.settings.stopOnLastSlide : false,
 				};
 			}
 			
-			if ('cube' !== this._getEffect()) {
+			if ('cube' !== this._getEffect() && 'fade' !== this._getEffect()) {
 				options.breakpoints[medium_breakpoint] = {
 					slidesPerView: this._getSlidesPerViewTablet(),
 					slidesPerGroup: this._getSlidesToScrollTablet(),

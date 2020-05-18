@@ -224,6 +224,10 @@ class PPCustomGridModule extends FLBuilderModule {
 	 */
 	static public function get_preset_data( $preset, $id, $type )
 	{
+		if ( ! isset( $_GET['fl_builder'] ) ) {
+			return '';
+		}
+
 		if ( ! $preset || empty( $preset ) ) {
 			return;
 		}
@@ -295,8 +299,8 @@ class PPCustomGridModule extends FLBuilderModule {
 		);
 
 
-		if ( isset( $presets[$type] ) ) {
-			return $presets[$type];
+		if ( isset( $presets[ $type ] ) ) {
+			return $presets[ $type ];
 		}
 
 		return $presets;
@@ -463,7 +467,7 @@ class PPCustomGridModule extends FLBuilderModule {
 	 * @return string
 	 */
 	static public function custom_grid_css( $css, $nodes ) {
-		$css = PPPostModuleExtend::post_grid_css( $css, $nodes );
+		$css = PPModuleExtend::post_grid_css( $css, $nodes );
 
 		return $css;
 	}
@@ -472,7 +476,7 @@ class PPCustomGridModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPCustomGridModule', array(
+BB_PowerPack::register_module('PPCustomGridModule', array(
 	'layout'        => array(
 		'title'         => __('Layout', 'bb-powerpack'),
 		'description'	=> __('We recommend using <strong>Content Grid</strong> module with "Custom Layout" option to create custom layouts instead of this module.', 'bb-powerpack'),

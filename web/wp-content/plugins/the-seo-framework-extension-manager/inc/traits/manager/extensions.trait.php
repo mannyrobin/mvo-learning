@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Traits
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -77,136 +78,136 @@ trait Extensions_Properties {
 		 * part of this awesome WordPress.org community :). Or build your own :D.
 		 */
 		return [
-			'local' => [
-				'slug' => 'local',
-				'network' => '0',
-				'type' => 'premium',
-				'area' => 'business',
-				'author' => 'Sybre Waaijer',
-				'party' => 'first',
-				'last_updated' => '1546685158',
-				'requires' => '4.7.0',
-				'tested' => '5.0.3',
-				'requires_tsf' => '3.1.0',
-				'tested_tsf' => '3.2.2',
+			'focus'     => [
+				'slug'         => 'focus',
+				'network'      => '0',
+				'type'         => 'essentials+',
+				'area'         => 'audit, content, keywords',
+				'author'       => 'Sybre Waaijer',
+				'party'        => 'first',
+				'last_updated' => '1576566882',
+				'requires'     => '4.9',
+				'tested'       => '5.4',
+				'requires_tsf' => '4.0',
+				'tested_tsf'   => '4.0',
 			],
-			'focus' => [
-				'slug' => 'focus',
-				'network' => '0',
-				'type' => 'essentials+',
-				'area' => 'audit, content, keywords',
-				'author' => 'Sybre Waaijer',
-				'party' => 'first',
-				'last_updated' => '1547763663',
-				'requires' => '4.8.0',
-				'tested' => '5.0.3',
-				'requires_tsf' => '3.1.0',
-				'tested_tsf' => '3.2.2',
+			'articles'  => [
+				'slug'         => 'articles',
+				'network'      => '0',
+				'type'         => 'essentials',
+				'area'         => 'blogging, news',
+				'author'       => 'Sybre Waaijer',
+				'party'        => 'first',
+				'last_updated' => '1588908764',
+				'requires'     => '4.9',
+				'tested'       => '5.4',
+				'requires_tsf' => '4.0.2',
+				'tested_tsf'   => '4.0',
 			],
-			'articles' => [
-				'slug' => 'articles',
-				'network' => '0',
-				'type' => 'essentials',
-				'area' => 'blogging, news',
-				'author' => 'Sybre Waaijer',
-				'party' => 'first',
-				'last_updated' => '1541599634',
-				'requires' => '4.6.0',
-				'tested' => '5.0.3',
-				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '3.2.2',
-			],
-			'honeypot' => [
-				'slug' => 'honeypot',
-				'network' => '0',
-				'type' => 'essentials',
-				'area' => 'anti-spam',
-				'author' => 'Sybre Waaijer',
-				'party' => 'first',
+			'honeypot'  => [
+				'slug'         => 'honeypot',
+				'network'      => '0',
+				'type'         => 'essentials',
+				'area'         => 'anti-spam',
+				'author'       => 'Sybre Waaijer',
+				'party'        => 'first',
 				'last_updated' => '1542470700',
-				'requires' => '4.6.0',
-				'tested' => '5.0.3',
-				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.2.2',
+				'requires'     => '4.9',
+				'tested'       => '5.4',
+				'requires_tsf' => '4.0',
+				'tested_tsf'   => '4.0',
 			],
-			'amp' => [
-				'slug' => 'amp',
-				'network' => '0',
-				'type' => 'free',
-				'area' => 'general',
-				'author' => 'Sybre Waaijer',
-				'party' => 'first',
-				'last_updated' => '1534366523',
-				'requires' => '4.6.0',
-				'tested' => '5.0.3',
-				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '3.2.2',
+			'cord'      => [
+				'slug'         => 'cord',
+				'network'      => '0',
+				'type'         => 'essentials',
+				'area'         => 'analytics',
+				'author'       => 'Sybre Waaijer',
+				'party'        => 'first',
+				'last_updated' => '1576470514',
+				'requires'     => '4.9',
+				'tested'       => '5.4',
+				'requires_tsf' => '4.0',
+				'tested_tsf'   => '4.0',
 			],
-			'monitor' => [
-				'slug' => 'monitor',
-				'network' => '0',
-				'type' => 'premium',
-				'area' => 'uptime, syntax',
-				'author' => 'Sybre Waaijer',
-				'party' => 'first',
-				'last_updated' => '1546666851',
-				'requires' => '4.6.0',
-				'tested' => '5.0.3',
-				'requires_tsf' => '3.1.0',
-				'tested_tsf' => '3.2.2',
+			'local'     => [
+				'slug'         => 'local',
+				'network'      => '0',
+				'type'         => 'premium',
+				'area'         => 'business',
+				'author'       => 'Sybre Waaijer',
+				'party'        => 'first',
+				'last_updated' => '1589479187',
+				'requires'     => '4.9',
+				'tested'       => '5.4',
+				'requires_tsf' => '4.0',
+				'tested_tsf'   => '4.0',
+			],
+			'amp'       => [
+				'slug'         => 'amp',
+				'network'      => '0',
+				'type'         => 'free',
+				'area'         => 'general',
+				'author'       => 'Sybre Waaijer',
+				'party'        => 'first',
+				'last_updated' => '1565627638',
+				'requires'     => '4.9',
+				'tested'       => '5.4',
+				'requires_tsf' => '4.0',
+				'tested_tsf'   => '4.0',
+			],
+			'monitor'   => [
+				'slug'         => 'monitor',
+				'network'      => '0',
+				'type'         => 'premium',
+				'area'         => 'uptime, syntax',
+				'author'       => 'Sybre Waaijer',
+				'party'        => 'first',
+				'last_updated' => '1589479187',
+				'requires'     => '4.9',
+				'tested'       => '5.4',
+				'requires_tsf' => '4.0',
+				'tested_tsf'   => '4.0',
 			],
 			'incognito' => [
-				'slug' => 'incognito',
-				'network' => '0',
-				'type' => 'free',
-				'area' => 'general',
-				'author' => 'Sybre Waaijer',
-				'party' => 'first',
+				'slug'         => 'incognito',
+				'network'      => '0',
+				'type'         => 'free',
+				'area'         => 'general',
+				'author'       => 'Sybre Waaijer',
+				'party'        => 'first',
 				'last_updated' => '1515109560',
-				'requires' => '3.6.0',
-				'tested' => '5.0.3',
-				'requires_tsf' => '2.2.0',
-				'tested_tsf' => '3.2.2',
+				'requires'     => '4.9',
+				'tested'       => '5.4',
+				'requires_tsf' => '4.0',
+				'tested_tsf'   => '4.0',
 			],
-			'origin' => [
-				'slug' => 'origin',
-				'network' => '0',
-				'type' => 'free',
-				'area' => 'media',
-				'author' => 'Sybre Waaijer',
-				'party' => 'first',
+			'origin'    => [
+				'slug'         => 'origin',
+				'network'      => '0',
+				'type'         => 'free',
+				'area'         => 'media',
+				'author'       => 'Sybre Waaijer',
+				'party'        => 'first',
 				'last_updated' => '1541601833',
-				'requires' => '4.6.0',
-				'tested' => '5.0.3',
-				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.2.2',
+				'requires'     => '4.9',
+				'tested'       => '5.4',
+				'requires_tsf' => '4.0',
+				'tested_tsf'   => '4.0',
 			],
 			'title-fix' => [
-				'slug' => 'title-fix',
-				'network' => '0',
-				'type' => 'free',
-				'area' => 'theme',
-				'author' => 'Sybre Waaijer',
-				'party' => 'first',
-				'last_updated' => '1534366523',
-				'requires' => '4.6.0',
-				'tested' => '5.0.3',
-				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.2.2',
+				'slug'         => 'title-fix',
+				'network'      => '0',
+				'type'         => 'free',
+				'area'         => 'theme',
+				'author'       => 'Sybre Waaijer',
+				'party'        => 'first',
+				'last_updated' => '1572496812',
+				'requires'     => '4.9',
+				'tested'       => '5.4',
+				'requires_tsf' => '4.0',
+				'tested_tsf'   => '4.0',
 			],
-			// 'transporter' => [
-			// 	'slug' => 'transporter',
-			// 	'network' => '0',
-			// 	'type' => 'free',
-			// 	'area' => 'media',
-			// 	'author' => 'Sybre Waaijer',
-			// 	'party' => 'first',
-			// 	'last_updated' => '1510175308',
-			// 	'requires' => '4.4.0',
-			// 	'tested' => '4.9.0',
-			// 	'requires_tsf' => '2.7.0',
-			// 	'tested_tsf' => '3.0.0',
-			// ],
 		];
 	}
 
@@ -223,9 +224,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '52d25dc09b464caa0776227eff1fe9ea67465e2df20c47b06a468bb59e152281',
-			'sha1'   => '00a56ea8588dd6eea4ed2da399cbc0bb1731ed29',
-			'md5'    => 'b0ad3c6f630ba67179a44bc545014539',
+			'sha256' => '46e6b45adacaed0d82ba637fb989389a83b592de0464b377427fce1333829eeb',
+			'sha1'   => '21023a84016ce56c6b254e617099aa420ed41374',
+			'md5'    => '625888d43c7c723328c042a9a5db4a99',
 		];
 	}
 
@@ -249,7 +250,14 @@ trait Extensions_Properties {
 			if ( isset( $extensions[ $slug ] ) ) {
 				return $extensions[ $slug ];
 			} else {
-				\the_seo_framework()->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'You must specify an existing extension slug.' );
+				//! Extension that doesn't exist is registered as activated.
+				//! The user can't remove this notice without disconnecting the account. TODO Purge it? --> Not here!
+				//! TODO run $this->disable_extension( $slug ) and register a notice: "${slug} no longer exists"
+				//! TODO Forward this to the upgrader for whenever an extension's removed.
+				\the_seo_framework()->_doing_it_wrong(
+					__CLASS__ . '::' . __FUNCTION__,
+					sprintf( 'You must specify an existing extension slug. <code>%s</code> does not exist.', \esc_html( $slug ) )
+				);
 				return [];
 			}
 		} else {
@@ -262,10 +270,11 @@ trait Extensions_Properties {
 	 * Generates expected asset URL or path for extensions.
 	 *
 	 * @since 1.0.0
+	 * @todo Reintroduce using this?
 	 *
 	 * @param string $slug The extension slug.
 	 * @param string $file The file to generate URL or path from.
-	 * @param bool $url Whether to return an URL or path.
+	 * @param bool   $url  Whether to return an URL or path.
 	 * @return string The extension asset URL or path.
 	 */
 	private static function get_extension_asset_location( $slug, $file, $url = false ) {
@@ -400,6 +409,7 @@ trait Extensions_Properties {
  *
  * Warning: This trait holds front-end PHP security risks when mistreated. Always use
  * trait TSF_Extension_Manager\Enclose(_*) in pair with this trait.
+ *
  * @see /inc/traits/overload.trait.php
  *
  * @since 1.0.0
@@ -442,9 +452,6 @@ trait Extensions_Actions {
 	 * @since 1.0.0
 	 * @todo Use this if people are being hackish.
 	 *
-	 * @param string $slug The extension slug.
-	 * @param string $instance The verification instance.
-	 * @param array $bits The verification bits.
 	 * @return array : {
 	 *    'hash' => string The generated hash,
 	 *    'type' => string The hash type used,
@@ -472,6 +479,8 @@ trait Extensions_Actions {
 
 	/**
 	 * Returns a list of active extension slugs.
+	 *
+	 * TODO enforce extension order?
 	 *
 	 * @since 1.0.0
 	 * @since 2.0.0 Now listens to the TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.
@@ -502,7 +511,7 @@ trait Extensions_Actions {
 			if ( ! $_active
 			|| ! $is_premium_user && static::is_extension_premium( $_extension )
 			|| ( ! $is_connected_user && static::is_extension_essentials( $_extension ) )
-			|| ( -1 === static::is_extension_compatible( $_extension ) )
+			|| ( ! static::is_extension_compatible( $_extension ) )
 			   ) {
 				unset( $extensions[ $_extension ] );
 			}
@@ -524,6 +533,7 @@ trait Extensions_Actions {
 	 * }
 	 */
 	public static function validate_extension_activation() {
+		// phpcs:disable, WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound -- condensed code
 
 		if ( ! self::verify_instance() ) {
 			return [ 'success' => false, 'case' => 0 ];
@@ -557,6 +567,7 @@ trait Extensions_Actions {
 		} else {
 			return [ 'success' => true, 'case' => 4 ];
 		}
+		// phpcs:enable, WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
 	}
 
 	/**
@@ -633,138 +644,111 @@ trait Extensions_Actions {
 	 * and The SEO Framework version.
 	 *
 	 * @since 1.0.0
+	 * @since 2.1.0 1. Now reworked to return only a boolean value.
+	 *              2. Moved cache to deeper method.
 	 *
 	 * @param array|string $extension The extension to check.
-	 * @return int Compatibility : {
-	 *    0 is compatible.
-	 *    1, 2 and 3 is okay but might require update of either WP or TSF. {
-	 *        1 : TSF version is greater than tested against.
-	 *        2 : TSF is compatible. WP Version is greater than tested against.
-	 *        3 : TSF and WP versions are both greater than tested against.
-	 *     }
-	 *     -1 is not compatible.
-	 * }
+	 * @return bool True if compatible, false otherwise.
 	 */
 	private static function is_extension_compatible( $extension ) {
 
 		if ( is_string( $extension ) )
 			$extension = static::get_extension( $extension );
 
+		if ( ! $extension ) return false;
+
+		return ! ( static::determine_extension_incompatibility( $extension )
+			& ( TSFEM_EXTENSION_TSF_INCOMPATIBLE | TSFEM_EXTENSION_WP_INCOMPATIBLE ) );
+	}
+
+	/**
+	 * Determines whether the input extension is compatible with the current WordPress
+	 * and The SEO Framework versions.
+	 *
+	 * @since 2.1.0
+	 * @since 2.3.1 Now compares liniently.
+	 * @uses static::version_compare_linient()
+	 * @staticvar array $cache
+	 * @global string $wp_version
+	 *
+	 * @param array|string $extension The extension to check.
+	 * @param bool         $get_bits Whether to get bits or int.
+	 * @return int|null The extension compatibility bitwise integer. Null on faiure.
+	 */
+	private static function determine_extension_incompatibility( $extension, $get_bits = false ) {
+
+		if ( is_string( $extension ) )
+			$extension = static::get_extension( $extension );
+
+		if ( ! $extension ) return null;
+
 		static $cache = [];
 
 		if ( isset( $cache[ $extension['slug'] ] ) )
 			return $cache[ $extension['slug'] ];
 
-		$compatibility = static::determine_extension_compatibility( $extension );
-
-		$table = [
-			0 => 0,
-			1 => 1,
-			4 => 2,
-			5 => 3,
-		];
-
-		$_compatibility = isset( $table[ $compatibility ] ) ? $table[ $compatibility ] : -1;
-
-		return $cache[ $extension['slug'] ] = $_compatibility;
-	}
-
-	/**
-	 * Determines whether the input extension is compatible with the current WordPress
-	 * and The SEO Framework version.
-	 *
-	 * The uneven bits (left to right) always need to be followed by an active bit.
-	 * So 1010 isn't possible. 0101 and 1101 are.
-	 *
-	 * I could've used concatenation for bit additions, but shifting bit series is more difficult; ergo cooler.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array|string $extension The extension to check.
-	 * @param bool $get_bits Whether to get bits or int.
-	 * @return int|string Either 4 bits or an integer that determine compatibility : {
-	 *    0  | '0000' = good => Completely compatible.
-	 *    1  | '0001' = okay => TSF version is greater than tested against.
-	 *    3  | '0011' = bad  => TSF is not compatible.
-	 *    4  | '0100' = okay => TSF is compatible. WP Version is greater than tested against.
-	 *    5  | '0101' = okay => TSF and WP versions are both greater than tested against.
-	 *    7  | '0111' = bad  => TSF is not compatible. WP version is greater than tested against.
-	 *    12 | '1100' = bad  => WP is not compatible.
-	 *    13 | '1101' = bad  => WP is not compatible. TSF version is greater than testest against.
-	 *    15 | '1111' = bad  => Not compatible.
-	 * }
-	 */
-	private static function determine_extension_compatibility( $extension, $get_bits = false ) {
-
-		$compatibility = static::get_extension_compatibility( $extension );
-
-		//= bindec( '1111' )
-		$bit = 15;
-
-		//* Set first two bits ( 1100 );
-		$first_two_bit = ~ $bit >> $compatibility['wp'];
-		//* Set last two bits ( 0011 );
-		$last_two_bit = ~ $bit >> 2 ^ $bit << 2 - $compatibility['tsf'];
-
-		//* Add bits up and invert bits so 0 is best case scenario.
-		$bit = $first_two_bit | $last_two_bit;
-		$bit = ~ $bit;
-
-		//* Convert bits to string and extract last 4 bits.
-		$bit = substr( decbin( $bit ), -4 );
-
-		return $get_bits ? $bit : bindec( $bit );
-	}
-
-	/**
-	 * Determines whether the input extension is compatible with the current WordPress
-	 * and The SEO Framework version.
-	 *
-	 * @since 1.0.0
-	 * @global string $wp_version
-	 *
-	 * @param array|string $extension The extension to check.
-	 * @return array Whether the extension is compatible. : {
-	 *    'tsf' => int (0-2),
-	 *    'wp' => int Compatibility (0-2),
-	 * }
-	 */
-	private static function get_extension_compatibility( $extension ) {
-		global $wp_version;
-
-		if ( is_string( $extension ) )
-			$extension = static::get_extension( $extension );
-
-		/**
-		 * @param array $compatibility : {
-		 *   key => int : {
-		 *     0: Not compatible.
-		 *     1: Version exceeeds tested check. Likely compatible.
-		 *     2: Compatible.
-		 *   }
-		 * }
-		 */
-		$compatibility = [
-			'tsf' => 0,
-			'wp'  => 0,
-		];
+		$compatibility = 0;
 
 		$_tsf_version = THE_SEO_FRAMEWORK_VERSION;
-		$_wp_version  = $wp_version;
+		$_wp_version  = $GLOBALS['wp_version'];
 
-		if ( version_compare( $_tsf_version, $extension['tested_tsf'], '>' ) ) {
-			$compatibility['tsf'] = 1;
-		} elseif ( version_compare( $_tsf_version, $extension['requires_tsf'], '>=' ) ) {
-			$compatibility['tsf'] = 2;
+		if ( static::version_compare_linient( $_tsf_version, $extension['requires_tsf'], '<' ) ) {
+			$compatibility |= TSFEM_EXTENSION_TSF_INCOMPATIBLE;
+		} elseif ( static::version_compare_linient( $_tsf_version, $extension['tested_tsf'], '>' ) ) {
+			$compatibility |= TSFEM_EXTENSION_TSF_UNTESTED;
 		}
 
-		if ( version_compare( $_wp_version, $extension['tested'], '>' ) ) {
-			$compatibility['wp'] = 1;
-		} elseif ( version_compare( $_wp_version, $extension['requires'], '>=' ) ) {
-			$compatibility['wp'] = 2;
+		if ( static::version_compare_linient( $_wp_version, $extension['requires'], '<' ) ) {
+			$compatibility |= TSFEM_EXTENSION_WP_INCOMPATIBLE;
+		} elseif ( static::version_compare_linient( $_wp_version, $extension['tested'], '>' ) ) {
+			$compatibility |= TSFEM_EXTENSION_WP_UNTESTED;
 		}
 
-		return $compatibility;
+		$cache[ $extension['slug'] ] = $compatibility;
+
+		return $cache[ $extension['slug'] ] = $compatibility;
+	}
+
+	/**
+	 * Compares the versions liniently by restricting $version1 to $version2's length in a WP's major-release fashion.
+	 *
+	 * Major/minor/branch: M[...M].M.m-b
+	 * The second "Major" branch may only be of length 1. M.MM is therefore not allowed.
+	 *
+	 * @since 2.3.1
+	 * @link <https://www.php.net/manual/en/function.version-compare.php>
+	 *
+	 * @param string $version1 First version number.
+	 * @param string $version2 Second version number.
+	 * @param string $operator Optional. The comparison operator.
+	 * @return mixed When no operator is defined, -1 if the first version is lower than the second, 0 if they are equal,
+	 *               and 1 if the second is lower.
+	 *               When using the operator argument, return true if the relationship is the one specified by the
+	 *               operator, false otherwise. When an unsupported operator is given, NULL is returned.
+	 */
+	private static function version_compare_linient( $version1, $version2, $operator = null ) {
+
+		// 1: major, 2: minor, 3: branch
+		$regex = '/^(\d+\.\d)(\.\d+)?(-.*)?$/';
+
+		preg_match( $regex, $version1, $m_version1 );
+		preg_match( $regex, $version2, $m_version2 );
+
+		switch ( count( $m_version2 ) ) {
+			case 4: // branch
+			case 3: // minor
+				if ( isset( $operator ) )
+					return version_compare( $version1, $version2, $operator );
+				return version_compare( $version1, $version2 );
+
+			default: // major
+				$version1 = $m_version1[1];
+				$version2 = $m_version2[1];
+
+				if ( isset( $operator ) )
+					return version_compare( $version1, $version2, $operator );
+				return version_compare( $version1, $version2 );
+		}
 	}
 
 	/**
@@ -773,9 +757,9 @@ trait Extensions_Actions {
 	 * @since 1.0.0
 	 *
 	 * @param string $slug The extension slug to load.
-	 * @param bool $ajax Whether AJAX is active.
+	 * @param bool   $ajax Whether AJAX is active.
 	 * @param string $_instance The verification instance. Propagates to inclusion file if possible.
-	 * @param array $bits The verification instance bits. Propagates to inclusion file if possible.
+	 * @param array  $bits The verification instance bits. Propagates to inclusion file if possible.
 	 * @return int|void {
 	 *   -1 => No check has been performed.
 	 *    1 => No file header path can be created. (Invalid extension)
@@ -872,10 +856,11 @@ trait Extensions_Actions {
 	 * @since 1.0.0
 	 * @since 1.2.0 : 1. Now tests extension file validity.
 	 *                2. Increased extension file timeout to 3 seconds, from 2.
+	 * @throws \Exception On JSON test file parsing failure.
 	 *
-	 * @param string $slug The extension slug.
+	 * @param string $slug      The extension slug.
 	 * @param string $_instance The verification instance. Passed by reference.
-	 * @param array $bits The verification instance bits. Passed by reference.
+	 * @param array  $bits      The verification instance bits. Passed by reference.
 	 * @return true on success, false on failure.
 	 */
 	private static function perform_extension_json_tests( $slug, &$_instance, &$bits ) {
@@ -889,17 +874,20 @@ trait Extensions_Actions {
 			goto end;
 
 		$timeout = stream_context_create( [ 'http' => [ 'timeout' => 3 ] ] );
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- this is a local file call.
 		$json = json_decode( file_get_contents( $json_file, false, $timeout ) );
 
 		if ( empty( $json ) ) {
 			//* json file contents are invalid.
 			throw new \Exception( 'Extension test file is invalid', E_USER_ERROR );
+
+			// This won't run, and that's OK.
 			$success[] = false;
 			goto end;
 		}
 
 		$namespace = empty( $json->namespace ) ? '' : $json->namespace;
-		$tests = empty( $json->test ) ? [] : (array) $json->test;
+		$tests     = empty( $json->test ) ? [] : (array) $json->test;
 
 		foreach ( $tests as $_class => $_file ) {
 			//* Base file is already tested.
@@ -916,7 +904,7 @@ trait Extensions_Actions {
 			}
 
 			if ( $_class ) {
-				$class = $namespace . '\\' . $_class;
+				$class     = $namespace . '\\' . $_class;
 				$success[] = (bool) new $class;
 			}
 		}
@@ -930,20 +918,20 @@ trait Extensions_Actions {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $file The file to test.
+	 * @param string $file      The file to test.
 	 * @param string $_instance The verification instance. Propagates to inclusion file. Passed by reference.
-	 * @param array $bits The verification instance bits. Propagates to inclusion file. Passed by reference.
+	 * @param array  $bits      The verification instance bits. Propagates to inclusion file. Passed by reference.
 	 * @return bool Whether the file inclusion(s) succeeded.
 	 */
 	private static function persist_include_extension( $file, &$_instance, &$bits ) {
 
 		$yield_count = 0;
-		$success = [];
+		$success     = [];
 
 		//* Get follow-up verification instance.
 		foreach ( \tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
 
-			$bits = $verification['bits'];
+			$bits      = $verification['bits'];
 			$_instance = $verification['instance'];
 
 			switch ( $yield_count ) :
@@ -1033,7 +1021,7 @@ trait Extensions_Actions {
 			}
 		}
 
-		$error = error_get_last();
+		$error      = error_get_last();
 		$error_type = '';
 
 		switch ( $error['type'] ) :
@@ -1058,17 +1046,27 @@ trait Extensions_Actions {
 		$error_notice = $error_type . ' ' . \esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
 		$advanced_error_notice = \esc_html( $error['message'] ) . ' in file <strong>' . \esc_html( $error['file'] ) . '</strong> on line <strong>' . \esc_html( $error['line'] ) . '</strong>.';
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( \wp_doing_ajax() ) {
 			// TODO send slug?
-			\tsf_extension_manager()->send_json( [
-				'results'     => \TSF_Extension_Manager\get_ajax_notice( false, $error_notice, 10005 ),
-				'fatal_error' => sprintf( '<strong>Error message:</strong> %s', $advanced_error_notice ),
-			], 'failure' );
+			\tsf_extension_manager()->send_json(
+				[
+					'results'     => \TSF_Extension_Manager\get_ajax_notice( false, $error_notice, 10005 ),
+					'fatal_error' => sprintf( '<strong>Error message:</strong> %s', $advanced_error_notice ),
+				],
+				'failure'
+			);
 		} else {
 			$error_notice .= '<br>' . \esc_html__( 'Extension has not been activated.', 'the-seo-framework-extension-manager' );
 			$error_notice .= '<p><strong>Error message:</strong> <br>' . $advanced_error_notice . '</p>';
 
-			\wp_die( $error_notice, 'Extension error', [ 'back_link' => true, 'text_direction' => 'ltr' ] ); // xss ok.
+			\wp_die(
+				$error_notice, // phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- it's escaped.
+				'Extension error',
+				[
+					'back_link'      => true,
+					'text_direction' => 'ltr',
+				]
+			);
 		}
 	}
 
@@ -1079,7 +1077,7 @@ trait Extensions_Actions {
 	 * @NOTE Output is not escaped.
 	 *
 	 * @param string $message The current error message.
-	 * @param array $error The PHP triggered error.
+	 * @param array  $error   The PHP triggered error.
 	 * @return string The cleaned error message.
 	 */
 	private static function clean_error_message( $message = '', $error = [] ) {
@@ -1091,8 +1089,8 @@ trait Extensions_Actions {
 		//* Remove error location and line from message.
 		if ( ( $loc = stripos( $message, ' in /' ) ) ) {
 			$additions = '.php:' . $error['line'];
-			$loc_line = stripos( $message, $additions, $loc );
-			$offset = $loc_line - $loc + strlen( $additions );
+			$loc_line  = stripos( $message, $additions, $loc );
+			$offset    = $loc_line - $loc + strlen( $additions );
 
 			if ( $loc_line && ( $rem = substr( $message, $loc, $offset ) ) ) {
 				//* Continue only if there are no spaces.
@@ -1111,9 +1109,9 @@ trait Extensions_Actions {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $slug The extension slug to load.
-	 * @param string $instance The verification instance. Propagates to inclusion file. Passed by reference.
-	 * @param array $bits The verification instance bits. Propagates to inclusion file. Passed by reference.
+	 * @param string $slug      The extension slug to load.
+	 * @param string $_instance The verification instance. Propagates to inclusion file. Passed by reference.
+	 * @param array  $bits      The verification instance bits. Propagates to inclusion file. Passed by reference.
 	 * @return bool Whether the extension is loaded.
 	 */
 	public static function load_extension( $slug, &$_instance, &$bits ) {
@@ -1141,14 +1139,15 @@ trait Extensions_Actions {
 	 * Also registers that the extension has been loaded.
 	 *
 	 * @since 1.0.0
+	 * @since 2.2.0 Now allows for persistent shared-class tests (thanks to _once).
 	 *
-	 * @param string $file The extension file to include.
-	 * @param string $instance The verification instance. Propagates to inclusion file. Passed by reference.
-	 * @param array $bits The verification instance bits. Propagates to inclusion file. Passed by reference.
+	 * @param string $file      The extension file to include.
+	 * @param string $_instance The verification instance. Propagates to inclusion file. Passed by reference.
+	 * @param array  $bits      The verification instance bits. Propagates to inclusion file. Passed by reference.
 	 * @return bool True on success, false on failure.
 	 */
 	private static function include_extension( $file, &$_instance, &$bits ) {
-		return (bool) include $file;
+		return (bool) include_once $file;
 	}
 
 	/**

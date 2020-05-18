@@ -29,15 +29,22 @@ class PPCalderaFormModule extends FLBuilderModule {
     /**
      * Get Caldera form titles.
      */
-    public static function caldera_form_titles()
-    {
-        $options = array( '' => __('None', 'bb-powerpack') );
+    public static function caldera_form_titles() {
+		$options = array( '' => __('None', 'bb-powerpack') );
+
+		if ( ! isset( $_GET['fl_builder'] ) ) {
+			return $options;
+		}
+		
+		if ( is_admin() ) {
+			return $options;
+		}
 
         if ( class_exists('Caldera_Forms_Forms') ) {
             $forms = Caldera_Forms_Forms::get_forms( true );
             if ( count( $forms ) ) {
                 foreach ( $forms as $form_id => $form ) {
-                    $options[$form_id] = $form['name'];
+                    $options[ $form_id ] = $form['name'];
                 }
             }
         }
@@ -254,7 +261,7 @@ class PPCalderaFormModule extends FLBuilderModule {
 /**
  * Register the module and its form settings.
  */
-FLBuilder::register_module('PPCalderaFormModule', array(
+BB_PowerPack::register_module('PPCalderaFormModule', array(
     'form'				=> array( // Tab
         'title'         => __('General', 'bb-powerpack'), // Tab title
         'sections'      => array( // Tab Sections
@@ -441,7 +448,7 @@ FLBuilder::register_module('PPCalderaFormModule', array(
                     'title_margin' 	=> array(
                         'type' 			=> 'pp-multitext',
                         'label' 		=> __('Margin', 'bb-powerpack'),
-                        'description'   => __( 'px', 'Value unit for font size. Such as: "14 px"', 'bb-powerpack' ),
+                        'description'   => 'px',
                         'default'       => array(
                             'top' => 10,
                             'bottom' => 10,
@@ -480,7 +487,7 @@ FLBuilder::register_module('PPCalderaFormModule', array(
                     'description_margin' 	=> array(
                         'type' 			=> 'pp-multitext',
                         'label' 		=> __('Margin', 'bb-powerpack'),
-                        'description'   => __( 'px', 'Value unit for margin. Such as: "14 px"', 'bb-powerpack' ),
+                        'description'   => 'px',
                         'default'       => array(
                             'top' => 10,
                             'bottom' => 10,
