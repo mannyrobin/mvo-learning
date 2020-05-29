@@ -1,0 +1,8 @@
+vendor/
+codeception.yml
+tests/*.suite.yml
+composer.lock
+
+# IDEs
+*.kdev4
+.kdev4/

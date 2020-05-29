@@ -1,0 +1,25 @@
+.insert-video-popup-cont,.insert-video-form{
+	width: 100%;
+}
+.insert-video-popup-cont h3 + hr{
+	margin-bottom: 15px;
+}
+.insert-video-form tr td{
+	padding-bottom: 15px;
+}
+.insert-video-form tr td label{
+	font-weight: 700;
+}
+#TB_window{
+	height: auto !important;
+	top: 50% !important;
+	-moz-transform: translateY(-50%);
+	-o-transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+#TB_ajaxContent{
+	width: 100% !important;
+	height: auto !important;
+	box-sizing: border-box;
+}

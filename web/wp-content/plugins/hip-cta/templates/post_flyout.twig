@@ -1,0 +1,49 @@
+<style>
+#hipcta_flyout {
+    display: inline-block;
+    position:fixed;
+    width: 400px;
+    height: auto;
+    right: -400px;
+    bottom: 0;
+    z-index:100;
+    transition: all 2s ease-in-out 0s;
+}
+
+#hipcta_flyout img {
+    width: 100%;
+    height: auto;
+}
+
+#hipcta_flyout.is_active {
+    right:0;
+}
+#hipcta_flyout .close-cta{
+	position: absolute;
+	left: 0;
+	top: -24px;
+	width: 24px;
+	height: 24px;
+	cursor: pointer;
+	background-color: rgba(0,0,0,0.5);
+	color: #fff;
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 1;
+	border: 1px solid #555;
+}
+#hipcta_flyout .close-cta:focus,#hipcta_flyout .close-cta:active{
+	outline: none;
+}
+#hipcta_flyout .close-cta:hover{
+	background-color: rgba(0,0,0,0.75);
+}
+
+@media only screen and (max-width: {{ mobile_width }}px) {
+	#hipcta_flyout.mobile-check {
+		display: none;
+	}
+}
+
+</style>
+<div id="hipcta_flyout" class="{% if mobile_check == 'on' %}mobile-check{% endif %}" ><button class="close-cta">X</button><a href="{{ link }}">{{ image | raw }}</a></div>

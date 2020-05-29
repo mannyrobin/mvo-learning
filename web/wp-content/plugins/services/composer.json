@@ -1,0 +1,17 @@
+{
+	"name": "hipdevteam/services",
+	"description": "Add Services post type, related post meta and Beaver Builder module to WordPress site.",
+	"type": "wordpress-plugin",
+	"require": {
+		"composer/installers": ">=1.0",
+		"pimple/pimple": "~3.0"
+	},
+	"require-dev": {
+		"lucatume/wp-browser": "^1.21",
+		"site5/phantoman": "^2.0",
+        "squizlabs/php_codesniffer": "*"
+	},
+	"autoload": {
+		"psr-4": { "Hip\\Services\\": "lib" }
+	}
+}

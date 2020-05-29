@@ -1,0 +1,12 @@
+{
+    "name": "hipdevteam/bb-post-categories",
+    "description": "Beaver Builder Module to display Post Categories list. Allows explicitly including/excluding certain categories.",
+    "type": "wordpress-plugin",
+    "authors": [
+        {
+            "name": "Hip Creative",
+            "email": "zach@hipcreativeinc.com"
+        }
+    ],
+    "require": {}
+}

@@ -1,0 +1,47 @@
+@import 'partials/variables';
+@import 'partials/forms';
+@import 'partials/global';
+@import 'partials/footer';
+@import "partials/condition-row";
+
+.checkmark-list-section li::before {
+    background-image: url(//hip.agency/wp-content/themes/hip-2016/dist/images/checkmark-white.png);
+    content: " ";
+    width: 28px;
+    height: 27px;
+    display: block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 0;
+}
+
+.checkmark-list-section li {
+    position: relative;
+    width: 33%;
+    flex-basis: 33%;
+    padding-left: 34px;
+    padding-top: 18px;
+}
+
+.checkmark-list-section ul {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    list-style-type: none !important;
+    margin: 0 0 1.5em 3em;
+}
+
+@media screen and (max-width: 960px) {
+    .checkmark-list-section li {
+        width: 50%;
+        flex-basis: 50%;
+    }
+}
+
+@media screen and (max-width: 460px) {
+    .checkmark-list-section li {
+        width: 100%;
+        flex-basis: 100%;
+    }
+}
