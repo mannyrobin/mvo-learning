@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e4c368da462786ff75f4e946e1e4468",
+    "content-hash": "103c365132165855ed9e73cfd12bc379",
     "packages": [
         {
             "name": "a5hleyrich/wp-background-processing",
@@ -686,25 +686,6 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Everything needed to manage conditions for Hip client sites.",
             "time": "2018-11-16T00:18:35+00:00"
-        },
-        {
-            "name": "hipdevteam/elementor-pro",
-            "version": "2.10.0",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.com/hipdevteam/elementor-pro.git",
-                "reference": "adde18a7cf9aa37c9f398f99a693218e89bbed74"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hipdevteam%2Felementor-pro/repository/archive.zip?sha=adde18a7cf9aa37c9f398f99a693218e89bbed74",
-                "reference": "adde18a7cf9aa37c9f398f99a693218e89bbed74",
-                "shasum": ""
-            },
-            "type": "wordpress-plugin",
-            "notification-url": "https://packagist.org/downloads/",
-            "description": "Fork of Elementor Pro for use with composer",
-            "time": "2020-06-13T10:10:04+00:00"
         },
         {
             "name": "hipdevteam/hip-bb-theme",
