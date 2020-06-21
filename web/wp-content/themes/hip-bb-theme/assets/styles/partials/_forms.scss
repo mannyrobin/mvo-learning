@@ -1,0 +1,45 @@
+.subscribe{
+	margin:0;
+	form.wpforms-form{
+		.wpforms-field-container{
+			.wpforms-field{
+				padding: 0 0 10px;
+				input[type="text"],input[type="email"]{
+				font-family:inherit;
+				font-size: 14px;
+				line-height: 1.45;
+				border: 1px solid #cccccc;
+				padding: 8px 12px;
+				&:focus{
+						border-color: #cccccc;
+					}
+				}
+				@media(max-width: $mobile){
+					max-width: 80%;
+					margin: 0 auto;
+				}
+			}			
+		}
+		.wpforms-submit-container{
+			padding:0;
+			text-align:center;
+			button[type="submit"]{
+				width: 200px;
+				border:0;
+				border-radius:3px;
+				background: $violate_dark;
+				color: #fff;
+				font-family:inherit;
+				font-size: 14px;
+				text-transform:uppercase;
+				&:hover{
+					background: $violate_deep;
+					color: $violate;
+				}
+				&:focus{
+					outline: none;
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,51 @@
+.condition-carousel-row {
+  .condition-carousel-heading{
+    margin-bottom: 20px;
+    h2 {
+      position: relative;
+      &:after {
+        content: "";
+        height: 1px;
+        position: absolute;
+        left: 25%;
+        width: 50%;
+        background: #e6e5e1;
+        bottom: 0;
+        margin-bottom: -10px;
+      }
+    }
+  }
+  .bx-viewport {
+    height: 100% !important;
+    padding-bottom: 20px;
+    .fl-post-carousel-wrapper {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    .fl-post-carousel-post {
+      box-shadow: 0 0 20px -4px rgba(0,0,0,.19);
+      border: 4px solid #fff !important;
+      text-align: center;
+      .fl-post-carousel-content {
+        padding-bottom: 40px;
+        p {
+          font-size: 1.2em;
+        }
+        .fl-post-carousel-more {
+          position: absolute;
+          width: 170px;
+          bottom: 10px;
+          left: 50%;
+          transform: translateX(-50%);
+          transition: all .3s ease 0s;
+          font-weight: 700;
+          line-height: 1.6;
+          padding-top: 10px;
+          padding-bottom: 10px;
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+      }
+    }
+  }
+  }
+}

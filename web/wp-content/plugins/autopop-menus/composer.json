@@ -1,0 +1,17 @@
+{
+	"name": "hipdevteam/autopop-menus",
+	"type": "wordpress-plugin",
+	"description": "Autopopulate submenus based on taxonomy, post type, or post hierarchy.",
+	"license": "GPL-2.0",
+	"authors": [ {
+		"name": "ydlr",
+		"email": "ydlr@ydlr.io"
+	} ],
+	"require": {
+		"composer/installers": ">=1.0",
+		"pimple/pimple": "~3.0"
+	},
+	"autoload": {
+		"psr-4": { "PuckLabs\\AutopopMenus\\": "lib" }
+	}
+}

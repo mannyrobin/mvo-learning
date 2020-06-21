@@ -1,0 +1,15 @@
+# Dependencies
+composer.lock
+vendor
+
+# IDE/Editor
+*.kate-swp
+.kdev4/
+*.kdev4
+
+# Configuration
+*.yml
+!*.dist.yml
+
+# Dev 
+docker-compose.yml

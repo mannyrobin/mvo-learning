@@ -1,0 +1,8 @@
+vendor/
+codeception.yml
+tests/*.suite.yml
+composer.lock
+
+#phpstorm
+.idea
+.idea/*

@@ -1,0 +1,23 @@
+{
+	"name": "hipdevteam/staff",
+	"type": "wordpress-plugin",
+	"description": "Everything needed to manage staff members for Hip client sites.",
+	"repositories": [
+		{
+		  "type": "composer",
+		  "url": "https://wpackagist.org"
+		}
+	],
+	"require": {
+		"composer/installers": ">=1.0",
+		"pimple/pimple": "~3.0",
+		"wpackagist-plugin/meta-box": "^4.15"
+	},
+	"require-dev": {
+		"lucatume/wp-browser": "^1.21",
+		"site5/phantoman": "^2.0"
+	},
+	"autoload": {
+		"psr-4": { "HipStaff\\": "lib" }
+	}
+}

@@ -1,0 +1,19 @@
+<p class="cta-image-wrap">
+    <div id="hipcta_img_preview">
+    {% if image_html %}
+            {{ image_html | raw }}
+            <a id="remove_cta_image" href="#">Remove Image</a>
+    {% else %}
+        <input id="upload_cta_image" 
+            type="button" 
+            class="button button-large"
+            value="Upload Image" 
+        />
+    {% endif %}
+    </div>       
+    <input type="hidden" value="{{ image_id }}" id="cta_image_id" name="hipcta[image]" />
+</p>
+<p>
+    <label class="hipcta_input_label" for="cta_link_url">Link URL:</label>
+    <input type="text" class="widefat" name="hipcta[link_url]" id="cta_link_url" value="{{ link_url }}" />
+</p>

@@ -1,0 +1,14 @@
+{
+	"name": "hipdevteam/hip-doc-exporter",
+	"type": "wordpress-plugin",
+	"description": "Export posts as word document.",
+	"repositories": [
+		{
+		  "type": "composer",
+		  "url": "https://wpackagist.org"
+		}
+	],
+	"require": {
+		"composer/installers": ">=1.0"
+	}
+}

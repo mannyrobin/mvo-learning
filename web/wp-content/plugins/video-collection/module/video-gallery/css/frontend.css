@@ -1,0 +1,61 @@
+.video-gallery-wrapper .fl-builder-pagination {
+	display: none;
+}
+
+.video-gallery-wrapper .load-more-btn {
+	text-align: center;
+}
+
+.video-gallery-wrapper .load-more-btn a {
+	padding: 8px 16px;
+	display: inline-block;
+	color: #fff;
+	border-radius: 2px;
+}
+
+.video-gallery-wrapper .load-more-btn p {
+	font-size: 18px;
+	color: #ff7979;
+}
+.video-gallery-wrapper .load-more-btn a.loading{
+	padding-right: 40px;
+	position: relative;
+}
+.video-gallery-wrapper .load-more-btn a.loading:after{
+	content: '';
+	position: absolute;
+	top: 12px;
+	right: 10px;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+	-webkit-animation:rotate 1s ease infinite;
+	-o-animation:rotate 1s ease infinite;
+	animation: rotate 1s ease infinite;
+}
+@-webkit-keyframes rotate{
+	from{
+		-webkit-transform: rotate(0deg);
+	}
+	to{
+		-webkit-transform: rotate(360deg);
+	}
+}
+@-o-keyframes rotate{
+	from{
+		-o-transform: rotate(0deg);
+	}
+	to{
+		-o-transform: rotate(360deg);
+	}
+}
+@keyframes rotate {
+	from{
+		transform: rotate(0deg);
+	}
+	to{
+		transform: rotate(360deg);
+	}
+}

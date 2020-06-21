@@ -1,0 +1,109 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: autopop-menu\n"
+"POT-Creation-Date: 2018-09-04 20:20-0600\n"
+"PO-Revision-Date: 2018-09-04 20:21-0600\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: lib/EditNavWalker.php:48
+#, php-format
+msgid "%s (Invalid)"
+msgstr ""
+
+#: lib/EditNavWalker.php:52
+#, php-format
+msgid "%s (Pending)"
+msgstr ""
+
+#: lib/EditNavWalker.php:65
+msgid "sub item"
+msgstr ""
+
+#: lib/EditNavWalker.php:97
+msgid "Edit"
+msgstr ""
+
+#: lib/EditNavWalker.php:106
+msgid "URL"
+msgstr ""
+
+#: lib/EditNavWalker.php:113
+msgid "Navigation Label"
+msgstr ""
+
+#: lib/EditNavWalker.php:119
+msgid "Title Attribute"
+msgstr ""
+
+#: lib/EditNavWalker.php:126
+msgid "Open link in a new tab"
+msgstr ""
+
+#: lib/EditNavWalker.php:131
+msgid "CSS Classes (optional)"
+msgstr ""
+
+#: lib/EditNavWalker.php:137
+msgid "Link Relationship (XFN)"
+msgstr ""
+
+#: lib/EditNavWalker.php:143
+msgid "Description"
+msgstr ""
+
+#: lib/EditNavWalker.php:145
+msgid ""
+"The description will be displayed in the menu if the current theme supports "
+"it."
+msgstr ""
+
+#: lib/EditNavWalker.php:155
+#, php-format
+msgid "Autopopulate all items in \"%s\" %s."
+msgstr ""
+
+#: lib/EditNavWalker.php:160
+#, php-format
+msgid "Autopopulate all %s"
+msgstr ""
+
+#: lib/EditNavWalker.php:164
+msgid "Autopopulate child posts"
+msgstr ""
+
+#: lib/EditNavWalker.php:170
+msgid "Move"
+msgstr ""
+
+#: lib/EditNavWalker.php:171
+msgid "Up one"
+msgstr ""
+
+#: lib/EditNavWalker.php:172
+msgid "Down one"
+msgstr ""
+
+#: lib/EditNavWalker.php:175
+msgid "To the top"
+msgstr ""
+
+#: lib/EditNavWalker.php:181
+#, php-format
+msgid "Original: %s"
+msgstr ""
+
+#: lib/EditNavWalker.php:194
+msgid "Remove"
+msgstr ""
+
+#: lib/EditNavWalker.php:195
+msgid "Cancel"
+msgstr ""
