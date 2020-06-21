@@ -79,9 +79,7 @@ git push origin --delete update || echo "No Update branch. All Good!"
   wp plugin update bb-plugin --allow-root
   wp plugin update bb-theme-builder --allow-root
   wp plugin update social-warfare-pro --allow-root
-  wp plugin update wpforms --allow-root
   wp plugin update wpforms-surveys-polls --allow-root
-  wp plugin update wpforms-zapier --allow-root
   wp plugin update bbpowerpack --allow-root
   wp plugin update the-seo-framework-extension-manager --allow-root
   wp plugin update bb-ultimate-addon --allow-root
