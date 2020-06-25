@@ -1,6 +1,0 @@
-{
-    "name": "hipdevteam/wpforms-zapier",
-    "description": "Fork of WPForms Zapier integration for use with composer",
-    "type": "wordpress-plugin",
-    "require": {}
-}

@@ -1,6 +1,0 @@
-/vendor/
-composer.lock
-.kdev4/
-*.kdev4
-.idea
-.idea/*

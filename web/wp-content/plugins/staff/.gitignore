@@ -1,7 +1,0 @@
-vendor/
-codeception.yml
-tests/*.suite.yml
-
-#Phpstorm
-.idea
-.idea/*

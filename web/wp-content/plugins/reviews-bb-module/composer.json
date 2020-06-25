@@ -1,7 +1,0 @@
-{
-    "name": "hipdevteam/reviews-bb-module",
-    "type": "wordpress-plugin",
-    "require": {
-        "composer/installers": "~1.0"
-    }
-}

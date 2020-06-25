@@ -1,6 +1,0 @@
-vendor/
-*.yml
-!*.dist.yml
-composer.lock
-.kdev4/
-*.kdev4

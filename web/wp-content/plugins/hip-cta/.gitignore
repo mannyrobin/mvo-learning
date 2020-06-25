@@ -1,7 +1,0 @@
-*.kate-swp
-*.kdev4
-vendor/
-composer.lock
-.directory
-.idea
-.idea/*

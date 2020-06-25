@@ -1,6 +1,0 @@
-image: composer
-
-PHPCS:
-  script:
-    - composer install
-    - vendor/bin/phpcs
